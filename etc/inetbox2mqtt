@@ -1,0 +1,15 @@
+[mqtt]
+server = 192.168.21.2
+port = 1883
+user =
+password =
+topic =
+
+[serial]
+device = /dev/ttyUSB0
+
+[options]
+duo_control = 0
+
+[logging]
+level = INFO

@@ -17,7 +17,7 @@
 from tools import calculate_checksum, PIN_MAP
 import inetboxapp
 import logging
-import uasyncio as asyncio
+import asyncio
 
 
 class Lin:
@@ -206,8 +206,8 @@ class Lin:
                 self.log.debug("system reboot in debug_mode suppressed")
             else:    
                 self.log.info("system reboot required")
-                import machine
-                machine.reset()
+                #import machine
+                #machine.reset()
     
     # check alive status
     def status_monitor(self):
@@ -230,7 +230,7 @@ class Lin:
         self.status_monitor()        
         # New input process: idea is, nothing to forget. So there is a turing-machine nessecary. This read 1 byte and decide to switch in the next level or to throw the input away
         # So there is a much higher probability for synchronizing
-        if not(self.serial.any()):
+        if not(self.serial.in_waiting):
             return
         self.pin_map.dtoggle_led("lin_led")
         ####### Many thanks to florent314 see also issue #69
@@ -251,8 +251,8 @@ class Lin:
         ##        pass
         ##    return
         line = b'\x00'+ self.serial.read(1)
-        while(not line[1]==0x55 ):
-            if self.serial.any()==0:
+        while(not line[1] == 0x55 ):
+            if self.serial.in_waiting == 0:
                 return
             line = b'\x00'+ self.serial.read(1)
             
@@ -293,7 +293,7 @@ class Lin:
                 return
             else: return
               
-        while self.serial.any()<9:
+        while self.serial.in_waiting < 9:
             pass
         #print("Debug:ici")
         line += self.serial.read(9)

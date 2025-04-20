@@ -32,7 +32,7 @@ class duo_ctrl:
         self.pin_map = pin_map
         for i in self.DC_CONFIG.keys():
             if self.pin_map(self.DC_CONFIG[i])[0]: # input-pins
-                log.debug(f"Pin_Map: in:{self.pin_map(DC_CONFIG[i])[0]}")
+                #log.debug(f"Pin_Map: in:{self.pin_map(DC_CONFIG[i])[0]}")
                 v = pin_map.get_gpio(self.DC_CONFIG[i])
                 if v:
                     self.status.update({i: ["ON", True]})
@@ -47,7 +47,7 @@ class duo_ctrl:
     def loop(self):
         for i in self.DC_CONFIG.keys():
             # only for inputs
-            if self.pin_map(DC_CONFIG[i])[0]:
+            if self.pin_map(self.DC_CONFIG[i])[0]:
                 v = self.pin_map.get_gpio(self.DC_CONFIG[i])
                 v_o = (self.status[i][0] == "ON")
                 if v != v_o:

@@ -3,15 +3,13 @@
 # Copyright (c) 2022  Dr. Magnus Christ (mc0110)
 #
 # This is part of the wifimanager package
-# 
+#
 #
 import logging
 import os
-from machine import soft_reset, reset
 from gen_html import Gen_Html
 from nanoweb import HttpError, Nanoweb, send_file
-import uasyncio as asyncio
-import gc
+import asyncio
 import random
 
 
@@ -23,7 +21,7 @@ test_mqtt = False
 def init(w, l, n, debug=False, logfile=False):
     if debug:
         log.setLevel(logging.DEBUG)
-    else:    
+    else:
         log.setLevel(logging.INFO)
     log.info("init")
     log.debug(f"init debug:{debug} logf:{logfile} l:{l} n:{n}")
@@ -39,7 +37,6 @@ def init(w, l, n, debug=False, logfile=False):
     file = logfile
     lin = l
     naw = n
-    gc.enable()
     gh = Gen_Html(w, lin)
     reboot = False
     soft_reboot = False
@@ -57,7 +54,7 @@ def unquote(s):
 #        print(bytearray.fromhex(i[:2]))
 #        print(i[2:],i[2:].encode("utf-8"))
         a = a + bytearray.fromhex(i[:2]) + i[2:].encode("utf-8")
-    return a.decode("utf-8")    
+    return a.decode("utf-8")
 
 
 async def command_loop():
@@ -73,27 +70,20 @@ async def command_loop():
 #         logging._stream = open("test.log", "a")
         await asyncio.sleep(3) # Update every 10sec
         if soft_reboot:
-            log.debug("soft_reboot")
-            await asyncio.sleep(5) # Update every 10sec
-            log.info("Soft reset chip")
-            soft_reset()
+            pass
         if reboot:
-            log.debug("reboot")
-            await asyncio.sleep(5) # Update every 10sec
-            log.info("Reset chip")
-            reset()
+            pass
 
 # Declare route directly with decorator
 @naw.route('/')
 async def index(r):
     global gh
     global repo_update
-    gc.collect()
     repo_update = False
     await r.write("HTTP/1.1 200 OK\r\n\r\n")
     await send_file(r, gh.handleRoot())
 #    await r.write(gh.handleRoot())
-    
+
 @naw.route('/s')
 async def status(r):
     global gh
@@ -103,11 +93,11 @@ async def status(r):
     await send_file(r, gh.handleStatus("Device status", "/", "Back",("30","/")))
 #    await r.write(gh.handleStatus("Device status", "/", "Back",("30","/")))
 
-@naw.route('/loop')    
+@naw.route('/loop')
 async def loop(r):
     pass
-   
-@naw.route('/ta')    
+
+@naw.route('/ta')
 async def toggle_ap(r):
     global gh
     if not(gh.connect.set_mqtt()):
@@ -140,8 +130,8 @@ async def set_mqtt(r):
         await connect.client.publish("service/truma/set/test", s, qos=1)
         log.info(f"mqtt: message sent to <service/truma/set/test> {s}")
         await r.write(gh.handleMessage(f"send 'service/truma/set/test'> {s}", "/", "Back",("5","/")))
-        
-        
+
+
 @naw.route('/rm')
 async def toggle_run_mode(r):
     global gh
@@ -151,12 +141,12 @@ async def toggle_run_mode(r):
     else:
         a = gh.connect.run_mode()
         if a < 2: a = 1 - a
-        else: a=0    
+        else: a=0
         gh.connect.run_mode(a)
         await r.write(gh.handleMessage("RUN mode changed", "/", "Back",("5","/")))
 
 @naw.route('/wc')
-# Generate the credential form    
+# Generate the credential form
 async def creds(r):
     global gh
     await r.write("HTTP/1.1 200 OK\r\n\r\n")
@@ -169,7 +159,7 @@ async def scan_networks(r):
     await r.write("HTTP/1.1 200 OK\r\n\r\n")
     if gh.connect.set_mqtt():
         await r.write(gh.handleScan_Networks())
-    else:    
+    else:
         await r.write(gh.handleMessage("This needs STA-mode", "/", "Back",("5","/")))
 
 @naw.route('/heat_on')
@@ -194,8 +184,8 @@ async def cp(r):
     global gh
     json = {}
     # convert JSON to json_result = {key: value}
-    for i in gh.JSON.keys():        
-        json[i] = "0"       
+    for i in gh.JSON.keys():
+        json[i] = "0"
     for i in r.args.keys():
         if r.args[i]=="True":
             json[i] = "1"
@@ -223,7 +213,7 @@ async def swp_cred(r):
     log.debug("Credentials swapped")
     await r.write("HTTP/1.1 200 OK\r\n\r\n")
     await r.write(gh.handleMessage("Credentials are swapped", "/", "Back",("5","/wc")))
-    
+
 @naw.route('/rc')
 async def res_cred(r):
     global gh
@@ -231,7 +221,7 @@ async def res_cred(r):
     log.debug("Credentials restored")
     await r.write("HTTP/1.1 200 OK\r\n\r\n")
     await r.write(gh.handleMessage("Credentials are restored", "/", "Back",("5","/")))
-    
+
 @naw.route('/ur')
 async def ur(r):
     global gh
@@ -281,7 +271,7 @@ async def upload(r):
         if "__" in dir:
             dir = "/"
         else:
-            dir = "/" + dir.strip("/") + "/"    
+            dir = "/" + dir.strip("/") + "/"
         # obtain the filename and size from request headers
         filename = unquote(r.headers['Content-Disposition'].split('filename=')[1].strip('"'))
         size = int(r.headers['Content-Length'])
@@ -293,7 +283,7 @@ async def upload(r):
                 chunk = await r.read(min(size, 1024))
                 f.write(chunk)
                 size -= len(chunk)
-            f.close()        
+            f.close()
         log.info('Successfully saved file: ' + dir + filename)
         await r.write("HTTP/1.1 201 Upload \r\n" )
 #        await send_file(r, gh.handleFiles(dir))
@@ -318,7 +308,7 @@ async def fm(r):
         await send_file(r, rp)
     elif r.param["button"]=="Download":
         log.info("download file: " + filename)
-        await r.write("HTTP/1.1 200 OK\r\n") 
+        await r.write("HTTP/1.1 200 OK\r\n")
         await r.write("Content-Type: application/octet-stream\r\n")
         await r.write("Content-Disposition: attachment; filename=%s\r\n\r\n" % filename)
         await send_file(r, direct+filename)

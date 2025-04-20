@@ -1,6 +1,9 @@
-import uasyncio as asyncio
-import uerrno
+import os
+import asyncio
+import errno as uerrno
 
+PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+GEN_DIR      = f"{PROJECT_ROOT}/html/"
 
 class HttpError(Exception):
     pass
@@ -16,7 +19,7 @@ class Request:
     close = None
     args = None
     param = None
-    
+
 
     def __init__(self):
         self.url = ""
@@ -40,7 +43,7 @@ async def error(request, code, reason):
 
 
 async def send_file(request, filename, segment=64, binary=False):
-    #print("send_file:", filename, segment, binary)      
+    #print("send_file:", filename, segment, binary)
     try:
        with open(filename, 'rb' if binary else 'r') as f:
             while True:
@@ -65,15 +68,18 @@ class Nanoweb:
     callback_request = None
     callback_error = staticmethod(error)
 
-    STATIC_DIR = '/'
-    INDEX_FILE = STATIC_DIR + 'index.html'
+    STATIC_DIR = GEN_DIR
+    INDEX_FILE = "index.html"
     debug = False
 
-    def __init__(self, port=80, address='0.0.0.0', debug=False, dir='/'):
+    def __init__(self, port=80, address='0.0.0.0', debug=True, dir='/'):
         self.port = port
         self.address = address
         self.debug = debug
-        self.STATIC_DIR = dir
+        self.STATIC_DIR = os.path.abspath(f"{self.STATIC_DIR}/{dir}")
+        self.INDEX_FILE = os.path.abspath(f"{self.STATIC_DIR}/{self.INDEX_FILE}")
+        #print(f"{self.STATIC_DIR=}")
+        #print(f"{self.INDEX_FILE=}")
 
     def route(self, route):
         """Route decorator"""
@@ -129,11 +135,23 @@ class Nanoweb:
 
         request = Request()
         request.read = reader.read
-        request.write = writer.awrite
-        request.close = writer.aclose
-        
+
+        # Wrap writer.write to emulate awrite
+        async def awrite(data):
+            if isinstance(data, str):
+                data = data.encode("utf-8")
+            writer.write(data)
+            await writer.drain()
+
+        async def aclose():
+            writer.close()
+            await writer.wait_closed()
+
+        request.write = awrite
+        request.close = aclose
+
         request.method, request.url, version = items
-        
+
         if self.debug: print("Method: ", request.method)
         if self.debug: print("URL: ",request.url)
         if self.debug: print("Version: ",version)
@@ -166,7 +184,7 @@ class Nanoweb:
                             request.headers[header] = value
                     elif len(items) == 1:
                         break
-                    
+
                 if self.debug: print("Header: ", request.headers)
                 if request.method == 'POST' and request.headers['Content-Type'] == 'application/x-www-form-urlencoded':
                         b = int(request.headers['Content-Length'])
@@ -182,12 +200,14 @@ class Nanoweb:
 
                 if self.callback_request:
                     self.callback_request(request)
-                
+
                 if self.debug: print("WorkingURL: ", request.url)
                 if request.url in self.routes:
                     # 1. If current url exists in routes
                     if self.debug: print("1. URL in routes: "+request.url)
+                    if self.debug: print(f"{self.routes=}")
                     request.route = request.url
+                    if self.debug: print(f"{request=}")
                     await self.generate_output(request,
                                                self.routes[request.url])
                 else:
@@ -230,7 +250,7 @@ class Nanoweb:
             if e.args[0] != uerrno.ECONNRESET:
                 raise
         finally:
-            await writer.aclose()
+            await aclose()
 
     async def run(self):
         return await asyncio.start_server(self.handle, self.address, self.port)

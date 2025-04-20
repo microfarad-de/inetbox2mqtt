@@ -1,7 +1,9 @@
-import os, machine
+import os
 #import connect
-import gc
 #from lin import Lin
+
+PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+GEN_DIR      = f"{PROJECT_ROOT}/html/"
 
 class Gen_Html():
     CR_M    = "(c) MIT licence &nbsp<a href='https://github.com/mc0110/inetbox2mqtt' target='_blank'>­inetbox2mqtt</a>&nbsp(2023) "
@@ -9,29 +11,26 @@ class Gen_Html():
     CONNECT_STATE = ""
 
     HLP_TXT = {
-            "root": '''This manager allows the administration of microPython devices via Wifi connection. 
+            "root": '''This manager allows the administration of microPython devices via Wifi connection.
     ''',
             "files": 'Filemanager with full access to the ports filesystem.',
             "": 'No help description available',
         }
-    
-    # w-parameter is the connect-object    
+
+    # w-parameter is the connect-object
     def __init__(self, w, lin):
         self.connect = w
         self.lin = lin
-        # generate the json-definition for credentials
-        self.JSON = self.connect.read_cred_json()
         # connection will be established
         #self.connect.connect()
-        self.refresh_connect_state()
-        
+        #self.refresh_connect_state()
+
     def refresh_connect_state(self):
         # collect state information
         # Wifi-class information
         self.CONNECT_STATE = self.connect.get_state()
-        gc.collect()
         # add mem state
-        self.CONNECT_STATE["mem_free"] = str(gc.mem_free())
+        self.CONNECT_STATE["mem_free"] = ""
         # add cred-file, with existing
         s =self.lin.app.get_all(False)
         for key, val in s.items():
@@ -39,25 +38,25 @@ class Gen_Html():
         if self.connect.creds():
             json = {}
             # convert JSON to json_result = {key: value}
-            for i in self.JSON.keys():        
+            for i in self.JSON.keys():
                 json[i] = "0"
-            # take results from cred-file {key: value}    
+            # take results from cred-file {key: value}
             a = self.connect.read_creds(json)
             for key, val in a.items():
                 self.CONNECT_STATE["cred_" + key] = val
-        
+
 
     def head(self, refresh=None):
         tmp = '''
             <!DOCTYPE html>
             <html lang='en'>
-            
+
             <head>
                 <meta charset='UTF-8'>
              '''
         if refresh != None:
             tmp += '<meta http-equiv="refresh" content="' + refresh[0] + '; url=' + refresh[1] + '">'
-        tmp += '''       
+        tmp += '''
                 <meta name= viewport content='width=device-width, initial-scale=1.0,'>
                 <meta Content-Type='application/x-www-form-urlencoded'>
                     <style type='text/css'>
@@ -88,15 +87,14 @@ class Gen_Html():
             for key in ap_k:
                 s += "&nbsp;(" + key[len(pre):] + " = " + str(self.CONNECT_STATE[key]) + ")&nbsp;"
             return s
-        
+
         tmp = self.head(refresh)
         tmp += "<body class='body_style'><div class='center'>"
         tmp += "<h2>" + self.connect.appname + " " + title + "</h2>"
         tmp += "</div>"
         if hlpkey != None:
             tmp += "<div class='help'>" + self.HLP_TXT.get(hlpkey) + "</div>"
-        gc.collect()    
-        if status:    
+        if status:
             tmp += "<div class='status'><div class='status_title'>State-info:<br></div>"
             tmp += str_keys("ap_") + "<br>"
             tmp += str_keys("sta_") + "<br>"
@@ -105,7 +103,6 @@ class Gen_Html():
             tmp += str_keys("mem_") + "<br>"
             tmp += str_keys("lin_") + "<br>"
             tmp += "</div>"
-        gc.collect()    
         return tmp;
 
 
@@ -124,7 +121,7 @@ class Gen_Html():
         return tmp
 
 
-    def handlePost(self, path, name, txt, val): 
+    def handlePost(self, path, name, txt, val):
       tmp = "<div>"
       tmp += "<form action='" + path + "' method='POST'>" + txt + "<input type='text' name='message' placeholder='" + name + "' required>"
       tmp += "<input type='submit' class='button' name= '" + val + "' value='"+ val + "'>"
@@ -137,19 +134,19 @@ class Gen_Html():
         tmp += "<div class='message'>" + message + "</div>"
         tmp += self.handleFooter(blnk,bttn_name)
         return tmp
-    
+
     def handleStatus(self, message, blnk, bttn_name, refresh = None):
         self.refresh_connect_state()
-        f = open("status.html","w")    
+        f = open(f"{GEN_DIR}status.html","w")
         f.write(self.handleHeader("Status", None, refresh, status = True))
         # tmp += "<div class='message'>" + message + "</div>"
         f.write(self.handleFooter(blnk,bttn_name))
         f.close()
-        return "/status.html"
+        return f"{GEN_DIR}status.html"
 
     # Main Page
     def handleRoot(self):
-        f = open("index.html","w")    
+        f = open(f"{GEN_DIR}index.html","w")
         f.write(self.handleHeader("", refresh = ("30","/")))
         f.write(self.handleGet("/s","Status"))
         f.write(self.handleGet("/wc","Credentials"))
@@ -158,25 +155,25 @@ class Gen_Html():
         f.write(self.handleGet("/heat_off","Water Heater off") + "\n")
         if self.connect.mqtt_flg:
             f.write(self.handleGet("/ts","Send MQTT message"))
-        else:    
+        else:
             f.write(self.handleGet("/ts","No MQTT..."))
         f.write(self.handleGet("/dir/__","Filemanager") + "<p>")
         if self.connect.run_mode() == 1:
             f.write(self.handleGet("/rm", "Normal RUN after reboot"))
         elif self.connect.run_mode() == 2:
             f.write(self.handleGet("/rm", "UPDATE after Reboot"))
-        else:    
+        else:
             f.write(self.handleGet("/rm", "OS mode after Reboot"))
         f.write(self.handleGet("/rb","Soft Reboot") + "\n")
         f.write(self.handleGet("/rb1","Hard Reboot") + "<p> \n")
         f.write(self.handleGet("/ur","Update Repo") + "<p>")
 #         if self.connect.set_ap():
 #             tmp += self.handleGet("/ta","Reset AccessPoint")
-#         else:    
+#         else:
 #             tmp += self.handleGet("/ta","Start AccessPoint")
         f.write(self.handleFooter())
         f.close()
-        return "/index.html"
+        return f"{GEN_DIR}index.html"
 
     def handleFileAction(self, link, dir, fn):
         tmp = "<form action='" + link + dir + " 'method='GET'>"
@@ -187,12 +184,12 @@ class Gen_Html():
         tmp += "<label class='label_style'>" + fn + "</label>"
         tmp += "</form> \n"
         return tmp
-    
+
     def handleUpload(self, dir):
         dir1 = dir
         if dir == "/":
             dir1 = "/__/"
-        
+
         tmp = "File-Upload<br><div><form  id='form' action='/upload' method = 'GET'><input type='file' id='file' name='file'> <input type='submit' class='button_s' value='Upload'> </form>"
         tmp += " <script>async function upload(ev) { const file = document.getElementById('file').files[0]; if (!file) {return;}"
         tmp += "await fetch('/upload" + dir1 + "',"
@@ -201,7 +198,7 @@ class Gen_Html():
         tmp += "document.getElementById('form').addEventListener('submit', upload); \n </script> </div> \n"
         return tmp
 
-    def handleFiles(self, dir):  
+    def handleFiles(self, dir):
         def gen_dir_href(i):
             tmp = ""
             tmp += "<a href ='/dir"
@@ -232,43 +229,43 @@ class Gen_Html():
             tmp += "</text></a> "
             tmp += "<br>"
             return tmp
-        
+
         # print("handleFiles dir=", dir)
         if dir[-1] != "/":
             dir = dir + "/"
         if dir[0] != "/":
             dir = "/" + dir
-        f = open("fm.html","w")    
+        f = open(f"{GEN_DIR}fm.html","w")
         f.write(self.handleHeader("Filemanager  '" + dir + "'"))
         f.write("<div><div>")
         f.write(gen_dir_back_href())
-        s = os.ilistdir(dir)   # directories
+        s = os.listdir(dir)   # directories
         for i in s:
             if i[1] == 0x4000:
                 f.write(gen_dir_href(i[0]))
-        s = os.ilistdir(dir)   # files
+        s = os.listdir(dir)   # files
         for i in s:
             if i[1] == 0x8000:
                 f.write(self.handleFileAction("/fm", dir, i[0]))
         if dir == '/':
             dir = '/__/'
         f.write("</div></div>")
-        f.write("<br><br>" + self.handleUpload(dir) + "<br><br>") 
+        f.write("<br><br>" + self.handleUpload(dir) + "<br><br>")
         f.write(self.handleFooter())
         f.close()
-        return "fm.html"
+        return f"{GEN_DIR}fm.html"
 
 
     def handleScan_Networks(self):
         tmp = self.handleHeader("Wifi-Networks", refresh = ("20", "/scan"));
-        tmp += self.connect.scan_html()  
+        tmp += self.connect.scan_html()
         tmp += "<br>" + self.handleGet("/scan", "Rescan")
         tmp += self.handleFooter()
         return tmp
 
 
     def handleCredentials(self, json_form):
-        f = open("cred.html","w")    
+        f = open(f"{GEN_DIR}cred.html","w")
         f.write(self.handleHeader("Credentials"))
         if self.connect.creds():
             f.write("<p>" + self.handleGet("/dc","Delete Credentials") + "\n")
@@ -278,8 +275,8 @@ class Gen_Html():
             f.write("<p> Credential-File doesn't exist </p><br> \n")
             if self.connect.creds_bak():
                 f.write(self.handleGet("/rc","Restore Credentials"))
-                
-        
+
+
         f.write("<p><form action='/cp' method='POST'> \n")
 
         # json-format: key,[type, entryname, order]
@@ -287,12 +284,12 @@ class Gen_Html():
         for e in entries:
             if e[1][0] == "checkbox":
                 f.write("<label for='" + e[0] + "'>" + e[1][1] + "</label> <input type='" + e[1][0] + "' name='" + e[0] +"' placeholder='" + e[0] + "' value='True'><br><br> \n")
-            else:    
+            else:
                 f.write("<label for='" + e[0] + "'>" + e[1][1] + "</label> <input type='" + e[1][0] + "' name='" + e[0] +"' placeholder='" + e[0] + "' value=''> <br><br> \n")
         f.write("<input type='submit' class='button' name='SUBMIT' value='Store Creds'></form>")
-        f.write("</p>")    
+        f.write("</p>")
         f.write(self.handleFooter())
         f.close()
-        return "cred.html"
+        return f"{GEN_DIR}cred.html"
 
 

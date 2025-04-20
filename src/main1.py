@@ -2,6 +2,7 @@
 #
 # Copyright (c) 2022  Dr. Magnus Christ (mc0110)
 # Copyright (c) 2023  Dr. Magnus Christ (mc0110)
+# Copyright (c) 2025  Karim Hraibi
 #
 # TRUMA-inetbox-simulation
 #
@@ -12,28 +13,36 @@
 #
 #
 #
-# Version: 2.5.0
+# Version: 3.0.0
 #
 # change_log:
 # 0.8.2 HA_autoConfig für den status error_code, clock ergänzt
 # 0.8.3 encrypted credentials, including duo_control, improve the MQTT-detection
 # 0.8.4 Tested with RP pico w R2040 - only UART-definition must be changed
 # 0.8.5 Added support for MPU6050 implementing a 2D-spiritlevel, added board-based autoconfig for UART,
-#       added config variables for activating duoControl and spirit-level features 
+#       added config variables for activating duoControl and spirit-level features
 # 0.8.6 added board-based autoconfig for I2C bus definition
 # 1.0.0 web-frontend implementation
 # 1.0.1 using mqtt-commands for reboot, ota, OS-run
 # 1.5.x chance browser behavior
 # 2.0.x chance connect and integrate mqtt-logic
+# 3.0.0 Simplified version ported to CPython for running on a Venus OS enabled Raspberry Pi
+#
 
-
+import os
+import sys
 import logging
-import uasyncio as asyncio
+import asyncio
 from lin import Lin
 from duocontrol import duo_ctrl
-from spiritlevel import spirit_level
-import time
-from machine import UART, Pin, I2C, soft_reset
+import serial as pyserial
+
+PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+LIB_PATH = os.path.join(PROJECT_ROOT, "lib")
+sys.path.insert(0, os.path.abspath(LIB_PATH))
+
+
+REL_NO = "3.0.0"
 
 log = logging.getLogger(__name__)
 
@@ -44,14 +53,14 @@ dc = None
 sl = None
 
 # Change the following configs to suit your environment
-topic_root      = 'truma'
-S_TOPIC_1	= ''
-S_TOPIC_2	= ''
-Pub_Prefix	= ''
-Pub_SL_Prefix	= ''
-HA_STOPIC	= ''
-HA_CTOPIC	= ''
-HA_CONFIG	= ''
+topic_root    = 'truma'
+S_TOPIC_1     = ''
+S_TOPIC_2     = ''
+Pub_Prefix    = ''
+Pub_SL_Prefix = ''
+HA_STOPIC     = ''
+HA_CTOPIC     = ''
+HA_CONFIG     = ''
 
 
 
@@ -64,11 +73,11 @@ def set_prefix(topic):
     global HA_STOPIC
     global HA_CTOPIC
     global HA_CONFIG
-    
+
     topic_root = topic
     S_TOPIC_1       = 'service/' + topic_root + '/set/'
     S_TOPIC_2       = 'homeassistant/status'
-    Pub_Prefix      = 'service/' + topic_root + '/control_status/' 
+    Pub_Prefix      = 'service/' + topic_root + '/control_status/'
     Pub_SL_Prefix   = 'service/spiritlevel/status/'
 
     # Auto-discovery-function of home-assistant (HA)
@@ -118,24 +127,7 @@ def callback(topic, msg, retained, qos):
     # Command received from broker
     if topic.startswith(S_TOPIC_1):
         topic = topic[len(S_TOPIC_1):]
-        if topic == "reboot":
-            if msg == "1":
-                log.info("reboot device request via mqtt")
-                soft_reset()
-            return    
-        if topic == "os_run":
-            if msg == "1":
-                log.info("switch to os_run -> AP-access: 192.168.4.1:80")
-                connect.run_mode(0)
-                soft_reset()
-            return    
-        if topic == "ota_update":
-            if msg == "1":
-                log.info("update software via OTA")
-                connect.run_mode(3)
-                soft_reset()
-            return
-#        log.info("Received command: "+str(topic)+" payload: "+str(msg))
+#       log.info("Received command: "+str(topic)+" payload: "+str(msg))
         if topic in lin.app.status.keys():
             log.info("inet-key:"+str(topic)+" value: "+str(msg))
             try:
@@ -155,10 +147,10 @@ def callback(topic, msg, retained, qos):
                 log.debug("key incl. dc is unkown")
         else:
             log.debug("key w/o dc is unkown")
-    # HA-server send ONLINE message        
+    # HA-server send ONLINE message
     if (topic == S_TOPIC_2) and (msg == 'online'):
         log.info("Received HOMEASSISTANT-online message")
-        await set_ha_autoconfig(connect.client)
+        set_ha_autoconfig(connect.client)
 
 
 # Initialze the subscripted topics
@@ -179,8 +171,8 @@ async def del_ha_autoconfig(c):
         except:
             log.debug("Publishing error in del_ha_autoconfig")
     log.info("del ha_autoconfig completed")
-        
-# HA auto discovery: define all auto config entities         
+
+# HA auto discovery: define all auto config entities
 async def set_ha_autoconfig(c):
     global connect
     for i in HA_CONFIG.keys():
@@ -199,17 +191,17 @@ async def main():
     global connect
     global file
     log.debug("main-loop is running")
-            
+
     await del_ha_autoconfig(connect.client)
     await set_ha_autoconfig(connect.client)
     log.info("Initializing completed")
-    
+
     i = 0
     wd = False
     while True:
         await asyncio.sleep(10) # Update every 10sec
         if file: logging._stream.flush()
-        s =lin.app.get_all(True)
+        s = lin.app.get_all(True)
         for key in s.keys():
             log.debug(f'publish {key}:{s[key]}')
             try:
@@ -221,7 +213,7 @@ async def main():
                 asyncio.create_task(lin.watchdog())
                 wd = True
         else: wd = False
-        if not(dc == None):        
+        if not(dc == None):
             s = dc.get_all(True)
             for key in s.keys():
                 log.debug(f'publish {key}:{s[key]}')
@@ -229,19 +221,12 @@ async def main():
                     await connect.client.publish(Pub_Prefix+key, str(s[key]), qos=1)
                 except:
                     log.debug("Error in duo_ctrl status publishing")
-        if not(sl == None):        
-            s = sl.get_all()
-            for key in s.keys():
-                log.debug(f'publish {key}:{s[key]}')
-                try:
-                    await connect.client.publish(Pub_SL_Prefix+key, str(s[key]), qos=1)
-                except:
-                    log.debug("Error in spirit_level status publishing")
+
         i += 1
         if not(i % 6):
             i = 0
             lin.app.status["alive"][1] = True # publish alive-heartbeat every min
-            
+
 
 # major ctrl loop for inetbox-communication
 async def lin_loop():
@@ -251,7 +236,7 @@ async def lin_loop():
     while True:
         await lin.loop_serial()
         if not(lin.stop_async): # full performance to send buffer
-            await asyncio.sleep_ms(1)
+            await asyncio.sleep(0.001)
 
 
 # major ctrl loop for duo_ctrl_check
@@ -268,16 +253,15 @@ async def sl_loop():
     while True:
         sl.loop()
         #print("Angle X: " + str(sl.get_roll()) + "      Angle Y: " +str(sl.get_pitch()) )
-        await asyncio.sleep_ms(100)
+        await asyncio.sleep(0.1)
 
 async def ctrl_loop():
     loop = asyncio.get_event_loop()
     a=asyncio.create_task(main())
     b=asyncio.create_task(lin_loop())
+    c=asyncio.create_task(connect.client.connect())
     if not(dc == None):
-        c=asyncio.create_task(dc_loop())
-    if not(sl == None):
-        d=asyncio.create_task(sl_loop())
+        d=asyncio.create_task(dc_loop())
     while True:
         await asyncio.sleep(10)
         if a.done():
@@ -286,9 +270,12 @@ async def ctrl_loop():
         if b.done():
             log.info("Restart lin_loop")
             b=asyncio.create_task(lin_loop())
-    
+        if c.done():
+            log.info("Restart MQTT clinet connect looop")
+            c=asyncio.create_task(connect.client.connect())
 
-def run(w, lin_debug, inet_debug, mqtt_debug, logfile):
+
+def run(w, lin_debug=False, inet_debug=False, mqtt_debug=False, logfile=False):
     global topic_root
     global connect
     global lin
@@ -296,63 +283,74 @@ def run(w, lin_debug, inet_debug, mqtt_debug, logfile):
     global sl
     global file
     connect = w
-    
+
     file = logfile
-    cred = connect.read_json_creds()
-    activate_duoControl  = (cred["ADC"] == "1")
-    activate_spiritlevel = (cred["ASL"] == "1")
-        
+    activate_duoControl  = (connect.config["options"]["duo_control"] == "1")
+
     if mqtt_debug:
         log.setLevel(logging.DEBUG)
-    else:    
+    else:
         log.setLevel(logging.INFO)
-        
+
     if lin_debug: log.info("LIN-LOG defined")
     if inet_debug: log.info("INET-LOG defined")
     if mqtt_debug: log.info("MQTT-LOG defined")
-    
+
     # hw-specific configuration
     # if ("ESP32" in uos.uname().machine):
-    
+
     log.info(f"HW-Check {w.platform_name}")
-#    serial = UART(w.p.get_pin("lin_uart"), rx= w.p.get_pin("lin_rx"), tx=w.p.get_pin("lin_tx"), baudrate=9600, bits=8, parity=None, stop=1, timeout=3) # this is the HW-UART-no 2
-#    serial = UART(w.p.get_data("lin_uart"), baudrate=9600, bits=8, parity=None, stop=1, timeout=3, rx=Pin(w.p.get_data("lin_rx")), tx=Pin(w.p.get_data("lin_tx"))) # this is the HW-UART-no 2
-    if (w.platform=="rp2"):
-        serial = UART(w.p.get_data("lin_uart"), baudrate=9600, bits=8, parity=None, stop=1, timeout=3, rx=Pin(w.p.get_data("lin_rx")), tx=Pin(w.p.get_data("lin_tx"))) # this is the HW-UART-no 2
-    if (w.platform=="esp32"):
-        serial = UART(w.p.get_data("lin_uart"), baudrate=9600, bits=8, parity=None, stop=1, timeout=3, rx=w.p.get_data("lin_rx"), tx=w.p.get_data("lin_tx")) # this is the HW-UART-no 2
-    
-    if activate_duoControl:
-        log.info("Activate duoControl set to true, using GPIO 18,19 as input, 22,23 as output")
-        dc = duo_ctrl()
-    else:
-        dc = None
-    if activate_spiritlevel:
-        # debugging from Christian S. - thanks a lot for this hint
-        sda = w.p.get_data("sl_sda")
-        scl = w.p.get_data("sl_scl")
-        # debugging from Markus (trinler007) - thanks a lot for this hint
-        log.info(f"Activate spirit_level set to true, using I2C- on GPIO {scl}(scl), {sda}(sda)")
-        i2c = I2C(1, sda=Pin(sda), scl=Pin(scl), freq=400000)
-        time.sleep(1.5)
-        sl = spirit_level(i2c)
-        
+    # serial = UART(w.p.get_pin("lin_uart"), rx= w.p.get_pin("lin_rx"), tx=w.p.get_pin("lin_tx"), baudrate=9600, bits=8, parity=None, stop=1, timeout=3) # this is the HW-UART-no 2
+    # serial = UART(w.p.get_data("lin_uart"), baudrate=9600, bits=8, parity=None, stop=1, timeout=3, rx=Pin(w.p.get_data("lin_rx")), tx=Pin(w.p.get_data("lin_tx"))) # this is the HW-UART-no 2
+    serial = pyserial.serial_for_url('loop://', baudrate=9600)
+    '''
+    serial = pyserial.Serial(
+        port=connect.config["serial"]["device"],
+        baudrate=9600,
+        bytesize=pyserial.EIGHTBITS,
+        parity=pyserial.PARITY_NONE,
+        stopbits=pyserial.STOPBITS_ONE,
+        timeout=3
+    )
+    '''
+    #if (w.platform=="rp2"):
+    #    serial = UART(w.p.get_data("lin_uart"), baudrate=9600, bits=8, parity=None, stop=1, timeout=3, rx=Pin(w.p.get_data("lin_rx")), tx=Pin(w.p.get_data("lin_tx"))) # this is the HW-UART-no 2
+    #if (w.platform=="esp32"):
+    #    serial = UART(w.p.get_data("lin_uart"), baudrate=9600, bits=8, parity=None, stop=1, timeout=3, rx=w.p.get_data("lin_rx"), tx=w.p.get_data("lin_tx")) # this is the HW-UART-no 2
+
+    #if activate_duoControl:
+    #    log.info("Activate duoControl set to true, using GPIO 18,19 as input, 22,23 as output")
+    #    dc = duo_ctrl()
+    #else:
+    #    dc = None
+
     # Initialize the lin-object
     lin = Lin(serial, w.p, lin_debug, inet_debug)
-    if cred["TOPIC"] != "":
-        topic_root = cred["TOPIC"]
-        
+    if connect.config["mqtt"]["topic"] != "":
+        topic_root = connect.options["mqtt"]["topic"]
+
     set_prefix(topic_root)
     log.info(f"prefix: '{topic_root}' set: {S_TOPIC_1} rec: {Pub_Prefix}")
-    connect.config.set_last_will("service/" + topic_root + "/control_status/alive", "OFF", retain=True, qos=0)  # last will is important
+    connect.mqtt_config.set_last_will("service/" + topic_root + "/control_status/alive", "OFF", retain=True, qos=0)  # last will is important
     connect.set_proc(subscript = callback, connect = conn_callback)
-    
+
     if not(dc == None):
         HA_CONFIG.update(dc.HA_DC_CONFIG)
     if not(sl == None):
         HA_CONFIG.update(sl.HA_SL_CONFIG)
-        
-    asyncio.run(ctrl_loop())    
+
+    asyncio.run(ctrl_loop())
     #loop.run_forever()
 
 
+
+if __name__ == "__main__":
+
+    log.info(f"Release no: {REL_NO}")
+
+    import connect
+    w=connect.Connect()
+    w.rel_no = REL_NO
+    w.connect()
+
+    run(w)
