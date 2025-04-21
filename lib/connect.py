@@ -22,6 +22,8 @@ import configparser
 from mqtt_async2 import MQTTClient, MQTTConfig
 from tools import PIN_MAPS, PIN_MAP
 
+log = logging.getLogger(__name__)
+
 PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 CONFIG_FN    = "etc/inetbox2mqtt"
 
@@ -35,15 +37,10 @@ class Connect():
     appname     = ""
     mqtt_flg    = ""
 
-    def __init__(self, hw=None, fn=None, debuglog=False):
+    def __init__(self, hw=None, fn=None):
         if hw == None: hw = "RPi"
 
-        self.log = logging.getLogger(__name__)
-
-        if debuglog:
-            self.log.setLevel(logging.DEBUG)
-        else:
-            self.log.setLevel(logging.INFO)
+        log = logging.getLogger(__name__)
 
         self.pin_map = hw
         self.client = None
@@ -59,7 +56,7 @@ class Connect():
         self.platform_name = str(self.pin_map) + " " + str(sys.platform)
         self.python = '{} {}'.format(sys.implementation.name,'.'.join(str(s) for s in sys.implementation.version))
 
-        self.log.info("Detected " + self.python + " on port: " + self.platform)
+        log.info("Detected " + self.python + " on port: " + self.platform)
 
         self.mqtt_config = MQTTConfig()
 
@@ -68,14 +65,14 @@ class Connect():
 
 
     async def c_subscripted(self, topic, msg, retained, qos):
-        self.log.debug("Received topic:" + str(topic) + " > payload: " + str(msg) + "qos: " + str(qos))
+        log.debug("Received topic:" + str(topic) + " > payload: " + str(msg) + "qos: " + str(qos))
         if self.subscripted != None: await self.subscripted(topic, msg, retained, qos)
 
 
     # Initialze the connect-funct
     # define subscriptions
     async def c_connected(self, client):
-        self.log.info("MQTT connected")
+        log.info("MQTT connected")
         if self.connected != None:
             await self.connected(client)
 
@@ -92,30 +89,34 @@ class Connect():
             self.config.read(file)
             return self.config
         except:
-            self.log.error(f"Failed to open config file: {file}")
+            log.error(f"Failed to open config file: {file}")
             return None
 
 
-    def connect(self):
-        return self.set_mqtt()
+    def connect(self, mqtt_debug=False):
+        return self.set_mqtt(mqtt_debug=mqtt_debug)
 
 
-    def set_mqtt(self):
-        self.log.debug("Try to open mqtt connection")
+    def set_mqtt(self, mqtt_debug):
+        log.debug("Try to open mqtt connection")
         cfg = self.read_config()
         if cfg:
+            mqtt_debug = cfg.getboolean("logging", "mqtt_debug")
+            if mqtt_debug:
+                log.setLevel(level=logging.DEBUG)
+                log.info("MQTT debug log enabled")
             self.mqtt_config.server   = cfg["mqtt"]["server"]
             self.mqtt_config.user     = cfg["mqtt"]["user"]
             self.mqtt_config.password = cfg["mqtt"]["password"]
             port = 1883
             if cfg["mqtt"]["port"] != "":
                 port = int(cfg["mqtt"]["port"])
-                self.log.info(f"MQTT Port is switched to port: {port}")
+                log.info(f"MQTT Port is switched to port: {port}")
             self.mqtt_config.clean     = True
             self.mqtt_config.keepalive = 60  # last will after 60sek off
             # self.mqtt_config.set_last_will("test/alive", "OFF", retain=True, qos=0)  # last will is important for clean connect
             self.mqtt_config.set_last_will("service/truma/control_status/alive", "OFF", retain=True, qos=0)  # last will is important
-            self.client = MQTTClient(self.mqtt_config)
+            self.client = MQTTClient(self.mqtt_config, mqtt_debug)
 
 
     def run_mode(self):

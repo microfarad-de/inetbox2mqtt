@@ -8,6 +8,7 @@ from tools import calculate_checksum
 import conversions as cnv
 import logging
 
+log = logging.getLogger(__name__)
 
 class InetboxApp:
 
@@ -95,16 +96,16 @@ class InetboxApp:
     STATUS_BUFFER_HEADER_02 = bytes([0x02, 0x0D])
     STATUS_BUFFER_HEADER_03 = bytes([0x0A, 0x15])
     STATUS_BUFFER_HEADER_04 = bytes([0x12, 0x35]) #Aventa Aircon Status
-    
+
     STATUS_BUFFER_HEADER_WRITE_STATUS = bytes([0x0C, 0x32])
     STATUS_BUFFER_HEADER_WRITE_02_STATUS = bytes([0x0C, 0x34]) #Aventa Aircon Write
 
 
 # Problem is, that micropython doesn't hold the correct order of the keys (like CPython > 3.7)
-# Workaround is 
+# Workaround is
 
     STATUS_BUFFER_TYPES = {
-        
+
         STATUS_BUFFER_HEADER_RECV_STATUS: {
             # mapping-table: key, subject, byte-len, storage
                     1: ["dummy", 1, False],
@@ -129,7 +130,7 @@ class InetboxApp:
         },
         STATUS_BUFFER_HEADER_WRITE_STATUS: {
             # mapping-table: key, mapping-key, byte-len
-                    1: ["command_counter", 1, "command_counter"], 
+                    1: ["command_counter", 1, "command_counter"],
                     2: ["checksum", 1, "checksum"],
                     3: ["target_temp_room", 2, "target_temp_room"],
                     4: ["heating_mode", 1, "heating_mode"],
@@ -144,7 +145,7 @@ class InetboxApp:
         },
         STATUS_BUFFER_HEADER_WRITE_02_STATUS: {  # AVENTA-Write-Commands
             # mapping-table: key, mapping-key, byte-len
-                    1: ["command_counter", 1, "command_counter"], 
+                    1: ["command_counter", 1, "command_counter"],
                     2: ["checksum", 1, "checksum"],
                     3: ["aircon_operating_mode", 1, "aircon_operating_mode"],
                     4: ["dummy", 1, "", 0],
@@ -289,13 +290,15 @@ class InetboxApp:
     reflect = True
 
     display_status = {}
-    log = logging.getLogger(__name__)
 
     def __init__(self, debug, reflect = True):
         # when requested, set logger to debug level
         if debug:
-            self.log.setLevel(logging.DEBUG)
-        self.log.debug(f"Status: {self.status}")
+            log.setLevel(logging.DEBUG)
+            log.info("INET debug log enabled")
+
+
+        log.debug(f"Status: {self.status}")
         self.reflect = reflect
 
     def map_or_debug(self, mapping, value):
@@ -312,10 +315,10 @@ class InetboxApp:
                 0x21: self.parse_status_1,
                 0x22: self.parse_status_2,
             }[pid](databytes)
-            self.log.debug(f"Found handled message {hex(pid)}> {format_bytes(databytes)}")            
+            log.debug(f"Found handled message {hex(pid)}> {format_bytes(databytes)}")
             return True
         except KeyError:
-            self.log.debug(f"error in handle_message")
+            log.debug(f"error in handle_message")
             # ... or exit with false
             return False
 
@@ -384,19 +387,19 @@ class InetboxApp:
         self.display_status.update(data)
 
     def process_status_buffer_update(self, buf_id, status_buffer):
-        self.log.debug(f"Status ID[{buf_id.hex(' ')}]:> {status_buffer.hex(' ')}")
+        log.debug(f"Status ID[{buf_id.hex(' ')}]:> {status_buffer.hex(' ')}")
 
         if not(buf_id in self.STATUS_BUFFER_TYPES.keys()):
-            self.log.debug("unkown buffer type - no processing")
+            log.debug("unkown buffer type - no processing")
             return
-        
+
         status_buffer_map = self.STATUS_BUFFER_TYPES[buf_id]
         parsed_status_buffer = {}
 
         val = 0
-        
+
         keys = list(status_buffer_map.keys())
-        keys.sort()       
+        keys.sort()
         for key in keys:
             val_a = val
             val += status_buffer_map[key][1]
@@ -404,21 +407,21 @@ class InetboxApp:
                 status_key = status_buffer_map[key][0]
                 if (status_key == "display"):
                     parsed_status_buffer[status_key] = [status_buffer[val_a:val].hex(" "), True, False]
-                else:                    
+                else:
                     parsed_status_buffer[status_key] = [int.from_bytes(status_buffer[val_a:val],"little"), True, False]
-        
+
         self.status.update(parsed_status_buffer)
-        self.log.debug(f"Update: {parsed_status_buffer}")
-        
+        log.debug(f"Update: {parsed_status_buffer}")
+
 
     def _get_status_buffer_for_writing(self):
         # right now, we only send this one type of buffer
 
         if not self.upload_buffer:
             return None
-        
+
         status_buffer_map = self.STATUS_BUFFER_TYPES[self.STATUS_BUFFER_HEADER_WRITE_STATUS]
-        
+
         # increase output message counter
         self.status["command_counter"] = [(self.status["command_counter"][0] + 1) % 0xFF, True]
         self.status["checksum"] = [0, True, False]
@@ -441,10 +444,10 @@ class InetboxApp:
                     self.status[map_key] = [self.status[map_key][0], self.status[map_key][1], False]
         except KeyError:
             self.upload_buffer = 0
-            self.log.debug(f"KeyError in status_buffer for writing")
+            log.debug(f"KeyError in status_buffer for writing")
             return None
-        
-        self.log.debug(f"result of heater status-transfer: {binary_buffer_contents.hex(' ')}")
+
+        log.debug(f"result of heater status-transfer: {binary_buffer_contents.hex(' ')}")
 
 # calculate checksum
         self.status["checksum"] = [calculate_checksum(
@@ -452,7 +455,7 @@ class InetboxApp:
                 self.STATUS_BUFFER_PREAMBLE
                 + self.STATUS_BUFFER_HEADER_WRITE_STATUS
                 + binary_buffer_contents
-            )[self.STATUS_HEADER_CHECKSUM_START :]  
+            )[self.STATUS_HEADER_CHECKSUM_START :]
         ), True, False]
 
         try:
@@ -467,7 +470,7 @@ class InetboxApp:
                     binary_buffer_contents += self.status[map_key][0].to_bytes(val, "little")
         except KeyError:
             self.upload_buffer = 0
-            self.log.debug(f"KeyError in status_buffer for writing")
+            log.debug(f"KeyError in status_buffer for writing")
             return None
 
 #        self.upload_buffer = True
@@ -483,10 +486,10 @@ class InetboxApp:
             bytearray([0x03, 0x25]) + send_buffer[24:30],
             bytearray([0x03, 0x26]) + send_buffer[30:36],
              ]
-        for q in s: 
+        for q in s:
             cs = calculate_checksum(q)
             q.append(cs)
-            self.log.debug(f"buffer for writing: {q.hex(' ')}")
+            log.debug(f"buffer for writing: {q.hex(' ')}")
         return s
 
     def _get_status_buffer1_for_writing(self):
@@ -494,9 +497,9 @@ class InetboxApp:
 
         if not self.upload02_buffer:
             return None
-        
+
         status_buffer_map = self.STATUS_BUFFER_TYPES[self.STATUS_BUFFER_HEADER_WRITE_02_STATUS]
-        
+
         # increase output message counter
         self.status["command_counter"] = [(self.status["command_counter"][0] + 1) % 0xFF, True]
         self.status["checksum"] = [0, True, False]
@@ -518,13 +521,13 @@ class InetboxApp:
                 else:
                     binary_buffer_contents += self.status[map_key][0].to_bytes(val, "little")
                     self.status[map_key] = [self.status[map_key][0], self.status[map_key][1], False]
-                    
+
         except KeyError:
-            self.log.debug(f"KeyError in status_buffer1 for writing")
+            log.debug(f"KeyError in status_buffer1 for writing")
             self.upload02_buffer = 0
             return None
-        
-        self.log.debug(f"result of aircon status-transfer: {binary_buffer_contents.hex(' ')}")
+
+        log.debug(f"result of aircon status-transfer: {binary_buffer_contents.hex(' ')}")
 
 # calculate checksum
         self.status["checksum"] = [calculate_checksum(
@@ -532,7 +535,7 @@ class InetboxApp:
                 self.STATUS_BUFFER_PREAMBLE
                 + self.STATUS_BUFFER_HEADER_WRITE_02_STATUS
                 + binary_buffer_contents
-            )[self.STATUS_HEADER_CHECKSUM_START :]  
+            )[self.STATUS_HEADER_CHECKSUM_START :]
         ), True, False]
 
         try:
@@ -546,9 +549,9 @@ class InetboxApp:
                 else:
                     binary_buffer_contents += self.status[map_key][0].to_bytes(val, "little")
         except KeyError:
-            self.log.debug(f"KeyError in status_buffer1 for writing")
+            log.debug(f"KeyError in status_buffer1 for writing")
             self.upload02_buffer = 0
-        
+
         send_buffer = self.STATUS_BUFFER_PREAMBLE + self.STATUS_BUFFER_HEADER_WRITE_02_STATUS + binary_buffer_contents
 
         s = [
@@ -560,13 +563,13 @@ class InetboxApp:
             bytearray([0x03, 0x25]) + send_buffer[24:30],
             bytearray([0x03, 0x26]) + send_buffer[30:36],
              ]
-        for q in s: 
+        for q in s:
             cs = calculate_checksum(q)
             q.append(cs)
-            self.log.debug(f"buffer for writing: {q.hex(' ')}")
-        
+            log.debug(f"buffer for writing: {q.hex(' ')}")
+
         return s
-    
+
     # This is the small api to the mqtt-engine
     # I changed the logic slightly, in the MAP-Definition it can be changed
     def get_status(self, key):
@@ -582,8 +585,8 @@ class InetboxApp:
             raise Exception(f"Conversion function not defined - this key {key} isn't defined?")
         if self.STATUS_CONVERSION_FUNCTIONS[key] is None:
             raise Exception(f"Conversion function not defined - this key {key} isn't writeable?")
-#        self.log.info(f"Setting {key} to {value}")
-        self.log.debug(f"set_status: {key}:{value}")
+#        log.info(f"Setting {key} to {value}")
+        log.debug(f"set_status: {key}:{value}")
         old_data = self.status[key][0]
         old_flg = self.status[key][2]
         # self.reflect chance the behavior of system control: True means that set commands reflected in control_status
@@ -594,24 +597,24 @@ class InetboxApp:
             if self.status[key][0] != old_data:
                 self.status[key][2] = True
 #        self.upload_buffer = True
-        self.log.debug(f"Status elements: {self.status}")
-# check for heater-items        
+        log.debug(f"Status elements: {self.status}")
+# check for heater-items
         map_key = []
         for k in self.STATUS_BUFFER_TYPES[self.STATUS_BUFFER_HEADER_WRITE_STATUS]:
             map_key += [self.STATUS_BUFFER_TYPES[self.STATUS_BUFFER_HEADER_WRITE_STATUS][k][2]]
         if key in map_key:
-            self.log.debug(f"heater: {key}:{self.status[key]}")
-            if self.status[key][2]: self.upload_buffer = 2   
-# check for aircon-items 
+            log.debug(f"heater: {key}:{self.status[key]}")
+            if self.status[key][2]: self.upload_buffer = 2
+# check for aircon-items
         map_key = []
         for k in self.STATUS_BUFFER_TYPES[self.STATUS_BUFFER_HEADER_WRITE_02_STATUS]:
             map_key += [self.STATUS_BUFFER_TYPES[self.STATUS_BUFFER_HEADER_WRITE_02_STATUS][k][2]]
         if key in map_key:
-            self.log.debug(f"aircon: {key}:{self.status[key]}")
+            log.debug(f"aircon: {key}:{self.status[key]}")
             if self.status[key][2]: self.upload02_buffer = 2
-        self.upload_wait = 3 # wait for 3 "fe"-cycles to collect commands    
-        self.log.debug(f"upload_buffer: {self.upload_buffer}")    
-        self.log.debug(f"upload02_buffer: {self.upload02_buffer}")    
+        self.upload_wait = 3 # wait for 3 "fe"-cycles to collect commands
+        log.debug(f"upload_buffer: {self.upload_buffer}")
+        log.debug(f"upload02_buffer: {self.upload02_buffer}")
 
 # Status-Dump - with False, it sends all status-values
 # with True it sends only a list of changed values - but reset the chance-flag
@@ -628,6 +631,6 @@ class InetboxApp:
                     self.status[key][1] = False
                     self.status_updated = True
                     s.update({key: self.get_status(key)})
-            return s        
-        
+            return s
+
 

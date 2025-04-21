@@ -19,6 +19,8 @@ import inetboxapp
 import logging
 import asyncio
 
+log = logging.getLogger(__name__)
+
 
 class Lin:
 
@@ -30,9 +32,8 @@ class Lin:
     cmd_buf = {}
     cnt_rows = 1
     stop_async = False
-    log = logging.getLogger(__name__)
     cnt_in = 0
-# Same approach for the raw PID 0xD8. This corresponds to a PID 0x18
+    # Same approach for the raw PID 0xD8. This corresponds to a PID 0x18
     d8_alive = False
 
 
@@ -66,7 +67,9 @@ class Lin:
         self.pin_map = pin_map
         self.cnt_rows = 1
         if lin_debug:
-            self.log.setLevel(logging.DEBUG)
+            log.setLevel(logging.DEBUG)
+            log.info("LIN debug log enabled")
+
         self.lin_debug = lin_debug
         self.app = inetboxapp.InetboxApp(inet_debug)
         self.pin_map.set_led("lin_led", False)
@@ -91,16 +94,16 @@ class Lin:
     def _send_answer(self, databytes):
         self.serial.write(databytes)
         self.serial.flush()
-        self.log.debug("out > " + str(databytes.hex(" ")))
+        log.debug("out > " + str(databytes.hex(" ")))
         self.pin_map.toggle_led("lin_led")
 
 
     def prepare_tl_str_response(self, message_str, info_str):
         self.prepare_tl_response(bytes.fromhex(message_str.replace(" ","")))
         if info_str.startswith("_"):
-            self.log.debug(info_str)
+            log.debug(info_str)
         else:
-            self.log.info(info_str)
+            log.info(info_str)
 
 
     def prepare_tl_response(self, messages):
@@ -113,7 +116,7 @@ class Lin:
             self.ts_response_buffer.pop(0)
             self._send_answer(databytes)
         else:
-            self.log.debug("unexpacted behavior - nothing to send")
+            log.debug("unexpacted behavior - nothing to send")
 
 
     def no_answer(self, s, p):
@@ -121,7 +124,7 @@ class Lin:
             self.stop_async = self.response_waiting()
         self.updates_to_send = (self.app.upload_buffer or self.app.upload02_buffer)
         if p.startswith("_"): return
-        self.log.debug(p)
+        log.debug(p)
 
 
     def display_status(self):
@@ -144,12 +147,12 @@ class Lin:
             buf += self.cpp_in_buffer[i]
         #print(buf.hex("+"))
         if buf[:8] != self.BUFFER_PREAMBLE:
-            self.log.debug("buffer preamble doesn't match")
+            log.debug("buffer preamble doesn't match")
             return False
         buf_id = buf[8:10]
         self.d8_alive = True
         self.cpp_buffer[buf_id] = buf[10:]
-        self.log.debug(f"Buf[{buf_id}]={self.cpp_buffer[buf_id]}")
+        log.debug(f"Buf[{buf_id}]={self.cpp_buffer[buf_id]}")
         self.app.process_status_buffer_update(buf_id, self.cpp_buffer[buf_id])
         return True
 
@@ -166,19 +169,19 @@ class Lin:
 #         self.prepare_tl_response(bytes.fromhex("03 26 00 00 00 00 00 00 d6".replace(" ","")))
 
         if self.app.upload_buffer:
-            self.log.debug("heater_status to be generated")
+            log.debug("heater_status to be generated")
             self.cmd_buf = self.app._get_status_buffer_for_writing()
             self.stop_async = True
             if self.app.upload_buffer > 0: self.app.upload_buffer -= 1
 
         if self.app.upload02_buffer:
-            self.log.debug("aircon_status to be generated")
+            log.debug("aircon_status to be generated")
             self.cmd_buf = self.app._get_status_buffer1_for_writing()
             self.stop_async = True
             if self.app.upload02_buffer > 0: self.app.upload02_buffer -= 1
 
         if (self.cmd_buf == None) or (self.cmd_buf == {}):
-            self.log.debug("cmd_buffer is empty")
+            log.debug("cmd_buffer is empty")
             return
         self.d8_alive = True
         self.stop_async = True
@@ -186,26 +189,26 @@ class Lin:
             self.prepare_tl_response(i)
         self.updates_to_send = False
         if p.startswith("_"): return
-        self.log.debug(p)
+        log.debug(p)
 
     async def watchdog(self):
-        self.log.info("watchdog activated")
+        log.info("watchdog activated")
         await asyncio.sleep(60)
         if (self.app.status["alive"][0] == "ON"):
-            self.log.info("watchdog deactivated_s1")
+            log.info("watchdog deactivated_s1")
             return
         await asyncio.sleep(60)
         if (self.app.status["alive"][0] == "ON"):
-            self.log.info("watchdog deactivated_s2")
+            log.info("watchdog deactivated_s2")
             return
         await asyncio.sleep(60)
         if (self.app.status["alive"][0] == "ON"):
-            self.log.info("watchdog deactivated_s3")
+            log.info("watchdog deactivated_s3")
         else:
             if self.lin_debug:
-                self.log.debug("system reboot in debug_mode suppressed")
+                log.debug("system reboot in debug_mode suppressed")
             else:
-                self.log.info("system reboot required")
+                log.info("system reboot required")
                 #import machine
                 #machine.reset()
 
@@ -271,13 +274,13 @@ class Lin:
             self.d8_alive = True
             self.app.status["alive"] = ["ON", True, False]
             self.pin_map.set_led("lin_led", True)
-            self.log.debug(f"in < {line.hex(' ')}")
+            log.debug(f"in < {line.hex(' ')}")
             s = False
             if not(self.app.upload_wait): s = (self.app.upload_buffer or self.app.upload02_buffer)
             if s:
                 self.app.upload_wait = 4
                 self.stop_async = True
-                self.log.debug("0x18 - update-requested")
+                log.debug("0x18 - update-requested")
                 self._send_answer(bytearray.fromhex("ff ff ff ff ff ff ff ff 27".replace(" ","")))
                 return
             else:
@@ -288,7 +291,7 @@ class Lin:
 # send requested answer to 0x3d -> 0x7d with parity) but only, if I have the need to answer
         if raw_pid == 0x7d:
             if self.response_waiting():
-                self.log.debug(f"in < {line.hex(' ')}")
+                log.debug(f"in < {line.hex(' ')}")
                 self._answer_tl_request()
                 return
             else: return
@@ -311,7 +314,7 @@ class Lin:
         self.cnt_rows = self.cnt_rows % self.CNT_ROWS_MAX
         if not(self.cnt_rows): self.display_status()
 
-        self.log.debug(f"in < {line.hex(' ')}")
+        log.debug(f"in < {line.hex(' ')}")
 #        if len(line) != 12:
 #            return              # exit, length isn't correct
 #
@@ -325,7 +328,7 @@ class Lin:
         if (line[:4]==buf_trans_id) and (line[4] in range(0x21, 0x27)):
 #            self.("Buffer-check:" + str(line.hex("-")))
             self.cpp_in_buffer[line[4] - 0x21] = line[5:-1] # fill into buffer-segment
-#            self.log.debug(str(self.cpp_in_buffer[line[4] - 0x21].hex("*"))+ str(line[4] - 0x21))
+#            log.debug(str(self.cpp_in_buffer[line[4] - 0x21].hex("*"))+ str(line[4] - 0x21))
             if (line[4] == 0x26):
                 if (self.assemble_cpp_buffer()):
                     self.prepare_tl_str_response("03 01 fb ff ff ff ff ff 00", "_send ackn-response for buffer delivery") # ackn buffer-upload
@@ -349,7 +352,7 @@ class Lin:
             "00 55 03 aa 0a ff ff ff ff ff ff 48": [self.no_answer, "", "_ackn from CPplus"], # ackn from CPplus
             }
         if not(cmd in cmd_ctrl.keys()):
-            #self.log.debug(str(line.hex(" ")) + "-> no processing")
+            #log.debug(str(line.hex(" ")) + "-> no processing")
             return # no processing necessary
         cmd_ctrl[cmd][0](cmd_ctrl[cmd][1], cmd_ctrl[cmd][2]) # do it
         return

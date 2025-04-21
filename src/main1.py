@@ -42,7 +42,11 @@ LIB_PATH = os.path.join(PROJECT_ROOT, "lib")
 sys.path.insert(0, os.path.abspath(LIB_PATH))
 
 
-REL_NO = "3.0.0"
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s [%(name)s] %(levelname)s: %(message)s',
+    stream=sys.stdout  # Direct logs to stdout
+)
 
 log = logging.getLogger(__name__)
 
@@ -51,6 +55,9 @@ connect = None
 lin = None
 dc = None
 sl = None
+
+# Release number
+REL_NO = "3.0.0"
 
 # Change the following configs to suit your environment
 TOPIC_ROOT    = 'truma'
@@ -186,7 +193,7 @@ async def set_ha_autoconfig(c):
 async def main():
     global repo_update
     global connect
-    global file
+
     log.debug("main-loop is running")
 
     await del_ha_autoconfig(connect.client)
@@ -197,7 +204,6 @@ async def main():
     wd = False
     while True:
         await asyncio.sleep(10) # Update every 10sec
-        if file: logging._stream.flush()
         s = lin.app.get_all(True)
         for key in s.keys():
             log.debug(f'publish {key}:{s[key]}')
@@ -268,30 +274,26 @@ async def ctrl_loop():
             log.info("Restart lin_loop")
             b=asyncio.create_task(lin_loop())
         if c.done():
-            log.info("Restart MQTT clinet connect looop")
+            log.info("Restart MQTT client connect loop")
             c=asyncio.create_task(connect.client.connect())
 
 
-def run(w, lin_debug=False, inet_debug=False, mqtt_debug=False, logfile=False):
+def run(w, lin_debug=False, inet_debug=False, mqtt_debug=False):
     global TOPIC_ROOT
     global connect
     global lin
     global dc
     global sl
-    global file
     connect = w
 
-    file = logfile
-    activate_duoControl  = (connect.config["options"]["duo_control"] == "1")
+    duocontrol = connect.config.getboolean("options", "duo_control")
+    lin_debug  = connect.config.getboolean("logging", "lin_debug")
+    inet_debug = connect.config.getboolean("logging", "inet_debug")
+    mqtt_debug = connect.config.getboolean("logging", "mqtt_debug")
 
     if mqtt_debug:
         log.setLevel(logging.DEBUG)
-    else:
-        log.setLevel(logging.INFO)
-
-    if lin_debug: log.info("LIN-LOG defined")
-    if inet_debug: log.info("INET-LOG defined")
-    if mqtt_debug: log.info("MQTT-LOG defined")
+        log.info("MQTT debug log enabled")
 
     log.info(f"HW-Check {w.platform_name}")
 
@@ -309,7 +311,7 @@ def run(w, lin_debug=False, inet_debug=False, mqtt_debug=False, logfile=False):
             timeout=3
         )
 
-    #if activate_duoControl:
+    #if duocontrol:
     #    log.info("Activate duoControl set to true, using GPIO 18,19 as input, 22,23 as output")
     #    dc = duo_ctrl()
     #else:
@@ -333,11 +335,8 @@ def run(w, lin_debug=False, inet_debug=False, mqtt_debug=False, logfile=False):
 
 if __name__ == "__main__":
 
-    log.info(f"Release no: {REL_NO}")
-
     import connect
     w=connect.Connect()
     w.rel_no = REL_NO
     w.connect()
-
     run(w)

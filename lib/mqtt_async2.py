@@ -456,7 +456,8 @@ class MQTTClient():
     def __init__(self, config, debug=False):
         # handle config
         self._c = config
-        if debug: log.setLevel(logging.DEBUG)        # config last will and keepalive
+        if debug:
+            log.setLevel(logging.DEBUG)
         if self._c.will is None:
             self._c.keepalive = 0 # no point setting MQTT keepalive if there's no lw
         elif not isinstance(self._c.will, MQTTMessage):
