@@ -19,7 +19,6 @@ import os
 import sys
 import logging
 import configparser
-from crypto_keys import fn_crypto as crypt
 from mqtt_async2 import MQTTClient, MQTTConfig
 from tools import PIN_MAPS, PIN_MAP
 

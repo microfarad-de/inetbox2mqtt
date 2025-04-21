@@ -288,7 +288,7 @@ class Lin:
 # send requested answer to 0x3d -> 0x7d with parity) but only, if I have the need to answer
         if raw_pid == 0x7d:
             if self.response_waiting():
-                self.log.debug(f"in < {line.hex(" ")}")
+                self.log.debug(f"in < {line.hex(' ')}")
                 self._answer_tl_request()
                 return
             else: return
@@ -311,7 +311,7 @@ class Lin:
         self.cnt_rows = self.cnt_rows % self.CNT_ROWS_MAX
         if not(self.cnt_rows): self.display_status()
 
-        self.log.debug(f"in < {line.hex(" ")}")
+        self.log.debug(f"in < {line.hex(' ')}")
 #        if len(line) != 12:
 #            return              # exit, length isn't correct
 #
