@@ -6,8 +6,8 @@ password =
 topic =
 
 [serial]
-device = dummy
-# device = /dev/ttyUSB0
+#device = dummy
+device = /dev/ttyAMA0
 
 [options]
 duo_control = 0
