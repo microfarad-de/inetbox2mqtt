@@ -61,17 +61,21 @@ def run(w, lin_debug=False, inet_debug=False, webos_debug=False, naw_debug=False
     # hw-specific configuration
     #log.info(f"run uart:{w.p.get_data('lin_uart')} tx:{w.p.get_data('lin_tx')} rx:{w.p.get_data('lin_rx')}")
     #log.info(f"HW-Check {w.platform_name}")
-    serial = pyserial.serial_for_url('loop://', baudrate=9600)
-    '''
-    serial = pyserial.Serial(
-        port=connect.config["serial"]["device"],
-        baudrate=9600,
-        bytesize=pyserial.EIGHTBITS,
-        parity=pyserial.PARITY_NONE,
-        stopbits=pyserial.STOPBITS_ONE,
-        timeout=3
-    )
-    '''
+
+    port = connect.config["serial"]["device"]
+
+    if port == "dummy":
+        serial = pyserial.serial_for_url('loop://', baudrate=9600)
+    else:
+        serial = pyserial.Serial(
+            port=port,
+            baudrate=9600,
+            bytesize=pyserial.EIGHTBITS,
+            parity=pyserial.PARITY_NONE,
+            stopbits=pyserial.STOPBITS_ONE,
+            timeout=3
+        )
+
 #    if (w.platform=="rp2"):
 #        serial = UART(w.p.get_data("lin_uart"), baudrate=9600, bits=8, parity=None, stop=1, timeout=3, rx=Pin(w.p.get_data("lin_rx")), tx=Pin(w.p.get_data("lin_tx"))) # this is the HW-UART-no 2
 #    if (w.platform=="esp32"):

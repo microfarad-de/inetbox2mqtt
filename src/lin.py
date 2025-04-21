@@ -1,5 +1,5 @@
 # MIT License
-# 
+#
 # Copyright (c) 2022  Dr. Magnus Christ (mc0110)
 #
 #
@@ -7,12 +7,12 @@
 #
 # this project is based on the LIN Specification Package Revision 2.2A
 #
-# The essential basis is to incorporate the results of the specification in such a way that 
-# there are no performance problems. Therefore, for example, RAW PIDs are processed in which 
-# the parity bits have not been separated. These are shown on pages 53ff of the specification. 
+# The essential basis is to incorporate the results of the specification in such a way that
+# there are no performance problems. Therefore, for example, RAW PIDs are processed in which
+# the parity bits have not been separated. These are shown on pages 53ff of the specification.
 # Thus 3C/3D with parity becomes 3C/7D. If this leads to confusion, I apologise.
 # Same approach for the raw PID 0xD8. This corresponds to a PID 0x18
-# This module has been optimised for high performance.  
+# This module has been optimised for high performance.
 
 from tools import calculate_checksum, PIN_MAP
 import inetboxapp
@@ -38,15 +38,15 @@ class Lin:
 
     # Only for display control / slow event timing
     CNT_ROWS_MAX = 200
-    
+
     # Check Alive-status periodically - with 1ms delay it is appx. 9s
     # there must be more than 1 D8-requests in this periode, than is alive status "ON"
-    # otherwise it would set "OFF" 
+    # otherwise it would set "OFF"
     CNT_IN_MAX = 9000
-    
+
     DISPLAY_STATUS_PIDS = [bytes([0x20]), bytes([0x61]), bytes([0xE2])]
-    
-    
+
+
     # the correct (full) preamble starts in the first frame, but we see only one type of
     # frames, all with the same length - so we can use a frame-preamble with a shorter length,
     # starting in the 2. frame
@@ -67,7 +67,7 @@ class Lin:
         self.cnt_rows = 1
         if lin_debug:
             self.log.setLevel(logging.DEBUG)
-        self.lin_debug = lin_debug    
+        self.lin_debug = lin_debug
         self.app = inetboxapp.InetboxApp(inet_debug)
         self.pin_map.set_led("lin_led", False)
         print("Lin initialized")
@@ -85,7 +85,7 @@ class Lin:
             cs = calculate_checksum(databytes)
         else:
             cs = calculate_checksum(bytes([pid_for_checksum]) + databytes)
-        self.send_answer(self, serial, databytes.extend([cs]))    
+        self.send_answer(self, serial, databytes.extend([cs]))
 
 
     def _send_answer(self, databytes):
@@ -99,7 +99,7 @@ class Lin:
         self.prepare_tl_response(bytes.fromhex(message_str.replace(" ","")))
         if info_str.startswith("_"):
             self.log.debug(info_str)
-        else:    
+        else:
             self.log.info(info_str)
 
 
@@ -123,7 +123,7 @@ class Lin:
         if p.startswith("_"): return
         self.log.debug(p)
 
-       
+
     def display_status(self):
         pass
 #        if self.info:
@@ -136,13 +136,13 @@ class Lin:
 
 
     def assemble_cpp_buffer(self):
-        # gather the transfered frames 
+        # gather the transfered frames
         # preamble "00 1E 00 00 0x22 0xFF 0xFF 0x54 0x01"
         # buffer id (2 bytes)
         buf = bytes([])
         for i in range(5):
             buf += self.cpp_in_buffer[i]
-        #print(buf.hex("+"))    
+        #print(buf.hex("+"))
         if buf[:8] != self.BUFFER_PREAMBLE:
             self.log.debug("buffer preamble doesn't match")
             return False
@@ -204,21 +204,21 @@ class Lin:
         else:
             if self.lin_debug:
                 self.log.debug("system reboot in debug_mode suppressed")
-            else:    
+            else:
                 self.log.info("system reboot required")
                 #import machine
                 #machine.reset()
-    
+
     # check alive status
     def status_monitor(self):
         self.cnt_in += 1
         if not(self.cnt_in % self.CNT_IN_MAX):
             self.cnt_in=0
-            self.app.status["alive"] = ["ON", True, False] 
+            self.app.status["alive"] = ["ON", True, False]
 # Same approach for the raw PID 0xD8. This corresponds to a PID 0x18
             if self.d8_alive:
                 self.app.status["alive"][0] = "ON"
-            else:    
+            else:
                 self.app.status["alive"][0] = "OFF"
             self.d8_alive = False
             self.pin_map.set_led("lin_led", False)
@@ -227,7 +227,7 @@ class Lin:
 
     async def loop_serial(self):
 
-        self.status_monitor()        
+        self.status_monitor()
         # New input process: idea is, nothing to forget. So there is a turing-machine nessecary. This read 1 byte and decide to switch in the next level or to throw the input away
         # So there is a much higher probability for synchronizing
         if not(self.serial.in_waiting):
@@ -240,7 +240,7 @@ class Lin:
         ##        line = bytes([0x00, 0x55]) + self.serial.read(1)
         ##        self.loop_state = False
         ##        # this is the exit point of the turing machine
-        ##    else: # recycling the byte, if it is 0x00 
+        ##    else: # recycling the byte, if it is 0x00
         ##        self.loop_state = (line[0] == 0x00) # e.g. 0x00 0x00 0x55 would be found
         ##        return
         ##else: # this is level 1 - waiting for 0x00 for next level
@@ -255,23 +255,23 @@ class Lin:
             if self.serial.in_waiting == 0:
                 return
             line = b'\x00'+ self.serial.read(1)
-            
+
         line += self.serial.read(1)
         #line = self.serial.read(2)
 
         #if(not len(line)==11 ):
-        #    
+        #
         #    return
 
         raw_pid = line[2]
-        if raw_pid in self.DISPLAY_STATUS_PIDS: print(f"status-message found with {raw_pid:x}")#0x20 0x61 0xe2 
+        if raw_pid in self.DISPLAY_STATUS_PIDS: print(f"status-message found with {raw_pid:x}")#0x20 0x61 0xe2
 
 # Same approach for the raw PID 0xD8. This corresponds to a PID 0x18
         if raw_pid == 0xd8:
             self.d8_alive = True
-            self.app.status["alive"] = ["ON", True, False] 
+            self.app.status["alive"] = ["ON", True, False]
             self.pin_map.set_led("lin_led", True)
-            self.log.debug(f"in < {line.hex(" ")}")
+            self.log.debug(f"in < {line.hex(' ')}")
             s = False
             if not(self.app.upload_wait): s = (self.app.upload_buffer or self.app.upload02_buffer)
             if s:
@@ -288,11 +288,11 @@ class Lin:
 # send requested answer to 0x3d -> 0x7d with parity) but only, if I have the need to answer
         if raw_pid == 0x7d:
             if self.response_waiting():
-                self.log.debug(f"in < {line.hex(" ")}")        
+                self.log.debug(f"in < {line.hex(" ")}")
                 self._answer_tl_request()
                 return
             else: return
-              
+
         while self.serial.in_waiting < 9:
             pass
         #print("Debug:ici")
@@ -310,7 +310,7 @@ class Lin:
         self.cnt_rows += 1
         self.cnt_rows = self.cnt_rows % self.CNT_ROWS_MAX
         if not(self.cnt_rows): self.display_status()
-        
+
         self.log.debug(f"in < {line.hex(" ")}")
 #        if len(line) != 12:
 #            return              # exit, length isn't correct
@@ -341,7 +341,7 @@ class Lin:
             "00 55 3c 7f 06 b2 00 17 46 00 1f 4b": [self.prepare_tl_str_response, "03 06 f2 17 46 00 1f 00 87", "_B2 - response request"],  # B2-Message I - Initialization started
             "00 55 03 aa 0a ff ff ff ff ff ff 48": [self.no_answer, "", "_NAD 03 response - ack"],               # reaction to B2 - ackn
             "00 55 3c 03 06 b2 20 17 46 00 1f a7": [self.prepare_tl_str_response, "03 06 f2 17 46 00 1f 00 87", "B2 - identifier for NAD 03"],  # B2-Message II: Looking for my ID-no 17 46 00 1f
-            "00 55 3c 03 06 b2 22 17 46 00 1f a5": [self.prepare_tl_str_response, "03 06 f2 17 46 00 1f 00 87", "B2 - initializer for NAD 03   -----------------> start registration"],  # B2-Message Initializer		
+            "00 55 3c 03 06 b2 22 17 46 00 1f a5": [self.prepare_tl_str_response, "03 06 f2 17 46 00 1f 00 87", "B2 - initializer for NAD 03   -----------------> start registration"],  # B2-Message Initializer
             "00 55 3c 7f 06 b0 17 46 00 1f 03 4a": [self.prepare_tl_str_response, "03 01 f0 ff ff ff ff ff 0b", "B0 - init finalized - send ackn ---------------> registration finalized"],  # B0-Message - registation finalized
             "00 55 3c 03 05 b9 00 1f 00 00 ff 1f": [self.prepare_tl_str_response, "03 02 f9 00 ff ff ff ff 01", "_Heartbeat for NAD 03 - send response"],  # Heartbeat
             "00 55 3c 03 10 29 bb 00 1f 00 1e ca": [self.no_answer, "", "_Frame 1 of buffer-transfer (6 frames) from CPplus"], #0xBB notice to send buffer
@@ -352,4 +352,4 @@ class Lin:
             #self.log.debug(str(line.hex(" ")) + "-> no processing")
             return # no processing necessary
         cmd_ctrl[cmd][0](cmd_ctrl[cmd][1], cmd_ctrl[cmd][2]) # do it
-        return 
+        return
