@@ -1698,20 +1698,20 @@
         "type": "ui_text",
         "z": "391f51e7377c8273",
         "group": "ab3a9f0b2e4b8d1b",
-        "order": 3,
+        "order": 4,
         "width": 0,
         "height": 0,
         "name": "",
         "label": "Error code",
         "format": "{{value}}",
         "layout": "row-spread",
-        "className": "red-target",
+        "className": "red-error",
         "style": false,
         "font": "",
         "fontSize": 16,
         "color": "#000000",
         "x": 470,
-        "y": 680,
+        "y": 780,
         "wires": []
     },
     {
@@ -1834,8 +1834,9 @@
         "id": "c7fd42bc843cc3f0",
         "type": "ui_text",
         "z": "391f51e7377c8273",
+        "d": true,
         "group": "ab3a9f0b2e4b8d1b",
-        "order": 4,
+        "order": 5,
         "width": 0,
         "height": 0,
         "name": "",
@@ -1848,7 +1849,7 @@
         "fontSize": 16,
         "color": "#000000",
         "x": 450,
-        "y": 800,
+        "y": 880,
         "wires": [],
         "info": "Dummy block used as a spacer"
     },
@@ -2004,17 +2005,17 @@
         "z": "391f51e7377c8273",
         "group": "ab3a9f0b2e4b8d1b",
         "name": "Red error",
-        "order": 5,
+        "order": 7,
         "width": 0,
         "height": 0,
-        "format": "\n<style>\n.red {\n    color: red !important;\n    font-weight: bold;\n}\n</style>\n\n<script>\n(function(scope) {\n    scope.$watch('msg.payload', function(value) {\n        const controls = document.querySelectorAll('.red-target');\n        controls.forEach(el => {\n            if (value === 0) {\n                el.classList.remove('red');\n            } else {\n                el.classList.add('red');\n            }\n        });\n    });\n})(scope);\n</script>\n",
+        "format": "\n<style>\n.red {\n    color: red !important;\n    font-weight: bold;\n}\n</style>\n\n<script>\n(function(scope) {\n    scope.$watch('msg.payload', function(value) {\n        const controls = document.querySelectorAll('.red-error');\n        controls.forEach(el => {\n            if (value === 0) {\n                el.classList.remove('red');\n            } else {\n                el.classList.add('red');\n            }\n        });\n    });\n})(scope);\n</script>\n",
         "storeOutMessages": true,
         "fwdInMessages": true,
         "resendOnRefresh": true,
         "templateScope": "local",
         "className": "",
         "x": 460,
-        "y": 720,
+        "y": 820,
         "wires": [
             []
         ]
@@ -2429,12 +2430,76 @@
         "rh": 0,
         "inputs": 0,
         "x": 160,
-        "y": 680,
+        "y": 780,
         "wires": [
             [
                 "6192907fb799f322",
                 "97600a7142d22145"
             ]
+        ]
+    },
+    {
+        "id": "723d590927876a6d",
+        "type": "mqtt in",
+        "z": "391f51e7377c8273",
+        "name": "Connection status",
+        "topic": "service/truma/control_status/alive",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "2c24d1c82633c69e",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 190,
+        "y": 680,
+        "wires": [
+            [
+                "79e231be0eadd912",
+                "c08c14766b0a0eec"
+            ]
+        ]
+    },
+    {
+        "id": "79e231be0eadd912",
+        "type": "ui_text",
+        "z": "391f51e7377c8273",
+        "group": "ab3a9f0b2e4b8d1b",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "Connection status",
+        "format": "{{value}}",
+        "layout": "row-spread",
+        "className": "red-conn-status",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#000000",
+        "x": 490,
+        "y": 680,
+        "wires": []
+    },
+    {
+        "id": "c08c14766b0a0eec",
+        "type": "ui_template",
+        "z": "391f51e7377c8273",
+        "group": "ab3a9f0b2e4b8d1b",
+        "name": "Red conn. status",
+        "order": 6,
+        "width": 0,
+        "height": 0,
+        "format": "\n<style>\n.red {\n    color: red !important;\n    font-weight: bold;\n}\n</style>\n\n<script>\n(function(scope) {\n    scope.$watch('msg.payload', function(value) {\n        const controls = document.querySelectorAll('.red-conn-status');\n        controls.forEach(el => {\n            if (value === \"OFF\") {\n                el.classList.add('red');\n            } else {\n                el.classList.remove('red');\n            }\n        });\n    });\n})(scope);\n</script>\n",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 490,
+        "y": 720,
+        "wires": [
+            []
         ]
     }
 ]
