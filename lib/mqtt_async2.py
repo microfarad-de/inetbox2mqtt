@@ -21,6 +21,7 @@ from time import monotonic
 import asyncio
 import uuid
 import logging
+import inspect
 
 
 log = logging.getLogger(__name__)
@@ -78,7 +79,8 @@ async def open_connection(addr):
     return AsyncSock(reader, writer)
 
 
-def is_awaitable(f): return f.__class__.__name__ == 'generator'
+def is_awaitable(f):
+    return inspect.isawaitable(f)
 
 def ticks_ms():
     return int(monotonic() * 1000)
@@ -544,9 +546,9 @@ class MQTTClient():
         loop.create_task(self._handle_msgs(self._proto))
         loop.create_task(self._keep_alive(self._proto))
         # Notify app that we're connceted and ready to roll
-        #if self._c.connect_coro is not None:
-        #    loop.create_task(self._c.connect_coro(self))
-        #log.debug("connected")
+        if self._c.connect_coro is not None:
+            loop.create_task(self._c.connect_coro(self))
+        log.debug("connected")
 
     async def disconnect(self):
         self._state = 2 # dead - do not reconnect

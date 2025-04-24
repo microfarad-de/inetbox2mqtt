@@ -13,6 +13,6 @@ device = dummy
 duo_control = 0
 
 [logging]
-lin_debug  = 1
-inet_debug = 1
-mqtt_debug = 1
+lin_debug  = 0
+inet_debug = 0
+mqtt_debug = 0

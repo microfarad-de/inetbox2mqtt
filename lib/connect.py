@@ -66,7 +66,8 @@ class Connect():
 
     async def c_subscripted(self, topic, msg, retained, qos):
         log.debug("Received topic:" + str(topic) + " > payload: " + str(msg) + "qos: " + str(qos))
-        if self.subscripted != None: await self.subscripted(topic, msg, retained, qos)
+        if self.subscripted != None:
+            await self.subscripted(topic, msg, retained, qos)
 
 
     # Initialze the connect-funct

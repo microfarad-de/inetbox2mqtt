@@ -1,0 +1,2440 @@
+[
+    {
+        "id": "37a752f35a68bbed",
+        "type": "tab",
+        "label": "Top",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "b22624498baaa896",
+        "type": "tab",
+        "label": "Energy",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "2561d49b29c858c7",
+        "type": "tab",
+        "label": "Environment",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "391f51e7377c8273",
+        "type": "tab",
+        "label": "Climate Control",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "c627e40abb963e7a",
+        "type": "ui_tab",
+        "name": "Environment",
+        "icon": "mi-device_thermostat",
+        "order": 2,
+        "disabled": false,
+        "hidden": false
+    },
+    {
+        "id": "f9f7eda377a1ebac",
+        "type": "ui_base",
+        "theme": {
+            "name": "theme-dark",
+            "lightTheme": {
+                "default": "#0094CE",
+                "baseColor": "#0094CE",
+                "baseFont": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif",
+                "edited": true,
+                "reset": false
+            },
+            "darkTheme": {
+                "default": "#097479",
+                "baseColor": "#0079c9",
+                "baseFont": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif",
+                "edited": true,
+                "reset": false
+            },
+            "customTheme": {
+                "name": "Victron Theme",
+                "default": "#4B7930",
+                "baseColor": "#087fcb",
+                "baseFont": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif",
+                "reset": false
+            },
+            "themeState": {
+                "base-color": {
+                    "default": "#097479",
+                    "value": "#0079c9",
+                    "edited": true
+                },
+                "page-titlebar-backgroundColor": {
+                    "value": "#0079c9",
+                    "edited": false
+                },
+                "page-backgroundColor": {
+                    "value": "#111111",
+                    "edited": true
+                },
+                "page-sidebar-backgroundColor": {
+                    "value": "#333333",
+                    "edited": true
+                },
+                "group-textColor": {
+                    "value": "#16a2ff",
+                    "edited": true
+                },
+                "group-borderColor": {
+                    "value": "#555555",
+                    "edited": true
+                },
+                "group-backgroundColor": {
+                    "value": "#333333",
+                    "edited": true
+                },
+                "widget-textColor": {
+                    "value": "#eeeeee",
+                    "edited": true
+                },
+                "widget-backgroundColor": {
+                    "value": "#0079c9",
+                    "edited": true
+                },
+                "widget-borderColor": {
+                    "value": "#333333",
+                    "edited": true
+                },
+                "base-font": {
+                    "value": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif"
+                }
+            },
+            "angularTheme": {
+                "primary": "indigo",
+                "accents": "blue",
+                "warn": "red",
+                "background": "grey",
+                "palette": "light"
+            }
+        },
+        "site": {
+            "name": "Caravan",
+            "hideToolbar": "false",
+            "allowSwipe": "true",
+            "lockMenu": "false",
+            "allowTempTheme": "true",
+            "dateFormat": "DD.MM.YYYY",
+            "sizes": {
+                "sx": 48,
+                "sy": 48,
+                "gx": 6,
+                "gy": 6,
+                "cx": 6,
+                "cy": 6,
+                "px": 0,
+                "py": 0
+            }
+        }
+    },
+    {
+        "id": "cf4c6771afb43982",
+        "type": "ui_group",
+        "name": "Sensors",
+        "tab": "c627e40abb963e7a",
+        "order": 1,
+        "disp": true,
+        "width": 6,
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "2c24d1c82633c69e",
+        "type": "mqtt-broker",
+        "name": "Venus",
+        "broker": "localhost",
+        "port": "",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "b076e87b73537682",
+        "type": "ui_tab",
+        "name": "Climate Control",
+        "icon": "mi-local_fire_department",
+        "order": 3,
+        "disabled": false,
+        "hidden": false
+    },
+    {
+        "id": "9b3a8c49293c5c6a",
+        "type": "ui_group",
+        "name": "Heater",
+        "tab": "b076e87b73537682",
+        "order": 1,
+        "disp": true,
+        "width": "6",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "ab3a9f0b2e4b8d1b",
+        "type": "ui_group",
+        "name": "Status",
+        "tab": "b076e87b73537682",
+        "order": 2,
+        "disp": true,
+        "width": "6",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "victron-client-id",
+        "type": "victron-client"
+    },
+    {
+        "id": "3e1087bac2188791",
+        "type": "ui_tab",
+        "name": "Energy",
+        "icon": "mi-bolt",
+        "order": 1,
+        "disabled": false,
+        "hidden": false
+    },
+    {
+        "id": "78e90b890a20dc73",
+        "type": "ui_group",
+        "name": "Battery",
+        "tab": "3e1087bac2188791",
+        "order": 1,
+        "disp": true,
+        "width": 6,
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "73cf60e5cc907395",
+        "type": "ui_group",
+        "name": "Solar",
+        "tab": "3e1087bac2188791",
+        "order": 2,
+        "disp": true,
+        "width": "6",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "9426728fc210ec9b",
+        "type": "mqtt in",
+        "z": "37a752f35a68bbed",
+        "d": true,
+        "name": "RPi Temp",
+        "topic": "N/+/temperature/29/Temperature",
+        "qos": "2",
+        "datatype": "json",
+        "broker": "2c24d1c82633c69e",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 180,
+        "y": 440,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "209ef98590510f71",
+        "type": "inject",
+        "z": "37a752f35a68bbed",
+        "d": true,
+        "name": "Poll",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "5",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "0.5",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 170,
+        "y": 380,
+        "wires": [
+            [
+                "acad561bf5e51b0d"
+            ]
+        ]
+    },
+    {
+        "id": "acad561bf5e51b0d",
+        "type": "exec",
+        "z": "37a752f35a68bbed",
+        "d": true,
+        "command": "dbus-send --system --print-reply --dest=com.victronenergy.temperature.RpiCpu06 /Temperature com.victronenergy.BusItem.GetValue",
+        "addpay": "",
+        "append": "",
+        "useSpawn": "false",
+        "timer": "",
+        "winHide": false,
+        "oldrc": false,
+        "name": "Get RPi Temp.",
+        "x": 320,
+        "y": 380,
+        "wires": [
+            [
+                "1504c61fdc35ae7e"
+            ],
+            [],
+            []
+        ]
+    },
+    {
+        "id": "1504c61fdc35ae7e",
+        "type": "function",
+        "z": "37a752f35a68bbed",
+        "d": true,
+        "name": "Parse Temp.",
+        "func": "let lines = msg.payload.split(\"\\n\");\nfor (let line of lines) {\n    if (line.includes(\"double\")) {\n        msg.payload = parseFloat(line.split(\"double\")[1]);\n        break;\n    }\n}\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 490,
+        "y": 380,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "941135a1b6edb738",
+        "type": "ui_template",
+        "z": "37a752f35a68bbed",
+        "group": "cf4c6771afb43982",
+        "name": "Connectivity check",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "format": "<style>\n  .dashboard-disabled {\n    pointer-events: none;\n    /*\n    opacity: 0.8;\n    filter: grayscale(50%);\n    */\n  }\n</style>\n\n<script>\n  (function() {\n    const CHECK_INTERVAL = 5000;\n    const TIMEOUT = 3000;\n\n    function checkServerReachability() {\n      const xhr = new XMLHttpRequest();\n      xhr.open(\"GET\", \"/ui\", true);\n      let isTimedOut = false;\n      const timeout = setTimeout(() => {\n        isTimedOut = true;\n        xhr.abort();\n        showWarning();\n      }, TIMEOUT);\n      xhr.onreadystatechange = function() {\n        if (xhr.readyState === 4) {\n          clearTimeout(timeout);\n          if (!isTimedOut && xhr.status === 200) {\n            hideWarning();\n          } else {\n            showWarning();\n          }\n        }\n      };\n      xhr.onerror = function() {\n        clearTimeout(timeout);\n        showWarning();\n      };\n      xhr.send();\n    }\n\n    function showWarning() {\n      let el = document.getElementById(\"server-disconnect-warning\");\n      if (!el) {\n        el = document.createElement(\"div\");\n        el.id = \"server-disconnect-warning\";\n        el.style.cssText = \"position:fixed;top:0;left:0;width:100%;background:#ffdddd;color:#b00;padding:10px;text-align:left;font-weight:bold;;font-size:1.1em;z-index:9999;\";\n        el.innerHTML = \"✘ &nbsp; Connection lost\";\n        document.body.appendChild(el);\n      } else {\n        el.style.display = \"block\";\n      }\n      document.body.classList.add(\"dashboard-disabled\");\n    }\n\n    function hideWarning() {\n      const el = document.getElementById(\"server-disconnect-warning\");\n      if (el) {\n        el.style.display = \"none\";\n      }\n      document.body.classList.remove(\"dashboard-disabled\");\n    }\n\n    setInterval(checkServerReachability, CHECK_INTERVAL);\n    checkServerReachability();\n  })();\n</script>\n",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "resendOnRefresh": true,
+        "templateScope": "global",
+        "className": "",
+        "x": 130,
+        "y": 60,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "758eb6577bb4aaa5",
+        "type": "comment",
+        "z": "37a752f35a68bbed",
+        "name": "Archive",
+        "info": "",
+        "x": 90,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "ef5e0433c7f553e3",
+        "type": "ui_template",
+        "z": "37a752f35a68bbed",
+        "group": "cf4c6771afb43982",
+        "name": "Disable text selection",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "format": "<style>\n    /* Disable text selection across the entire dashboard */\n    body, .nr-dashboard-template, .nr-dashboard-container {\n        user-select: none;\n        -webkit-user-select: none; /* Safari/Chrome */\n        -moz-user-select: none; /* Firefox */\n        -ms-user-select: none; /* Internet Explorer */\n    }\n</style>",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "resendOnRefresh": true,
+        "templateScope": "global",
+        "className": "",
+        "x": 140,
+        "y": 120,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "7a5ee5e1791de897",
+        "type": "ui_template",
+        "z": "37a752f35a68bbed",
+        "group": "cf4c6771afb43982",
+        "name": "Disable zoom",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "format": "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui\">\n",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "resendOnRefresh": true,
+        "templateScope": "global",
+        "className": "",
+        "x": 120,
+        "y": 180,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "b5a98e808b494951",
+        "type": "debug",
+        "z": "37a752f35a68bbed",
+        "d": true,
+        "name": "debug 1",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 420,
+        "y": 560,
+        "wires": []
+    },
+    {
+        "id": "14605faf69088a89",
+        "type": "mqtt in",
+        "z": "37a752f35a68bbed",
+        "d": true,
+        "name": "Truma test",
+        "topic": "service/truma/set/target_temp_room",
+        "qos": "2",
+        "datatype": "json",
+        "broker": "2c24d1c82633c69e",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 200,
+        "y": 560,
+        "wires": [
+            [
+                "b5a98e808b494951"
+            ]
+        ]
+    },
+    {
+        "id": "4d22e4a2b451ad0b",
+        "type": "victron-input-solarcharger",
+        "z": "b22624498baaa896",
+        "service": "com.victronenergy.solarcharger/289",
+        "path": "/Yield/Power",
+        "serviceObj": {
+            "service": "com.victronenergy.solarcharger/289",
+            "name": "SmartSolar Charger MPPT 100/20 48V"
+        },
+        "pathObj": {
+            "path": "/Yield/Power",
+            "type": "float",
+            "name": "PV Power (W)"
+        },
+        "name": "",
+        "onlyChanges": false,
+        "roundValues": "0",
+        "x": 240,
+        "y": 380,
+        "wires": [
+            [
+                "6d01c099981f5e8a"
+            ]
+        ]
+    },
+    {
+        "id": "0f4851a0740942b4",
+        "type": "ui_text",
+        "z": "b22624498baaa896",
+        "group": "73cf60e5cc907395",
+        "order": 2,
+        "width": 3,
+        "height": 1,
+        "name": "",
+        "label": "Voltage",
+        "format": "{{msg.payload}} V",
+        "layout": "col-center",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#000000",
+        "x": 720,
+        "y": 440,
+        "wires": []
+    },
+    {
+        "id": "4349069380bcd671",
+        "type": "victron-input-solarcharger",
+        "z": "b22624498baaa896",
+        "service": "com.victronenergy.solarcharger/289",
+        "path": "/Pv/V",
+        "serviceObj": {
+            "service": "com.victronenergy.solarcharger/289",
+            "name": "SmartSolar Charger MPPT 100/20 48V"
+        },
+        "pathObj": {
+            "path": "/Pv/V",
+            "type": "float",
+            "name": "PV voltage"
+        },
+        "name": "",
+        "onlyChanges": false,
+        "roundValues": "2",
+        "x": 230,
+        "y": 440,
+        "wires": [
+            [
+                "0f4851a0740942b4"
+            ]
+        ]
+    },
+    {
+        "id": "4222164f2945fc86",
+        "type": "ui_text",
+        "z": "b22624498baaa896",
+        "group": "73cf60e5cc907395",
+        "order": 3,
+        "width": 3,
+        "height": 1,
+        "name": "",
+        "label": "Current",
+        "format": "{{msg.payload}} A",
+        "layout": "col-center",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#000000",
+        "x": 720,
+        "y": 560,
+        "wires": []
+    },
+    {
+        "id": "16237dfdc1cca256",
+        "type": "victron-input-solarcharger",
+        "z": "b22624498baaa896",
+        "service": "com.victronenergy.solarcharger/289",
+        "path": "/Dc/0/Current",
+        "serviceObj": {
+            "service": "com.victronenergy.solarcharger/289",
+            "name": "Solar Charger"
+        },
+        "pathObj": {
+            "path": "/Dc/0/Current",
+            "type": "float",
+            "name": "Battery current (A)"
+        },
+        "name": "",
+        "onlyChanges": false,
+        "roundValues": "2",
+        "x": 180,
+        "y": 560,
+        "wires": [
+            [
+                "4222164f2945fc86"
+            ]
+        ]
+    },
+    {
+        "id": "7043f4ea18184a75",
+        "type": "ui_text",
+        "z": "b22624498baaa896",
+        "group": "78e90b890a20dc73",
+        "order": 2,
+        "width": 3,
+        "height": 1,
+        "name": "",
+        "label": "Voltage",
+        "format": "{{msg.payload}} V",
+        "layout": "col-center",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": "18",
+        "color": "#000000",
+        "x": 720,
+        "y": 120,
+        "wires": []
+    },
+    {
+        "id": "f909117d2080cfbd",
+        "type": "ui_text",
+        "z": "b22624498baaa896",
+        "group": "78e90b890a20dc73",
+        "order": 3,
+        "width": 3,
+        "height": 1,
+        "name": "",
+        "label": "Current",
+        "format": "{{msg.payload}} A",
+        "layout": "col-center",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#000000",
+        "x": 720,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "6e13fcff475194b8",
+        "type": "ui_text",
+        "z": "b22624498baaa896",
+        "group": "73cf60e5cc907395",
+        "order": 4,
+        "width": 3,
+        "height": 1,
+        "name": "",
+        "label": "State",
+        "format": "{{msg.textvalue}}",
+        "layout": "col-center",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#000000",
+        "x": 710,
+        "y": 500,
+        "wires": []
+    },
+    {
+        "id": "c1f210a816af8226",
+        "type": "victron-input-solarcharger",
+        "z": "b22624498baaa896",
+        "service": "com.victronenergy.solarcharger/289",
+        "path": "/State",
+        "serviceObj": {
+            "service": "com.victronenergy.solarcharger/289",
+            "name": "Solar Charger"
+        },
+        "pathObj": {
+            "path": "/State",
+            "type": "enum",
+            "name": "Charge state",
+            "enum": {
+                "0": "Off",
+                "2": "Fault",
+                "3": "Bulk",
+                "4": "Absorption",
+                "5": "Float",
+                "6": "Storage",
+                "7": "Equalize",
+                "245": "Off",
+                "247": "Equalize",
+                "252": "External Control"
+            }
+        },
+        "initial": "",
+        "name": "",
+        "onlyChanges": false,
+        "roundValues": "3",
+        "x": 160,
+        "y": 500,
+        "wires": [
+            [
+                "6e13fcff475194b8"
+            ]
+        ]
+    },
+    {
+        "id": "46702bbbfa670292",
+        "type": "ui_gauge",
+        "z": "b22624498baaa896",
+        "name": "",
+        "group": "78e90b890a20dc73",
+        "order": 1,
+        "width": 6,
+        "height": 3,
+        "gtype": "donut",
+        "title": "",
+        "label": "%",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "100",
+        "colors": [
+            "#e6e600",
+            "#e6e600",
+            "#e6e600"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 710,
+        "y": 60,
+        "wires": []
+    },
+    {
+        "id": "f1a4e42038e4063d",
+        "type": "victron-input-battery",
+        "z": "b22624498baaa896",
+        "service": "com.victronenergy.battery/289",
+        "path": "/Soc",
+        "serviceObj": {
+            "service": "com.victronenergy.battery/289",
+            "name": "Battery"
+        },
+        "pathObj": {
+            "path": "/Soc",
+            "type": "float",
+            "name": "State of charge (%)"
+        },
+        "name": "",
+        "onlyChanges": false,
+        "roundValues": "0",
+        "x": 160,
+        "y": 60,
+        "wires": [
+            [
+                "46702bbbfa670292"
+            ]
+        ]
+    },
+    {
+        "id": "f9afb605184c3be9",
+        "type": "victron-input-battery",
+        "z": "b22624498baaa896",
+        "service": "com.victronenergy.battery/289",
+        "path": "/Dc/0/Voltage",
+        "serviceObj": {
+            "service": "com.victronenergy.battery/289",
+            "name": "Battery"
+        },
+        "pathObj": {
+            "path": "/Dc/0/Voltage",
+            "type": "float",
+            "name": "Battery voltage (V)"
+        },
+        "name": "",
+        "onlyChanges": false,
+        "roundValues": "2",
+        "x": 160,
+        "y": 120,
+        "wires": [
+            [
+                "7043f4ea18184a75"
+            ]
+        ]
+    },
+    {
+        "id": "e63362591c8c6fbb",
+        "type": "victron-input-battery",
+        "z": "b22624498baaa896",
+        "service": "com.victronenergy.battery/289",
+        "path": "/Dc/0/Current",
+        "serviceObj": {
+            "service": "com.victronenergy.battery/289",
+            "name": "Battery"
+        },
+        "pathObj": {
+            "path": "/Dc/0/Current",
+            "type": "float",
+            "name": "Battery current (A)"
+        },
+        "name": "",
+        "onlyChanges": false,
+        "roundValues": "2",
+        "x": 150,
+        "y": 180,
+        "wires": [
+            [
+                "f909117d2080cfbd"
+            ]
+        ]
+    },
+    {
+        "id": "dbf406ca351cbe4a",
+        "type": "ui_text",
+        "z": "b22624498baaa896",
+        "group": "78e90b890a20dc73",
+        "order": 5,
+        "width": 3,
+        "height": 1,
+        "name": "",
+        "label": "Time remaining",
+        "format": "{{msg.payload}}",
+        "layout": "col-center",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#000000",
+        "x": 740,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "0310f30d85c0a6e7",
+        "type": "victron-input-battery",
+        "z": "b22624498baaa896",
+        "service": "com.victronenergy.battery/289",
+        "path": "/TimeToGo",
+        "serviceObj": {
+            "service": "com.victronenergy.battery/289",
+            "name": "Battery"
+        },
+        "pathObj": {
+            "path": "/TimeToGo",
+            "type": "float",
+            "name": "Time to go (s)"
+        },
+        "name": "",
+        "onlyChanges": false,
+        "roundValues": "1",
+        "x": 140,
+        "y": 300,
+        "wires": [
+            [
+                "150b6139a9534c68"
+            ]
+        ]
+    },
+    {
+        "id": "150b6139a9534c68",
+        "type": "function",
+        "z": "b22624498baaa896",
+        "name": "Sec. to d/h",
+        "func": "let totalSeconds = msg.payload;\n\nlet days = Math.floor(totalSeconds / 86400); // 86400 seconds in a day\nlet hours = Math.floor((totalSeconds % 86400) / 3600); // Remaining hours\n\nif (totalSeconds === null ) {\n    msg.payload = `--`;\n}\nelse {\n    msg.payload = `${days} d &nbsp;${hours} h`;\n}\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 570,
+        "y": 300,
+        "wires": [
+            [
+                "dbf406ca351cbe4a"
+            ]
+        ]
+    },
+    {
+        "id": "41d9e01fcc702672",
+        "type": "victron-input-battery",
+        "z": "b22624498baaa896",
+        "service": "com.victronenergy.battery/289",
+        "path": "/ConsumedAmphours",
+        "serviceObj": {
+            "service": "com.victronenergy.battery/289",
+            "name": "Battery"
+        },
+        "pathObj": {
+            "path": "/ConsumedAmphours",
+            "type": "float",
+            "name": "Consumed Amphours (Ah)"
+        },
+        "name": "",
+        "onlyChanges": false,
+        "roundValues": "1",
+        "x": 180,
+        "y": 240,
+        "wires": [
+            [
+                "f33aa0023c70b646"
+            ]
+        ]
+    },
+    {
+        "id": "f33aa0023c70b646",
+        "type": "ui_text",
+        "z": "b22624498baaa896",
+        "group": "78e90b890a20dc73",
+        "order": 4,
+        "width": 3,
+        "height": 1,
+        "name": "",
+        "label": "Consumed Ah",
+        "format": "{{msg.payload}} Ah",
+        "layout": "col-center",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#000000",
+        "x": 740,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "6d01c099981f5e8a",
+        "type": "ui_gauge",
+        "z": "b22624498baaa896",
+        "name": "",
+        "group": "73cf60e5cc907395",
+        "order": 1,
+        "width": 3,
+        "height": 2,
+        "gtype": "donut",
+        "title": "",
+        "label": "W",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "200",
+        "colors": [
+            "#e6e600",
+            "#e6e600",
+            "#e6e600"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 710,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "id": "b606e7edf0b64565",
+        "type": "ui_text",
+        "z": "b22624498baaa896",
+        "group": "73cf60e5cc907395",
+        "order": 5,
+        "width": 3,
+        "height": 1,
+        "name": "",
+        "label": "Yield today",
+        "format": "{{msg.payload}} Wh",
+        "layout": "col-center",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#000000",
+        "x": 730,
+        "y": 620,
+        "wires": []
+    },
+    {
+        "id": "6b590f0911fba275",
+        "type": "victron-input-solarcharger",
+        "z": "b22624498baaa896",
+        "service": "com.victronenergy.solarcharger/289",
+        "path": "/History/Daily/0/Yield",
+        "serviceObj": {
+            "service": "com.victronenergy.solarcharger/289",
+            "name": "SmartSolar Charger MPPT 100/20 48V"
+        },
+        "pathObj": {
+            "path": "/History/Daily/0/Yield",
+            "type": "float",
+            "name": "Yield today (kWh)"
+        },
+        "name": "",
+        "onlyChanges": false,
+        "roundValues": "3",
+        "x": 250,
+        "y": 620,
+        "wires": [
+            [
+                "53a95fb1c4d6126a"
+            ]
+        ]
+    },
+    {
+        "id": "53a95fb1c4d6126a",
+        "type": "function",
+        "z": "b22624498baaa896",
+        "name": "KWh to Wh",
+        "func": "let kwh = msg.payload;\n\nmsg.payload = kwh * 1000;\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 570,
+        "y": 620,
+        "wires": [
+            [
+                "b606e7edf0b64565"
+            ]
+        ]
+    },
+    {
+        "id": "4f1a3eb1c8709dde",
+        "type": "ui_text",
+        "z": "b22624498baaa896",
+        "group": "73cf60e5cc907395",
+        "order": 6,
+        "width": "6",
+        "height": "1",
+        "name": "",
+        "label": "",
+        "format": "",
+        "layout": "row-spread",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#000000",
+        "x": 710,
+        "y": 680,
+        "wires": [],
+        "info": "Dummy block used as a spacer"
+    },
+    {
+        "id": "e17db9ed39276503",
+        "type": "ui_gauge",
+        "z": "2561d49b29c858c7",
+        "name": "",
+        "group": "cf4c6771afb43982",
+        "order": 9,
+        "width": 3,
+        "height": 3,
+        "gtype": "donut",
+        "title": "CPU",
+        "label": "°C",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "100",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 650,
+        "y": 440,
+        "wires": []
+    },
+    {
+        "id": "0d95bf949c201846",
+        "type": "victron-input-temperature",
+        "z": "2561d49b29c858c7",
+        "service": "com.victronenergy.temperature/29",
+        "path": "/Temperature",
+        "serviceObj": {
+            "service": "com.victronenergy.temperature/29",
+            "name": "com.victronenergy.temperature/29"
+        },
+        "pathObj": {
+            "path": "/Temperature",
+            "type": "float",
+            "name": "Temperature (°C)"
+        },
+        "name": "",
+        "onlyChanges": false,
+        "roundValues": "1",
+        "x": 240,
+        "y": 440,
+        "wires": [
+            [
+                "07a70b239be4ed5c"
+            ]
+        ]
+    },
+    {
+        "id": "a143838f0999d97b",
+        "type": "ui_gauge",
+        "z": "2561d49b29c858c7",
+        "name": "",
+        "group": "cf4c6771afb43982",
+        "order": 4,
+        "width": 3,
+        "height": 3,
+        "gtype": "donut",
+        "title": "Indoor",
+        "label": "°C",
+        "format": "{{value}}",
+        "min": "-10",
+        "max": "40",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 650,
+        "y": 120,
+        "wires": []
+    },
+    {
+        "id": "1cbbd964a196c7d8",
+        "type": "victron-input-temperature",
+        "z": "2561d49b29c858c7",
+        "service": "com.victronenergy.temperature/20",
+        "path": "/Temperature",
+        "serviceObj": {
+            "service": "com.victronenergy.temperature/20",
+            "name": "Indoor"
+        },
+        "pathObj": {
+            "path": "/Temperature",
+            "type": "float",
+            "name": "Temperature (°C)"
+        },
+        "name": "",
+        "onlyChanges": false,
+        "roundValues": "1",
+        "x": 150,
+        "y": 120,
+        "wires": [
+            [
+                "9840ba532403df6f"
+            ]
+        ]
+    },
+    {
+        "id": "cfdc6c99305c58ca",
+        "type": "ui_gauge",
+        "z": "2561d49b29c858c7",
+        "name": "",
+        "group": "cf4c6771afb43982",
+        "order": 5,
+        "width": 3,
+        "height": 3,
+        "gtype": "donut",
+        "title": "Indoor RH",
+        "label": "%",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "100",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 670,
+        "y": 200,
+        "wires": []
+    },
+    {
+        "id": "e9e6e61455e7859a",
+        "type": "victron-input-temperature",
+        "z": "2561d49b29c858c7",
+        "service": "com.victronenergy.temperature/20",
+        "path": "/Humidity",
+        "serviceObj": {
+            "service": "com.victronenergy.temperature/20",
+            "name": "Indoor"
+        },
+        "pathObj": {
+            "path": "/Humidity",
+            "type": "float",
+            "name": "Humidity (%)"
+        },
+        "name": "",
+        "onlyChanges": false,
+        "roundValues": "1",
+        "x": 140,
+        "y": 200,
+        "wires": [
+            [
+                "ba91e7b317413a88"
+            ]
+        ]
+    },
+    {
+        "id": "24ad0f6f10a8086e",
+        "type": "ui_gauge",
+        "z": "2561d49b29c858c7",
+        "name": "",
+        "group": "cf4c6771afb43982",
+        "order": 6,
+        "width": 3,
+        "height": 3,
+        "gtype": "donut",
+        "title": "Fridge",
+        "label": "°C",
+        "format": "{{value}}",
+        "min": "-10",
+        "max": "40",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 650,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "03367e769796dea2",
+        "type": "victron-input-temperature",
+        "z": "2561d49b29c858c7",
+        "service": "com.victronenergy.temperature/21",
+        "path": "/Temperature",
+        "serviceObj": {
+            "service": "com.victronenergy.temperature/21",
+            "name": "Fridge"
+        },
+        "pathObj": {
+            "path": "/Temperature",
+            "type": "float",
+            "name": "Temperature (°C)"
+        },
+        "name": "",
+        "onlyChanges": false,
+        "roundValues": "1",
+        "x": 150,
+        "y": 280,
+        "wires": [
+            [
+                "62eeb5d5f6feb245"
+            ]
+        ]
+    },
+    {
+        "id": "9840ba532403df6f",
+        "type": "function",
+        "z": "2561d49b29c858c7",
+        "name": "Offset",
+        "func": "let temp = msg.payload;\n\ntemp = temp - 0.4;\n\nmsg.payload = (+temp).toFixed(1);\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 510,
+        "y": 120,
+        "wires": [
+            [
+                "a143838f0999d97b"
+            ]
+        ]
+    },
+    {
+        "id": "62eeb5d5f6feb245",
+        "type": "function",
+        "z": "2561d49b29c858c7",
+        "name": "Offset",
+        "func": "let temp = msg.payload;\n\ntemp = temp - 0.2;\n\nmsg.payload = (+temp).toFixed(1);\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 510,
+        "y": 280,
+        "wires": [
+            [
+                "24ad0f6f10a8086e"
+            ]
+        ]
+    },
+    {
+        "id": "ba91e7b317413a88",
+        "type": "function",
+        "z": "2561d49b29c858c7",
+        "name": "Offset",
+        "func": "let hum = msg.payload;\n\nhum = hum - 0;\n\nmsg.payload = (+hum).toFixed(1);\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 510,
+        "y": 200,
+        "wires": [
+            [
+                "cfdc6c99305c58ca"
+            ]
+        ]
+    },
+    {
+        "id": "07a70b239be4ed5c",
+        "type": "function",
+        "z": "2561d49b29c858c7",
+        "name": "Offset",
+        "func": "let temp = msg.payload;\n\ntemp = temp - 0;\n\nmsg.payload = (+temp).toFixed(1);\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 510,
+        "y": 440,
+        "wires": [
+            [
+                "e17db9ed39276503"
+            ]
+        ]
+    },
+    {
+        "id": "cefda18b76d95a02",
+        "type": "victron-input-battery",
+        "z": "2561d49b29c858c7",
+        "service": "com.victronenergy.battery/289",
+        "path": "/Dc/0/Temperature",
+        "serviceObj": {
+            "service": "com.victronenergy.battery/289",
+            "name": "Battery"
+        },
+        "pathObj": {
+            "path": "/Dc/0/Temperature",
+            "type": "float",
+            "name": "Battery temperature (°C)"
+        },
+        "name": "",
+        "onlyChanges": false,
+        "roundValues": "1",
+        "x": 170,
+        "y": 520,
+        "wires": [
+            [
+                "9ed9823a39f88154"
+            ]
+        ]
+    },
+    {
+        "id": "9ed9823a39f88154",
+        "type": "function",
+        "z": "2561d49b29c858c7",
+        "name": "Offset",
+        "func": "let temp = msg.payload;\n\ntemp = temp - 0;\n\nmsg.payload = (+temp).toFixed(1);\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 510,
+        "y": 520,
+        "wires": [
+            [
+                "de056db018f84c0f"
+            ]
+        ]
+    },
+    {
+        "id": "de056db018f84c0f",
+        "type": "ui_gauge",
+        "z": "2561d49b29c858c7",
+        "name": "",
+        "group": "cf4c6771afb43982",
+        "order": 8,
+        "width": 3,
+        "height": 3,
+        "gtype": "donut",
+        "title": "Battery",
+        "label": "°C",
+        "format": "{{value}}",
+        "min": "-10",
+        "max": "40",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 660,
+        "y": 520,
+        "wires": []
+    },
+    {
+        "id": "9e5aa2e8d55e9cd2",
+        "type": "ui_text",
+        "z": "2561d49b29c858c7",
+        "group": "cf4c6771afb43982",
+        "order": 10,
+        "width": 6,
+        "height": 1,
+        "name": "",
+        "label": "",
+        "format": "",
+        "layout": "row-spread",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#000000",
+        "x": 650,
+        "y": 600,
+        "wires": [],
+        "info": "Dummy block used as a spacer"
+    },
+    {
+        "id": "dc6d769c56844def",
+        "type": "ui_gauge",
+        "z": "2561d49b29c858c7",
+        "name": "",
+        "group": "cf4c6771afb43982",
+        "order": 7,
+        "width": 3,
+        "height": 3,
+        "gtype": "donut",
+        "title": "Fridge RH",
+        "label": "%",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "100",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 670,
+        "y": 360,
+        "wires": []
+    },
+    {
+        "id": "3c7da46d16440c1c",
+        "type": "victron-input-temperature",
+        "z": "2561d49b29c858c7",
+        "service": "com.victronenergy.temperature/21",
+        "path": "/Humidity",
+        "serviceObj": {
+            "service": "com.victronenergy.temperature/21",
+            "name": "Fridge"
+        },
+        "pathObj": {
+            "path": "/Humidity",
+            "type": "float",
+            "name": "Humidity (%)"
+        },
+        "name": "",
+        "onlyChanges": false,
+        "roundValues": "1",
+        "x": 140,
+        "y": 360,
+        "wires": [
+            [
+                "ce5e49a552a71a95"
+            ]
+        ]
+    },
+    {
+        "id": "ce5e49a552a71a95",
+        "type": "function",
+        "z": "2561d49b29c858c7",
+        "name": "Offset",
+        "func": "let hum = msg.payload;\n\nhum = hum - 0;\n\nmsg.payload = (+hum).toFixed(1);\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 510,
+        "y": 360,
+        "wires": [
+            [
+                "dc6d769c56844def"
+            ]
+        ]
+    },
+    {
+        "id": "7df678563a819cc4",
+        "type": "ui_switch",
+        "z": "391f51e7377c8273",
+        "name": "",
+        "label": "Heating",
+        "tooltip": "",
+        "group": "9b3a8c49293c5c6a",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "passthru": true,
+        "decouple": "false",
+        "topic": "switch",
+        "topicType": "str",
+        "style": "",
+        "onvalue": "true",
+        "onvalueType": "bool",
+        "onicon": "",
+        "oncolor": "",
+        "offvalue": "false",
+        "offvalueType": "bool",
+        "officon": "",
+        "offcolor": "",
+        "animate": false,
+        "className": "",
+        "x": 460,
+        "y": 140,
+        "wires": [
+            [
+                "3f6ad65acd3a5234",
+                "c71fb3d32cdf6139",
+                "95a5eca3262d042c"
+            ]
+        ]
+    },
+    {
+        "id": "f6d22ec56a889695",
+        "type": "ui_dropdown",
+        "z": "391f51e7377c8273",
+        "name": "",
+        "label": "&nbsp;Fan setting &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;",
+        "tooltip": "",
+        "place": "",
+        "group": "9b3a8c49293c5c6a",
+        "order": 4,
+        "width": 0,
+        "height": 0,
+        "passthru": false,
+        "multiple": false,
+        "options": [
+            {
+                "label": "ECO",
+                "value": "eco",
+                "type": "str"
+            },
+            {
+                "label": "HIGH",
+                "value": "high",
+                "type": "str"
+            }
+        ],
+        "payload": "",
+        "topic": "fan",
+        "topicType": "str",
+        "className": "grayout-target",
+        "x": 565,
+        "y": 260,
+        "wires": [
+            [
+                "7dcb693e456897db"
+            ]
+        ],
+        "l": false
+    },
+    {
+        "id": "8ede93c0d2432a6d",
+        "type": "ui_dropdown",
+        "z": "391f51e7377c8273",
+        "name": "",
+        "label": "&nbsp;Water temperature &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;",
+        "tooltip": "",
+        "place": "",
+        "group": "9b3a8c49293c5c6a",
+        "order": 5,
+        "width": 0,
+        "height": 0,
+        "passthru": false,
+        "multiple": false,
+        "options": [
+            {
+                "label": "OFF",
+                "value": 0,
+                "type": "num"
+            },
+            {
+                "label": "ECO",
+                "value": 40,
+                "type": "num"
+            },
+            {
+                "label": "HOT",
+                "value": 60,
+                "type": "num"
+            }
+        ],
+        "payload": "",
+        "topic": "fan",
+        "topicType": "str",
+        "className": "",
+        "x": 565,
+        "y": 320,
+        "wires": [
+            [
+                "c71fb3d32cdf6139",
+                "d447a46d234eb48e"
+            ]
+        ],
+        "l": false
+    },
+    {
+        "id": "c268d215c0a29312",
+        "type": "ui_dropdown",
+        "z": "391f51e7377c8273",
+        "name": "",
+        "label": "&nbsp;Energy selection &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;",
+        "tooltip": "",
+        "place": "",
+        "group": "9b3a8c49293c5c6a",
+        "order": 6,
+        "width": 0,
+        "height": 0,
+        "passthru": false,
+        "multiple": false,
+        "options": [
+            {
+                "label": "Gas",
+                "value": "gas",
+                "type": "str"
+            },
+            {
+                "label": "Electric 1",
+                "value": "electric1",
+                "type": "str"
+            },
+            {
+                "label": "Electric 2",
+                "value": "electric2",
+                "type": "str"
+            },
+            {
+                "label": "Mix 1",
+                "value": "mix1",
+                "type": "str"
+            },
+            {
+                "label": "Mix 2",
+                "value": "mix2",
+                "type": "str"
+            }
+        ],
+        "payload": "",
+        "topic": "topic",
+        "topicType": "msg",
+        "className": "grayout-target-2",
+        "x": 565,
+        "y": 380,
+        "wires": [
+            [
+                "8c25986c65998ad3"
+            ]
+        ],
+        "l": false
+    },
+    {
+        "id": "6427f73155b45c3a",
+        "type": "ui_text",
+        "z": "391f51e7377c8273",
+        "group": "ab3a9f0b2e4b8d1b",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "Room temperature",
+        "format": "{{value}} °C",
+        "layout": "row-spread",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#000000",
+        "x": 490,
+        "y": 560,
+        "wires": []
+    },
+    {
+        "id": "3dd9c191a2d56f94",
+        "type": "ui_text",
+        "z": "391f51e7377c8273",
+        "group": "ab3a9f0b2e4b8d1b",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "Water temperature",
+        "format": "{{value}} °C",
+        "layout": "row-spread",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#000000",
+        "x": 490,
+        "y": 620,
+        "wires": []
+    },
+    {
+        "id": "6192907fb799f322",
+        "type": "ui_text",
+        "z": "391f51e7377c8273",
+        "group": "ab3a9f0b2e4b8d1b",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "Error code",
+        "format": "{{value}}",
+        "layout": "row-spread",
+        "className": "red-target",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#000000",
+        "x": 470,
+        "y": 680,
+        "wires": []
+    },
+    {
+        "id": "9882b516675f8097",
+        "type": "ui_numeric",
+        "z": "391f51e7377c8273",
+        "d": true,
+        "name": "",
+        "label": "Temperature",
+        "tooltip": "",
+        "group": "9b3a8c49293c5c6a",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "wrap": false,
+        "passthru": false,
+        "topic": "temperature",
+        "topicType": "str",
+        "format": "{{value}} °C",
+        "min": "5",
+        "max": "30",
+        "step": 1,
+        "className": "grayout-target",
+        "x": 310,
+        "y": 60,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "3f6ad65acd3a5234",
+        "type": "ui_template",
+        "z": "391f51e7377c8273",
+        "group": "9b3a8c49293c5c6a",
+        "name": "Grayout 1",
+        "order": 7,
+        "width": 0,
+        "height": 0,
+        "format": "<style>\n.grayout {\n    pointer-events: none;\n    filter: opacity(50%);\n    /*display: none;*/\n}\n</style>\n\n<script>\n(function(scope) {\n    scope.$watch('msg.payload', function(value) {\n        const controls = document.querySelectorAll('.grayout-target');\n        controls.forEach(el => {\n            if (!value) {\n                el.classList.add('grayout');\n            } else {\n                el.classList.remove('grayout');\n            }\n        });\n    });\n})(scope);\n</script>\n",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 720,
+        "y": 40,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "c71fb3d32cdf6139",
+        "type": "ui_template",
+        "z": "391f51e7377c8273",
+        "group": "9b3a8c49293c5c6a",
+        "name": "Grayout 2",
+        "order": 8,
+        "width": 0,
+        "height": 0,
+        "format": "<script>\n(function(scope) {\n    let states = { switch1: false, switch2: false };\n\n    scope.$watch('msg', function(msg) {\n        if (!msg || typeof msg.payload === 'undefined') return;\n\n        // Update the state depending on which switch sent the message\n        if (msg.topic === \"switch\") states.switch1 = msg.payload;\n        if (msg.topic === \"fan\") states.switch2 = msg.payload;\n\n        // Enable if either switch is true\n        const shouldEnable = states.switch1 || states.switch2;\n\n        // Add or remove the 'grayout' class from the grayout-target elements\n        const elements = document.querySelectorAll('.grayout-target-2');\n        elements.forEach(el => {\n            if (shouldEnable) {\n                el.classList.remove('grayout');\n            } else {\n                el.classList.add('grayout');\n            }\n        });\n    });\n})(scope);\n</script>\n",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 720,
+        "y": 80,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "8ee51c86622f317a",
+        "type": "inject",
+        "z": "391f51e7377c8273",
+        "d": true,
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "eco",
+        "payloadType": "str",
+        "x": 150,
+        "y": 120,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "8c25986c65998ad3",
+        "type": "function",
+        "z": "391f51e7377c8273",
+        "name": "Energy select",
+        "func": "\n// Define the lookup table\nconst lookupTable = {\n    \"gas\":       { value1: \"gas\",         value2: 0    },\n    \"electric1\": { value1: \"electricity\", value2: 900  },\n    \"electric2\": { value1: \"electricity\", value2: 1800 },\n    \"mix1\":      { value1: \"mix\",         value2: 900  },\n    \"mix2\":      { value1: \"mix\",         value2: 1800 }\n};\n\n// Get the input value (e.g., from msg.payload)\nlet inputValue = msg.payload;\n\n// Check the lookup table and get the results\nlet result = lookupTable[inputValue] || { value1: \"gas\", value2: 0 };\n\n// Prepare two different messages\nlet msg1 = { payload: result.value1 };  // Message for the first output\nlet msg2 = { payload: result.value2 };  // Message for the second output\n\n// Return both messages to different outputs\nreturn [msg1, msg2];  // Sends msg1 to output 1, and msg2 to output 2\n",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 740,
+        "y": 380,
+        "wires": [
+            [
+                "e123175452a0c255"
+            ],
+            [
+                "864ec9dedede4187"
+            ]
+        ]
+    },
+    {
+        "id": "c7fd42bc843cc3f0",
+        "type": "ui_text",
+        "z": "391f51e7377c8273",
+        "group": "ab3a9f0b2e4b8d1b",
+        "order": 4,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "",
+        "format": "",
+        "layout": "row-spread",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#000000",
+        "x": 450,
+        "y": 800,
+        "wires": [],
+        "info": "Dummy block used as a spacer"
+    },
+    {
+        "id": "f5c41b9f9936f215",
+        "type": "inject",
+        "z": "391f51e7377c8273",
+        "d": true,
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "0",
+        "payloadType": "num",
+        "x": 150,
+        "y": 60,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "6f65acc61017824f",
+        "type": "function",
+        "z": "391f51e7377c8273",
+        "name": "Set temperature",
+        "func": "\nflow.set(\"temp\", msg.payload);\n\nvar sw = flow.get(\"switch\");\n\nif (sw === true){\n    let msg1 = {payload: msg.payload};\n    return msg1;\n}\nelse {\n    return null;\n}",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 740,
+        "y": 200,
+        "wires": [
+            [
+                "defc780bd37644a4"
+            ]
+        ]
+    },
+    {
+        "id": "7dcb693e456897db",
+        "type": "function",
+        "z": "391f51e7377c8273",
+        "name": "Set fan",
+        "func": "\nflow.set(\"fan\", msg.payload);\n\nvar sw = flow.get(\"switch\");\n\nif (sw === true){\n    let msg1 = {payload: msg.payload};\n    return msg1;\n}\nelse {\n    return null;\n}",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 720,
+        "y": 260,
+        "wires": [
+            [
+                "2dd8bdbb19a99a93"
+            ]
+        ]
+    },
+    {
+        "id": "95a5eca3262d042c",
+        "type": "function",
+        "z": "391f51e7377c8273",
+        "name": "Heating trigger",
+        "func": "\nflow.set(\"switch\", msg.payload);\n\nif (msg.payload === true) {\n    var temp = flow.get(\"temp\");\n    var fan = flow.get(\"fan\");\n\n    // Prepare two different messages\n    let msg1 = { payload: temp };  // Message for the first output\n    let msg2 = { payload: fan };  // Message for the second output\n    return [msg1, msg2];\n}\nelse {\n    let msg1 = {payload: 0}\n    let msg2 = { payload: \"off\" };\n    return [msg1, msg2]\n}\n",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 740,
+        "y": 140,
+        "wires": [
+            [
+                "defc780bd37644a4"
+            ],
+            [
+                "2dd8bdbb19a99a93"
+            ]
+        ]
+    },
+    {
+        "id": "ebad44bd5d935840",
+        "type": "function",
+        "z": "391f51e7377c8273",
+        "d": true,
+        "name": "Gate",
+        "func": "\nvar sw = flow.get(\"switch\");\n\nif (sw === true){\n    let msg1 = {payload: msg.payload};\n    return msg1;\n}\nelse {\n    return null;\n}",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 290,
+        "y": 120,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "972e3c74b98cbe54",
+        "type": "function",
+        "z": "391f51e7377c8273",
+        "name": "Energy combine",
+        "func": "\nflow.set(\"source\", msg.payload);\n\n// Define the same lookup table\nconst lookupTable = {\n    \"gas\":       { value1: \"gas\",         value2: 0    },\n    \"electric1\": { value1: \"electricity\", value2: 900  },\n    \"electric2\": { value1: \"electricity\", value2: 1800 },\n    \"mix1\":      { value1: \"mix\",         value2: 900  },\n    \"mix2\":      { value1: \"mix\",         value2: 1800 }\n};\n\nlet value1 = msg.payload;\nlet value2 = flow.get(\"power\");\n\n// Perform reverse lookup\nlet foundKey = null;\nfor (let key in lookupTable) {\n    let entry = lookupTable[key];\n    if (entry.value1 === value1 && entry.value2 === value2) {\n        foundKey = key;\n        break;\n    }\n}\n\n// Return the key as payload (or a fallback if not found)\nmsg.payload = foundKey || \"unknown\";\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 420,
+        "y": 380,
+        "wires": [
+            [
+                "c268d215c0a29312"
+            ]
+        ]
+    },
+    {
+        "id": "10115e6f55d68ea4",
+        "type": "function",
+        "z": "391f51e7377c8273",
+        "name": "Energy combine",
+        "func": "\nflow.set(\"power\", msg.payload);\n\n// Define the same lookup table\nconst lookupTable = {\n    \"gas\":       { value1: \"gas\",         value2: 0    },\n    \"electric1\": { value1: \"electricity\", value2: 900  },\n    \"electric2\": { value1: \"electricity\", value2: 1800 },\n    \"mix1\":      { value1: \"mix\",         value2: 900  },\n    \"mix2\":      { value1: \"mix\",         value2: 1800 }\n};\n\nlet value1 = flow.get(\"source\");\nlet value2 = msg.payload;\n\n// Perform reverse lookup\nlet foundKey = null;\nfor (let key in lookupTable) {\n    let entry = lookupTable[key];\n    if (entry.value1 === value1 && entry.value2 === value2) {\n        foundKey = key;\n        break;\n    }\n}\n\n// Return the key as payload (or a fallback if not found)\nmsg.payload = foundKey || \"unknown\";\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 420,
+        "y": 420,
+        "wires": [
+            [
+                "c268d215c0a29312"
+            ]
+        ]
+    },
+    {
+        "id": "97600a7142d22145",
+        "type": "ui_template",
+        "z": "391f51e7377c8273",
+        "group": "ab3a9f0b2e4b8d1b",
+        "name": "Red error",
+        "order": 5,
+        "width": 0,
+        "height": 0,
+        "format": "\n<style>\n.red {\n    color: red !important;\n    font-weight: bold;\n}\n</style>\n\n<script>\n(function(scope) {\n    scope.$watch('msg.payload', function(value) {\n        const controls = document.querySelectorAll('.red-target');\n        controls.forEach(el => {\n            if (value === 0) {\n                el.classList.remove('red');\n            } else {\n                el.classList.add('red');\n            }\n        });\n    });\n})(scope);\n</script>\n",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 460,
+        "y": 720,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "555b5779bdb6e92a",
+        "type": "ui_dropdown",
+        "z": "391f51e7377c8273",
+        "name": "",
+        "label": "&nbsp;Temperature &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;",
+        "tooltip": "",
+        "place": "",
+        "group": "9b3a8c49293c5c6a",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "passthru": false,
+        "multiple": false,
+        "options": [
+            {
+                "label": "5",
+                "value": 5,
+                "type": "num"
+            },
+            {
+                "label": "6",
+                "value": 6,
+                "type": "num"
+            },
+            {
+                "label": "7",
+                "value": 7,
+                "type": "num"
+            },
+            {
+                "label": "8",
+                "value": 8,
+                "type": "num"
+            },
+            {
+                "label": "9",
+                "value": 9,
+                "type": "num"
+            },
+            {
+                "label": "10",
+                "value": 10,
+                "type": "num"
+            },
+            {
+                "label": "11",
+                "value": 11,
+                "type": "num"
+            },
+            {
+                "label": "12",
+                "value": 12,
+                "type": "num"
+            },
+            {
+                "label": "13",
+                "value": 13,
+                "type": "num"
+            },
+            {
+                "label": "14",
+                "value": 14,
+                "type": "num"
+            },
+            {
+                "label": "15",
+                "value": 15,
+                "type": "num"
+            },
+            {
+                "label": "16",
+                "value": 16,
+                "type": "num"
+            },
+            {
+                "label": "17",
+                "value": 17,
+                "type": "num"
+            },
+            {
+                "label": "18",
+                "value": 18,
+                "type": "num"
+            },
+            {
+                "label": "19",
+                "value": 19,
+                "type": "num"
+            },
+            {
+                "label": "20",
+                "value": 20,
+                "type": "num"
+            },
+            {
+                "label": "21",
+                "value": 21,
+                "type": "num"
+            },
+            {
+                "label": "22",
+                "value": 22,
+                "type": "num"
+            },
+            {
+                "label": "23",
+                "value": 23,
+                "type": "num"
+            },
+            {
+                "label": "24",
+                "value": 24,
+                "type": "num"
+            },
+            {
+                "label": "25",
+                "value": 25,
+                "type": "num"
+            },
+            {
+                "label": "26",
+                "value": 26,
+                "type": "num"
+            },
+            {
+                "label": "27",
+                "value": 27,
+                "type": "num"
+            },
+            {
+                "label": "28",
+                "value": 28,
+                "type": "num"
+            },
+            {
+                "label": "29",
+                "value": 29,
+                "type": "num"
+            },
+            {
+                "label": "30",
+                "value": 30,
+                "type": "num"
+            }
+        ],
+        "payload": "",
+        "topic": "fan",
+        "topicType": "str",
+        "className": "grayout-target",
+        "x": 565,
+        "y": 200,
+        "wires": [
+            [
+                "6f65acc61017824f"
+            ]
+        ],
+        "l": false
+    },
+    {
+        "id": "defc780bd37644a4",
+        "type": "mqtt out",
+        "z": "391f51e7377c8273",
+        "name": "Temperature",
+        "topic": "service/truma/set/target_temp_room",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "2c24d1c82633c69e",
+        "x": 990,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "2dd8bdbb19a99a93",
+        "type": "mqtt out",
+        "z": "391f51e7377c8273",
+        "name": "Fan setting",
+        "topic": "service/truma/set/heating_mode",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "2c24d1c82633c69e",
+        "x": 990,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "d447a46d234eb48e",
+        "type": "mqtt out",
+        "z": "391f51e7377c8273",
+        "name": "Water temperature",
+        "topic": "service/truma/set/target_temp_water",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "2c24d1c82633c69e",
+        "x": 1010,
+        "y": 320,
+        "wires": []
+    },
+    {
+        "id": "e123175452a0c255",
+        "type": "mqtt out",
+        "z": "391f51e7377c8273",
+        "name": "Energy mix",
+        "topic": "service/truma/set/energy_mix",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "2c24d1c82633c69e",
+        "x": 990,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "id": "864ec9dedede4187",
+        "type": "mqtt out",
+        "z": "391f51e7377c8273",
+        "name": "El. power",
+        "topic": "service/truma/set/el_power_level",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "2c24d1c82633c69e",
+        "x": 980,
+        "y": 440,
+        "wires": []
+    },
+    {
+        "id": "8e400b868732b2d8",
+        "type": "mqtt in",
+        "z": "391f51e7377c8273",
+        "name": "Temperature",
+        "topic": "service/truma/control_status/target_temp_room",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "2c24d1c82633c69e",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 170,
+        "y": 200,
+        "wires": [
+            [
+                "555b5779bdb6e92a"
+            ]
+        ]
+    },
+    {
+        "id": "cbb6491e7b6d0646",
+        "type": "mqtt in",
+        "z": "391f51e7377c8273",
+        "name": "Fan setting",
+        "topic": "service/truma/control_status/heating_mode",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "2c24d1c82633c69e",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 160,
+        "y": 260,
+        "wires": [
+            [
+                "f6d22ec56a889695"
+            ]
+        ]
+    },
+    {
+        "id": "7befabbb0dc3e8ae",
+        "type": "mqtt in",
+        "z": "391f51e7377c8273",
+        "name": "Water temperature",
+        "topic": "service/truma/control_status/target_temp_water",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "2c24d1c82633c69e",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 190,
+        "y": 320,
+        "wires": [
+            [
+                "8ede93c0d2432a6d"
+            ]
+        ]
+    },
+    {
+        "id": "06db01580e13cd9f",
+        "type": "mqtt in",
+        "z": "391f51e7377c8273",
+        "name": "Energy mix",
+        "topic": "service/truma/control_status/energy_mix",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "2c24d1c82633c69e",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 160,
+        "y": 380,
+        "wires": [
+            [
+                "972e3c74b98cbe54"
+            ]
+        ]
+    },
+    {
+        "id": "64c170e5dd9b4e4e",
+        "type": "mqtt in",
+        "z": "391f51e7377c8273",
+        "name": "El. power",
+        "topic": "service/truma/control_status/el_power_level",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "2c24d1c82633c69e",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 160,
+        "y": 420,
+        "wires": [
+            [
+                "10115e6f55d68ea4"
+            ]
+        ]
+    },
+    {
+        "id": "6153a73b1555ed50",
+        "type": "mqtt in",
+        "z": "391f51e7377c8273",
+        "name": "Room temperature",
+        "topic": "service/truma/control_status/current_temp_room",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "2c24d1c82633c69e",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 190,
+        "y": 560,
+        "wires": [
+            [
+                "6427f73155b45c3a"
+            ]
+        ]
+    },
+    {
+        "id": "5053378f0a38cb61",
+        "type": "mqtt in",
+        "z": "391f51e7377c8273",
+        "name": "Water temperature",
+        "topic": "service/truma/control_status/current_temp_water",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "2c24d1c82633c69e",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 190,
+        "y": 620,
+        "wires": [
+            [
+                "3dd9c191a2d56f94"
+            ]
+        ]
+    },
+    {
+        "id": "cc01a9f3c5a92194",
+        "type": "mqtt in",
+        "z": "391f51e7377c8273",
+        "name": "Error code",
+        "topic": "service/truma/control_status/error_code",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "2c24d1c82633c69e",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 160,
+        "y": 680,
+        "wires": [
+            [
+                "6192907fb799f322",
+                "97600a7142d22145"
+            ]
+        ]
+    }
+]
