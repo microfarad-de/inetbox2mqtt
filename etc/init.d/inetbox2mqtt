@@ -9,7 +9,7 @@
 # Description:       Starts the Python script to run MQTT integration
 ### END INIT INFO
 
-SCRIPT_PATH="/opt/inetbox2mqtt/src/main1.py"
+SCRIPT_PATH="/opt/inetbox2mqtt/src/main.py"
 PIDFILE="/var/run/inetbox2mqtt.pid"
 LOGFILE="/var/log/inetbox2mqtt.log"
 USER="root"  # Or another user if appropriate
