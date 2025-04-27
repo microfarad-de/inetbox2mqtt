@@ -324,7 +324,7 @@ def run(w, lin_debug=False, inet_debug=False, mqtt_debug=False):
 
     set_prefix(TOPIC_ROOT)
     log.info(f"prefix: '{TOPIC_ROOT}' set: {S_TOPIC_1} rec: {PUB_PREFIX}")
-    connect.mqtt_config.set_last_will("service/" + TOPIC_ROOT + "/control_status/alive", "OFF", retain=True, qos=0)  # last will is important
+    #connect.mqtt_config.set_last_will("service/" + TOPIC_ROOT + "/control_status/alive", "OFF", retain=True, qos=0)  # last will is important
     connect.set_proc(subscript = callback, connect = conn_callback)
 
     if not(dc == None):

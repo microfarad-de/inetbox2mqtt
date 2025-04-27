@@ -218,7 +218,7 @@ class Lin:
         if not(self.cnt_in % self.CNT_IN_MAX):
             self.cnt_in=0
             self.app.status["alive"] = ["ON", True, False]
-# Same approach for the raw PID 0xD8. This corresponds to a PID 0x18
+            # Same approach for the raw PID 0xD8. This corresponds to a PID 0x18
             if self.d8_alive:
                 self.app.status["alive"][0] = "ON"
             else:
@@ -304,9 +304,9 @@ class Lin:
         for b in line:
             deb=deb+f"{b:02x} "
         if(len(line)>2):
-            print("debug:%s, %d, 0x%x"%(deb,len(line),line[2]))
+            log.debug("%s, %d, 0x%x"%(deb,len(line),line[2]))
         else:
-            print("debug:%s, %d"%(deb,len(line)))
+            log.debug("%s, %d"%(deb,len(line)))
         # the idea is to trigger events from the loop-timing
         # seeing completed rows at this point (rows means LIN-frames)
         # but we don't use this functionality at the moment

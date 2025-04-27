@@ -348,7 +348,7 @@
         "order": 1,
         "width": 0,
         "height": 0,
-        "format": "<style>\n  .dashboard-disabled {\n    pointer-events: none;\n    /*\n    opacity: 0.8;\n    filter: grayscale(50%);\n    */\n  }\n</style>\n\n<script>\n  (function() {\n    const CHECK_INTERVAL = 5000;\n    const TIMEOUT = 3000;\n\n    function checkServerReachability() {\n      const xhr = new XMLHttpRequest();\n      xhr.open(\"GET\", \"/ui\", true);\n      let isTimedOut = false;\n      const timeout = setTimeout(() => {\n        isTimedOut = true;\n        xhr.abort();\n        showWarning();\n      }, TIMEOUT);\n      xhr.onreadystatechange = function() {\n        if (xhr.readyState === 4) {\n          clearTimeout(timeout);\n          if (!isTimedOut && xhr.status === 200) {\n            hideWarning();\n          } else {\n            showWarning();\n          }\n        }\n      };\n      xhr.onerror = function() {\n        clearTimeout(timeout);\n        showWarning();\n      };\n      xhr.send();\n    }\n\n    function showWarning() {\n      let el = document.getElementById(\"server-disconnect-warning\");\n      if (!el) {\n        el = document.createElement(\"div\");\n        el.id = \"server-disconnect-warning\";\n        el.style.cssText = \"position:fixed;top:0;left:0;width:100%;background:#ffdddd;color:#b00;padding:10px;text-align:left;font-weight:bold;;font-size:1.1em;z-index:9999;\";\n        el.innerHTML = \"✘ &nbsp; Connection lost\";\n        document.body.appendChild(el);\n      } else {\n        el.style.display = \"block\";\n      }\n      document.body.classList.add(\"dashboard-disabled\");\n    }\n\n    function hideWarning() {\n      const el = document.getElementById(\"server-disconnect-warning\");\n      if (el) {\n        el.style.display = \"none\";\n      }\n      document.body.classList.remove(\"dashboard-disabled\");\n    }\n\n    setInterval(checkServerReachability, CHECK_INTERVAL);\n    checkServerReachability();\n  })();\n</script>\n",
+        "format": "<style>\n  .dashboard-disabled {\n    pointer-events: none;\n    /*\n    opacity: 0.8;\n    filter: grayscale(50%);\n    */\n  }\n</style>\n\n<script>\n  (function() {\n    const CHECK_INTERVAL = 5000;\n    const TIMEOUT = 3000;\n\n    function checkServerReachability() {\n      const xhr = new XMLHttpRequest();\n      xhr.open(\"GET\", \"/ui\", true);\n      let isTimedOut = false;\n      const timeout = setTimeout(() => {\n        isTimedOut = true;\n        xhr.abort();\n        showWarning();\n      }, TIMEOUT);\n      xhr.onreadystatechange = function() {\n        if (xhr.readyState === 4) {\n          clearTimeout(timeout);\n          if (!isTimedOut && xhr.status === 200) {\n            hideWarning();\n          } else {\n            showWarning();\n          }\n        }\n      };\n      xhr.onerror = function() {\n        clearTimeout(timeout);\n        showWarning();\n      };\n      xhr.send();\n    }\n\n    function showWarning() {\n      let el = document.getElementById(\"server-disconnect-warning\");\n      if (!el) {\n        el = document.createElement(\"div\");\n        el.id = \"server-disconnect-warning\";\n        el.style.cssText = \"position:fixed;top:0;left:0;width:100%;background:#ffdddd;color:#b00;padding:10px;text-align:left;font-weight:bold;;font-size:1.1em;z-index:9999;\";\n        el.innerHTML = \"✘ &nbsp; Connection lost\";\n        document.body.appendChild(el);\n      } else {\n        el.style.display = \"block\";\n      }\n      //document.body.classList.add(\"dashboard-disabled\");\n    }\n\n    function hideWarning() {\n      const el = document.getElementById(\"server-disconnect-warning\");\n      if (el) {\n        el.style.display = \"none\";\n      }\n      //document.body.classList.remove(\"dashboard-disabled\");\n    }\n\n    setInterval(checkServerReachability, CHECK_INTERVAL);\n    checkServerReachability();\n  })();\n</script>\n",
         "storeOutMessages": true,
         "fwdInMessages": true,
         "resendOnRefresh": true,
@@ -2036,132 +2036,132 @@
         "multiple": false,
         "options": [
             {
-                "label": "5",
+                "label": "5 °C",
                 "value": 5,
                 "type": "num"
             },
             {
-                "label": "6",
+                "label": "6 °C",
                 "value": 6,
                 "type": "num"
             },
             {
-                "label": "7",
+                "label": "7 °C",
                 "value": 7,
                 "type": "num"
             },
             {
-                "label": "8",
+                "label": "8 °C",
                 "value": 8,
                 "type": "num"
             },
             {
-                "label": "9",
+                "label": "9 °C",
                 "value": 9,
                 "type": "num"
             },
             {
-                "label": "10",
+                "label": "10 °C",
                 "value": 10,
                 "type": "num"
             },
             {
-                "label": "11",
+                "label": "11 °C",
                 "value": 11,
                 "type": "num"
             },
             {
-                "label": "12",
+                "label": "12 °C",
                 "value": 12,
                 "type": "num"
             },
             {
-                "label": "13",
+                "label": "13 °C",
                 "value": 13,
                 "type": "num"
             },
             {
-                "label": "14",
+                "label": "14 °C",
                 "value": 14,
                 "type": "num"
             },
             {
-                "label": "15",
+                "label": "15 °C",
                 "value": 15,
                 "type": "num"
             },
             {
-                "label": "16",
+                "label": "16 °C",
                 "value": 16,
                 "type": "num"
             },
             {
-                "label": "17",
+                "label": "17 °C",
                 "value": 17,
                 "type": "num"
             },
             {
-                "label": "18",
+                "label": "18 °C",
                 "value": 18,
                 "type": "num"
             },
             {
-                "label": "19",
+                "label": "19 °C",
                 "value": 19,
                 "type": "num"
             },
             {
-                "label": "20",
+                "label": "20 °C",
                 "value": 20,
                 "type": "num"
             },
             {
-                "label": "21",
+                "label": "21 °C",
                 "value": 21,
                 "type": "num"
             },
             {
-                "label": "22",
+                "label": "22 °C",
                 "value": 22,
                 "type": "num"
             },
             {
-                "label": "23",
+                "label": "23 °C",
                 "value": 23,
                 "type": "num"
             },
             {
-                "label": "24",
+                "label": "24 °C",
                 "value": 24,
                 "type": "num"
             },
             {
-                "label": "25",
+                "label": "25 °C",
                 "value": 25,
                 "type": "num"
             },
             {
-                "label": "26",
+                "label": "26 °C",
                 "value": 26,
                 "type": "num"
             },
             {
-                "label": "27",
+                "label": "27 °C",
                 "value": 27,
                 "type": "num"
             },
             {
-                "label": "28",
+                "label": "28 °C",
                 "value": 28,
                 "type": "num"
             },
             {
-                "label": "29",
+                "label": "29 °C",
                 "value": 29,
                 "type": "num"
             },
             {
-                "label": "30",
+                "label": "30 °C",
                 "value": 30,
                 "type": "num"
             }
