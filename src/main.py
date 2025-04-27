@@ -259,11 +259,13 @@ async def sl_loop():
         await asyncio.sleep(0.1)
 
 async def ctrl_loop():
-    asyncio.create_task(connect.client.connect())
     a=asyncio.create_task(main())
     b=asyncio.create_task(lin_loop())
-    if not(dc == None):
-        d=asyncio.create_task(dc_loop())
+
+    # Delay to ensure successful MQTT connect after boot
+    await asyncio.sleep(20)
+    asyncio.create_task(connect.client.connect())
+
     while True:
         await asyncio.sleep(10)
         if a.done():
