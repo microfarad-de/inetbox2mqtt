@@ -163,7 +163,7 @@ async def conn_callback(client):
     # inetbox_set_commands
     await connect.client.subscribe(S_TOPIC_1+"#", 1)
     # HA_online_command
-    await connect.client.subscribe(S_TOPIC_2, 1)
+    #await connect.client.subscribe(S_TOPIC_2, 1)
 
 
 # HA autodiscovery - delete all entities
@@ -259,7 +259,6 @@ async def sl_loop():
         await asyncio.sleep(0.1)
 
 async def ctrl_loop():
-    loop = asyncio.get_event_loop()
     a=asyncio.create_task(main())
     b=asyncio.create_task(lin_loop())
     c=asyncio.create_task(connect.client.connect())
@@ -273,9 +272,9 @@ async def ctrl_loop():
         if b.done():
             log.info("Restart lin_loop")
             b=asyncio.create_task(lin_loop())
-        if c.done():
-            log.info("Restart MQTT client connect loop")
-            c=asyncio.create_task(connect.client.connect())
+        #if c.done():
+        #    log.info("Restart MQTT client connect loop")
+        #    c=asyncio.create_task(connect.client.connect())
 
 
 def run(w, lin_debug=False, inet_debug=False, mqtt_debug=False):
@@ -318,7 +317,7 @@ def run(w, lin_debug=False, inet_debug=False, mqtt_debug=False):
     set_prefix(TOPIC_ROOT)
     log.info(f"prefix: '{TOPIC_ROOT}' set: {S_TOPIC_1} rec: {PUB_PREFIX}")
     #connect.mqtt_config.set_last_will("service/" + TOPIC_ROOT + "/control_status/alive", "OFF", retain=True, qos=0)  # last will is important
-    connect.set_proc(subscript = callback, connect = conn_callback)
+    connect.set_proc(connect=conn_callback, subscript=callback)
 
     if not(dc == None):
         HA_CONFIG.update(dc.HA_DC_CONFIG)

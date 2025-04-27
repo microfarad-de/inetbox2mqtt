@@ -114,7 +114,7 @@ class Connect():
                 port = int(cfg["mqtt"]["port"])
                 log.info(f"MQTT Port is switched to port: {port}")
             self.mqtt_config.clean     = True
-            self.mqtt_config.keepalive = 60  # last will after 60sec off
+            #self.mqtt_config.keepalive = 60  # last will after 60sec off
             #self.mqtt_config.set_last_will("service/truma/control_status/alive", "OFF", retain=True, qos=0)  # last will is important
             self.client = MQTTClient(self.mqtt_config, mqtt_debug)
 
