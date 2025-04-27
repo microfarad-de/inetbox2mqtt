@@ -259,9 +259,9 @@ async def sl_loop():
         await asyncio.sleep(0.1)
 
 async def ctrl_loop():
+    asyncio.create_task(connect.client.connect())
     a=asyncio.create_task(main())
     b=asyncio.create_task(lin_loop())
-    c=asyncio.create_task(connect.client.connect())
     if not(dc == None):
         d=asyncio.create_task(dc_loop())
     while True:
@@ -272,9 +272,6 @@ async def ctrl_loop():
         if b.done():
             log.info("Restart lin_loop")
             b=asyncio.create_task(lin_loop())
-        #if c.done():
-        #    log.info("Restart MQTT client connect loop")
-        #    c=asyncio.create_task(connect.client.connect())
 
 
 def run(w, lin_debug=False, inet_debug=False, mqtt_debug=False):
