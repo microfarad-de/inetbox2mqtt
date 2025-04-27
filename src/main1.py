@@ -286,7 +286,6 @@ def run(w, lin_debug=False, inet_debug=False, mqtt_debug=False):
     global sl
     connect = w
 
-    duocontrol = connect.config.getboolean("options", "duo_control")
     lin_debug  = connect.config.getboolean("logging", "lin_debug")
     inet_debug = connect.config.getboolean("logging", "inet_debug")
     mqtt_debug = connect.config.getboolean("logging", "mqtt_debug")
@@ -310,12 +309,6 @@ def run(w, lin_debug=False, inet_debug=False, mqtt_debug=False):
             stopbits=pyserial.STOPBITS_ONE,
             timeout=3
         )
-
-    #if duocontrol:
-    #    log.info("Activate duoControl set to true, using GPIO 18,19 as input, 22,23 as output")
-    #    dc = duo_ctrl()
-    #else:
-    #    dc = None
 
     # Initialize the lin-object
     lin = Lin(serial, w.p, lin_debug, inet_debug)
