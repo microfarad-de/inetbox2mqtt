@@ -16,10 +16,29 @@ Additionally, a Node-Red dashboard for controlling the Truma Combi heater has be
 
 ## Prerequisites
 
-The setup has been tested on a Raspberry Pi 3 running the Victron Venus OS Large version. This guide assumes that you have a working Venus OS installation and you are familiar with the Victron Cerbo GX / Venus OS basic concepts.
+The setup has been tested on a Raspberry Pi 3 running the Victron Venus OS Large version with Node-Red enabled. This guide assumes that you have a working Venus OS installation and you are familiar with the Victron Cerbo GX / Venus OS / Node-Red basic concepts.
 
-For general Venus OS Large installation instructions, please visit https://www.victronenergy.com/live/venus-os:large.
+This guide also assumes that you have configured Venus OS SSH root access.
 
+For general Venus OS Large and Node-Red setup instructions, please visit https://www.victronenergy.com/live/venus-os:large.
+
+
+
+## Hardware Setup
+
+The setup uses a TJA1020 TTL UART to LIN bus converter. For the sake of wiring simplicity, and in order to avoid interfering with the Venus OS operation, it has been chosen not to use the Raspberry Pi's on board serial port in favor of an FT232RL compatible USB to serial converter. The voltage jumper of the FT232RL board has been configured 3.3 V in order to ensure compatibility with the TJA1020 module.
+
+The electrical connections are described in the following table:
+
+| FT232RL Pin | TJA1020 Pin | LIN Bus | Power Supply |
+|-------------|-------------|---------|--------------|
+| GND         | GND         | GND     |
+| RX          | TX          |         |
+| TX          | RX          |         |
+|             | LIN         | LIN     |
+|             | 12V         |         | +12V fused 1A
+
+Further information is provided in [the original inetbox2mqtt electrics guide](doc/ELECTRIC.md), as well as in [the following similar project](https://github.com/danielfett/inetbox.py).
 
 ## Installation
 
@@ -29,12 +48,12 @@ Following are the installation instructions:
 
 2. Create symbolic links for the configuration and init.d startup scripts:
 
-   * `ln -s /opt/inetbox2mqtt/etc/inetbox2mqtt /etc/inetbox2mqtt`
+   `ln -s /opt/inetbox2mqtt/etc/inetbox2mqtt /etc/inetbox2mqtt`
 
-   * `ln -s /opt/inetbox2mqtt/etc/init.d/inetbox2mqtt /etc/init.d/inetbox2mqtt`
+   `ln -s /opt/inetbox2mqtt/etc/init.d/inetbox2mqtt /etc/init.d/inetbox2mqtt`
 
 3. Enable service auto start:
-   * `ln -s /etc/init.d/inetbox2mqtt /etc/rc5.d/S99inetbox2mqtt`
+   `ln -s /etc/init.d/inetbox2mqtt /etc/rc5.d/S99inetbox2mqtt`
 
 4. Edit the configuration parameters in `/etc/inetbox2mqtt`
    * Since we are going to connect to the local MQTT server provided by Venus OS, the MQTT server and port can be left unchanged at `localhost` and `1883`.
@@ -44,37 +63,37 @@ Following are the installation instructions:
 
 Before starting the inetbox2mqtt service, the following Venus OS adaptations need to be done.
 
-First of all, you need to enable MQTT access via the Venus GUI under "Settings > Services"
+1. First of all, you need to enable MQTT access via the Venus GUI under "Settings > Services"
 
-Then you need to enable Node-Red under "Settings > Venus OS Large features". Node-Red will provide the web interface for controlling your Truma device.
+2. Then you need to enable Node-Red under "Settings > Venus OS Large features". Node-Red will provide the web interface for controlling your Truma Combi.
 
-Finally, you need to configure a rule to prevent Venus OS from automatically grabbing the serial port in use by the USB to serial adapter. In order to achieve this, please add the following line to `/etc/udev/rules.d/serial-starter.rules`:
+3. Finally, you need to configure a rule to prevent Venus OS from automatically grabbing the serial port in use by the USB to serial adapter. In order to achieve this, please add the following line to `/etc/udev/rules.d/serial-starter.rules`:
 
-`ACTION=="add", ENV{ID_BUS}=="usb", ENV{ID_MODEL}=="FT232R_USB_UART", ENV{VE_SERVICE}="ignore"`
+   `ACTION=="add", ENV{ID_BUS}=="usb", ENV{ID_MODEL}=="FT232R_USB_UART", ENV{VE_SERVICE}="ignore"`
 
-Where the exact value for ID_MODEL can be retrieved by executing the following command:
+   Where the exact value for ID_MODEL can be retrieved by executing the following command:
 
-`udevadm info /dev/serial/by-id/usb-FTDI_FT232R_USB_UART_00000000-if00-port0`
+   `udevadm info /dev/serial/by-id/usb-FTDI_FT232R_USB_UART_00000000-if00-port0`
 
-Whereas the device name needs to replaced with the one corresponding to the USB to serial converter in use.
+   Whereas the device name needs to replaced with the one corresponding to the USB to serial converter in use.
 
-Also, comment out any other line that refers to your serial device ID_MODEL.
+   Also, comment out any other line that refers to your serial device ID_MODEL.
 
 ## Installing the Node-Red Dashboard
 
 Having activated Node-Red, you may want to install the dashboard for controlling the Truma Combi.
 
-First you have to login to your Node-Red editor under `<ip_address>:1881`, where ip_address needs to be replaced with your Raspberry Pi local IP address.
+1. First you have to login to your Node-Red editor under `<ip_address>:1881`, where ip_address needs to be replaced with your Raspberry Pi local IP address.
 
-Then click on the "hamburger menu" at the top right corner and select the "Manage Palette" menu item. There you need to find and install the "node-red-dashboard" addon.
+2. Then click on the "hamburger menu" at the top right corner and select the "Manage Palette" menu item. There you need to find and install the "node-red-dashboard" addon.
 
-Afterwards please select the "Import" menu item in order to import the `node-red/caravan-dashboard.json` file. The Truma Combi dashboard will be displayed under the "Climate Control" tab. Please feel free to disable any addtional tabs that are not applicable to your setup.
+3. Afterwards please select the "Import" menu item in order to import the `node-red/caravan-dashboard.json` file. The Truma Combi dashboard will be displayed under the "Climate Control" tab. Please feel free to disable any addtional tabs that are not applicable to your setup.
+
+The following picutre shows a screen shot of the Truma Combi control dashboard, which is a close clone of the original Truma iNet System app.
 
 ![Node-Red dashboard](doc/node-red.png)
 
-## Hardware Setup
-
-Coming soon...
+On iOS devices, it is recommended to create a home screen shortcut for the dashboard URL. When opened via shortcut, the dashboard will have a rather native app feel as the Safari address bar and navigation buttons will no longer be visible.
 
 
 ## Bringup
