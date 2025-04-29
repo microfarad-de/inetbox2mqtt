@@ -73,7 +73,7 @@ class Lin:
         self.lin_debug = lin_debug
         self.app = inetboxapp.InetboxApp(inet_debug)
         self.pin_map.set_led("lin_led", False)
-        print("Lin initialized")
+
 
     def response_waiting(self):
         return len(self.ts_response_buffer)
