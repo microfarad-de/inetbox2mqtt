@@ -248,16 +248,6 @@
         "className": ""
     },
     {
-        "id": "6f9418a7fefd96ca",
-        "type": "ui_spacer",
-        "z": "2561d49b29c858c7",
-        "name": "spacer",
-        "group": "cf4c6771afb43982",
-        "order": 12,
-        "width": 3,
-        "height": 1
-    },
-    {
         "id": "9426728fc210ec9b",
         "type": "mqtt in",
         "z": "37a752f35a68bbed",
@@ -574,7 +564,7 @@
         "name": "",
         "onlyChanges": false,
         "roundValues": "2",
-        "x": 180,
+        "x": 170,
         "y": 560,
         "wires": [
             [
@@ -756,7 +746,7 @@
         "name": "",
         "onlyChanges": false,
         "roundValues": "2",
-        "x": 160,
+        "x": 150,
         "y": 120,
         "wires": [
             [
@@ -1414,83 +1404,6 @@
         "info": "Dummy block used as a spacer"
     },
     {
-        "id": "dc6d769c56844def",
-        "type": "ui_gauge",
-        "z": "2561d49b29c858c7",
-        "d": true,
-        "name": "",
-        "group": "cf4c6771afb43982",
-        "order": 11,
-        "width": 3,
-        "height": 1,
-        "gtype": "donut",
-        "title": "Fridge RH",
-        "label": "%",
-        "format": "{{value}}",
-        "min": 0,
-        "max": "100",
-        "colors": [
-            "#00b500",
-            "#e6e600",
-            "#ca3838"
-        ],
-        "seg1": "",
-        "seg2": "",
-        "diff": false,
-        "className": "",
-        "x": 660,
-        "y": 820,
-        "wires": []
-    },
-    {
-        "id": "3c7da46d16440c1c",
-        "type": "victron-input-temperature",
-        "z": "2561d49b29c858c7",
-        "d": true,
-        "service": "com.victronenergy.temperature/21",
-        "path": "/Humidity",
-        "serviceObj": {
-            "service": "com.victronenergy.temperature/21",
-            "name": "Fridge"
-        },
-        "pathObj": {
-            "path": "/Humidity",
-            "type": "float",
-            "name": "Humidity (%)"
-        },
-        "name": "",
-        "onlyChanges": false,
-        "roundValues": "1",
-        "x": 140,
-        "y": 820,
-        "wires": [
-            [
-                "ce5e49a552a71a95"
-            ]
-        ]
-    },
-    {
-        "id": "ce5e49a552a71a95",
-        "type": "function",
-        "z": "2561d49b29c858c7",
-        "d": true,
-        "name": "Offset",
-        "func": "let hum = msg.payload;\n\nhum = hum - 0;\n\nmsg.payload = (+hum).toFixed(1);\n\nreturn msg;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 510,
-        "y": 820,
-        "wires": [
-            [
-                "dc6d769c56844def"
-            ]
-        ]
-    },
-    {
         "id": "f46d628d15bf17ce",
         "type": "mqtt in",
         "z": "2561d49b29c858c7",
@@ -1929,7 +1842,7 @@
         "type": "function",
         "z": "391f51e7377c8273",
         "name": "Heating trigger",
-        "func": "\nflow.set(\"switch\", msg.payload);\n\nif (msg.payload === true) {\n    var temp = flow.get(\"temp\");\n    var fan = flow.get(\"fan\");\n    \n    if (temp === undefined) {\n        temp = 20;\n    }\n    \n    if (fan === undefined) {\n        fan = \"eco\";\n    }\n\n    // Prepare two different messages\n    let msg1 = { payload: temp };  // Message for the first output\n    let msg2 = { payload: fan };  // Message for the second output\n    return [msg1, msg2];\n}\nelse {\n    let msg1 = {payload: 0}\n    let msg2 = { payload: \"off\" };\n    return [msg1, msg2]\n}\n",
+        "func": "\nif (msg.from_mqtt === true) {\n    return null\n\n}\nelse if (msg.payload === true) {\n    \n    var temp = flow.get(\"temp\");\n    var fan = flow.get(\"fan\");\n    \n    if (temp === undefined) {\n        temp = 20;\n    }\n    \n    if (fan === undefined) {\n        fan = \"eco\";\n    }\n\n    // Prepare two different messages\n    let msg1 = { payload: temp };  // Message for the first output\n    let msg2 = { payload: fan };  // Message for the second output\n    return [msg1, msg2];\n\n}\nelse {\n    let msg1 = {payload: 0}\n    let msg2 = { payload: \"off\" };\n    return [msg1, msg2]\n}\n    \n",
         "outputs": 2,
         "timeout": 0,
         "noerr": 0,
@@ -1980,7 +1893,7 @@
         "finalize": "",
         "libs": [],
         "x": 420,
-        "y": 420,
+        "y": 440,
         "wires": [
             [
                 "c268d215c0a29312"
@@ -2182,7 +2095,7 @@
         "expiry": "",
         "broker": "2c24d1c82633c69e",
         "x": 990,
-        "y": 180,
+        "y": 200,
         "wires": []
     },
     {
@@ -2200,7 +2113,7 @@
         "expiry": "",
         "broker": "2c24d1c82633c69e",
         "x": 990,
-        "y": 240,
+        "y": 260,
         "wires": []
     },
     {
@@ -2357,7 +2270,7 @@
         "rh": 0,
         "inputs": 0,
         "x": 160,
-        "y": 420,
+        "y": 440,
         "wires": [
             [
                 "10115e6f55d68ea4"
@@ -2497,7 +2410,7 @@
         "type": "function",
         "z": "391f51e7377c8273",
         "name": "Set temp.",
-        "func": "\nvar temp = msg.payload\nvar sw = flow.get(\"switch\");\n\nlet msg1;\n\nif (temp === 0){\n    if (sw == true) {\n        msg1 = {payload: false};\n        return msg1;\n    }\n}\nelse {\n    flow.set(\"temp\", temp);\n    if (sw == false) {\n        msg1 = {payload: true};\n        return msg1;\n    }\n}\n",
+        "func": "\nvar temp = msg.payload\n\nlet msg1;\n\nif (temp === 0){\n    msg1 = {payload: false, from_mqtt: true};\n    return msg1;\n}\nelse {\n    flow.set(\"temp\", temp);\n    msg1 = {payload: true, from_mqtt: true};\n    return msg1;\n}\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
