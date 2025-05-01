@@ -248,96 +248,9 @@
         "className": ""
     },
     {
-        "id": "9426728fc210ec9b",
-        "type": "mqtt in",
-        "z": "37a752f35a68bbed",
-        "d": true,
-        "name": "RPi Temp",
-        "topic": "N/+/temperature/29/Temperature",
-        "qos": "2",
-        "datatype": "json",
-        "broker": "2c24d1c82633c69e",
-        "nl": false,
-        "rap": true,
-        "rh": 0,
-        "inputs": 0,
-        "x": 180,
-        "y": 440,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "209ef98590510f71",
-        "type": "inject",
-        "z": "37a752f35a68bbed",
-        "d": true,
-        "name": "Poll",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "5",
-        "crontab": "",
-        "once": true,
-        "onceDelay": "0.5",
-        "topic": "",
-        "payload": "",
-        "payloadType": "date",
-        "x": 170,
-        "y": 380,
-        "wires": [
-            [
-                "acad561bf5e51b0d"
-            ]
-        ]
-    },
-    {
-        "id": "acad561bf5e51b0d",
-        "type": "exec",
-        "z": "37a752f35a68bbed",
-        "d": true,
-        "command": "dbus-send --system --print-reply --dest=com.victronenergy.temperature.RpiCpu06 /Temperature com.victronenergy.BusItem.GetValue",
-        "addpay": "",
-        "append": "",
-        "useSpawn": "false",
-        "timer": "",
-        "winHide": false,
-        "oldrc": false,
-        "name": "Get RPi Temp.",
-        "x": 320,
-        "y": 380,
-        "wires": [
-            [
-                "1504c61fdc35ae7e"
-            ],
-            [],
-            []
-        ]
-    },
-    {
-        "id": "1504c61fdc35ae7e",
-        "type": "function",
-        "z": "37a752f35a68bbed",
-        "d": true,
-        "name": "Parse Temp.",
-        "func": "let lines = msg.payload.split(\"\\n\");\nfor (let line of lines) {\n    if (line.includes(\"double\")) {\n        msg.payload = parseFloat(line.split(\"double\")[1]);\n        break;\n    }\n}\nreturn msg;\n",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 490,
-        "y": 380,
-        "wires": [
-            []
-        ]
+        "id": "9fb9e907fe35fd83",
+        "type": "node-red-contrib-whatsapp-cmb-account",
+        "name": "Karim"
     },
     {
         "id": "941135a1b6edb738",
@@ -359,16 +272,6 @@
         "wires": [
             []
         ]
-    },
-    {
-        "id": "758eb6577bb4aaa5",
-        "type": "comment",
-        "z": "37a752f35a68bbed",
-        "name": "Archive",
-        "info": "",
-        "x": 90,
-        "y": 300,
-        "wires": []
     },
     {
         "id": "ef5e0433c7f553e3",
@@ -413,43 +316,46 @@
         ]
     },
     {
-        "id": "b5a98e808b494951",
-        "type": "debug",
+        "id": "2f93affb367a865e",
+        "type": "link in",
         "z": "37a752f35a68bbed",
-        "d": true,
-        "name": "debug 1",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "payload",
-        "targetType": "msg",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 420,
-        "y": 560,
-        "wires": []
-    },
-    {
-        "id": "14605faf69088a89",
-        "type": "mqtt in",
-        "z": "37a752f35a68bbed",
-        "d": true,
-        "name": "Truma test",
-        "topic": "service/truma/set/target_temp_room",
-        "qos": "2",
-        "datatype": "json",
-        "broker": "2c24d1c82633c69e",
-        "nl": false,
-        "rap": true,
-        "rh": 0,
-        "inputs": 0,
-        "x": 200,
-        "y": 560,
+        "name": "Send WhatsApp",
+        "links": [
+            "f2fa448128ce1972",
+            "713473bc2af8430d",
+            "f59d101299f0716e",
+            "f8b062643e6b87e5",
+            "08fe98afcefbc02c",
+            "dfc1f32cb802a02e",
+            "335af24ca01463cb",
+            "210d9c2dfb32db9e"
+        ],
+        "x": 55,
+        "y": 260,
         "wires": [
             [
-                "b5a98e808b494951"
+                "fceb7b2903eca364"
             ]
+        ]
+    },
+    {
+        "id": "fceb7b2903eca364",
+        "type": "node-red-contrib-whatsapp-cmb-send-message",
+        "z": "37a752f35a68bbed",
+        "name": "",
+        "credtype": "account",
+        "account": "9fb9e907fe35fd83",
+        "text": "payload",
+        "phonenumbervalue": "",
+        "apikeyvalue": "",
+        "apikeyinputtypemessage": "msg",
+        "phonenumberinputtypemessage": "msg",
+        "inputtypemessage": "msg",
+        "rejectssl": false,
+        "x": 240,
+        "y": 260,
+        "wires": [
+            []
         ]
     },
     {
@@ -699,7 +605,7 @@
         "diff": false,
         "className": "",
         "x": 710,
-        "y": 60,
+        "y": 40,
         "wires": []
     },
     {
@@ -721,10 +627,11 @@
         "onlyChanges": false,
         "roundValues": "0",
         "x": 160,
-        "y": 60,
+        "y": 40,
         "wires": [
             [
-                "46702bbbfa670292"
+                "46702bbbfa670292",
+                "96c9d62d250c6012"
             ]
         ]
     },
@@ -1012,6 +919,39 @@
         "info": "Dummy block used as a spacer"
     },
     {
+        "id": "210d9c2dfb32db9e",
+        "type": "link out",
+        "z": "b22624498baaa896",
+        "name": "link out 8",
+        "mode": "link",
+        "links": [
+            "2f93affb367a865e"
+        ],
+        "x": 635,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "96c9d62d250c6012",
+        "type": "function",
+        "z": "b22624498baaa896",
+        "name": "Alarm",
+        "func": "\nlet val = msg.payload;\n\nlet low  = 20;\nlet high = 100;\n\nlet lastAlarm = context.get('lastAlarm') || false;\nlet alarm;\n\nif (val < low) {\n    alarm = 'low';\n}\nelse if (val > high) {\n    alarm = 'high';\n}\nelse if (val > low + 1 || val < high - 1) {\n    alarm = false;\n}\n\nif (alarm && alarm != lastAlarm) {\n    context.set('lastAlarm', alarm);\n    msg.payload = `⚠️ Caravan alert!\\nBattery charge: ${val} %`;\n    node.warn(msg.payload);\n    return msg;\n}\nelse {\n    context.set('lastAlarm', alarm);\n    return null;\n}\n\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 550,
+        "y": 80,
+        "wires": [
+            [
+                "210d9c2dfb32db9e"
+            ]
+        ]
+    },
+    {
         "id": "e17db9ed39276503",
         "type": "ui_gauge",
         "z": "2561d49b29c858c7",
@@ -1035,7 +975,7 @@
         "seg2": "",
         "diff": false,
         "className": "",
-        "x": 650,
+        "x": 790,
         "y": 440,
         "wires": []
     },
@@ -1089,7 +1029,7 @@
         "seg2": "",
         "diff": false,
         "className": "",
-        "x": 650,
+        "x": 790,
         "y": 120,
         "wires": []
     },
@@ -1143,7 +1083,7 @@
         "seg2": "",
         "diff": false,
         "className": "",
-        "x": 670,
+        "x": 810,
         "y": 200,
         "wires": []
     },
@@ -1197,7 +1137,7 @@
         "seg2": "",
         "diff": false,
         "className": "",
-        "x": 650,
+        "x": 790,
         "y": 280,
         "wires": []
     },
@@ -1243,7 +1183,8 @@
         "y": 120,
         "wires": [
             [
-                "a143838f0999d97b"
+                "a143838f0999d97b",
+                "fb325a33504b650a"
             ]
         ]
     },
@@ -1263,7 +1204,8 @@
         "y": 280,
         "wires": [
             [
-                "24ad0f6f10a8086e"
+                "24ad0f6f10a8086e",
+                "4b982a0d14e889cd"
             ]
         ]
     },
@@ -1283,7 +1225,8 @@
         "y": 200,
         "wires": [
             [
-                "cfdc6c99305c58ca"
+                "cfdc6c99305c58ca",
+                "21fd221ab90c51ae"
             ]
         ]
     },
@@ -1303,7 +1246,8 @@
         "y": 440,
         "wires": [
             [
-                "e17db9ed39276503"
+                "e17db9ed39276503",
+                "b5b8406c72a647ae"
             ]
         ]
     },
@@ -1349,7 +1293,8 @@
         "y": 520,
         "wires": [
             [
-                "de056db018f84c0f"
+                "de056db018f84c0f",
+                "56bdbddca242d1e1"
             ]
         ]
     },
@@ -1377,7 +1322,7 @@
         "seg2": "",
         "diff": false,
         "className": "",
-        "x": 660,
+        "x": 800,
         "y": 520,
         "wires": []
     },
@@ -1398,7 +1343,7 @@
         "font": "",
         "fontSize": 16,
         "color": "#000000",
-        "x": 650,
+        "x": 790,
         "y": 600,
         "wires": [],
         "info": "Dummy block used as a spacer"
@@ -1448,7 +1393,7 @@
         "seg2": "",
         "diff": false,
         "className": "",
-        "x": 650,
+        "x": 790,
         "y": 360,
         "wires": []
     },
@@ -1468,7 +1413,206 @@
         "y": 360,
         "wires": [
             [
-                "e7fa40a69f3f7e54"
+                "e7fa40a69f3f7e54",
+                "a6cf0827571127fc"
+            ]
+        ]
+    },
+    {
+        "id": "f2fa448128ce1972",
+        "type": "link out",
+        "z": "2561d49b29c858c7",
+        "name": "link out 1",
+        "mode": "link",
+        "links": [
+            "2f93affb367a865e"
+        ],
+        "x": 755,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "fb325a33504b650a",
+        "type": "function",
+        "z": "2561d49b29c858c7",
+        "name": "Alarm",
+        "func": "\nlet val = msg.payload;\n\nlet low  = 15;\nlet high = 25;\n\nlet lastAlarm = context.get('lastAlarm') || false;\nlet alarm;\n\nif (val < low) {\n    alarm = 'low';\n}\nelse if (val > high) {\n    alarm = 'high';\n}\nelse if (val > low + 1 || val < high - 1) {\n    alarm = false;\n}\n\nif (alarm && alarm != lastAlarm) {\n    context.set('lastAlarm', alarm);\n    msg.payload = `⚠️ Caravan alert!\\nIndoor temperature: ${val} °C`;\n    node.warn(msg.payload);\n    return msg;\n}\nelse {\n    context.set('lastAlarm', alarm);\n    return null;\n}\n\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 650,
+        "y": 160,
+        "wires": [
+            [
+                "f2fa448128ce1972"
+            ]
+        ]
+    },
+    {
+        "id": "21fd221ab90c51ae",
+        "type": "function",
+        "z": "2561d49b29c858c7",
+        "name": "Alarm",
+        "func": "\nlet val = msg.payload;\n\nlet low  = 0;\nlet high = 70;\n\nlet lastAlarm = context.get('lastAlarm') || false;\nlet alarm;\n\nif (val < low) {\n    alarm = 'low';\n}\nelse if (val > high) {\n    alarm = 'high';\n}\nelse if (val > low + 1 || val < high - 1) {\n    alarm = false;\n}\n\nif (alarm && alarm != lastAlarm) {\n    context.set('lastAlarm', alarm);\n    msg.payload = `⚠️ Caravan alert!\\nIndoor humidity: ${val} %`;\n    node.warn(msg.payload);\n    return msg;\n}\nelse {\n    context.set('lastAlarm', alarm);\n    return null;\n}\n\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 650,
+        "y": 240,
+        "wires": [
+            [
+                "713473bc2af8430d"
+            ]
+        ]
+    },
+    {
+        "id": "713473bc2af8430d",
+        "type": "link out",
+        "z": "2561d49b29c858c7",
+        "name": "link out 2",
+        "mode": "link",
+        "links": [
+            "2f93affb367a865e"
+        ],
+        "x": 755,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "4b982a0d14e889cd",
+        "type": "function",
+        "z": "2561d49b29c858c7",
+        "name": "Alarm",
+        "func": "\nlet val = msg.payload;\n\nlet low  = 1;\nlet high = 5;\n\nlet lastAlarm = context.get('lastAlarm') || false;\nlet alarm;\n\nif (val < low) {\n    alarm = 'low';\n}\nelse if (val > high) {\n    alarm = 'high';\n}\nelse if (val > low + 1 || val < high - 1) {\n    alarm = false;\n}\n\nif (alarm && alarm != lastAlarm) {\n    context.set('lastAlarm', alarm);\n    msg.payload = `⚠️ Caravan alert!\\nFridge temperature: ${val} °C`;\n    node.warn(msg.payload);\n    return msg;\n}\nelse {\n    context.set('lastAlarm', alarm);\n    return null;\n}\n\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 650,
+        "y": 320,
+        "wires": [
+            [
+                "f59d101299f0716e"
+            ]
+        ]
+    },
+    {
+        "id": "f59d101299f0716e",
+        "type": "link out",
+        "z": "2561d49b29c858c7",
+        "name": "link out 3",
+        "mode": "link",
+        "links": [
+            "2f93affb367a865e"
+        ],
+        "x": 755,
+        "y": 320,
+        "wires": []
+    },
+    {
+        "id": "56bdbddca242d1e1",
+        "type": "function",
+        "z": "2561d49b29c858c7",
+        "name": "Alarm",
+        "func": "\nlet val = msg.payload;\n\nlet low  = 2;\nlet high = 30;\n\nlet lastAlarm = context.get('lastAlarm') || false;\nlet alarm;\n\nif (val < low) {\n    alarm = 'low';\n}\nelse if (val > high) {\n    alarm = 'high';\n}\nelse if (val > low + 1 || val < high - 1) {\n    alarm = false;\n}\n\nif (alarm && alarm != lastAlarm) {\n    context.set('lastAlarm', alarm);\n    msg.payload = `⚠️ Caravan alert!\\nBattery temperature: ${val} °C`;\n    node.warn(msg.payload);\n    return msg;\n}\nelse {\n    context.set('lastAlarm', alarm);\n    return null;\n}\n\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 650,
+        "y": 560,
+        "wires": [
+            [
+                "08fe98afcefbc02c"
+            ]
+        ]
+    },
+    {
+        "id": "08fe98afcefbc02c",
+        "type": "link out",
+        "z": "2561d49b29c858c7",
+        "name": "link out 5",
+        "mode": "link",
+        "links": [
+            "2f93affb367a865e"
+        ],
+        "x": 755,
+        "y": 560,
+        "wires": []
+    },
+    {
+        "id": "b5b8406c72a647ae",
+        "type": "function",
+        "z": "2561d49b29c858c7",
+        "name": "Alarm",
+        "func": "\nlet val = msg.payload;\n\nlet low  = 1;\nlet high = 55;\n\nlet lastAlarm = context.get('lastAlarm') || false;\nlet alarm;\n\nif (val < low) {\n    alarm = 'low';\n}\nelse if (val > high) {\n    alarm = 'high';\n}\nelse if (val > low + 1 || val < high - 1) {\n    alarm = false;\n}\n\nif (alarm && alarm != lastAlarm) {\n    context.set('lastAlarm', alarm);\n    msg.payload = `⚠️ Caravan alert!\\nCPU temperature: ${val} °C`;\n    node.warn(msg.payload);\n    return msg;\n}\nelse {\n    context.set('lastAlarm', alarm);\n    return null;\n}\n\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 650,
+        "y": 480,
+        "wires": [
+            [
+                "dfc1f32cb802a02e"
+            ]
+        ]
+    },
+    {
+        "id": "dfc1f32cb802a02e",
+        "type": "link out",
+        "z": "2561d49b29c858c7",
+        "name": "link out 6",
+        "mode": "link",
+        "links": [
+            "2f93affb367a865e"
+        ],
+        "x": 755,
+        "y": 480,
+        "wires": []
+    },
+    {
+        "id": "335af24ca01463cb",
+        "type": "link out",
+        "z": "2561d49b29c858c7",
+        "name": "link out 7",
+        "mode": "link",
+        "links": [
+            "2f93affb367a865e"
+        ],
+        "x": 755,
+        "y": 400,
+        "wires": []
+    },
+    {
+        "id": "a6cf0827571127fc",
+        "type": "function",
+        "z": "2561d49b29c858c7",
+        "name": "Alarm",
+        "func": "\nlet val = msg.payload;\n\nlet low  = 1;\nlet high = 100;\n\nlet lastAlarm = context.get('lastAlarm') || false;\nlet alarm;\n\nif (val < low) {\n    alarm = 'low';\n}\nelse if (val > high) {\n    alarm = 'high';\n}\nelse if (val > low + 1 || val < high - 1) {\n    alarm = false;\n}\n\nif (alarm && alarm != lastAlarm) {\n    context.set('lastAlarm', alarm);\n    msg.payload = `⚠️ Caravan alert!\\nWater temperature: ${val} °C`;\n    node.warn(msg.payload);\n    return msg;\n}\nelse {\n    context.set('lastAlarm', alarm);\n    return null;\n}\n\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 650,
+        "y": 400,
+        "wires": [
+            [
+                "335af24ca01463cb"
             ]
         ]
     },
@@ -1636,7 +1780,7 @@
         "payload": "",
         "topic": "topic",
         "topicType": "msg",
-        "className": "grayout-target-2",
+        "className": "grayout-target-2, bold-mix",
         "x": 565,
         "y": 380,
         "wires": [
@@ -1663,7 +1807,7 @@
         "font": "",
         "fontSize": 16,
         "color": "#000000",
-        "x": 490,
+        "x": 550,
         "y": 560,
         "wires": []
     },
@@ -1684,7 +1828,7 @@
         "font": "",
         "fontSize": 16,
         "color": "#000000",
-        "x": 490,
+        "x": 550,
         "y": 620,
         "wires": []
     },
@@ -1705,7 +1849,7 @@
         "font": "",
         "fontSize": 16,
         "color": "#000000",
-        "x": 470,
+        "x": 530,
         "y": 780,
         "wires": []
     },
@@ -1725,7 +1869,7 @@
         "templateScope": "local",
         "className": "",
         "x": 720,
-        "y": 40,
+        "y": 20,
         "wires": [
             []
         ]
@@ -1746,7 +1890,7 @@
         "templateScope": "local",
         "className": "",
         "x": 720,
-        "y": 80,
+        "y": 60,
         "wires": [
             []
         ]
@@ -1792,8 +1936,8 @@
         "font": "",
         "fontSize": 16,
         "color": "#000000",
-        "x": 450,
-        "y": 880,
+        "x": 510,
+        "y": 920,
         "wires": [],
         "info": "Dummy block used as a spacer"
     },
@@ -1802,7 +1946,7 @@
         "type": "function",
         "z": "391f51e7377c8273",
         "name": "Set temp.",
-        "func": "\nflow.set(\"temp\", msg.payload);\n\nvar sw = flow.get(\"switch\");\n\nif (sw === true){\n    let msg1 = {payload: msg.payload};\n    return msg1;\n}\nelse {\n    return null;\n}",
+        "func": "\nflow.set(\"temp\", msg.payload);\nflow.set('resend_temp', msg.payload);\n\nlet sw = flow.get(\"switch\");\n\nif (sw === true){\n    let msg1 = {payload: msg.payload};\n    return msg1;\n}\nelse {\n    return null;\n}",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -1822,7 +1966,7 @@
         "type": "function",
         "z": "391f51e7377c8273",
         "name": "Set fan",
-        "func": "\nflow.set(\"fan\", msg.payload);\n\nvar sw = flow.get(\"switch\");\n\nif (sw === true){\n    let msg1 = {payload: msg.payload};\n    return msg1;\n}\nelse {\n    return null;\n}",
+        "func": "\nflow.set(\"fan\", msg.payload);\nflow.set('resend_fan', msg.payload);\n\nlet sw = flow.get(\"switch\");\n\nif (sw === true){\n    let msg1 = {payload: msg.payload};\n    return msg1;\n}\nelse {\n    return null;\n}",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -1842,21 +1986,24 @@
         "type": "function",
         "z": "391f51e7377c8273",
         "name": "Heating trigger",
-        "func": "\nif (msg.from_mqtt === true) {\n    return null\n\n}\nelse if (msg.payload === true) {\n    \n    var temp = flow.get(\"temp\");\n    var fan = flow.get(\"fan\");\n    \n    if (temp === undefined) {\n        temp = 20;\n    }\n    \n    if (fan === undefined) {\n        fan = \"eco\";\n    }\n\n    // Prepare two different messages\n    let msg1 = { payload: temp };  // Message for the first output\n    let msg2 = { payload: fan };  // Message for the second output\n    return [msg1, msg2];\n\n}\nelse {\n    let msg1 = {payload: 0}\n    let msg2 = { payload: \"off\" };\n    return [msg1, msg2]\n}\n    \n",
-        "outputs": 2,
+        "func": "\nlet state = flow.get('resend_state');\nlet tempS = flow.get('resend_temp');\nlet fanS  = flow.get('resend_fan');\n\nif (msg.from_mqtt === true) {\n    \n    let msg3 = null;\n    \n    // Resend message if setting was not applied\n    if (fanS !== undefined) {\n        let fan = flow.get('fan');\n        if (fan === fanS) {\n            //node.warn(`match fan ${fan}`)\n            flow.set('resend_fan', undefined);\n        }\n        else {\n            //node.warn(`resend fan ${fanS}`)\n            flow.set('fan', fanS);\n            msg3 = { payload: true};\n        }\n    }\n    if (tempS !== undefined) {\n        let temp = flow.get('temp');\n        if (temp === tempS) {\n            //node.warn(`match temp ${temp}`)\n            flow.set('resend_temp', undefined);\n        }\n        else {\n            //node.warn(`resend temp ${tempS}`)\n            flow.set('temp', tempS);\n            msg3 = { payload: true};\n        }\n    }\n    if (state !== undefined) {\n        if (msg.payload === state) {\n            //node.warn('match switch')\n            flow.set('resend_state', undefined)\n        }\n        else if (state == true) {\n            //node.warn('resend switch on')\n            msg3 = { payload: true};\n        }\n        else {\n            //node.warn('resend switch off')\n            msg3 = { payload: false};\n        }\n    }\n        \n    //node.warn(`msg3 = ${msg3}`)\n    return [null, null, msg3];\n    \n}\nelse if (msg.payload === true) {\n    \n    flow.set('switch', true);\n    flow.set('resend_state', true);\n    \n    let temp = flow.get('temp');\n    let fan = flow.get('fan');\n    \n    if (temp === undefined) {\n        temp = 20;\n    }\n    \n    if (fan === undefined) {\n        fan = \"eco\";\n    }\n\n    // Prepare two different messages\n    let msg1 = { payload: temp };  // Message for the first output\n    let msg2 = { payload: fan };  // Message for the second output\n    return [msg1, msg2, null];\n\n}\nelse {\n    \n    flow.set('switch', false);\n    flow.set('resend_state', false);\n    \n    let msg1 = {payload: 0}\n    let msg2 = { payload: \"off\" };\n    return [msg1, msg2, null];\n    \n}\n    \n",
+        "outputs": 3,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
         "x": 740,
-        "y": 140,
+        "y": 120,
         "wires": [
             [
                 "defc780bd37644a4"
             ],
             [
                 "2dd8bdbb19a99a93"
+            ],
+            [
+                "7df678563a819cc4"
             ]
         ]
     },
@@ -1915,7 +2062,7 @@
         "resendOnRefresh": true,
         "templateScope": "local",
         "className": "",
-        "x": 460,
+        "x": 520,
         "y": 820,
         "wires": [
             []
@@ -2094,7 +2241,7 @@
         "correl": "",
         "expiry": "",
         "broker": "2c24d1c82633c69e",
-        "x": 990,
+        "x": 1030,
         "y": 200,
         "wires": []
     },
@@ -2112,7 +2259,7 @@
         "correl": "",
         "expiry": "",
         "broker": "2c24d1c82633c69e",
-        "x": 990,
+        "x": 1030,
         "y": 260,
         "wires": []
     },
@@ -2130,7 +2277,7 @@
         "correl": "",
         "expiry": "",
         "broker": "2c24d1c82633c69e",
-        "x": 1010,
+        "x": 1050,
         "y": 320,
         "wires": []
     },
@@ -2148,7 +2295,7 @@
         "correl": "",
         "expiry": "",
         "broker": "2c24d1c82633c69e",
-        "x": 990,
+        "x": 1030,
         "y": 380,
         "wires": []
     },
@@ -2166,7 +2313,7 @@
         "correl": "",
         "expiry": "",
         "broker": "2c24d1c82633c69e",
-        "x": 980,
+        "x": 1020,
         "y": 440,
         "wires": []
     },
@@ -2337,7 +2484,8 @@
         "wires": [
             [
                 "6192907fb799f322",
-                "97600a7142d22145"
+                "97600a7142d22145",
+                "cf6b3e9d9b5ca767"
             ]
         ]
     },
@@ -2380,7 +2528,7 @@
         "font": "",
         "fontSize": 16,
         "color": "#000000",
-        "x": 490,
+        "x": 550,
         "y": 680,
         "wires": []
     },
@@ -2399,7 +2547,7 @@
         "resendOnRefresh": true,
         "templateScope": "local",
         "className": "",
-        "x": 490,
+        "x": 550,
         "y": 720,
         "wires": [
             []
@@ -2410,14 +2558,14 @@
         "type": "function",
         "z": "391f51e7377c8273",
         "name": "Set temp.",
-        "func": "\nvar temp = msg.payload\n\nlet msg1;\n\nif (temp === 0){\n    msg1 = {payload: false, from_mqtt: true};\n    return msg1;\n}\nelse {\n    flow.set(\"temp\", temp);\n    msg1 = {payload: true, from_mqtt: true};\n    return msg1;\n}\n",
+        "func": "\nlet temp = msg.payload\n\nif (temp === 0){\n    let msg1 = {payload: false, from_mqtt: true};\n    return msg1;\n}\nelse {\n    flow.set(\"temp\", temp);\n    let msg1 = {payload: true, from_mqtt: true};\n    return msg1;\n}\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 320,
+        "x": 340,
         "y": 180,
         "wires": [
             [
@@ -2430,17 +2578,50 @@
         "type": "function",
         "z": "391f51e7377c8273",
         "name": "Set fan",
-        "func": "\nvar fan = msg.payload\n\nif (fan === \"off\"){\n}\nelse {\n    flow.set(\"fan\", fan);\n}\n",
+        "func": "\nlet fan = msg.payload\n\nif (fan !== \"off\"){\n\n    flow.set(\"fan\", fan);\n}\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 320,
+        "x": 340,
         "y": 240,
         "wires": [
             []
         ]
+    },
+    {
+        "id": "cf6b3e9d9b5ca767",
+        "type": "function",
+        "z": "391f51e7377c8273",
+        "name": "Alarm",
+        "func": "\nlet val = msg.payload;\n\nlet lastAlarm = context.get('lastAlarm') || false;\nlet alarm;\n\nif (val != 0) {\n    alarm = val;\n}\nelse {\n    alarm = false;\n}\n\nif (alarm && alarm != lastAlarm) {\n    context.set('lastAlarm', alarm);\n    msg.payload = `⚠️ Caravan alert!\\nTruma error code: ${val}`;\n    node.warn(msg.payload);\n    return msg;\n}\nelse {\n    context.set('lastAlarm', alarm);\n    return null;\n}\n\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 510,
+        "y": 860,
+        "wires": [
+            [
+                "f8b062643e6b87e5"
+            ]
+        ]
+    },
+    {
+        "id": "f8b062643e6b87e5",
+        "type": "link out",
+        "z": "391f51e7377c8273",
+        "name": "link out 4",
+        "mode": "link",
+        "links": [
+            "2f93affb367a865e"
+        ],
+        "x": 625,
+        "y": 860,
+        "wires": []
     }
 ]
