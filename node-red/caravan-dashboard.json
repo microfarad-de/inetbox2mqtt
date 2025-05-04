@@ -1801,8 +1801,8 @@
         "offcolor": "",
         "animate": false,
         "className": "",
-        "x": 520,
-        "y": 140,
+        "x": 380,
+        "y": 40,
         "wires": [
             [
                 "3f6ad65acd3a5234",
@@ -1820,7 +1820,7 @@
         "tooltip": "",
         "place": "",
         "group": "9b3a8c49293c5c6a",
-        "order": 4,
+        "order": 3,
         "width": 0,
         "height": 0,
         "passthru": false,
@@ -1841,12 +1841,13 @@
         "topic": "fan",
         "topicType": "str",
         "className": "grayout-target fan-target",
-        "x": 565,
-        "y": 300,
+        "x": 595,
+        "y": 320,
         "wires": [
             [
-                "7dcb693e456897db",
-                "bce2301e12d1e263"
+                "bce2301e12d1e263",
+                "3be88025427a9622",
+                "7dcb693e456897db"
             ]
         ],
         "l": false
@@ -1860,7 +1861,7 @@
         "tooltip": "",
         "place": "",
         "group": "9b3a8c49293c5c6a",
-        "order": 5,
+        "order": 4,
         "width": 0,
         "height": 0,
         "passthru": false,
@@ -1886,13 +1887,13 @@
         "topic": "water",
         "topicType": "str",
         "className": "water-target",
-        "x": 565,
-        "y": 400,
+        "x": 585,
+        "y": 460,
         "wires": [
             [
                 "c71fb3d32cdf6139",
-                "f0175d17d4a0976c",
-                "c8759ddbb78783e0"
+                "c8759ddbb78783e0",
+                "afd140e0799510af"
             ]
         ],
         "l": false
@@ -1906,7 +1907,7 @@
         "tooltip": "",
         "place": "",
         "group": "9b3a8c49293c5c6a",
-        "order": 6,
+        "order": 5,
         "width": 0,
         "height": 0,
         "passthru": false,
@@ -1942,12 +1943,12 @@
         "topic": "mix",
         "topicType": "str",
         "className": "grayout-target-2 mix-target",
-        "x": 565,
-        "y": 520,
+        "x": 585,
+        "y": 620,
         "wires": [
             [
-                "8c25986c65998ad3",
-                "141ce33d897ac41a"
+                "141ce33d897ac41a",
+                "f445d08b3d6cca0a"
             ]
         ],
         "l": false
@@ -1957,7 +1958,7 @@
         "type": "ui_text",
         "z": "391f51e7377c8273",
         "group": "ab3a9f0b2e4b8d1b",
-        "order": 2,
+        "order": 1,
         "width": 0,
         "height": 0,
         "name": "",
@@ -1969,8 +1970,8 @@
         "font": "",
         "fontSize": 16,
         "color": "#000000",
-        "x": 550,
-        "y": 740,
+        "x": 570,
+        "y": 840,
         "wires": []
     },
     {
@@ -1978,7 +1979,7 @@
         "type": "ui_text",
         "z": "391f51e7377c8273",
         "group": "ab3a9f0b2e4b8d1b",
-        "order": 3,
+        "order": 2,
         "width": 0,
         "height": 0,
         "name": "",
@@ -1990,8 +1991,8 @@
         "font": "",
         "fontSize": 16,
         "color": "#000000",
-        "x": 550,
-        "y": 800,
+        "x": 570,
+        "y": 900,
         "wires": []
     },
     {
@@ -1999,7 +2000,7 @@
         "type": "ui_text",
         "z": "391f51e7377c8273",
         "group": "ab3a9f0b2e4b8d1b",
-        "order": 5,
+        "order": 4,
         "width": 0,
         "height": 0,
         "name": "",
@@ -2011,8 +2012,8 @@
         "font": "",
         "fontSize": 16,
         "color": "#000000",
-        "x": 530,
-        "y": 960,
+        "x": 550,
+        "y": 1060,
         "wires": []
     },
     {
@@ -2021,7 +2022,7 @@
         "z": "391f51e7377c8273",
         "group": "9b3a8c49293c5c6a",
         "name": "Grayout 1",
-        "order": 7,
+        "order": 6,
         "width": 0,
         "height": 0,
         "format": "<style>\n.grayout {\n    pointer-events: none;\n    filter: opacity(50%);\n    /*display: none;*/\n}\n</style>\n\n<script>\n(function(scope) {\n    scope.$watch('msg.payload', function(value) {\n        const controls = document.querySelectorAll('.grayout-target');\n        controls.forEach(el => {\n            if (!value) {\n                el.classList.add('grayout');\n            } else {\n                el.classList.remove('grayout');\n            }\n        });\n    });\n})(scope);\n</script>\n",
@@ -2030,8 +2031,8 @@
         "resendOnRefresh": true,
         "templateScope": "local",
         "className": "",
-        "x": 720,
-        "y": 20,
+        "x": 820,
+        "y": 40,
         "wires": [
             []
         ]
@@ -2042,7 +2043,7 @@
         "z": "391f51e7377c8273",
         "group": "9b3a8c49293c5c6a",
         "name": "Grayout 2",
-        "order": 8,
+        "order": 11,
         "width": 0,
         "height": 0,
         "format": "<script>\n(function(scope) {\n    let states = { switch1: false, switch2: false };\n\n    scope.$watch('msg', function(msg) {\n        if (!msg || typeof msg.payload === 'undefined') return;\n\n        // Update the state depending on which switch sent the message\n        if (msg.topic === \"switch\") states.switch1 = msg.payload;\n        if (msg.topic === \"water\") states.switch2 = msg.payload;\n\n        // Enable if either switch is true\n        const shouldEnable = states.switch1 || states.switch2;\n\n        // Add or remove the 'grayout' class from the grayout-target elements\n        const elements = document.querySelectorAll('.grayout-target-2');\n        elements.forEach(el => {\n            if (shouldEnable) {\n                el.classList.remove('grayout');\n            } else {\n                el.classList.add('grayout');\n            }\n        });\n    });\n})(scope);\n</script>\n",
@@ -2051,8 +2052,8 @@
         "resendOnRefresh": true,
         "templateScope": "local",
         "className": "",
-        "x": 720,
-        "y": 60,
+        "x": 820,
+        "y": 80,
         "wires": [
             []
         ]
@@ -2069,14 +2070,14 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 740,
-        "y": 520,
+        "x": 840,
+        "y": 680,
         "wires": [
             [
-                "523472ab5e70eada"
+                "e123175452a0c255"
             ],
             [
-                "f445d08b3d6cca0a"
+                "864ec9dedede4187"
             ]
         ]
     },
@@ -2086,7 +2087,7 @@
         "z": "391f51e7377c8273",
         "d": true,
         "group": "ab3a9f0b2e4b8d1b",
-        "order": 6,
+        "order": 5,
         "width": 0,
         "height": 0,
         "name": "",
@@ -2098,8 +2099,8 @@
         "font": "",
         "fontSize": 16,
         "color": "#000000",
-        "x": 510,
-        "y": 1080,
+        "x": 530,
+        "y": 1180,
         "wires": [],
         "info": "Dummy block used as a spacer"
     },
@@ -2108,19 +2109,17 @@
         "type": "function",
         "z": "391f51e7377c8273",
         "name": "Set temp.",
-        "func": "\nflow.set(\"temp\", msg.payload);\nflow.set('resend_temp', {value: msg.payload, attempts: 1});\n\nlet sw = flow.get(\"switch\");\n\nif (sw === true){\n    return msg;\n}\nelse {\n    return null;\n}",
+        "func": "\nflow.set(\"temp\", msg.payload);\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 720,
-        "y": 200,
+        "x": 820,
+        "y": 220,
         "wires": [
-            [
-                "defc780bd37644a4"
-            ]
+            []
         ]
     },
     {
@@ -2128,19 +2127,17 @@
         "type": "function",
         "z": "391f51e7377c8273",
         "name": "Set fan",
-        "func": "\nflow.set(\"fan\", msg.payload);\nflow.set('resend_fan', {value: msg.payload, attempts: 1});\n\nlet sw = flow.get(\"switch\");\n\nif (sw === true){\n    return msg;\n}\nelse {\n    return null;\n}",
+        "func": "\nflow.set(\"fan\", msg.payload);\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 720,
-        "y": 300,
+        "x": 820,
+        "y": 320,
         "wires": [
-            [
-                "2dd8bdbb19a99a93"
-            ]
+            []
         ]
     },
     {
@@ -2148,21 +2145,21 @@
         "type": "function",
         "z": "391f51e7377c8273",
         "name": "Heating trigger",
-        "func": "\nlet swR   = flow.get('resend_sw');\nlet tempR = flow.get('resend_temp');\nlet fanR  = flow.get('resend_fan');\n\nconst DEBUG = false;\n\nif (msg.from_mqtt === true) {\n    \n    let msg3 = null;\n    \n    // Resend message if setting was not applied\n    \n    if (tempR !== undefined) {\n        let temp = flow.get('temp');\n        if (temp === tempR.value) {\n            if (DEBUG) node.warn(`match temp ${temp} ${tempR.attempts}`)\n            tempR.attempts -= 1;\n            if (tempR.attempts === 0) {\n                flow.set('resend_temp', undefined);\n            }\n        }\n        else {\n            if (DEBUG) node.warn(`resend temp ${tempR.value}`)\n            flow.set('temp', tempR.value);\n            msg3 = { payload: true};\n        }\n    }\n    \n    if (fanR !== undefined) {\n        let fan = flow.get('fan');\n        if (fan === fanR.value) {\n            if (DEBUG) node.warn(`match fan ${fan} ${fanR.attempts}`)\n            fanR.attempts -= 1;\n            if (fanR.attempts === 0) {\n                flow.set('resend_fan', undefined);\n            }\n        }\n        else {\n            if (DEBUG) node.warn(`resend fan ${fanR.value}`)\n            flow.set('fan', fanR.value);\n            msg3 = { payload: true};\n        }\n    }\n\n    if (swR !== undefined) {\n        if (msg.payload === swR.value) {\n            if (DEBUG) node.warn(`match switch ${msg.payload} ${swR.attempts}`)\n            swR.attempts -= 1;\n            if (swR.attempts === 0 ) {\n                flow.set('resend_sw', undefined);\n            }\n        }\n        else if (swR.value === true) {\n            if (DEBUG) node.warn('resend switch on')\n            msg3 = { payload: true};\n        }\n        else {\n            if (DEBUG) node.warn('resend switch off')\n            msg3 = { payload: false};\n        }\n    }\n        \n    if (DEBUG) node.warn(`msg3 = ${msg3}`)\n    return [null, null, msg3];\n    \n}\nelse if (msg.payload === true) {\n    \n    flow.set('switch', true);\n    flow.set('resend_sw', {value: true, attempts: 1});\n    \n    let temp = flow.get('temp');\n    let fan = flow.get('fan');\n    \n    if (temp === undefined) {\n        temp = 20;\n    }\n    \n    if (fan === undefined) {\n        fan = \"eco\";\n    }\n\n    // Prepare two different messages\n    let msg1 = { payload: temp }; // Message for the first output\n    let msg2 = { payload: fan };  // Message for the second output\n    return [msg1, msg2, null];\n\n}\nelse {\n    \n    flow.set('switch', false);\n    flow.set('resend_sw', {value: false, attempts: 1});\n    \n    let msg1 = {payload: 0}\n    let msg2 = { payload: \"off\" };\n    return [msg1, msg2, null];\n    \n}\n    \n",
+        "func": "\nlet state   = context.get('state');\n\nconst DEBUG = false;\n\nif (msg.from_mqtt === true) {\n    \n    let msg3 = null;\n    \n    // Retransmit message if setting was not applied\n    if (state !== undefined) {\n        if (msg.payload === state) {\n            if (DEBUG) node.warn(`match switch ${msg.payload}`)\n            context.set('state', undefined);\n        }\n        else if (state === true) {\n            if (DEBUG) node.warn('resend switch on')\n            msg3 = { payload: true};\n        }\n        else {\n            if (DEBUG) node.warn('resend switch off')\n            msg3 = { payload: false};\n        }\n    }\n        \n    if (DEBUG) node.warn(`msg3 = ${msg3}`)\n    return [null, null, msg3];\n    \n}\nelse if (msg.payload === true) {\n    \n    context.set('state', true);\n    \n    let temp = flow.get('temp');\n    let fan = flow.get('fan');\n    \n    if (temp === undefined) {\n        temp = 20;\n    }\n    \n    if (fan === undefined) {\n        fan = \"eco\";\n    }\n\n    // Prepare two different messages\n    let msg1 = { payload: temp, topic: 'temp' }; \n    let msg2 = { payload: fan,  topic: 'fan' };\n    return [msg1, msg2, null];\n\n}\nelse {\n    context.set('state', false);\n    \n    let msg1 = { payload: 0,     topic: 'temp' }\n    let msg2 = { payload: 'off', topic: 'fan' };\n    return [msg1, msg2, null];\n    \n}\n    \n",
         "outputs": 3,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 740,
+        "x": 380,
         "y": 120,
         "wires": [
             [
-                "defc780bd37644a4"
+                "ebd66a3fa235d757"
             ],
             [
-                "2dd8bdbb19a99a93"
+                "3be88025427a9622"
             ],
             [
                 "7df678563a819cc4"
@@ -2174,40 +2171,18 @@
         "type": "function",
         "z": "391f51e7377c8273",
         "name": "Energy combine",
-        "func": "\nflow.set(\"source\", msg.payload);\n\n// Define the same lookup table\nconst lookupTable = {\n    \"gas\":       { value1: \"gas\",         value2: 0    },\n    \"electric1\": { value1: \"electricity\", value2: 900  },\n    \"electric2\": { value1: \"electricity\", value2: 1800 },\n    \"mix1\":      { value1: \"mix\",         value2: 900  },\n    \"mix2\":      { value1: \"mix\",         value2: 1800 }\n};\n\nlet value1 = msg.payload;\nlet value2 = flow.get(\"power\");\n\n// Perform reverse lookup\nlet foundKey = null;\nfor (let key in lookupTable) {\n    let entry = lookupTable[key];\n    if (entry.value1 === value1 && entry.value2 === value2) {\n        foundKey = key;\n        break;\n    }\n}\n\n// Return the key as payload (or a fallback if not found)\nmsg.payload = foundKey || \"unknown\";\nreturn msg;\n",
+        "func": "\n// Define the same lookup table\nconst lookupTable = {\n    \"gas\":       { value1: \"gas\",         value2: 0    },\n    \"electric1\": { value1: \"electricity\", value2: 900  },\n    \"electric2\": { value1: \"electricity\", value2: 1800 },\n    \"mix1\":      { value1: \"mix\",         value2: 900  },\n    \"mix2\":      { value1: \"mix\",         value2: 1800 }\n};\n\nif (msg.topic.includes('energy_mix')) {\n    context.set('energy_mix', msg.payload);\n}\nelse if (msg.topic.includes('el_power_level')) {\n    context.set('el_power', msg.payload);\n}\n\nlet value1 = context.get('energy_mix');\nlet value2 = context.get('el_power');\n\n// Perform reverse lookup\nlet foundKey = null;\nfor (let key in lookupTable) {\n    let entry = lookupTable[key];\n    if (entry.value1 === value1 && entry.value2 === value2) {\n        foundKey = key;\n        break;\n    }\n}\n\n// Return the key as payload (or a fallback if not found)\nmsg.payload = foundKey || 'unknown';\nreturn msg;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 420,
-        "y": 520,
+        "x": 380,
+        "y": 680,
         "wires": [
             [
-                "c268d215c0a29312",
-                "141ce33d897ac41a"
-            ]
-        ]
-    },
-    {
-        "id": "10115e6f55d68ea4",
-        "type": "function",
-        "z": "391f51e7377c8273",
-        "name": "Energy combine",
-        "func": "\nflow.set(\"power\", msg.payload);\n\n// Define the same lookup table\nconst lookupTable = {\n    \"gas\":       { value1: \"gas\",         value2: 0    },\n    \"electric1\": { value1: \"electricity\", value2: 900  },\n    \"electric2\": { value1: \"electricity\", value2: 1800 },\n    \"mix1\":      { value1: \"mix\",         value2: 900  },\n    \"mix2\":      { value1: \"mix\",         value2: 1800 }\n};\n\nlet value1 = flow.get(\"source\");\nlet value2 = msg.payload;\n\n// Perform reverse lookup\nlet foundKey = null;\nfor (let key in lookupTable) {\n    let entry = lookupTable[key];\n    if (entry.value1 === value1 && entry.value2 === value2) {\n        foundKey = key;\n        break;\n    }\n}\n\n// Return the key as payload (or a fallback if not found)\nmsg.payload = foundKey || \"unknown\";\nreturn msg;\n",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 420,
-        "y": 620,
-        "wires": [
-            [
-                "c268d215c0a29312",
-                "141ce33d897ac41a"
+                "f445d08b3d6cca0a"
             ]
         ]
     },
@@ -2217,7 +2192,7 @@
         "z": "391f51e7377c8273",
         "group": "ab3a9f0b2e4b8d1b",
         "name": "Red error",
-        "order": 8,
+        "order": 7,
         "width": 0,
         "height": 0,
         "format": "\n<style>\n.red {\n    color: red !important;\n    font-weight: bold;\n}\n</style>\n\n<script>\n(function(scope) {\n    scope.$watch('msg.payload', function(value) {\n        const controls = document.querySelectorAll('.red-error');\n        controls.forEach(el => {\n            if (value === 0) {\n                el.classList.remove('red');\n            } else {\n                el.classList.add('red');\n            }\n        });\n    });\n})(scope);\n</script>\n",
@@ -2226,8 +2201,8 @@
         "resendOnRefresh": true,
         "templateScope": "local",
         "className": "",
-        "x": 340,
-        "y": 1020,
+        "x": 360,
+        "y": 1120,
         "wires": [
             []
         ]
@@ -2241,7 +2216,7 @@
         "tooltip": "",
         "place": "",
         "group": "9b3a8c49293c5c6a",
-        "order": 3,
+        "order": 2,
         "width": 0,
         "height": 0,
         "passthru": false,
@@ -2382,10 +2357,11 @@
         "topic": "temp",
         "topicType": "str",
         "className": "grayout-target temp-target",
-        "x": 565,
-        "y": 200,
+        "x": 595,
+        "y": 220,
         "wires": [
             [
+                "ebd66a3fa235d757",
                 "6f65acc61017824f",
                 "783ddd3bdb365462"
             ]
@@ -2406,8 +2382,8 @@
         "correl": "",
         "expiry": "",
         "broker": "2c24d1c82633c69e",
-        "x": 1110,
-        "y": 200,
+        "x": 1030,
+        "y": 280,
         "wires": []
     },
     {
@@ -2424,8 +2400,8 @@
         "correl": "",
         "expiry": "",
         "broker": "2c24d1c82633c69e",
-        "x": 1110,
-        "y": 300,
+        "x": 1030,
+        "y": 380,
         "wires": []
     },
     {
@@ -2442,8 +2418,8 @@
         "correl": "",
         "expiry": "",
         "broker": "2c24d1c82633c69e",
-        "x": 1130,
-        "y": 440,
+        "x": 1050,
+        "y": 520,
         "wires": []
     },
     {
@@ -2460,8 +2436,8 @@
         "correl": "",
         "expiry": "",
         "broker": "2c24d1c82633c69e",
-        "x": 1110,
-        "y": 560,
+        "x": 1030,
+        "y": 640,
         "wires": []
     },
     {
@@ -2478,8 +2454,8 @@
         "correl": "",
         "expiry": "",
         "broker": "2c24d1c82633c69e",
-        "x": 1100,
-        "y": 660,
+        "x": 1020,
+        "y": 700,
         "wires": []
     },
     {
@@ -2495,13 +2471,12 @@
         "rap": true,
         "rh": 0,
         "inputs": 0,
-        "x": 170,
+        "x": 190,
         "y": 200,
         "wires": [
             [
-                "555b5779bdb6e92a",
                 "c1037947af34c107",
-                "783ddd3bdb365462"
+                "ebd66a3fa235d757"
             ]
         ]
     },
@@ -2518,13 +2493,12 @@
         "rap": true,
         "rh": 0,
         "inputs": 0,
-        "x": 160,
+        "x": 180,
         "y": 300,
         "wires": [
             [
-                "f6d22ec56a889695",
                 "9a83d7ea5409cbf9",
-                "bce2301e12d1e263"
+                "3be88025427a9622"
             ]
         ]
     },
@@ -2541,13 +2515,11 @@
         "rap": true,
         "rh": 0,
         "inputs": 0,
-        "x": 190,
-        "y": 400,
+        "x": 210,
+        "y": 520,
         "wires": [
             [
-                "8ede93c0d2432a6d",
-                "f0175d17d4a0976c",
-                "c8759ddbb78783e0"
+                "afd140e0799510af"
             ]
         ]
     },
@@ -2564,12 +2536,11 @@
         "rap": true,
         "rh": 0,
         "inputs": 0,
-        "x": 160,
-        "y": 540,
+        "x": 180,
+        "y": 640,
         "wires": [
             [
-                "972e3c74b98cbe54",
-                "523472ab5e70eada"
+                "972e3c74b98cbe54"
             ]
         ]
     },
@@ -2586,12 +2557,11 @@
         "rap": true,
         "rh": 0,
         "inputs": 0,
-        "x": 160,
-        "y": 640,
+        "x": 180,
+        "y": 700,
         "wires": [
             [
-                "10115e6f55d68ea4",
-                "f445d08b3d6cca0a"
+                "972e3c74b98cbe54"
             ]
         ]
     },
@@ -2608,8 +2578,8 @@
         "rap": true,
         "rh": 0,
         "inputs": 0,
-        "x": 190,
-        "y": 740,
+        "x": 210,
+        "y": 840,
         "wires": [
             [
                 "6427f73155b45c3a"
@@ -2629,8 +2599,8 @@
         "rap": true,
         "rh": 0,
         "inputs": 0,
-        "x": 190,
-        "y": 800,
+        "x": 210,
+        "y": 900,
         "wires": [
             [
                 "3dd9c191a2d56f94"
@@ -2650,8 +2620,8 @@
         "rap": true,
         "rh": 0,
         "inputs": 0,
-        "x": 160,
-        "y": 960,
+        "x": 180,
+        "y": 1060,
         "wires": [
             [
                 "41c6c5947e4f9cf9",
@@ -2672,8 +2642,8 @@
         "rap": true,
         "rh": 0,
         "inputs": 0,
-        "x": 190,
-        "y": 860,
+        "x": 210,
+        "y": 960,
         "wires": [
             [
                 "79e231be0eadd912",
@@ -2686,7 +2656,7 @@
         "type": "ui_text",
         "z": "391f51e7377c8273",
         "group": "ab3a9f0b2e4b8d1b",
-        "order": 4,
+        "order": 3,
         "width": 0,
         "height": 0,
         "name": "",
@@ -2698,8 +2668,8 @@
         "font": "",
         "fontSize": 16,
         "color": "#000000",
-        "x": 550,
-        "y": 860,
+        "x": 570,
+        "y": 960,
         "wires": []
     },
     {
@@ -2708,7 +2678,7 @@
         "z": "391f51e7377c8273",
         "group": "ab3a9f0b2e4b8d1b",
         "name": "Red conn. status",
-        "order": 7,
+        "order": 6,
         "width": 0,
         "height": 0,
         "format": "\n<style>\n.red {\n    color: red !important;\n    font-weight: bold;\n}\n</style>\n\n<script>\n(function(scope) {\n    scope.$watch('msg.payload', function(value) {\n        const controls = document.querySelectorAll('.red-conn-status');\n        controls.forEach(el => {\n            if (value === \"OFF\") {\n                el.classList.add('red');\n            } else {\n                el.classList.remove('red');\n            }\n        });\n    });\n})(scope);\n</script>\n",
@@ -2717,8 +2687,8 @@
         "resendOnRefresh": true,
         "templateScope": "local",
         "className": "",
-        "x": 550,
-        "y": 900,
+        "x": 570,
+        "y": 1000,
         "wires": [
             []
         ]
@@ -2728,14 +2698,14 @@
         "type": "function",
         "z": "391f51e7377c8273",
         "name": "Set temp.",
-        "func": "\nlet temp = msg.payload\n\nif (temp !== 0){\n    flow.set(\"temp\", temp);\n}\n\nflow.set('tempWasSet', true);",
+        "func": "\nlet temp = msg.payload\n\nif (temp !== 0){\n    flow.set(\"temp\", temp);\n}\n\nflow.set('temp_was_set', true);",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 340,
+        "x": 360,
         "y": 180,
         "wires": [
             []
@@ -2746,15 +2716,15 @@
         "type": "function",
         "z": "391f51e7377c8273",
         "name": "Set fan",
-        "func": "\nlet tempWasSet = flow.get('tempWasSet');\n\nlet fan = msg.payload;\n\n\nif (tempWasSet === true) {\n    \n    flow.set('tempWasSet', false);\n    \n    if (fan === 'off'){\n        let msg1 = {payload: false, from_mqtt: true};\n        return msg1;\n    }\n    else {\n        flow.set('fan', fan);\n        let msg1 = {payload: true, from_mqtt: true};\n        return msg1;\n    }\n}",
+        "func": "\nlet tempWasSet = flow.get('temp_was_set');\n\nlet fan = msg.payload;\n\n\nif (tempWasSet === true) {\n    \n    flow.set('temp_was_set', false);\n    \n    if (fan === 'off'){\n        let msg1 = {payload: false, from_mqtt: true};\n        return msg1;\n    }\n    else {\n        flow.set('fan', fan);\n        let msg1 = {payload: true, from_mqtt: true};\n        return msg1;\n    }\n}",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 340,
-        "y": 240,
+        "x": 360,
+        "y": 280,
         "wires": [
             [
                 "7df678563a819cc4"
@@ -2773,8 +2743,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 510,
-        "y": 1000,
+        "x": 530,
+        "y": 1100,
         "wires": [
             [
                 "f8b062643e6b87e5"
@@ -2790,67 +2760,31 @@
         "links": [
             "2f93affb367a865e"
         ],
-        "x": 615,
-        "y": 1000,
+        "x": 635,
+        "y": 1100,
         "wires": []
-    },
-    {
-        "id": "523472ab5e70eada",
-        "type": "function",
-        "z": "391f51e7377c8273",
-        "name": "Resend",
-        "func": "\n// Resend the message if setting has not been applied\n\nstate = context.get('state');\n\nconst DEBUG = false;\n\nif (msg.topic === 'mix') {\n   \n    if (DEBUG) node.warn(`Sent ${msg.payload}`);\n    context.set('state', msg.payload);\n    return msg;\n}\nelse {\n    \n    if (state !== undefined) {\n    \n        if (msg.payload === state) {\n            if (DEBUG) node.warn(`Match ${msg.payload}`);\n            context.set('state', undefined);\n            return null;\n        }\n        else {\n            msg.payload = state;\n            if (DEBUG) node.warn(`Resend ${msg.payload}`);\n            return msg;\n        }\n        \n    }\n    \n}\n\n",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 960,
-        "y": 560,
-        "wires": [
-            [
-                "e123175452a0c255"
-            ]
-        ]
     },
     {
         "id": "f445d08b3d6cca0a",
         "type": "function",
         "z": "391f51e7377c8273",
-        "name": "Resend",
-        "func": "\n// Resend the message if setting has not been applied\n\nstate = context.get('state');\n\nconst DEBUG = false;\n\nif (msg.topic === 'mix') {\n   \n    if (DEBUG) node.warn(`Sent ${msg.payload}`);\n    context.set('state', msg.payload);\n    return msg;\n}\nelse {\n    \n    if (state !== undefined) {\n    \n        if (msg.payload === state) {\n            if (DEBUG) node.warn(`Match ${msg.payload}`);\n            context.set('state', undefined);\n            return null;\n        }\n        else {\n            msg.payload = state;\n            if (DEBUG) node.warn(`Resend ${msg.payload}`);\n            return msg;\n        }\n        \n    }\n    \n}\n\n",
-        "outputs": 1,
+        "name": "Retransmit",
+        "func": "\n// Resend the message if setting has not been applied\n\nstate = context.get('state');\n\nconst DEBUG = false;\n\nif (msg.topic === 'mix') {\n   \n    if (DEBUG) node.warn(`Sent ${msg.payload}`);\n    context.set('state', msg.payload);\n    return [null, msg];\n}\nelse {\n    \n    if (state !== undefined) {\n    \n        if (msg.payload === state) {\n            if (DEBUG) node.warn(`Match ${msg.payload}`);\n            context.set('state', undefined);\n            return [msg, null];\n        }\n        else {\n            msg.payload = state;\n            if (DEBUG) node.warn(`Resend ${msg.payload}`);\n            return [null, msg];\n        }\n        \n    }\n    else {\n        return [msg, null];\n    }\n    \n}\n\n",
+        "outputs": 2,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 960,
-        "y": 660,
+        "x": 590,
+        "y": 680,
         "wires": [
             [
-                "864ec9dedede4187"
-            ]
-        ]
-    },
-    {
-        "id": "f0175d17d4a0976c",
-        "type": "function",
-        "z": "391f51e7377c8273",
-        "name": "Resend",
-        "func": "\n// Resend the message if setting has not been applied\n\nstate = context.get('state');\n\nconst DEBUG = false;\n\nif (msg.topic === 'water') {\n   \n    if (DEBUG) node.warn(`Sent ${msg.payload}`);\n    context.set('state', msg.payload);\n    return msg;\n}\nelse {\n    \n    if (state !== undefined) {\n    \n        if (msg.payload === state) {\n            if (DEBUG) node.warn(`Match ${msg.payload}`);\n            context.set('state', undefined);\n            return null;\n        }\n        else {\n            msg.payload = state;\n            if (DEBUG) node.warn(`Resend ${msg.payload}`);\n            return msg;\n        }\n        \n    }\n    \n}\n\n",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 960,
-        "y": 440,
-        "wires": [
+                "c268d215c0a29312",
+                "141ce33d897ac41a"
+            ],
             [
-                "d447a46d234eb48e"
+                "8c25986c65998ad3"
             ]
         ]
     },
@@ -2869,8 +2803,8 @@
         "resendOnRefresh": true,
         "templateScope": "local",
         "className": "",
-        "x": 730,
-        "y": 240,
+        "x": 830,
+        "y": 260,
         "wires": [
             []
         ]
@@ -2881,7 +2815,7 @@
         "z": "391f51e7377c8273",
         "group": "9b3a8c49293c5c6a",
         "name": "Bold fan",
-        "order": 7,
+        "order": 8,
         "width": 0,
         "height": 0,
         "format": "<style>\n.bold {\n    font-weight: bold;\n}\n</style>\n\n<script>\n(function(scope) {\n    scope.$watch('msg.topic', function(value) {\n        const controls = document.querySelectorAll('.fan-target');\n        controls.forEach(el => {\n            if (value === 'fan') {\n                el.classList.add('bold');\n            } else {\n                el.classList.remove('bold');\n            }\n        });\n    });\n})(scope);\n</script>\n",
@@ -2890,8 +2824,8 @@
         "resendOnRefresh": true,
         "templateScope": "local",
         "className": "",
-        "x": 720,
-        "y": 340,
+        "x": 820,
+        "y": 360,
         "wires": [
             []
         ]
@@ -2902,7 +2836,7 @@
         "z": "391f51e7377c8273",
         "group": "9b3a8c49293c5c6a",
         "name": "Bold water",
-        "order": 7,
+        "order": 9,
         "width": 0,
         "height": 0,
         "format": "<style>\n.bold {\n    font-weight: bold;\n}\n</style>\n\n<script>\n(function(scope) {\n    scope.$watch('msg.topic', function(value) {\n        const controls = document.querySelectorAll('.water-target');\n        controls.forEach(el => {\n            if (value === 'water') {\n                el.classList.add('bold');\n            } else {\n                el.classList.remove('bold');\n            }\n        });\n    });\n})(scope);\n</script>\n",
@@ -2911,8 +2845,8 @@
         "resendOnRefresh": true,
         "templateScope": "local",
         "className": "",
-        "x": 730,
-        "y": 460,
+        "x": 830,
+        "y": 480,
         "wires": [
             []
         ]
@@ -2923,7 +2857,7 @@
         "z": "391f51e7377c8273",
         "group": "9b3a8c49293c5c6a",
         "name": "Bold mix",
-        "order": 7,
+        "order": 10,
         "width": 0,
         "height": 0,
         "format": "<style>\n.bold {\n    font-weight: bold;\n}\n</style>\n\n<script>\n(function(scope) {\n    scope.$watch('msg.topic', function(value) {\n        const controls = document.querySelectorAll('.mix-target');\n        controls.forEach(el => {\n            if (value === 'mix') {\n                el.classList.add('bold');\n            } else {\n                el.classList.remove('bold');\n            }\n        });\n    });\n})(scope);\n</script>\n",
@@ -2932,8 +2866,8 @@
         "resendOnRefresh": true,
         "templateScope": "local",
         "className": "",
-        "x": 720,
-        "y": 580,
+        "x": 820,
+        "y": 640,
         "wires": [
             []
         ]
@@ -2950,12 +2884,84 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 350,
-        "y": 960,
+        "x": 370,
+        "y": 1060,
         "wires": [
             [
                 "6192907fb799f322",
                 "cf6b3e9d9b5ca767"
+            ]
+        ]
+    },
+    {
+        "id": "afd140e0799510af",
+        "type": "function",
+        "z": "391f51e7377c8273",
+        "name": "Retransmit",
+        "func": "\n// Resend the message if setting has not been applied\n\nstate = context.get('state');\n\nconst DEBUG = false;\n\nif (msg.topic === 'water') {\n   \n    if (DEBUG) node.warn(`Sent ${msg.payload}`);\n    context.set('state', msg.payload);\n    return [null, msg];\n}\nelse {\n    \n    if (state !== undefined) {\n    \n        if (msg.payload === state) {\n            if (DEBUG) node.warn(`Match ${msg.payload}`);\n            context.set('state', undefined);\n            return [msg, null];\n        }\n        else {\n            msg.payload = state;\n            if (DEBUG) node.warn(`Resend ${msg.payload}`);\n            return [null, msg];\n        }\n        \n    }\n    else {\n        return [msg, null];\n    }\n    \n}\n\n",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 590,
+        "y": 520,
+        "wires": [
+            [
+                "c8759ddbb78783e0",
+                "8ede93c0d2432a6d"
+            ],
+            [
+                "d447a46d234eb48e"
+            ]
+        ]
+    },
+    {
+        "id": "3be88025427a9622",
+        "type": "function",
+        "z": "391f51e7377c8273",
+        "name": "Retransmit",
+        "func": "\n// Resend the message if setting has not been applied\n\nstate = context.get('state');\n\nconst DEBUG = false;\n\nif (msg.topic === 'fan') {\n   \n    if (DEBUG) node.warn(`Sent ${msg.payload}`);\n    context.set('state', msg.payload);\n    return [null, msg];\n}\nelse {\n    \n    if (state !== undefined) {\n    \n        if (msg.payload === state) {\n            if (DEBUG) node.warn(`Match ${msg.payload}`);\n            context.set('state', undefined);\n            return [msg, null];\n        }\n        else {\n            msg.payload = state;\n            if (DEBUG) node.warn(`Resend ${msg.payload}`);\n            return [null, msg];\n        }\n        \n    }\n    else {\n        return [msg, null];\n    }\n    \n}\n\n",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 590,
+        "y": 380,
+        "wires": [
+            [
+                "f6d22ec56a889695",
+                "bce2301e12d1e263"
+            ],
+            [
+                "2dd8bdbb19a99a93"
+            ]
+        ]
+    },
+    {
+        "id": "ebd66a3fa235d757",
+        "type": "function",
+        "z": "391f51e7377c8273",
+        "name": "Retransmit",
+        "func": "\n// Resend the message if setting has not been applied\n\nstate = context.get('state');\n\nconst DEBUG = false;\n\nif (msg.topic === 'temp') {\n   \n    if (DEBUG) node.warn(`Sent ${msg.payload}`);\n    context.set('state', msg.payload);\n    return [null, msg];\n}\nelse {\n    \n    if (state !== undefined) {\n    \n        if (msg.payload === state) {\n            if (DEBUG) node.warn(`Match ${msg.payload}`);\n            context.set('state', undefined);\n            return [msg, null];\n        }\n        else {\n            msg.payload = state;\n            if (DEBUG) node.warn(`Resend ${msg.payload}`);\n            return [null, msg];\n        }\n        \n    }\n    else {\n        return [msg, null];\n    }\n    \n}\n\n",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 590,
+        "y": 280,
+        "wires": [
+            [
+                "783ddd3bdb365462",
+                "555b5779bdb6e92a"
+            ],
+            [
+                "defc780bd37644a4"
             ]
         ]
     }
