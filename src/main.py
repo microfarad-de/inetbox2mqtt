@@ -49,9 +49,13 @@ logging.basicConfig(
 
 log = logging.getLogger(__name__)
 
-# define global objects - important for processing
+# Global objects
 connect = None
-lin = None
+lin     = None
+
+# Delay reading update from LIN (seconds)
+update_delay = 0
+
 
 # Release number
 REL_NO = "3.0.0"
@@ -66,6 +70,7 @@ STA_PREFIX = 'service/' + TOPIC_ROOT + '/control_status/'
 # Universal callback function for all subscriptions
 async def callback(topic, msg, retained, qos):
     global connect
+    global update_delay
     log.debug(f"received: {topic}: {msg}")
     topic = str(topic)
     topic = topic[2:-1]
@@ -77,6 +82,7 @@ async def callback(topic, msg, retained, qos):
 #       log.info("Received command: "+str(topic)+" payload: "+str(msg))
         if topic in lin.app.status.keys():
             log.info("inet-key:"+str(topic)+" value: "+str(msg))
+            update_delay = 1
             try:
                 lin.app.set_status(topic, msg)
             except Exception as e:
@@ -96,15 +102,17 @@ async def conn_callback(client):
 
 # main publisher-loop
 async def main():
-    global repo_update
     global connect
+    global update_delay
 
     log.debug("main-loop is running")
 
     i = 0
     wd = False
     while True:
-        await asyncio.sleep(10) # Update every 10sec
+        await asyncio.sleep(5)            # Set the update interval (seconds)
+        await asyncio.sleep(update_delay) # Addtional wait if a command was just sent
+        update_delay = 0
         s = lin.app.get_all(True)
         for key in s.keys():
             log.debug(f'publish {key}:{s[key]}')
