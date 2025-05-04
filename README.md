@@ -34,7 +34,7 @@ The electrical connections are described in the following table:
 | RX          | TX          |         |                  |
 | TX          | RX          |         |                  |
 |             | LIN         | LIN     |                  |
-|             | 12V         |         | +12V fused 1A    |
+|             | 12V         |         | +12V fused 100mA |
 
 Further details are provided in the [original inetbox2mqtt electrics guide](doc/ELECTRIC.md) and [this similar project](https://github.com/danielfett/inetbox.py).
 
