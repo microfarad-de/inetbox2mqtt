@@ -82,7 +82,7 @@ async def callback(topic, msg, retained, qos):
 #       log.info("Received command: "+str(topic)+" payload: "+str(msg))
         if topic in lin.app.status.keys():
             log.info("inet-key:"+str(topic)+" value: "+str(msg))
-            update_delay = 1
+            update_delay = 2
             try:
                 lin.app.set_status(topic, msg)
             except Exception as e:
