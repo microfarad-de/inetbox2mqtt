@@ -142,11 +142,11 @@
     {
         "id": "cf4c6771afb43982",
         "type": "ui_group",
-        "name": "Sensors",
+        "name": "Temperatures",
         "tab": "c627e40abb963e7a",
         "order": 1,
         "disp": true,
-        "width": 6,
+        "width": "6",
         "collapse": false,
         "className": ""
     },
@@ -253,6 +253,26 @@
         "name": "Karim"
     },
     {
+        "id": "9e2c0db2f38c2b58",
+        "type": "ui_tab",
+        "name": "Disabled",
+        "icon": "dashboard",
+        "order": 4,
+        "disabled": true,
+        "hidden": true
+    },
+    {
+        "id": "9c32c704d83eb416",
+        "type": "ui_group",
+        "name": "Disabled",
+        "tab": "9e2c0db2f38c2b58",
+        "order": 1,
+        "disp": true,
+        "width": "6",
+        "collapse": false,
+        "className": ""
+    },
+    {
         "id": "941135a1b6edb738",
         "type": "ui_template",
         "z": "37a752f35a68bbed",
@@ -328,7 +348,8 @@
             "08fe98afcefbc02c",
             "dfc1f32cb802a02e",
             "335af24ca01463cb",
-            "210d9c2dfb32db9e"
+            "210d9c2dfb32db9e",
+            "e1dd06c5c761e4d9"
         ],
         "x": 55,
         "y": 260,
@@ -352,7 +373,7 @@
         "phonenumberinputtypemessage": "msg",
         "inputtypemessage": "msg",
         "rejectssl": false,
-        "x": 240,
+        "x": 200,
         "y": 260,
         "wires": [
             []
@@ -927,7 +948,7 @@
         "links": [
             "2f93affb367a865e"
         ],
-        "x": 635,
+        "x": 675,
         "y": 80,
         "wires": []
     },
@@ -936,14 +957,14 @@
         "type": "function",
         "z": "b22624498baaa896",
         "name": "Alarm",
-        "func": "\nlet val = msg.payload;\n\nlet low  = 20;\nlet high = 100;\n\nlet lastAlarm = context.get('lastAlarm') || false;\nlet alarm;\n\nif (val < low) {\n    alarm = 'low';\n}\nelse if (val > high) {\n    alarm = 'high';\n}\nelse if (val > low + 1 || val < high - 1) {\n    alarm = false;\n}\n\nif (alarm && alarm != lastAlarm) {\n    context.set('lastAlarm', alarm);\n    msg.payload = `⚠️ Caravan alert!\\nBattery charge: ${val} %`;\n    node.warn(msg.payload);\n    return msg;\n}\nelse {\n    context.set('lastAlarm', alarm);\n    return null;\n}\n\n",
+        "func": "\nlet val = msg.payload;\n\nlet low  = 20;\nlet high = 100;\nlet thr  = 1;\n\nlet lastAlarm = context.get('lastAlarm') || false;\nlet alarm = false;\n\nif (val < low) {\n    alarm = 'low';\n}\nelse if (val > high) {\n    alarm = 'high';\n}\nelse if (val > low + thr && val < high - thr) {\n    alarm = false;\n    context.set('lastAlarm', alarm);\n}\n\nif (alarm && alarm != lastAlarm) {\n    context.set('lastAlarm', alarm);\n    msg.payload = `⚠️ Caravan alert!\\nBattery charge: ${val} %`;\n    node.warn(msg.payload);\n    return msg;\n}\nelse {\n    return null;\n}\n\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 550,
+        "x": 570,
         "y": 80,
         "wires": [
             [
@@ -965,7 +986,7 @@
         "label": "°C",
         "format": "{{value}}",
         "min": 0,
-        "max": "100",
+        "max": "80",
         "colors": [
             "#00b500",
             "#e6e600",
@@ -1011,11 +1032,11 @@
         "z": "2561d49b29c858c7",
         "name": "",
         "group": "cf4c6771afb43982",
-        "order": 4,
+        "order": 5,
         "width": 3,
         "height": 3,
         "gtype": "donut",
-        "title": "Indoor",
+        "title": "Outdoor",
         "label": "°C",
         "format": "{{value}}",
         "min": "-10",
@@ -1029,8 +1050,8 @@
         "seg2": "",
         "diff": false,
         "className": "",
-        "x": 790,
-        "y": 120,
+        "x": 800,
+        "y": 200,
         "wires": []
     },
     {
@@ -1041,7 +1062,7 @@
         "path": "/Temperature",
         "serviceObj": {
             "service": "com.victronenergy.temperature/20",
-            "name": "Indoor"
+            "name": "Outdoor"
         },
         "pathObj": {
             "path": "/Temperature",
@@ -1052,7 +1073,7 @@
         "onlyChanges": false,
         "roundValues": "1",
         "x": 150,
-        "y": 120,
+        "y": 200,
         "wires": [
             [
                 "9840ba532403df6f"
@@ -1063,9 +1084,10 @@
         "id": "cfdc6c99305c58ca",
         "type": "ui_gauge",
         "z": "2561d49b29c858c7",
+        "d": true,
         "name": "",
-        "group": "cf4c6771afb43982",
-        "order": 5,
+        "group": "9c32c704d83eb416",
+        "order": 11,
         "width": 3,
         "height": 3,
         "gtype": "donut",
@@ -1084,13 +1106,14 @@
         "diff": false,
         "className": "",
         "x": 810,
-        "y": 200,
+        "y": 700,
         "wires": []
     },
     {
         "id": "e9e6e61455e7859a",
         "type": "victron-input-temperature",
         "z": "2561d49b29c858c7",
+        "d": true,
         "service": "com.victronenergy.temperature/20",
         "path": "/Humidity",
         "serviceObj": {
@@ -1106,7 +1129,7 @@
         "onlyChanges": false,
         "roundValues": "1",
         "x": 140,
-        "y": 200,
+        "y": 700,
         "wires": [
             [
                 "ba91e7b317413a88"
@@ -1119,7 +1142,7 @@
         "z": "2561d49b29c858c7",
         "name": "",
         "group": "cf4c6771afb43982",
-        "order": 6,
+        "order": 7,
         "width": 3,
         "height": 3,
         "gtype": "donut",
@@ -1138,7 +1161,7 @@
         "diff": false,
         "className": "",
         "x": 790,
-        "y": 280,
+        "y": 360,
         "wires": []
     },
     {
@@ -1160,7 +1183,7 @@
         "onlyChanges": false,
         "roundValues": "1",
         "x": 150,
-        "y": 280,
+        "y": 360,
         "wires": [
             [
                 "62eeb5d5f6feb245"
@@ -1180,7 +1203,7 @@
         "finalize": "",
         "libs": [],
         "x": 510,
-        "y": 120,
+        "y": 200,
         "wires": [
             [
                 "a143838f0999d97b",
@@ -1201,7 +1224,7 @@
         "finalize": "",
         "libs": [],
         "x": 510,
-        "y": 280,
+        "y": 360,
         "wires": [
             [
                 "24ad0f6f10a8086e",
@@ -1213,6 +1236,7 @@
         "id": "ba91e7b317413a88",
         "type": "function",
         "z": "2561d49b29c858c7",
+        "d": true,
         "name": "Offset",
         "func": "let hum = msg.payload;\n\nhum = hum - 0;\n\nmsg.payload = (+hum).toFixed(1);\n\nreturn msg;",
         "outputs": 1,
@@ -1222,7 +1246,7 @@
         "finalize": "",
         "libs": [],
         "x": 510,
-        "y": 200,
+        "y": 700,
         "wires": [
             [
                 "cfdc6c99305c58ca",
@@ -1362,7 +1386,7 @@
         "rh": 0,
         "inputs": 0,
         "x": 130,
-        "y": 360,
+        "y": 280,
         "wires": [
             [
                 "61d5e98a72313d26"
@@ -1375,7 +1399,7 @@
         "z": "2561d49b29c858c7",
         "name": "",
         "group": "cf4c6771afb43982",
-        "order": 7,
+        "order": 6,
         "width": 3,
         "height": 3,
         "gtype": "donut",
@@ -1383,7 +1407,7 @@
         "label": "°C",
         "format": "{{value}}",
         "min": 0,
-        "max": "100",
+        "max": "80",
         "colors": [
             "#00b500",
             "#e6e600",
@@ -1394,7 +1418,7 @@
         "diff": false,
         "className": "",
         "x": 790,
-        "y": 360,
+        "y": 280,
         "wires": []
     },
     {
@@ -1410,7 +1434,7 @@
         "finalize": "",
         "libs": [],
         "x": 510,
-        "y": 360,
+        "y": 280,
         "wires": [
             [
                 "e7fa40a69f3f7e54",
@@ -1428,7 +1452,7 @@
             "2f93affb367a865e"
         ],
         "x": 755,
-        "y": 160,
+        "y": 240,
         "wires": []
     },
     {
@@ -1436,7 +1460,7 @@
         "type": "function",
         "z": "2561d49b29c858c7",
         "name": "Alarm",
-        "func": "\nlet val = msg.payload;\n\nlet low  = 15;\nlet high = 25;\n\nlet lastAlarm = context.get('lastAlarm') || false;\nlet alarm;\n\nif (val < low) {\n    alarm = 'low';\n}\nelse if (val > high) {\n    alarm = 'high';\n}\nelse if (val > low + 1 || val < high - 1) {\n    alarm = false;\n}\n\nif (alarm && alarm != lastAlarm) {\n    context.set('lastAlarm', alarm);\n    msg.payload = `⚠️ Caravan alert!\\nIndoor temperature: ${val} °C`;\n    node.warn(msg.payload);\n    return msg;\n}\nelse {\n    context.set('lastAlarm', alarm);\n    return null;\n}\n\n",
+        "func": "\nlet val = msg.payload;\n\nlet low  = 15;\nlet high = 25;\nlet thr  = 1;\n\nlet lastAlarm = context.get('lastAlarm') || false;\nlet alarm = false;\n\nif (val < low) {\n    alarm = 'low';\n}\nelse if (val > high) {\n    alarm = 'high';\n}\nelse if (val > low + thr && val < high - thr) {\n    alarm = false;\n    context.set('lastAlarm', alarm);\n}\n\nif (alarm && alarm != lastAlarm) {\n    context.set('lastAlarm', alarm);\n    msg.payload = `⚠️ Caravan alert!\\nIndoor temperature: ${val} °C`;\n    node.warn(msg.payload);\n    return msg;\n}\nelse {\n    return null;\n}\n\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -1444,7 +1468,7 @@
         "finalize": "",
         "libs": [],
         "x": 650,
-        "y": 160,
+        "y": 240,
         "wires": [
             [
                 "f2fa448128ce1972"
@@ -1455,8 +1479,9 @@
         "id": "21fd221ab90c51ae",
         "type": "function",
         "z": "2561d49b29c858c7",
+        "d": true,
         "name": "Alarm",
-        "func": "\nlet val = msg.payload;\n\nlet low  = 0;\nlet high = 70;\n\nlet lastAlarm = context.get('lastAlarm') || false;\nlet alarm;\n\nif (val < low) {\n    alarm = 'low';\n}\nelse if (val > high) {\n    alarm = 'high';\n}\nelse if (val > low + 1 || val < high - 1) {\n    alarm = false;\n}\n\nif (alarm && alarm != lastAlarm) {\n    context.set('lastAlarm', alarm);\n    msg.payload = `⚠️ Caravan alert!\\nIndoor humidity: ${val} %`;\n    node.warn(msg.payload);\n    return msg;\n}\nelse {\n    context.set('lastAlarm', alarm);\n    return null;\n}\n\n",
+        "func": "\nlet val = msg.payload;\n\nlet low  = 0;\nlet high = 70;\nlet thr  = 5;\n\nlet lastAlarm = context.get('lastAlarm') || false;\nlet alarm = false;\n\nif (val < low) {\n    alarm = 'low';\n}\nelse if (val > high) {\n    alarm = 'high';\n}\nelse if (val > low + thr && val < high - thr) {\n    alarm = false;\n    context.set('lastAlarm', alarm);\n}\n\nif (alarm && alarm != lastAlarm) {\n    context.set('lastAlarm', alarm);\n    msg.payload = `⚠️ Caravan alert!\\nIndoor humidity: ${val} %`;\n    node.warn(msg.payload);\n    return msg;\n}\nelse {\n    return null;\n}\n\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -1464,7 +1489,7 @@
         "finalize": "",
         "libs": [],
         "x": 650,
-        "y": 240,
+        "y": 740,
         "wires": [
             [
                 "713473bc2af8430d"
@@ -1475,13 +1500,14 @@
         "id": "713473bc2af8430d",
         "type": "link out",
         "z": "2561d49b29c858c7",
+        "d": true,
         "name": "link out 2",
         "mode": "link",
         "links": [
             "2f93affb367a865e"
         ],
         "x": 755,
-        "y": 240,
+        "y": 740,
         "wires": []
     },
     {
@@ -1489,7 +1515,7 @@
         "type": "function",
         "z": "2561d49b29c858c7",
         "name": "Alarm",
-        "func": "\nlet val = msg.payload;\n\nlet low  = 1;\nlet high = 5;\n\nlet lastAlarm = context.get('lastAlarm') || false;\nlet alarm;\n\nif (val < low) {\n    alarm = 'low';\n}\nelse if (val > high) {\n    alarm = 'high';\n}\nelse if (val > low + 1 || val < high - 1) {\n    alarm = false;\n}\n\nif (alarm && alarm != lastAlarm) {\n    context.set('lastAlarm', alarm);\n    msg.payload = `⚠️ Caravan alert!\\nFridge temperature: ${val} °C`;\n    node.warn(msg.payload);\n    return msg;\n}\nelse {\n    context.set('lastAlarm', alarm);\n    return null;\n}\n\n",
+        "func": "\nlet val = msg.payload;\n\nlet low  = 1;\nlet high = 5;\nlet thr  = 1;\n\nlet lastAlarm = context.get('lastAlarm') || false;\nlet alarm = false;\n\nif (val < low) {\n    alarm = 'low';\n}\nelse if (val > high) {\n    alarm = 'high';\n}\nelse if (val > low + thr && val < high - thr) {\n    alarm = false;\n    context.set('lastAlarm', alarm);\n}\n\nif (alarm && alarm != lastAlarm) {\n    context.set('lastAlarm', alarm);\n    msg.payload = `⚠️ Caravan alert!\\nFridge temperature: ${val} °C`;\n    node.warn(msg.payload);\n    return msg;\n}\nelse {\n    return null;\n}\n\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -1497,7 +1523,7 @@
         "finalize": "",
         "libs": [],
         "x": 650,
-        "y": 320,
+        "y": 400,
         "wires": [
             [
                 "f59d101299f0716e"
@@ -1514,7 +1540,7 @@
             "2f93affb367a865e"
         ],
         "x": 755,
-        "y": 320,
+        "y": 400,
         "wires": []
     },
     {
@@ -1522,7 +1548,7 @@
         "type": "function",
         "z": "2561d49b29c858c7",
         "name": "Alarm",
-        "func": "\nlet val = msg.payload;\n\nlet low  = 2;\nlet high = 30;\n\nlet lastAlarm = context.get('lastAlarm') || false;\nlet alarm;\n\nif (val < low) {\n    alarm = 'low';\n}\nelse if (val > high) {\n    alarm = 'high';\n}\nelse if (val > low + 1 || val < high - 1) {\n    alarm = false;\n}\n\nif (alarm && alarm != lastAlarm) {\n    context.set('lastAlarm', alarm);\n    msg.payload = `⚠️ Caravan alert!\\nBattery temperature: ${val} °C`;\n    node.warn(msg.payload);\n    return msg;\n}\nelse {\n    context.set('lastAlarm', alarm);\n    return null;\n}\n\n",
+        "func": "\nlet val = msg.payload;\n\nlet low  = 2;\nlet high = 30;\nlet thr  = 1;\n\nlet lastAlarm = context.get('lastAlarm') || false;\nlet alarm = false;\n\nif (val < low) {\n    alarm = 'low';\n}\nelse if (val > high) {\n    alarm = 'high';\n}\nelse if (val > low + thr && val < high - thr) {\n    alarm = false;\n    context.set('lastAlarm', alarm);\n}\n\nif (alarm && alarm != lastAlarm) {\n    context.set('lastAlarm', alarm);\n    msg.payload = `⚠️ Caravan alert!\\nBattery temperature: ${val} °C`;\n    node.warn(msg.payload);\n    return msg;\n}\nelse {\n    return null;\n}\n\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -1555,7 +1581,7 @@
         "type": "function",
         "z": "2561d49b29c858c7",
         "name": "Alarm",
-        "func": "\nlet val = msg.payload;\n\nlet low  = 1;\nlet high = 55;\n\nlet lastAlarm = context.get('lastAlarm') || false;\nlet alarm;\n\nif (val < low) {\n    alarm = 'low';\n}\nelse if (val > high) {\n    alarm = 'high';\n}\nelse if (val > low + 1 || val < high - 1) {\n    alarm = false;\n}\n\nif (alarm && alarm != lastAlarm) {\n    context.set('lastAlarm', alarm);\n    msg.payload = `⚠️ Caravan alert!\\nCPU temperature: ${val} °C`;\n    node.warn(msg.payload);\n    return msg;\n}\nelse {\n    context.set('lastAlarm', alarm);\n    return null;\n}\n\n",
+        "func": "\nlet val = msg.payload;\n\nlet low  = 1;\nlet high = 55;\nlet thr  = 5;\n\nlet lastAlarm = context.get('lastAlarm') || false;\nlet alarm = false;\n\nif (val < low) {\n    alarm = 'low';\n}\nelse if (val > high) {\n    alarm = 'high';\n}\nelse if (val > low + thr && val < high - thr) {\n    alarm = false;\n    context.set('lastAlarm', alarm);\n}\n\nif (alarm && alarm != lastAlarm) {\n    context.set('lastAlarm', alarm);\n    msg.payload = `⚠️ Caravan alert!\\nCPU temperature: ${val} °C`;\n    node.warn(msg.payload);\n    return msg;\n}\nelse {\n    return null;\n}\n\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -1593,7 +1619,7 @@
             "2f93affb367a865e"
         ],
         "x": 755,
-        "y": 400,
+        "y": 320,
         "wires": []
     },
     {
@@ -1601,7 +1627,7 @@
         "type": "function",
         "z": "2561d49b29c858c7",
         "name": "Alarm",
-        "func": "\nlet val = msg.payload;\n\nlet low  = 1;\nlet high = 100;\n\nlet lastAlarm = context.get('lastAlarm') || false;\nlet alarm;\n\nif (val < low) {\n    alarm = 'low';\n}\nelse if (val > high) {\n    alarm = 'high';\n}\nelse if (val > low + 1 || val < high - 1) {\n    alarm = false;\n}\n\nif (alarm && alarm != lastAlarm) {\n    context.set('lastAlarm', alarm);\n    msg.payload = `⚠️ Caravan alert!\\nWater temperature: ${val} °C`;\n    node.warn(msg.payload);\n    return msg;\n}\nelse {\n    context.set('lastAlarm', alarm);\n    return null;\n}\n\n",
+        "func": "\nlet val = msg.payload;\n\nlet low  = 1;\nlet high = 100;\nlet thr  = 5;\n\nlet lastAlarm = context.get('lastAlarm') || false;\nlet alarm = false;\n\nif (val < low) {\n    alarm = 'low';\n}\nelse if (val > high) {\n    alarm = 'high';\n}\nelse if (val > low + thr && val < high - thr) {\n    alarm = false;\n    context.set('lastAlarm', alarm);\n}\n\nif (alarm && alarm != lastAlarm) {\n    context.set('lastAlarm', alarm);\n    msg.payload = `⚠️ Caravan alert!\\nWater temperature: ${val} °C`;\n    node.warn(msg.payload);\n    return msg;\n}\nelse {\n    return null;\n}\n\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -1609,12 +1635,115 @@
         "finalize": "",
         "libs": [],
         "x": 650,
-        "y": 400,
+        "y": 320,
         "wires": [
             [
                 "335af24ca01463cb"
             ]
         ]
+    },
+    {
+        "id": "6296b4c566c5530e",
+        "type": "mqtt in",
+        "z": "2561d49b29c858c7",
+        "name": "Room temperature",
+        "topic": "service/truma/control_status/current_temp_room",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "2c24d1c82633c69e",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 130,
+        "y": 120,
+        "wires": [
+            [
+                "2d67a916b8f417a8"
+            ]
+        ]
+    },
+    {
+        "id": "2d67a916b8f417a8",
+        "type": "function",
+        "z": "2561d49b29c858c7",
+        "name": "Offset",
+        "func": "let temp = msg.payload;\n\ntemp = temp - 0.0;\n\nmsg.payload = (+temp).toFixed(1);\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 510,
+        "y": 120,
+        "wires": [
+            [
+                "9233787d27554fa6",
+                "18820dfd7073eb9f"
+            ]
+        ]
+    },
+    {
+        "id": "18820dfd7073eb9f",
+        "type": "function",
+        "z": "2561d49b29c858c7",
+        "name": "Alarm",
+        "func": "\nlet val = msg.payload;\n\nlet low  = 0;\nlet high = 30;\nlet thr  = 1;\n\nlet lastAlarm = context.get('lastAlarm') || false;\nlet alarm = false;\n\nif (val < low) {\n    alarm = 'low';\n}\nelse if (val > high) {\n    alarm = 'high';\n}\nelse if (val > low + thr && val < high - thr) {\n    alarm = false;\n    context.set('lastAlarm', alarm);\n}\n\nif (alarm && alarm != lastAlarm) {\n    context.set('lastAlarm', alarm);\n    msg.payload = `⚠️ Caravan alert!\\nOutdoor temperature: ${val} °C`;\n    node.warn(msg.payload);\n    return msg;\n}\nelse {\n    return null;\n}\n\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 650,
+        "y": 160,
+        "wires": [
+            [
+                "e1dd06c5c761e4d9"
+            ]
+        ]
+    },
+    {
+        "id": "e1dd06c5c761e4d9",
+        "type": "link out",
+        "z": "2561d49b29c858c7",
+        "name": "link out 9",
+        "mode": "link",
+        "links": [
+            "2f93affb367a865e"
+        ],
+        "x": 755,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "9233787d27554fa6",
+        "type": "ui_gauge",
+        "z": "2561d49b29c858c7",
+        "name": "",
+        "group": "cf4c6771afb43982",
+        "order": 4,
+        "width": 3,
+        "height": 3,
+        "gtype": "donut",
+        "title": "Indoor",
+        "label": "°C",
+        "format": "{{value}}",
+        "min": "-10",
+        "max": "40",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 790,
+        "y": 120,
+        "wires": []
     },
     {
         "id": "7df678563a819cc4",
@@ -1723,7 +1852,7 @@
             }
         ],
         "payload": "",
-        "topic": "fan",
+        "topic": "water",
         "topicType": "str",
         "className": "",
         "x": 565,
@@ -1731,7 +1860,7 @@
         "wires": [
             [
                 "c71fb3d32cdf6139",
-                "d447a46d234eb48e"
+                "f0175d17d4a0976c"
             ]
         ],
         "l": false
@@ -1778,9 +1907,9 @@
             }
         ],
         "payload": "",
-        "topic": "topic",
-        "topicType": "msg",
-        "className": "grayout-target-2, bold-mix",
+        "topic": "mix",
+        "topicType": "str",
+        "className": "grayout-target-2",
         "x": 565,
         "y": 380,
         "wires": [
@@ -1795,7 +1924,7 @@
         "type": "ui_text",
         "z": "391f51e7377c8273",
         "group": "ab3a9f0b2e4b8d1b",
-        "order": 1,
+        "order": 2,
         "width": 0,
         "height": 0,
         "name": "",
@@ -1816,7 +1945,7 @@
         "type": "ui_text",
         "z": "391f51e7377c8273",
         "group": "ab3a9f0b2e4b8d1b",
-        "order": 2,
+        "order": 3,
         "width": 0,
         "height": 0,
         "name": "",
@@ -1837,7 +1966,7 @@
         "type": "ui_text",
         "z": "391f51e7377c8273",
         "group": "ab3a9f0b2e4b8d1b",
-        "order": 4,
+        "order": 5,
         "width": 0,
         "height": 0,
         "name": "",
@@ -1883,7 +2012,7 @@
         "order": 8,
         "width": 0,
         "height": 0,
-        "format": "<script>\n(function(scope) {\n    let states = { switch1: false, switch2: false };\n\n    scope.$watch('msg', function(msg) {\n        if (!msg || typeof msg.payload === 'undefined') return;\n\n        // Update the state depending on which switch sent the message\n        if (msg.topic === \"switch\") states.switch1 = msg.payload;\n        if (msg.topic === \"fan\") states.switch2 = msg.payload;\n\n        // Enable if either switch is true\n        const shouldEnable = states.switch1 || states.switch2;\n\n        // Add or remove the 'grayout' class from the grayout-target elements\n        const elements = document.querySelectorAll('.grayout-target-2');\n        elements.forEach(el => {\n            if (shouldEnable) {\n                el.classList.remove('grayout');\n            } else {\n                el.classList.add('grayout');\n            }\n        });\n    });\n})(scope);\n</script>\n",
+        "format": "<script>\n(function(scope) {\n    let states = { switch1: false, switch2: false };\n\n    scope.$watch('msg', function(msg) {\n        if (!msg || typeof msg.payload === 'undefined') return;\n\n        // Update the state depending on which switch sent the message\n        if (msg.topic === \"switch\") states.switch1 = msg.payload;\n        if (msg.topic === \"water\") states.switch2 = msg.payload;\n\n        // Enable if either switch is true\n        const shouldEnable = states.switch1 || states.switch2;\n\n        // Add or remove the 'grayout' class from the grayout-target elements\n        const elements = document.querySelectorAll('.grayout-target-2');\n        elements.forEach(el => {\n            if (shouldEnable) {\n                el.classList.remove('grayout');\n            } else {\n                el.classList.add('grayout');\n            }\n        });\n    });\n})(scope);\n</script>\n",
         "storeOutMessages": true,
         "fwdInMessages": true,
         "resendOnRefresh": true,
@@ -1900,7 +2029,7 @@
         "type": "function",
         "z": "391f51e7377c8273",
         "name": "Energy select",
-        "func": "\n// Define the lookup table\nconst lookupTable = {\n    \"gas\":       { value1: \"gas\",         value2: 0    },\n    \"electric1\": { value1: \"electricity\", value2: 900  },\n    \"electric2\": { value1: \"electricity\", value2: 1800 },\n    \"mix1\":      { value1: \"mix\",         value2: 900  },\n    \"mix2\":      { value1: \"mix\",         value2: 1800 }\n};\n\n// Get the input value (e.g., from msg.payload)\nlet inputValue = msg.payload;\n\n// Check the lookup table and get the results\nlet result = lookupTable[inputValue] || { value1: \"gas\", value2: 0 };\n\n// Prepare two different messages\nlet msg1 = { payload: result.value1 };  // Message for the first output\nlet msg2 = { payload: result.value2 };  // Message for the second output\n\n// Return both messages to different outputs\nreturn [msg1, msg2];  // Sends msg1 to output 1, and msg2 to output 2\n",
+        "func": "\n// Define the lookup table\nconst lookupTable = {\n    \"gas\":       { value1: \"gas\",         value2: 0    },\n    \"electric1\": { value1: \"electricity\", value2: 900  },\n    \"electric2\": { value1: \"electricity\", value2: 1800 },\n    \"mix1\":      { value1: \"mix\",         value2: 900  },\n    \"mix2\":      { value1: \"mix\",         value2: 1800 }\n};\n\n// Get the input value (e.g., from msg.payload)\nlet inputValue = msg.payload;\n\n// Check the lookup table and get the results\nlet result = lookupTable[inputValue] || { value1: \"gas\", value2: 0 };\n\n// Prepare two different messages\nlet msg1 = { payload: result.value1, topic: 'mix' };  // Message for the first output\nlet msg2 = { payload: result.value2, topic: 'mix' };  // Message for the second output\n\n// Return both messages to different outputs\nreturn [msg1, msg2];  // Sends msg1 to output 1, and msg2 to output 2\n",
         "outputs": 2,
         "timeout": 0,
         "noerr": 0,
@@ -1911,10 +2040,10 @@
         "y": 380,
         "wires": [
             [
-                "e123175452a0c255"
+                "523472ab5e70eada"
             ],
             [
-                "864ec9dedede4187"
+                "f445d08b3d6cca0a"
             ]
         ]
     },
@@ -1924,7 +2053,7 @@
         "z": "391f51e7377c8273",
         "d": true,
         "group": "ab3a9f0b2e4b8d1b",
-        "order": 5,
+        "order": 6,
         "width": 0,
         "height": 0,
         "name": "",
@@ -1946,7 +2075,7 @@
         "type": "function",
         "z": "391f51e7377c8273",
         "name": "Set temp.",
-        "func": "\nflow.set(\"temp\", msg.payload);\nflow.set('resend_temp', msg.payload);\n\nlet sw = flow.get(\"switch\");\n\nif (sw === true){\n    let msg1 = {payload: msg.payload};\n    return msg1;\n}\nelse {\n    return null;\n}",
+        "func": "\nflow.set(\"temp\", msg.payload);\nflow.set('resend_temp', {value: msg.payload, attempts: 1});\n\nlet sw = flow.get(\"switch\");\n\nif (sw === true){\n    let msg1 = {payload: msg.payload};\n    return msg1;\n}\nelse {\n    return null;\n}",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -1966,7 +2095,7 @@
         "type": "function",
         "z": "391f51e7377c8273",
         "name": "Set fan",
-        "func": "\nflow.set(\"fan\", msg.payload);\nflow.set('resend_fan', msg.payload);\n\nlet sw = flow.get(\"switch\");\n\nif (sw === true){\n    let msg1 = {payload: msg.payload};\n    return msg1;\n}\nelse {\n    return null;\n}",
+        "func": "\nflow.set(\"fan\", msg.payload);\nflow.set('resend_fan', {value: msg.payload, attempts: 1});\n\nlet sw = flow.get(\"switch\");\n\nif (sw === true){\n    let msg1 = {payload: msg.payload};\n    return msg1;\n}\nelse {\n    return null;\n}",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -1986,7 +2115,7 @@
         "type": "function",
         "z": "391f51e7377c8273",
         "name": "Heating trigger",
-        "func": "\nlet state = flow.get('resend_state');\nlet tempS = flow.get('resend_temp');\nlet fanS  = flow.get('resend_fan');\n\nif (msg.from_mqtt === true) {\n    \n    let msg3 = null;\n    \n    // Resend message if setting was not applied\n    if (fanS !== undefined) {\n        let fan = flow.get('fan');\n        if (fan === fanS) {\n            //node.warn(`match fan ${fan}`)\n            flow.set('resend_fan', undefined);\n        }\n        else {\n            //node.warn(`resend fan ${fanS}`)\n            flow.set('fan', fanS);\n            msg3 = { payload: true};\n        }\n    }\n    if (tempS !== undefined) {\n        let temp = flow.get('temp');\n        if (temp === tempS) {\n            //node.warn(`match temp ${temp}`)\n            flow.set('resend_temp', undefined);\n        }\n        else {\n            //node.warn(`resend temp ${tempS}`)\n            flow.set('temp', tempS);\n            msg3 = { payload: true};\n        }\n    }\n    if (state !== undefined) {\n        if (msg.payload === state) {\n            //node.warn('match switch')\n            flow.set('resend_state', undefined)\n        }\n        else if (state == true) {\n            //node.warn('resend switch on')\n            msg3 = { payload: true};\n        }\n        else {\n            //node.warn('resend switch off')\n            msg3 = { payload: false};\n        }\n    }\n        \n    //node.warn(`msg3 = ${msg3}`)\n    return [null, null, msg3];\n    \n}\nelse if (msg.payload === true) {\n    \n    flow.set('switch', true);\n    flow.set('resend_state', true);\n    \n    let temp = flow.get('temp');\n    let fan = flow.get('fan');\n    \n    if (temp === undefined) {\n        temp = 20;\n    }\n    \n    if (fan === undefined) {\n        fan = \"eco\";\n    }\n\n    // Prepare two different messages\n    let msg1 = { payload: temp };  // Message for the first output\n    let msg2 = { payload: fan };  // Message for the second output\n    return [msg1, msg2, null];\n\n}\nelse {\n    \n    flow.set('switch', false);\n    flow.set('resend_state', false);\n    \n    let msg1 = {payload: 0}\n    let msg2 = { payload: \"off\" };\n    return [msg1, msg2, null];\n    \n}\n    \n",
+        "func": "\nlet swR   = flow.get('resend_sw');\nlet tempR = flow.get('resend_temp');\nlet fanR  = flow.get('resend_fan');\n\nconst DEBUG = false;\n\nif (msg.from_mqtt === true) {\n    \n    let msg3 = null;\n    \n    // Resend message if setting was not applied\n    \n    if (tempR !== undefined) {\n        let temp = flow.get('temp');\n        if (temp === tempR.value) {\n            if (DEBUG) node.warn(`match temp ${temp} ${tempR.attempts}`)\n            tempR.attempts -= 1;\n            if (tempR.attempts === 0) {\n                flow.set('resend_temp', undefined);\n            }\n        }\n        else {\n            if (DEBUG) node.warn(`resend temp ${tempR.value}`)\n            flow.set('temp', tempR.value);\n            msg3 = { payload: true};\n        }\n    }\n    \n    if (fanR !== undefined) {\n        let fan = flow.get('fan');\n        if (fan === fanR.value) {\n            if (DEBUG) node.warn(`match fan ${fan} ${fanR.attempts}`)\n            fanR.attempts -= 1;\n            if (fanR.attempts === 0) {\n                flow.set('resend_fan', undefined);\n            }\n        }\n        else {\n            if (DEBUG) node.warn(`resend fan ${fanR.value}`)\n            flow.set('fan', fanR.value);\n            msg3 = { payload: true};\n        }\n    }\n\n    if (swR !== undefined) {\n        if (msg.payload === swR.value) {\n            if (DEBUG) node.warn(`match switch ${msg.payload} ${swR.attempts}`)\n            swR.attempts -= 1;\n            if (swR.attempts === 0 ) {\n                flow.set('resend_sw', undefined);\n            }\n        }\n        else if (swR.value === true) {\n            if (DEBUG) node.warn('resend switch on')\n            msg3 = { payload: true};\n        }\n        else {\n            if (DEBUG) node.warn('resend switch off')\n            msg3 = { payload: false};\n        }\n    }\n        \n    if (DEBUG) node.warn(`msg3 = ${msg3}`)\n    return [null, null, msg3];\n    \n}\nelse if (msg.payload === true) {\n    \n    flow.set('switch', true);\n    flow.set('resend_sw', {value: true, attempts: 1});\n    \n    let temp = flow.get('temp');\n    let fan = flow.get('fan');\n    \n    if (temp === undefined) {\n        temp = 20;\n    }\n    \n    if (fan === undefined) {\n        fan = \"eco\";\n    }\n\n    // Prepare two different messages\n    let msg1 = { payload: temp }; // Message for the first output\n    let msg2 = { payload: fan };  // Message for the second output\n    return [msg1, msg2, null];\n\n}\nelse {\n    \n    flow.set('switch', false);\n    flow.set('resend_sw', {value: false, attempts: 1});\n    \n    let msg1 = {payload: 0}\n    let msg2 = { payload: \"off\" };\n    return [msg1, msg2, null];\n    \n}\n    \n",
         "outputs": 3,
         "timeout": 0,
         "noerr": 0,
@@ -2053,7 +2182,7 @@
         "z": "391f51e7377c8273",
         "group": "ab3a9f0b2e4b8d1b",
         "name": "Red error",
-        "order": 7,
+        "order": 8,
         "width": 0,
         "height": 0,
         "format": "\n<style>\n.red {\n    color: red !important;\n    font-weight: bold;\n}\n</style>\n\n<script>\n(function(scope) {\n    scope.$watch('msg.payload', function(value) {\n        const controls = document.querySelectorAll('.red-error');\n        controls.forEach(el => {\n            if (value === 0) {\n                el.classList.remove('red');\n            } else {\n                el.classList.add('red');\n            }\n        });\n    });\n})(scope);\n</script>\n",
@@ -2215,7 +2344,7 @@
             }
         ],
         "payload": "",
-        "topic": "fan",
+        "topic": "temp",
         "topicType": "str",
         "className": "grayout-target",
         "x": 565,
@@ -2241,7 +2370,7 @@
         "correl": "",
         "expiry": "",
         "broker": "2c24d1c82633c69e",
-        "x": 1030,
+        "x": 1110,
         "y": 200,
         "wires": []
     },
@@ -2259,7 +2388,7 @@
         "correl": "",
         "expiry": "",
         "broker": "2c24d1c82633c69e",
-        "x": 1030,
+        "x": 1110,
         "y": 260,
         "wires": []
     },
@@ -2277,8 +2406,8 @@
         "correl": "",
         "expiry": "",
         "broker": "2c24d1c82633c69e",
-        "x": 1050,
-        "y": 320,
+        "x": 1130,
+        "y": 360,
         "wires": []
     },
     {
@@ -2295,8 +2424,8 @@
         "correl": "",
         "expiry": "",
         "broker": "2c24d1c82633c69e",
-        "x": 1030,
-        "y": 380,
+        "x": 1110,
+        "y": 420,
         "wires": []
     },
     {
@@ -2313,8 +2442,8 @@
         "correl": "",
         "expiry": "",
         "broker": "2c24d1c82633c69e",
-        "x": 1020,
-        "y": 440,
+        "x": 1100,
+        "y": 480,
         "wires": []
     },
     {
@@ -2378,7 +2507,8 @@
         "y": 320,
         "wires": [
             [
-                "8ede93c0d2432a6d"
+                "8ede93c0d2432a6d",
+                "f0175d17d4a0976c"
             ]
         ]
     },
@@ -2396,10 +2526,11 @@
         "rh": 0,
         "inputs": 0,
         "x": 160,
-        "y": 380,
+        "y": 400,
         "wires": [
             [
-                "972e3c74b98cbe54"
+                "972e3c74b98cbe54",
+                "523472ab5e70eada"
             ]
         ]
     },
@@ -2417,10 +2548,11 @@
         "rh": 0,
         "inputs": 0,
         "x": 160,
-        "y": 440,
+        "y": 460,
         "wires": [
             [
-                "10115e6f55d68ea4"
+                "10115e6f55d68ea4",
+                "f445d08b3d6cca0a"
             ]
         ]
     },
@@ -2516,7 +2648,7 @@
         "type": "ui_text",
         "z": "391f51e7377c8273",
         "group": "ab3a9f0b2e4b8d1b",
-        "order": 3,
+        "order": 4,
         "width": 0,
         "height": 0,
         "name": "",
@@ -2538,7 +2670,7 @@
         "z": "391f51e7377c8273",
         "group": "ab3a9f0b2e4b8d1b",
         "name": "Red conn. status",
-        "order": 6,
+        "order": 7,
         "width": 0,
         "height": 0,
         "format": "\n<style>\n.red {\n    color: red !important;\n    font-weight: bold;\n}\n</style>\n\n<script>\n(function(scope) {\n    scope.$watch('msg.payload', function(value) {\n        const controls = document.querySelectorAll('.red-conn-status');\n        controls.forEach(el => {\n            if (value === \"OFF\") {\n                el.classList.add('red');\n            } else {\n                el.classList.remove('red');\n            }\n        });\n    });\n})(scope);\n</script>\n",
@@ -2558,7 +2690,7 @@
         "type": "function",
         "z": "391f51e7377c8273",
         "name": "Set temp.",
-        "func": "\nlet temp = msg.payload\n\nif (temp === 0){\n    let msg1 = {payload: false, from_mqtt: true};\n    return msg1;\n}\nelse {\n    flow.set(\"temp\", temp);\n    let msg1 = {payload: true, from_mqtt: true};\n    return msg1;\n}\n",
+        "func": "\nlet temp = msg.payload\n\nif (temp !== 0){\n    flow.set(\"temp\", temp);\n}\n\nflow.set('tempWasSet', true);",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -2568,9 +2700,7 @@
         "x": 340,
         "y": 180,
         "wires": [
-            [
-                "7df678563a819cc4"
-            ]
+            []
         ]
     },
     {
@@ -2578,7 +2708,7 @@
         "type": "function",
         "z": "391f51e7377c8273",
         "name": "Set fan",
-        "func": "\nlet fan = msg.payload\n\nif (fan !== \"off\"){\n\n    flow.set(\"fan\", fan);\n}\n",
+        "func": "\nlet tempWasSet = flow.get('tempWasSet');\n\nlet fan = msg.payload;\n\n\nif (tempWasSet === true) {\n    \n    flow.set('tempWasSet', false);\n    \n    if (fan === 'off'){\n        let msg1 = {payload: false, from_mqtt: true};\n        return msg1;\n    }\n    else {\n        flow.set('fan', fan);\n        let msg1 = {payload: true, from_mqtt: true};\n        return msg1;\n    }\n}",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -2588,7 +2718,9 @@
         "x": 340,
         "y": 240,
         "wires": [
-            []
+            [
+                "7df678563a819cc4"
+            ]
         ]
     },
     {
@@ -2596,7 +2728,7 @@
         "type": "function",
         "z": "391f51e7377c8273",
         "name": "Alarm",
-        "func": "\nlet val = msg.payload;\n\nlet lastAlarm = context.get('lastAlarm') || false;\nlet alarm;\n\nif (val != 0) {\n    alarm = val;\n}\nelse {\n    alarm = false;\n}\n\nif (alarm && alarm != lastAlarm) {\n    context.set('lastAlarm', alarm);\n    msg.payload = `⚠️ Caravan alert!\\nTruma error code: ${val}`;\n    node.warn(msg.payload);\n    return msg;\n}\nelse {\n    context.set('lastAlarm', alarm);\n    return null;\n}\n\n",
+        "func": "\nlet val = msg.payload;\n\nlet lastAlarm = context.get('lastAlarm') || false;\nlet alarm = false;\n\nif (val != 0) {\n    alarm = val;\n}\nelse {\n    alarm = false;\n    context.set('lastAlarm', alarm);\n}\n\nif (alarm && alarm != lastAlarm) {\n    context.set('lastAlarm', alarm);\n    msg.payload = `⚠️ Caravan alert!\\nTruma error code: ${val}`;\n    node.warn(msg.payload);\n    return msg;\n}\nelse {\n    return null;\n}\n\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -2623,5 +2755,65 @@
         "x": 625,
         "y": 860,
         "wires": []
+    },
+    {
+        "id": "523472ab5e70eada",
+        "type": "function",
+        "z": "391f51e7377c8273",
+        "name": "Resend",
+        "func": "\n// Resend the message if setting has not been applied\n\nstate = context.get('state');\n\nconst DEBUG = false;\n\nif (msg.topic === 'mix') {\n   \n    if (DEBUG) node.warn(`Sent ${msg.payload}`);\n    context.set('state', msg.payload);\n    return msg;\n}\nelse {\n    \n    if (state !== undefined) {\n    \n        if (msg.payload === state) {\n            if (DEBUG) node.warn(`Match ${msg.payload}`);\n            context.set('state', undefined);\n            return null;\n        }\n        else {\n            msg.payload = state;\n            if (DEBUG) node.warn(`Resend ${msg.payload}`);\n            return msg;\n        }\n        \n    }\n    \n}\n\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 960,
+        "y": 420,
+        "wires": [
+            [
+                "e123175452a0c255"
+            ]
+        ]
+    },
+    {
+        "id": "f445d08b3d6cca0a",
+        "type": "function",
+        "z": "391f51e7377c8273",
+        "name": "Resend",
+        "func": "\n// Resend the message if setting has not been applied\n\nstate = context.get('state');\n\nconst DEBUG = false;\n\nif (msg.topic === 'mix') {\n   \n    if (DEBUG) node.warn(`Sent ${msg.payload}`);\n    context.set('state', msg.payload);\n    return msg;\n}\nelse {\n    \n    if (state !== undefined) {\n    \n        if (msg.payload === state) {\n            if (DEBUG) node.warn(`Match ${msg.payload}`);\n            context.set('state', undefined);\n            return null;\n        }\n        else {\n            msg.payload = state;\n            if (DEBUG) node.warn(`Resend ${msg.payload}`);\n            return msg;\n        }\n        \n    }\n    \n}\n\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 960,
+        "y": 480,
+        "wires": [
+            [
+                "864ec9dedede4187"
+            ]
+        ]
+    },
+    {
+        "id": "f0175d17d4a0976c",
+        "type": "function",
+        "z": "391f51e7377c8273",
+        "name": "Resend",
+        "func": "\n// Resend the message if setting has not been applied\n\nstate = context.get('state');\n\nconst DEBUG = false;\n\nif (msg.topic === 'water') {\n   \n    if (DEBUG) node.warn(`Sent ${msg.payload}`);\n    context.set('state', msg.payload);\n    return msg;\n}\nelse {\n    \n    if (state !== undefined) {\n    \n        if (msg.payload === state) {\n            if (DEBUG) node.warn(`Match ${msg.payload}`);\n            context.set('state', undefined);\n            return null;\n        }\n        else {\n            msg.payload = state;\n            if (DEBUG) node.warn(`Resend ${msg.payload}`);\n            return msg;\n        }\n        \n    }\n    \n}\n\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 960,
+        "y": 360,
+        "wires": [
+            [
+                "d447a46d234eb48e"
+            ]
+        ]
     }
 ]
