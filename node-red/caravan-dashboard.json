@@ -273,6 +273,36 @@
         "className": ""
     },
     {
+        "id": "80881962d1dfdf8f",
+        "type": "ui_spacer",
+        "z": "2561d49b29c858c7",
+        "name": "spacer",
+        "group": "cf4c6771afb43982",
+        "order": 10,
+        "width": 6,
+        "height": 1
+    },
+    {
+        "id": "4d41c088558ac93e",
+        "type": "ui_spacer",
+        "z": "2561d49b29c858c7",
+        "name": "spacer",
+        "group": "cf4c6771afb43982",
+        "order": 11,
+        "width": 6,
+        "height": 1
+    },
+    {
+        "id": "1568aa8c26424a2b",
+        "type": "ui_spacer",
+        "z": "2561d49b29c858c7",
+        "name": "spacer",
+        "group": "cf4c6771afb43982",
+        "order": 12,
+        "width": 6,
+        "height": 1
+    },
+    {
         "id": "941135a1b6edb738",
         "type": "ui_template",
         "z": "37a752f35a68bbed",
@@ -985,8 +1015,8 @@
         "title": "CPU",
         "label": "°C",
         "format": "{{value}}",
-        "min": 0,
-        "max": "80",
+        "min": "-10",
+        "max": "90",
         "colors": [
             "#00b500",
             "#e6e600",
@@ -1142,7 +1172,7 @@
         "z": "2561d49b29c858c7",
         "name": "",
         "group": "cf4c6771afb43982",
-        "order": 7,
+        "order": 6,
         "width": 3,
         "height": 3,
         "gtype": "donut",
@@ -1161,7 +1191,7 @@
         "diff": false,
         "className": "",
         "x": 790,
-        "y": 360,
+        "y": 280,
         "wires": []
     },
     {
@@ -1183,7 +1213,7 @@
         "onlyChanges": false,
         "roundValues": "1",
         "x": 150,
-        "y": 360,
+        "y": 280,
         "wires": [
             [
                 "62eeb5d5f6feb245"
@@ -1224,7 +1254,7 @@
         "finalize": "",
         "libs": [],
         "x": 510,
-        "y": 360,
+        "y": 280,
         "wires": [
             [
                 "24ad0f6f10a8086e",
@@ -1355,7 +1385,7 @@
         "type": "ui_text",
         "z": "2561d49b29c858c7",
         "group": "cf4c6771afb43982",
-        "order": 10,
+        "order": 13,
         "width": 6,
         "height": 1,
         "name": "",
@@ -1386,7 +1416,7 @@
         "rh": 0,
         "inputs": 0,
         "x": 130,
-        "y": 280,
+        "y": 360,
         "wires": [
             [
                 "61d5e98a72313d26"
@@ -1399,15 +1429,15 @@
         "z": "2561d49b29c858c7",
         "name": "",
         "group": "cf4c6771afb43982",
-        "order": 6,
+        "order": 7,
         "width": 3,
         "height": 3,
         "gtype": "donut",
         "title": "Water",
         "label": "°C",
         "format": "{{value}}",
-        "min": 0,
-        "max": "80",
+        "min": "-10",
+        "max": "90",
         "colors": [
             "#00b500",
             "#e6e600",
@@ -1418,7 +1448,7 @@
         "diff": false,
         "className": "",
         "x": 790,
-        "y": 280,
+        "y": 360,
         "wires": []
     },
     {
@@ -1434,7 +1464,7 @@
         "finalize": "",
         "libs": [],
         "x": 510,
-        "y": 280,
+        "y": 360,
         "wires": [
             [
                 "e7fa40a69f3f7e54",
@@ -1460,7 +1490,7 @@
         "type": "function",
         "z": "2561d49b29c858c7",
         "name": "Alarm",
-        "func": "\nlet val = msg.payload;\n\nlet low  = 15;\nlet high = 25;\nlet thr  = 1;\n\nlet lastAlarm = context.get('lastAlarm') || false;\nlet alarm = false;\n\nif (val < low) {\n    alarm = 'low';\n}\nelse if (val > high) {\n    alarm = 'high';\n}\nelse if (val > low + thr && val < high - thr) {\n    alarm = false;\n    context.set('lastAlarm', alarm);\n}\n\nif (alarm && alarm != lastAlarm) {\n    context.set('lastAlarm', alarm);\n    msg.payload = `⚠️ Caravan alert!\\nIndoor temperature: ${val} °C`;\n    node.warn(msg.payload);\n    return msg;\n}\nelse {\n    return null;\n}\n\n",
+        "func": "\nlet val = msg.payload;\n\nlet low  = 0;\nlet high = 30;\nlet thr  = 1;\n\nlet lastAlarm = context.get('lastAlarm') || false;\nlet alarm = false;\n\nif (val < low) {\n    alarm = 'low';\n}\nelse if (val > high) {\n    alarm = 'high';\n}\nelse if (val > low + thr && val < high - thr) {\n    alarm = false;\n    context.set('lastAlarm', alarm);\n}\n\nif (alarm && alarm != lastAlarm) {\n    context.set('lastAlarm', alarm);\n    msg.payload = `⚠️ Caravan alert!\\nOutdoor temperature: ${val} °C`;\n    node.warn(msg.payload);\n    return msg;\n}\nelse {\n    return null;\n}\n\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -1523,7 +1553,7 @@
         "finalize": "",
         "libs": [],
         "x": 650,
-        "y": 400,
+        "y": 320,
         "wires": [
             [
                 "f59d101299f0716e"
@@ -1540,7 +1570,7 @@
             "2f93affb367a865e"
         ],
         "x": 755,
-        "y": 400,
+        "y": 320,
         "wires": []
     },
     {
@@ -1619,7 +1649,7 @@
             "2f93affb367a865e"
         ],
         "x": 755,
-        "y": 320,
+        "y": 400,
         "wires": []
     },
     {
@@ -1635,7 +1665,7 @@
         "finalize": "",
         "libs": [],
         "x": 650,
-        "y": 320,
+        "y": 400,
         "wires": [
             [
                 "335af24ca01463cb"
@@ -1689,7 +1719,7 @@
         "type": "function",
         "z": "2561d49b29c858c7",
         "name": "Alarm",
-        "func": "\nlet val = msg.payload;\n\nlet low  = 0;\nlet high = 30;\nlet thr  = 1;\n\nlet lastAlarm = context.get('lastAlarm') || false;\nlet alarm = false;\n\nif (val < low) {\n    alarm = 'low';\n}\nelse if (val > high) {\n    alarm = 'high';\n}\nelse if (val > low + thr && val < high - thr) {\n    alarm = false;\n    context.set('lastAlarm', alarm);\n}\n\nif (alarm && alarm != lastAlarm) {\n    context.set('lastAlarm', alarm);\n    msg.payload = `⚠️ Caravan alert!\\nOutdoor temperature: ${val} °C`;\n    node.warn(msg.payload);\n    return msg;\n}\nelse {\n    return null;\n}\n\n",
+        "func": "\nlet val = msg.payload;\n\nlet low  = 10;\nlet high = 25;\nlet thr  = 1;\n\nlet lastAlarm = context.get('lastAlarm') || false;\nlet alarm = false;\n\nif (val < low) {\n    alarm = 'low';\n}\nelse if (val > high) {\n    alarm = 'high';\n}\nelse if (val > low + thr && val < high - thr) {\n    alarm = false;\n    context.set('lastAlarm', alarm);\n}\n\nif (alarm && alarm != lastAlarm) {\n    context.set('lastAlarm', alarm);\n    msg.payload = `⚠️ Caravan alert!\\nIndoor temperature: ${val} °C`;\n    node.warn(msg.payload);\n    return msg;\n}\nelse {\n    return null;\n}\n\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -1810,12 +1840,13 @@
         "payload": "",
         "topic": "fan",
         "topicType": "str",
-        "className": "grayout-target",
+        "className": "grayout-target fan-target",
         "x": 565,
-        "y": 260,
+        "y": 300,
         "wires": [
             [
-                "7dcb693e456897db"
+                "7dcb693e456897db",
+                "bce2301e12d1e263"
             ]
         ],
         "l": false
@@ -1854,13 +1885,14 @@
         "payload": "",
         "topic": "water",
         "topicType": "str",
-        "className": "",
+        "className": "water-target",
         "x": 565,
-        "y": 320,
+        "y": 400,
         "wires": [
             [
                 "c71fb3d32cdf6139",
-                "f0175d17d4a0976c"
+                "f0175d17d4a0976c",
+                "c8759ddbb78783e0"
             ]
         ],
         "l": false
@@ -1909,12 +1941,13 @@
         "payload": "",
         "topic": "mix",
         "topicType": "str",
-        "className": "grayout-target-2",
+        "className": "grayout-target-2 mix-target",
         "x": 565,
-        "y": 380,
+        "y": 520,
         "wires": [
             [
-                "8c25986c65998ad3"
+                "8c25986c65998ad3",
+                "141ce33d897ac41a"
             ]
         ],
         "l": false
@@ -1937,7 +1970,7 @@
         "fontSize": 16,
         "color": "#000000",
         "x": 550,
-        "y": 560,
+        "y": 740,
         "wires": []
     },
     {
@@ -1958,7 +1991,7 @@
         "fontSize": 16,
         "color": "#000000",
         "x": 550,
-        "y": 620,
+        "y": 800,
         "wires": []
     },
     {
@@ -1979,7 +2012,7 @@
         "fontSize": 16,
         "color": "#000000",
         "x": 530,
-        "y": 780,
+        "y": 960,
         "wires": []
     },
     {
@@ -2037,7 +2070,7 @@
         "finalize": "",
         "libs": [],
         "x": 740,
-        "y": 380,
+        "y": 520,
         "wires": [
             [
                 "523472ab5e70eada"
@@ -2066,7 +2099,7 @@
         "fontSize": 16,
         "color": "#000000",
         "x": 510,
-        "y": 920,
+        "y": 1100,
         "wires": [],
         "info": "Dummy block used as a spacer"
     },
@@ -2075,7 +2108,7 @@
         "type": "function",
         "z": "391f51e7377c8273",
         "name": "Set temp.",
-        "func": "\nflow.set(\"temp\", msg.payload);\nflow.set('resend_temp', {value: msg.payload, attempts: 1});\n\nlet sw = flow.get(\"switch\");\n\nif (sw === true){\n    let msg1 = {payload: msg.payload};\n    return msg1;\n}\nelse {\n    return null;\n}",
+        "func": "\nflow.set(\"temp\", msg.payload);\nflow.set('resend_temp', {value: msg.payload, attempts: 1});\n\nlet sw = flow.get(\"switch\");\n\nif (sw === true){\n    return msg;\n}\nelse {\n    return null;\n}",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -2095,7 +2128,7 @@
         "type": "function",
         "z": "391f51e7377c8273",
         "name": "Set fan",
-        "func": "\nflow.set(\"fan\", msg.payload);\nflow.set('resend_fan', {value: msg.payload, attempts: 1});\n\nlet sw = flow.get(\"switch\");\n\nif (sw === true){\n    let msg1 = {payload: msg.payload};\n    return msg1;\n}\nelse {\n    return null;\n}",
+        "func": "\nflow.set(\"fan\", msg.payload);\nflow.set('resend_fan', {value: msg.payload, attempts: 1});\n\nlet sw = flow.get(\"switch\");\n\nif (sw === true){\n    return msg;\n}\nelse {\n    return null;\n}",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -2103,7 +2136,7 @@
         "finalize": "",
         "libs": [],
         "x": 720,
-        "y": 260,
+        "y": 300,
         "wires": [
             [
                 "2dd8bdbb19a99a93"
@@ -2149,10 +2182,11 @@
         "finalize": "",
         "libs": [],
         "x": 420,
-        "y": 380,
+        "y": 520,
         "wires": [
             [
-                "c268d215c0a29312"
+                "c268d215c0a29312",
+                "141ce33d897ac41a"
             ]
         ]
     },
@@ -2169,10 +2203,11 @@
         "finalize": "",
         "libs": [],
         "x": 420,
-        "y": 440,
+        "y": 620,
         "wires": [
             [
-                "c268d215c0a29312"
+                "c268d215c0a29312",
+                "141ce33d897ac41a"
             ]
         ]
     },
@@ -2192,7 +2227,7 @@
         "templateScope": "local",
         "className": "",
         "x": 520,
-        "y": 820,
+        "y": 1000,
         "wires": [
             []
         ]
@@ -2346,12 +2381,13 @@
         "payload": "",
         "topic": "temp",
         "topicType": "str",
-        "className": "grayout-target",
+        "className": "grayout-target temp-target",
         "x": 565,
         "y": 200,
         "wires": [
             [
-                "6f65acc61017824f"
+                "6f65acc61017824f",
+                "783ddd3bdb365462"
             ]
         ],
         "l": false
@@ -2389,7 +2425,7 @@
         "expiry": "",
         "broker": "2c24d1c82633c69e",
         "x": 1110,
-        "y": 260,
+        "y": 300,
         "wires": []
     },
     {
@@ -2407,7 +2443,7 @@
         "expiry": "",
         "broker": "2c24d1c82633c69e",
         "x": 1130,
-        "y": 360,
+        "y": 440,
         "wires": []
     },
     {
@@ -2425,7 +2461,7 @@
         "expiry": "",
         "broker": "2c24d1c82633c69e",
         "x": 1110,
-        "y": 420,
+        "y": 560,
         "wires": []
     },
     {
@@ -2443,7 +2479,7 @@
         "expiry": "",
         "broker": "2c24d1c82633c69e",
         "x": 1100,
-        "y": 480,
+        "y": 660,
         "wires": []
     },
     {
@@ -2464,7 +2500,8 @@
         "wires": [
             [
                 "555b5779bdb6e92a",
-                "c1037947af34c107"
+                "c1037947af34c107",
+                "783ddd3bdb365462"
             ]
         ]
     },
@@ -2482,11 +2519,12 @@
         "rh": 0,
         "inputs": 0,
         "x": 160,
-        "y": 260,
+        "y": 300,
         "wires": [
             [
                 "f6d22ec56a889695",
-                "9a83d7ea5409cbf9"
+                "9a83d7ea5409cbf9",
+                "bce2301e12d1e263"
             ]
         ]
     },
@@ -2504,11 +2542,12 @@
         "rh": 0,
         "inputs": 0,
         "x": 190,
-        "y": 320,
+        "y": 400,
         "wires": [
             [
                 "8ede93c0d2432a6d",
-                "f0175d17d4a0976c"
+                "f0175d17d4a0976c",
+                "c8759ddbb78783e0"
             ]
         ]
     },
@@ -2526,7 +2565,7 @@
         "rh": 0,
         "inputs": 0,
         "x": 160,
-        "y": 400,
+        "y": 540,
         "wires": [
             [
                 "972e3c74b98cbe54",
@@ -2548,7 +2587,7 @@
         "rh": 0,
         "inputs": 0,
         "x": 160,
-        "y": 460,
+        "y": 640,
         "wires": [
             [
                 "10115e6f55d68ea4",
@@ -2570,7 +2609,7 @@
         "rh": 0,
         "inputs": 0,
         "x": 190,
-        "y": 560,
+        "y": 740,
         "wires": [
             [
                 "6427f73155b45c3a"
@@ -2591,7 +2630,7 @@
         "rh": 0,
         "inputs": 0,
         "x": 190,
-        "y": 620,
+        "y": 800,
         "wires": [
             [
                 "3dd9c191a2d56f94"
@@ -2612,7 +2651,7 @@
         "rh": 0,
         "inputs": 0,
         "x": 160,
-        "y": 780,
+        "y": 960,
         "wires": [
             [
                 "6192907fb799f322",
@@ -2635,7 +2674,7 @@
         "rh": 0,
         "inputs": 0,
         "x": 190,
-        "y": 680,
+        "y": 860,
         "wires": [
             [
                 "79e231be0eadd912",
@@ -2661,7 +2700,7 @@
         "fontSize": 16,
         "color": "#000000",
         "x": 550,
-        "y": 680,
+        "y": 860,
         "wires": []
     },
     {
@@ -2680,7 +2719,7 @@
         "templateScope": "local",
         "className": "",
         "x": 550,
-        "y": 720,
+        "y": 900,
         "wires": [
             []
         ]
@@ -2736,7 +2775,7 @@
         "finalize": "",
         "libs": [],
         "x": 510,
-        "y": 860,
+        "y": 1040,
         "wires": [
             [
                 "f8b062643e6b87e5"
@@ -2753,7 +2792,7 @@
             "2f93affb367a865e"
         ],
         "x": 625,
-        "y": 860,
+        "y": 1040,
         "wires": []
     },
     {
@@ -2769,7 +2808,7 @@
         "finalize": "",
         "libs": [],
         "x": 960,
-        "y": 420,
+        "y": 560,
         "wires": [
             [
                 "e123175452a0c255"
@@ -2789,7 +2828,7 @@
         "finalize": "",
         "libs": [],
         "x": 960,
-        "y": 480,
+        "y": 660,
         "wires": [
             [
                 "864ec9dedede4187"
@@ -2809,11 +2848,95 @@
         "finalize": "",
         "libs": [],
         "x": 960,
-        "y": 360,
+        "y": 440,
         "wires": [
             [
                 "d447a46d234eb48e"
             ]
+        ]
+    },
+    {
+        "id": "783ddd3bdb365462",
+        "type": "ui_template",
+        "z": "391f51e7377c8273",
+        "group": "9b3a8c49293c5c6a",
+        "name": "Bold temp",
+        "order": 7,
+        "width": 0,
+        "height": 0,
+        "format": "<style>\n.bold {\n    font-weight: bold;\n}\n</style>\n\n<script>\n(function(scope) {\n    scope.$watch('msg.topic', function(value) {\n        const controls = document.querySelectorAll('.temp-target');\n        controls.forEach(el => {\n            if (value === 'temp') {\n                el.classList.add('bold');\n            } else {\n                el.classList.remove('bold');\n            }\n        });\n    });\n})(scope);\n</script>\n",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 730,
+        "y": 240,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "bce2301e12d1e263",
+        "type": "ui_template",
+        "z": "391f51e7377c8273",
+        "group": "9b3a8c49293c5c6a",
+        "name": "Bold fan",
+        "order": 7,
+        "width": 0,
+        "height": 0,
+        "format": "<style>\n.bold {\n    font-weight: bold;\n}\n</style>\n\n<script>\n(function(scope) {\n    scope.$watch('msg.topic', function(value) {\n        const controls = document.querySelectorAll('.fan-target');\n        controls.forEach(el => {\n            if (value === 'fan') {\n                el.classList.add('bold');\n            } else {\n                el.classList.remove('bold');\n            }\n        });\n    });\n})(scope);\n</script>\n",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 720,
+        "y": 340,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "c8759ddbb78783e0",
+        "type": "ui_template",
+        "z": "391f51e7377c8273",
+        "group": "9b3a8c49293c5c6a",
+        "name": "Bold water",
+        "order": 7,
+        "width": 0,
+        "height": 0,
+        "format": "<style>\n.bold {\n    font-weight: bold;\n}\n</style>\n\n<script>\n(function(scope) {\n    scope.$watch('msg.topic', function(value) {\n        const controls = document.querySelectorAll('.water-target');\n        controls.forEach(el => {\n            if (value === 'water') {\n                el.classList.add('bold');\n            } else {\n                el.classList.remove('bold');\n            }\n        });\n    });\n})(scope);\n</script>\n",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 730,
+        "y": 460,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "141ce33d897ac41a",
+        "type": "ui_template",
+        "z": "391f51e7377c8273",
+        "group": "9b3a8c49293c5c6a",
+        "name": "Bold mix",
+        "order": 7,
+        "width": 0,
+        "height": 0,
+        "format": "<style>\n.bold {\n    font-weight: bold;\n}\n</style>\n\n<script>\n(function(scope) {\n    scope.$watch('msg.topic', function(value) {\n        const controls = document.querySelectorAll('.mix-target');\n        controls.forEach(el => {\n            if (value === 'mix') {\n                el.classList.add('bold');\n            } else {\n                el.classList.remove('bold');\n            }\n        });\n    });\n})(scope);\n</script>\n",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 720,
+        "y": 580,
+        "wires": [
+            []
         ]
     }
 ]
