@@ -2099,7 +2099,7 @@
         "fontSize": 16,
         "color": "#000000",
         "x": 510,
-        "y": 1100,
+        "y": 1080,
         "wires": [],
         "info": "Dummy block used as a spacer"
     },
@@ -2226,8 +2226,8 @@
         "resendOnRefresh": true,
         "templateScope": "local",
         "className": "",
-        "x": 520,
-        "y": 1000,
+        "x": 340,
+        "y": 1020,
         "wires": [
             []
         ]
@@ -2654,9 +2654,8 @@
         "y": 960,
         "wires": [
             [
-                "6192907fb799f322",
-                "97600a7142d22145",
-                "cf6b3e9d9b5ca767"
+                "41c6c5947e4f9cf9",
+                "97600a7142d22145"
             ]
         ]
     },
@@ -2767,7 +2766,7 @@
         "type": "function",
         "z": "391f51e7377c8273",
         "name": "Alarm",
-        "func": "\nlet val = msg.payload;\n\nlet lastAlarm = context.get('lastAlarm') || false;\nlet alarm = false;\n\nif (val != 0) {\n    alarm = val;\n}\nelse {\n    alarm = false;\n    context.set('lastAlarm', alarm);\n}\n\nif (alarm && alarm != lastAlarm) {\n    context.set('lastAlarm', alarm);\n    msg.payload = `⚠️ Caravan alert!\\nTruma error code: ${val}`;\n    node.warn(msg.payload);\n    return msg;\n}\nelse {\n    return null;\n}\n\n",
+        "func": "\nlet val = msg.payload;\n\nlet lastAlarm = context.get('lastAlarm') || false;\nlet alarm = false;\n\nif (val != 'OK') {\n    alarm = val;\n}\nelse {\n    alarm = false;\n    context.set('lastAlarm', alarm);\n}\n\nif (alarm && alarm != lastAlarm) {\n    context.set('lastAlarm', alarm);\n    msg.payload = `⚠️ Caravan alert!\\nTruma error code:\\n${val}`;\n    node.warn(msg.payload);\n    return msg;\n}\nelse {\n    return null;\n}\n\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -2775,7 +2774,7 @@
         "finalize": "",
         "libs": [],
         "x": 510,
-        "y": 1040,
+        "y": 1000,
         "wires": [
             [
                 "f8b062643e6b87e5"
@@ -2791,8 +2790,8 @@
         "links": [
             "2f93affb367a865e"
         ],
-        "x": 625,
-        "y": 1040,
+        "x": 615,
+        "y": 1000,
         "wires": []
     },
     {
@@ -2937,6 +2936,27 @@
         "y": 580,
         "wires": [
             []
+        ]
+    },
+    {
+        "id": "41c6c5947e4f9cf9",
+        "type": "function",
+        "z": "391f51e7377c8273",
+        "name": "Decode error",
+        "func": "\nswitch (msg.payload) {\n    \n    case 0:\n        msg.payload = 'OK';\n        break;\n        \n    case 7:\n        msg.payload = '230V disconnected!';\n        break;\n    \n    case 8:\n        msg.payload = 'Gas interrupted (mix)!'\n        break;\n    \n    case 17:\n        msg.payload = 'Gas interrupted!'\n        break;\n}\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 350,
+        "y": 960,
+        "wires": [
+            [
+                "6192907fb799f322",
+                "cf6b3e9d9b5ca767"
+            ]
         ]
     }
 ]
