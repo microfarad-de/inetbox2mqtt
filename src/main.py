@@ -49,16 +49,16 @@ logging.basicConfig(
 
 log = logging.getLogger(__name__)
 
+
 # Global objects
 connect = None
 lin     = None
-
-# Delay reading update from LIN (seconds)
-update_delay = 0
+lock    = None
 
 
 # Release number
 REL_NO = "3.0.0"
+
 
 # Change the following configs to suit your environment
 TOPIC_ROOT = 'truma'
@@ -70,7 +70,8 @@ STA_PREFIX = 'service/' + TOPIC_ROOT + '/control_status/'
 # Universal callback function for all subscriptions
 async def callback(topic, msg, retained, qos):
     global connect
-    global update_delay
+    global lock
+
     log.debug(f"received: {topic}: {msg}")
     topic = str(topic)
     topic = topic[2:-1]
@@ -79,15 +80,13 @@ async def callback(topic, msg, retained, qos):
     # Command received from broker
     if topic.startswith(SET_PREFIX):
         topic = topic[len(SET_PREFIX):]
-#       log.info("Received command: "+str(topic)+" payload: "+str(msg))
         if topic in lin.app.status.keys():
             log.info("inet-key:"+str(topic)+" value: "+str(msg))
-            update_delay = 2
-            try:
-                lin.app.set_status(topic, msg)
-            except Exception as e:
-                log.debug(Exception(e))
-                # send via mqtt
+            async with lock:
+                try:
+                    lin.app.set_status(topic, msg)
+                except Exception as e:
+                    log.debug(Exception(e))
         else:
             log.debug("key is unknown")
 
@@ -103,17 +102,18 @@ async def conn_callback(client):
 # main publisher-loop
 async def main():
     global connect
-    global update_delay
+    global lock
 
     log.debug("main-loop is running")
 
     i = 0
     wd = False
     while True:
-        await asyncio.sleep(5)            # Set the update interval (seconds)
-        await asyncio.sleep(update_delay) # Addtional wait if a command was just sent
-        update_delay = 0
-        s = lin.app.get_all(True)
+        await asyncio.sleep(8)      # Set the update interval (seconds)
+        async with lock:
+            await asyncio.sleep(2)  # Wait to ensure the status buffer has been updated
+            s = lin.app.get_all(True)
+
         for key in s.keys():
             log.debug(f'publish {key}:{s[key]}')
             try:
@@ -126,7 +126,6 @@ async def main():
                 wd = True
         else:
             wd = False
-
 
         i += 1
         if not(i % 6):
@@ -146,6 +145,9 @@ async def lin_loop():
 
 
 async def ctrl_loop():
+    global lock
+    lock = asyncio.Lock()
+
     a=asyncio.create_task(main())
     b=asyncio.create_task(lin_loop())
 
