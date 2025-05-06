@@ -117,7 +117,7 @@
                 "accents": "blue",
                 "warn": "red",
                 "background": "grey",
-                "palette": "light"
+                "palette": "dark"
             }
         },
         "site": {
@@ -125,7 +125,7 @@
             "hideToolbar": "false",
             "allowSwipe": "true",
             "lockMenu": "false",
-            "allowTempTheme": "true",
+            "allowTempTheme": "false",
             "dateFormat": "DD.MM.YYYY",
             "sizes": {
                 "sx": 48,
@@ -271,36 +271,6 @@
         "width": "6",
         "collapse": false,
         "className": ""
-    },
-    {
-        "id": "80881962d1dfdf8f",
-        "type": "ui_spacer",
-        "z": "2561d49b29c858c7",
-        "name": "spacer",
-        "group": "cf4c6771afb43982",
-        "order": 10,
-        "width": 6,
-        "height": 1
-    },
-    {
-        "id": "4d41c088558ac93e",
-        "type": "ui_spacer",
-        "z": "2561d49b29c858c7",
-        "name": "spacer",
-        "group": "cf4c6771afb43982",
-        "order": 11,
-        "width": 6,
-        "height": 1
-    },
-    {
-        "id": "1568aa8c26424a2b",
-        "type": "ui_spacer",
-        "z": "2561d49b29c858c7",
-        "name": "spacer",
-        "group": "cf4c6771afb43982",
-        "order": 12,
-        "width": 6,
-        "height": 1
     },
     {
         "id": "941135a1b6edb738",
@@ -1385,7 +1355,7 @@
         "type": "ui_text",
         "z": "2561d49b29c858c7",
         "group": "cf4c6771afb43982",
-        "order": 13,
+        "order": 10,
         "width": 6,
         "height": 1,
         "name": "",
@@ -1719,7 +1689,7 @@
         "type": "function",
         "z": "2561d49b29c858c7",
         "name": "Alarm",
-        "func": "\nlet val = msg.payload;\n\nlet low  = 10;\nlet high = 25;\nlet thr  = 1;\n\nlet lastAlarm = context.get('lastAlarm') || false;\nlet alarm = false;\n\nif (val < low) {\n    alarm = 'low';\n}\nelse if (val > high) {\n    alarm = 'high';\n}\nelse if (val > low + thr && val < high - thr) {\n    alarm = false;\n    context.set('lastAlarm', alarm);\n}\n\nif (alarm && alarm != lastAlarm) {\n    context.set('lastAlarm', alarm);\n    msg.payload = `⚠️ Caravan alert!\\nIndoor temperature: ${val} °C`;\n    node.warn(msg.payload);\n    return msg;\n}\nelse {\n    return null;\n}\n\n",
+        "func": "\nlet val = msg.payload;\n\nlet low  = 5;\nlet high = 25;\nlet thr  = 1;\n\nlet lastAlarm = context.get('lastAlarm') || false;\nlet alarm = false;\n\nif (val < low) {\n    alarm = 'low';\n}\nelse if (val > high) {\n    alarm = 'high';\n}\nelse if (val > low + thr && val < high - thr) {\n    alarm = false;\n    context.set('lastAlarm', alarm);\n}\n\nif (alarm && alarm != lastAlarm) {\n    context.set('lastAlarm', alarm);\n    msg.payload = `⚠️ Caravan alert!\\nIndoor temperature: ${val} °C`;\n    node.warn(msg.payload);\n    return msg;\n}\nelse {\n    return null;\n}\n\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -2374,7 +2344,7 @@
         "z": "391f51e7377c8273",
         "name": "Temperature",
         "topic": "service/truma/set/target_temp_room",
-        "qos": "",
+        "qos": "2",
         "retain": "",
         "respTopic": "",
         "contentType": "",
@@ -2392,7 +2362,7 @@
         "z": "391f51e7377c8273",
         "name": "Fan setting",
         "topic": "service/truma/set/heating_mode",
-        "qos": "",
+        "qos": "2",
         "retain": "",
         "respTopic": "",
         "contentType": "",
@@ -2410,7 +2380,7 @@
         "z": "391f51e7377c8273",
         "name": "Water temperature",
         "topic": "service/truma/set/target_temp_water",
-        "qos": "",
+        "qos": "2",
         "retain": "",
         "respTopic": "",
         "contentType": "",
@@ -2428,7 +2398,7 @@
         "z": "391f51e7377c8273",
         "name": "Energy mix",
         "topic": "service/truma/set/energy_mix",
-        "qos": "",
+        "qos": "2",
         "retain": "",
         "respTopic": "",
         "contentType": "",
@@ -2446,7 +2416,7 @@
         "z": "391f51e7377c8273",
         "name": "El. power",
         "topic": "service/truma/set/el_power_level",
-        "qos": "",
+        "qos": "2",
         "retain": "",
         "respTopic": "",
         "contentType": "",
