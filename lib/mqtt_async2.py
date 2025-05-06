@@ -535,19 +535,15 @@ class MQTTClient():
             await self.disconnect() # whoops, someone called disconnect() while we were connecting
             raise OSError(-1, "disconnect while connecting")
         # If we get here without error broker/LAN must be up.
-        loop = asyncio.get_event_loop()
-        # Notify app that Wifi is up
-        #if self._c.wifi_coro is not None:
-        #    loop.create_task(self._c.wifi_coro(True))  # Notify app that Wifi is up
         # Start background coroutines that run until the user calls disconnect
         if self._conn_keeper is None:
-            self._conn_keeper = loop.create_task(self._keep_connected())
+            self._conn_keeper = asyncio.create_task(self._keep_connected())
         # Start background coroutines that quit on connection fail
-        loop.create_task(self._handle_msgs(self._proto))
-        loop.create_task(self._keep_alive(self._proto))
+        asyncio.create_task(self._handle_msgs(self._proto))
+        asyncio.create_task(self._keep_alive(self._proto))
         # Notify app that we're connceted and ready to roll
         if self._c.connect_coro is not None:
-            loop.create_task(self._c.connect_coro(self))
+            asyncio.create_task(self._c.connect_coro(self))
         log.debug("connected")
 
     async def disconnect(self):
@@ -639,9 +635,8 @@ class MQTTClient():
             log.debug("dead socket: %s failed (%s)", why, detail)
             await self._proto.disconnect() # should this be in a create_task() ?
             self._proto = None
-            loop = asyncio.get_event_loop()
             if self._c.wifi_coro is not None:
-                loop.create_task(self._c.wifi_coro(False))  # Notify application
+                asyncio.create_task(self._c.wifi_coro(False))  # Notify application
 
     # _keep_connected runs until disconnect() and ensures that there's always a connection.
     # It's strategy is to wait for the current connection to die and then to first reconnect at the

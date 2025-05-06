@@ -210,7 +210,7 @@ def run(w, lin_debug=False, inet_debug=False, mqtt_debug=False):
 if __name__ == "__main__":
 
     import connect
-    w=connect.Connect()
+    w = connect.Connect()
     w.rel_no = REL_NO
     w.connect()
     run(w)
