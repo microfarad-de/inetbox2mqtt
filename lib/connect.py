@@ -1,19 +1,13 @@
 # MIT License
 #
 # Copyright (c) 2022  Dr. Magnus Christ (mc0110)
+# Copyright (c) 2025  Karim Hraibi
 #
-# This is part of the wifimanager package
+# Functionalities:
+#     Reading/writing a config file for the credentials
+#     Initializing the MQTT client
 #
-#
-# Functionalities: The module establishes a Wifi connection.
-# This is done either via an STA connection or if no credentials are available,
-# via an AP connection on 192.168.4.1.
-# It is possible to establish both connections in parallel.
-#
-# Further functionalities:
-#     Reading / writing a json file for the credentials
-#     Wifi-network scan
-#     Reading / writing encrypted credentials from / to file
+
 
 import os
 import sys
@@ -70,8 +64,6 @@ class Connect():
             await self.subscripted(topic, msg, retained, qos)
 
 
-    # Initialze the connect-funct
-    # define subscriptions
     async def c_connected(self, client):
         log.info("MQTT connected")
         if self.connected != None:
@@ -119,8 +111,6 @@ class Connect():
             self.client = MQTTClient(self.mqtt_config, mqtt_debug)
 
 
-    def run_mode(self):
-        return 1
 
 
 

@@ -90,11 +90,13 @@ Before starting the inetbox2mqtt service, configure the following in Venus OS:
 
 Once Node-Red is activated, follow these steps to install the dashboard:
 
-1. Log in to the Node-Red editor at `http://<ip_address>:1881`, replacing `<ip_address>` with your Raspberry Pi's IP address.
+1. Log in to the Node-Red editor at `https://<ip_address>:1881`, replacing `<ip_address>` with your Raspberry Pi's IP address. Depending on the Venus OS security settings, you might need to use `http` insetead of `https`.
 
 2. Click the **hamburger menu** (top right) and select **Manage Palette**. Then find and install the `node-red-dashboard` addon.
 
 3. Use the **Import** menu option to import the `node-red/caravan-dashboard.json` file.
+
+4. Open the dashboard by going to `https://<ip_address>:1881/ui` (may need to use `http`).
 
     The Truma Combi dashboard will appear under the **Climate Control** tab. You may disable any additional tabs that are not relevant to your setup.
 

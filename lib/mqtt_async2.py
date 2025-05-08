@@ -5,6 +5,9 @@
 # (which had various improvements contributed by Kevin Köck).
 # (C) Copyright Peter Hinch 2017-2019.
 #
+# Ported to CPython to run on a Rasbperry Pi with Victron Venus OS by Karim Hraibi
+# Copyright (c) 2025  Karim Hraibi
+#
 # Released under the MIT licence.
 # See the README.md in this directory for implementaion and usage details.
 

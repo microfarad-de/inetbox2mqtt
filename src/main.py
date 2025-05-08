@@ -9,7 +9,7 @@
 # Credentials and MQTT-server-adress must be filled
 # If the mqtt-server needs authentification, this can also filled
 #
-# The communication with the CPplus uses ESP32-UART2 - connect (tx:GPIO17, rx:GPIO16)
+# The communication with the CPplus uses a FT232RL USB to serial converter
 #
 #
 #
@@ -26,7 +26,7 @@
 # 1.0.1 using mqtt-commands for reboot, ota, OS-run
 # 1.5.x chance browser behavior
 # 2.0.x chance connect and integrate mqtt-logic
-# 3.0.0 Simplified version ported to CPython for running on a Venus OS enabled Raspberry Pi
+# 3.0.x Simplified version ported to CPython for running on a Venus OS enabled Raspberry Pi (by Karim Hraibi)
 #
 
 import os
