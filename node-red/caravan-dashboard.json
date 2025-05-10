@@ -80,6 +80,11 @@
                 "name": "message",
                 "type": "str",
                 "value": "Indoor temperature"
+            },
+            {
+                "name": "unit",
+                "type": "str",
+                "value": "°C"
             }
         ],
         "meta": {},
@@ -430,7 +435,7 @@
         "type": "function",
         "z": "26a48bdabf7607df",
         "name": "Alarm",
-        "func": "\nlet val = +msg.payload;  // Convert to an integer\n\nlet low  = env.get('low');\nlet high = env.get('high');\nlet thr  = env.get('threshold');\nlet message = env.get('message');\n\nlet lastAlarm = context.get('lastAlarm') || false;\nlet alarm = false;\n\nif (val < low) {\n    alarm = 'low';\n}\nelse if (val > high) {\n    alarm = 'high';\n}\nelse if (val > (low + thr) && val < (high - thr)) {\n    alarm = false;\n    context.set('lastAlarm', alarm);\n}\n//node.warn(`val=${val}, low=${low}, high=${high}, thr=${thr}, alarm=${alarm}, lastAlarm=${lastAlarm}`);\n\nif (alarm && alarm != lastAlarm) {\n    context.set('lastAlarm', alarm);\n    msg.payload = `⚠️ Caravan alert!\\n${message}: ${val} °C`;\n    node.warn(msg.payload);\n    return msg;\n}\nelse {\n    return null;\n}\n\n",
+        "func": "\nlet val = +msg.payload;  // Convert to an integer\n\nlet low     = env.get('low');\nlet high    = env.get('high');\nlet thr     = env.get('threshold');\nlet message = env.get('message');\nlet unit    = env.get('unit');\n\nlet lastAlarm = context.get('lastAlarm') || false;\nlet alarm = false;\n\nif (val < low) {\n    alarm = 'low';\n}\nelse if (val > high) {\n    alarm = 'high';\n}\nelse if (val > (low + thr) && val < (high - thr)) {\n    alarm = false;\n    context.set('lastAlarm', alarm);\n}\n//node.warn(`val=${val}, low=${low}, high=${high}, thr=${thr}, alarm=${alarm}, lastAlarm=${lastAlarm}`);\n\nif (alarm && alarm != lastAlarm) {\n    context.set('lastAlarm', alarm);\n    msg.payload = `⚠️ Caravan alert!\\n${message}: ${val} ${unit}`;\n    node.warn(msg.payload);\n    return msg;\n}\nelse {\n    return null;\n}\n\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -1289,6 +1294,11 @@
                 "name": "message",
                 "value": "Battery charge",
                 "type": "str"
+            },
+            {
+                "name": "unit",
+                "value": "V",
+                "type": "str"
             }
         ],
         "x": 550,
@@ -1535,7 +1545,7 @@
         "wires": [
             [
                 "cfdc6c99305c58ca",
-                "21fd221ab90c51ae"
+                "5b7e97627c330eb3"
             ]
         ]
     },
@@ -1676,27 +1686,6 @@
         "x": 755,
         "y": 240,
         "wires": []
-    },
-    {
-        "id": "21fd221ab90c51ae",
-        "type": "function",
-        "z": "2561d49b29c858c7",
-        "d": true,
-        "name": "Alarm",
-        "func": "\nlet val = msg.payload;\n\nlet low  = 0;\nlet high = 70;\nlet thr  = 5;\n\nlet lastAlarm = context.get('lastAlarm') || false;\nlet alarm = false;\n\nif (val < low) {\n    alarm = 'low';\n}\nelse if (val > high) {\n    alarm = 'high';\n}\nelse if (val > low + thr && val < high - thr) {\n    alarm = false;\n    context.set('lastAlarm', alarm);\n}\n\nif (alarm && alarm != lastAlarm) {\n    context.set('lastAlarm', alarm);\n    msg.payload = `⚠️ Caravan alert!\\nIndoor humidity: ${val} %`;\n    node.warn(msg.payload);\n    return msg;\n}\nelse {\n    return null;\n}\n\n",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 650,
-        "y": 740,
-        "wires": [
-            [
-                "713473bc2af8430d"
-            ]
-        ]
     },
     {
         "id": "713473bc2af8430d",
@@ -1840,11 +1829,6 @@
             {
                 "name": "high",
                 "value": "25",
-                "type": "str"
-            },
-            {
-                "name": "message",
-                "value": "Indoor temperature",
                 "type": "str"
             }
         ],
@@ -2105,6 +2089,42 @@
         ]
     },
     {
+        "id": "5b7e97627c330eb3",
+        "type": "subflow:26a48bdabf7607df",
+        "z": "2561d49b29c858c7",
+        "d": true,
+        "name": "",
+        "env": [
+            {
+                "name": "high",
+                "value": "70",
+                "type": "str"
+            },
+            {
+                "name": "threshold",
+                "value": "5",
+                "type": "num"
+            },
+            {
+                "name": "message",
+                "value": "Indoor humidity",
+                "type": "str"
+            },
+            {
+                "name": "unit",
+                "value": "%",
+                "type": "str"
+            }
+        ],
+        "x": 650,
+        "y": 740,
+        "wires": [
+            [
+                "713473bc2af8430d"
+            ]
+        ]
+    },
+    {
         "id": "7df678563a819cc4",
         "type": "ui_switch",
         "z": "391f51e7377c8273",
@@ -2170,7 +2190,7 @@
         "topic": "fan",
         "topicType": "str",
         "className": "grayout-target fan-target",
-        "x": 595,
+        "x": 675,
         "y": 320,
         "wires": [
             [
@@ -2216,7 +2236,7 @@
         "topic": "water",
         "topicType": "str",
         "className": "water-target",
-        "x": 585,
+        "x": 665,
         "y": 460,
         "wires": [
             [
@@ -2272,7 +2292,7 @@
         "topic": "mix",
         "topicType": "str",
         "className": "grayout-target-2 mix-target",
-        "x": 585,
+        "x": 665,
         "y": 620,
         "wires": [
             [
@@ -2360,7 +2380,7 @@
         "resendOnRefresh": true,
         "templateScope": "local",
         "className": "",
-        "x": 820,
+        "x": 900,
         "y": 40,
         "wires": [
             []
@@ -2381,7 +2401,7 @@
         "resendOnRefresh": true,
         "templateScope": "local",
         "className": "",
-        "x": 820,
+        "x": 900,
         "y": 80,
         "wires": [
             []
@@ -2399,7 +2419,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 840,
+        "x": 920,
         "y": 680,
         "wires": [
             [
@@ -2436,7 +2456,7 @@
         "id": "6f65acc61017824f",
         "type": "function",
         "z": "391f51e7377c8273",
-        "name": "Set temp.",
+        "name": "Set temp",
         "func": "\nflow.set(\"temp\", msg.payload);\n",
         "outputs": 1,
         "timeout": 0,
@@ -2444,7 +2464,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 820,
+        "x": 900,
         "y": 220,
         "wires": [
             []
@@ -2462,7 +2482,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 820,
+        "x": 900,
         "y": 320,
         "wires": [
             []
@@ -2484,10 +2504,12 @@
         "y": 120,
         "wires": [
             [
+                "783ddd3bdb365462",
                 "8e85ae446e921901"
             ],
             [
-                "ad544c551d347711"
+                "ad544c551d347711",
+                "bce2301e12d1e263"
             ],
             [
                 "7df678563a819cc4"
@@ -2685,7 +2707,7 @@
         "topic": "temp",
         "topicType": "str",
         "className": "grayout-target temp-target",
-        "x": 595,
+        "x": 675,
         "y": 220,
         "wires": [
             [
@@ -2710,7 +2732,7 @@
         "correl": "",
         "expiry": "",
         "broker": "2c24d1c82633c69e",
-        "x": 1030,
+        "x": 1110,
         "y": 280,
         "wires": []
     },
@@ -2728,7 +2750,7 @@
         "correl": "",
         "expiry": "",
         "broker": "2c24d1c82633c69e",
-        "x": 1030,
+        "x": 1110,
         "y": 380,
         "wires": []
     },
@@ -2746,7 +2768,7 @@
         "correl": "",
         "expiry": "",
         "broker": "2c24d1c82633c69e",
-        "x": 1050,
+        "x": 1130,
         "y": 520,
         "wires": []
     },
@@ -2764,7 +2786,7 @@
         "correl": "",
         "expiry": "",
         "broker": "2c24d1c82633c69e",
-        "x": 1030,
+        "x": 1110,
         "y": 640,
         "wires": []
     },
@@ -2782,7 +2804,7 @@
         "correl": "",
         "expiry": "",
         "broker": "2c24d1c82633c69e",
-        "x": 1020,
+        "x": 1100,
         "y": 700,
         "wires": []
     },
@@ -2981,7 +3003,7 @@
         "id": "c1037947af34c107",
         "type": "function",
         "z": "391f51e7377c8273",
-        "name": "Set temp.",
+        "name": "Set temp",
         "func": "\nlet temp = msg.payload\n\nif (temp !== 0){\n    flow.set(\"temp\", temp);\n}\n\nflow.set('temp_was_set', true);",
         "outputs": 1,
         "timeout": 0,
@@ -3063,7 +3085,7 @@
         "resendOnRefresh": true,
         "templateScope": "local",
         "className": "",
-        "x": 830,
+        "x": 910,
         "y": 260,
         "wires": [
             []
@@ -3084,7 +3106,7 @@
         "resendOnRefresh": true,
         "templateScope": "local",
         "className": "",
-        "x": 820,
+        "x": 900,
         "y": 360,
         "wires": [
             []
@@ -3105,7 +3127,7 @@
         "resendOnRefresh": true,
         "templateScope": "local",
         "className": "",
-        "x": 830,
+        "x": 910,
         "y": 480,
         "wires": [
             []
@@ -3126,7 +3148,7 @@
         "resendOnRefresh": true,
         "templateScope": "local",
         "className": "",
-        "x": 820,
+        "x": 900,
         "y": 640,
         "wires": [
             []
@@ -3159,12 +3181,12 @@
         "type": "subflow:2b1e3a255c9f7549",
         "z": "391f51e7377c8273",
         "name": "",
-        "x": 600,
+        "x": 680,
         "y": 280,
         "wires": [
             [
-                "555b5779bdb6e92a",
-                "783ddd3bdb365462"
+                "783ddd3bdb365462",
+                "175e4cc78278dcd3"
             ],
             [
                 "defc780bd37644a4"
@@ -3183,12 +3205,12 @@
                 "type": "str"
             }
         ],
-        "x": 600,
+        "x": 680,
         "y": 380,
         "wires": [
             [
-                "f6d22ec56a889695",
-                "bce2301e12d1e263"
+                "bce2301e12d1e263",
+                "fe950be63ef24341"
             ],
             [
                 "2dd8bdbb19a99a93"
@@ -3207,7 +3229,7 @@
                 "type": "str"
             }
         ],
-        "x": 600,
+        "x": 680,
         "y": 520,
         "wires": [
             [
@@ -3231,7 +3253,7 @@
                 "type": "str"
             }
         ],
-        "x": 600,
+        "x": 680,
         "y": 680,
         "wires": [
             [
@@ -3240,6 +3262,46 @@
             ],
             [
                 "8c25986c65998ad3"
+            ]
+        ]
+    },
+    {
+        "id": "175e4cc78278dcd3",
+        "type": "function",
+        "z": "391f51e7377c8273",
+        "name": "filter",
+        "func": "\nif (msg.payload === 0) {\n    return null;\n}\nelse {\n    return msg;\n}\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 590,
+        "y": 220,
+        "wires": [
+            [
+                "555b5779bdb6e92a"
+            ]
+        ]
+    },
+    {
+        "id": "fe950be63ef24341",
+        "type": "function",
+        "z": "391f51e7377c8273",
+        "name": "filter",
+        "func": "\nif (msg.payload === 'off') {\n    return null;\n}\nelse {\n    return msg;\n}\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 590,
+        "y": 320,
+        "wires": [
+            [
+                "f6d22ec56a889695"
             ]
         ]
     }
