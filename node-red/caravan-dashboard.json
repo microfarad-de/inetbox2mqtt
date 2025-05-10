@@ -1297,7 +1297,7 @@
             },
             {
                 "name": "unit",
-                "value": "V",
+                "value": "%",
                 "type": "str"
             }
         ],
