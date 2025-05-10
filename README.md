@@ -31,10 +31,23 @@ The electrical connections are described in the following table:
 | FT232RL Pin | TJA1020 Pin | LIN Bus | Power Supply     |
 |-------------|-------------|---------|------------------|
 | GND         | GND         | GND     |                  |
-| RX          | TX          |         |                  |
-| TX          | RX          |         |                  |
+| RXD         | TX          |         |                  |
+| TXD         | RX          |         |                  |
 |             | LIN         | LIN     |                  |
 |             | 12V         |         | +12V fused 100mA |
+
+
+The images below display the completed setup, where the TJA1020 and FT232RL modules are connected together on a prototyping stripboard:
+
+![LIN to USB converter 1](doc/lin-converter-1.png)
+![LIN to USB converter 2](doc/lin-converter-2.png)
+![LIN to USB converter 3](doc/lin-converter-3.png)
+
+The following images shows the LIN bus RJ12 connector pinout:
+
+![RJ12 pinout](doc/pinout.jpg)
+
+The RJ12 connecter can be plugged into any free LIN port on the CP Plus or Truma Combi.
 
 Further details are provided in the [original inetbox2mqtt electrics guide](doc/ELECTRIC.md) and [this similar project](https://github.com/danielfett/inetbox.py).
 
@@ -142,7 +155,7 @@ Once the hardware is connected, you will need to pair the Truma CP Plus control 
     2025-04-29 20:57:50,949 [connect] INFO: MQTT connected
     ```
 
-6. Access the Node-Red dashboard at `http://<ip_address>:1881/ui`. It should display:
+6. Access the Node-Red dashboard at `https://<ip_address>:1881/ui`. It should display:
 
     - Current Truma Combi settings
     - Room and water temperature values
