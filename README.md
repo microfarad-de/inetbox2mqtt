@@ -43,7 +43,7 @@ The images below display the completed setup, where the TJA1020 and FT232RL modu
 ![LIN to USB converter 2](doc/lin-converter-2.png)
 ![LIN to USB converter 3](doc/lin-converter-3.png)
 
-The following images shows the LIN bus RJ12 connector pinout:
+The following image shows the LIN bus RJ12 connector pinout:
 
 ![RJ12 pinout](doc/pinout.jpg)
 
@@ -162,3 +162,64 @@ Once the hardware is connected, you will need to pair the Truma CP Plus control 
     - `"ON"` in the **Connection status** field
 
 The dashboard can also be accessed remotely via the Victron VRM portal under the **Venus OS Large** section.
+
+
+## MQTT Topics
+
+The `service/truma/control_status/#` topics can be subscribed to. They include the current status of the CP Plus and Truma Combi systems.
+If your heater is off and you send a set command or use an input on the CP Plus, there is a delay of about 30 seconds before you see the first values. This behavior is normal.
+
+### Status Topics
+
+| **Status Topic** | **Payload** | **Function** |
+|------------------|-------------|--------------|
+| `service/truma/control_status/#` |  | Subscribe to all status entries |
+| `service/truma/control_status/alive` | `on`, `off` | Connection status |
+| `service/truma/control_status/clock` | `hh:mm` | CP Plus time |
+| `service/truma/control_status/current_temp_room` | Temperature in °C (`0`, `5–30°C`) | Current room temperature |
+| `service/truma/control_status/target_temp_room` | Temperature in °C (`0`, `5–30°C`) | Target room temperature |
+| `service/truma/control_status/current_temp_water` | Temperature in °C (`0–70°C`) | Current water temperature |
+| `service/truma/control_status/target_temp_water` | Temperature in °C (`0–70°C`) | Target water temperature |
+| `service/truma/control_status/energy_mix` | `gas`, `mix`, `electricity` | Heater mode of operation |
+| `service/truma/control_status/el_power_level` | `0`, `900`, `1800` | Max electric power consumption |
+| `service/truma/control_status/heating_mode` | `off`, `eco`, `high` | Fan speed |
+| `service/truma/control_status/aircon_operating_mode` | `off`, `vent`, `cool`, `hot`, `auto` | Aircon operating mode |
+| `service/truma/control_status/aircon_vent_mode` | `low`, `mid`, `high`, `night`, `auto` | Aircon ventilator mode |
+| `service/truma/control_status/target_temp_aircon` | Temperature in °C (`20–32°C`) | Target aircon temperature |
+| `service/truma/control_status/operating_status` | `0–7` | Heater operation mode (`0,1 = off`, `7 = running`) |
+| `service/truma/control_status/error_code` | `0–xx` | Truma error codes |
+
+### Set Topics
+
+To set values, you must use the corresponding set topics. The list of set topics and valid payloads is shown below:
+
+| **Set Topic** | **Payload** | **Function** |
+|---------------|-------------|--------------|
+| `service/truma/set/target_temp_room` | Temperature in °C (`0`, `5–30°C`) | Set target room temperature |
+| `service/truma/set/target_temp_water` | `0`, `40`, `60`, `200` | Set target water temperature (`0 = off`, `40 = eco`, `60 = high`, `200 = boost`) |
+| `service/truma/set/energy_mix` | `gas`, `mix`, `electricity` | Set mode of operation |
+| `service/truma/set/el_power_level` | `0`, `900`, `1800` | Set max electric power consumption |
+| `service/truma/set/heating_mode` | `off`, `eco`, `high` | Set fan speed (`off` is only accepted if room heater is off) |
+| `service/truma/set/aircon_operating_mode` | `off`, `vent`, `cool`, `hot`, `auto` | Set aircon operating mode |
+| `service/truma/set/aircon_vent_mode` | `low`, `mid`, `high`, `night`, `auto` | Set aircon ventilator mode |
+| `service/truma/set/target_temp_aircon` | Temperature in °C (`20–30°C`) | Set target aircon temperature |
+
+### Usage Notes
+
+To switch on the room heating, you must set both `target_temp_room > 4` and `heating_mode = eco`. These commands should be sent immediately after one another.
+
+The same applies to `energy_mix` and `el_power_level`, which should be set together. Only specific combinations of these settings make sense, depending on whether the heater supports both electric and combustion modes. Valid combinations include:
+
+- `gas-0`
+- `mix-900`
+- `mix-1800`
+- `electricity-900`
+- `electricity-1800`
+
+These commands are the same for diesel and gas burners.
+
+For the Aventa aircon, only certain combinations of `aircon_operating_mode` and `aircon_vent_mode` are valid:
+
+- `off-low`
+- `auto-auto`
+- `vent/cool/hot` with `low/mid/high`
