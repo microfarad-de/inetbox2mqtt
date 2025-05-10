@@ -991,10 +991,10 @@
         "group": "6af9ec52f6b6cf0c",
         "order": 1,
         "width": 3,
-        "height": 3,
+        "height": 4,
         "gtype": "wave",
         "title": "Left",
-        "label": "%",
+        "label": " %",
         "format": "{{value}}",
         "min": 0,
         "max": "100",
@@ -1019,10 +1019,10 @@
         "group": "6af9ec52f6b6cf0c",
         "order": 2,
         "width": 3,
-        "height": 3,
+        "height": 4,
         "gtype": "wave",
         "title": "Right",
-        "label": "%",
+        "label": " %",
         "format": "{{value}}",
         "min": 0,
         "max": "100",
@@ -2065,7 +2065,7 @@
         "font": "",
         "fontSize": 16,
         "color": "#000000",
-        "x": 570,
+        "x": 670,
         "y": 840,
         "wires": []
     },
@@ -2086,7 +2086,7 @@
         "font": "",
         "fontSize": 16,
         "color": "#000000",
-        "x": 570,
+        "x": 670,
         "y": 900,
         "wires": []
     },
@@ -2107,8 +2107,8 @@
         "font": "",
         "fontSize": 16,
         "color": "#000000",
-        "x": 560,
-        "y": 1060,
+        "x": 660,
+        "y": 960,
         "wires": []
     },
     {
@@ -2193,8 +2193,8 @@
         "font": "",
         "fontSize": 16,
         "color": "#000000",
-        "x": 530,
-        "y": 1180,
+        "x": 630,
+        "y": 1080,
         "wires": [],
         "info": "Dummy block used as a spacer"
     },
@@ -2295,8 +2295,8 @@
         "resendOnRefresh": true,
         "templateScope": "local",
         "className": "",
-        "x": 540,
-        "y": 1140,
+        "x": 640,
+        "y": 1040,
         "wires": [
             []
         ]
@@ -2715,7 +2715,7 @@
         "rh": 0,
         "inputs": 0,
         "x": 180,
-        "y": 1060,
+        "y": 1020,
         "wires": [
             [
                 "41c6c5947e4f9cf9"
@@ -2793,8 +2793,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 530,
-        "y": 1100,
+        "x": 630,
+        "y": 1000,
         "wires": [
             [
                 "f8b062643e6b87e5"
@@ -2810,8 +2810,8 @@
         "links": [
             "2f93affb367a865e"
         ],
-        "x": 705,
-        "y": 1100,
+        "x": 805,
+        "y": 1000,
         "wires": []
     },
     {
@@ -2927,15 +2927,15 @@
         "type": "function",
         "z": "391f51e7377c8273",
         "name": "Decode error",
-        "func": "\nif (msg.topic.includes('control_status/a')) {\n    if (msg.payload !== 'ON') {\n        msg.payload = 'LIN disconnected!';\n    }\n    else {\n        status = context.get('status');\n        if (status === undefined) {\n            msg.payload = 'OK';\n        }\n        else {\n            msg.payload = status;\n        }\n    }\n    return msg;\n}\n\n\nswitch (msg.payload) {\n    \n    case 0:\n        msg.payload = 'OK';\n        break;\n        \n    case 7:\n        msg.payload = '230V disconnected!';\n        break;\n    \n    case 8:\n        msg.payload = 'Gas interrupted!';\n        break;\n    \n    case 17:\n        msg.payload = 'Gas interrupted!';\n        break;\n        \n    default:\n        msg.payload = 'Error code: ' + msg.payload;\n        break;\n}\n\ncontext.set('status', msg.payload);\nreturn msg;",
+        "func": "\nif (msg.topic.includes('control_status/a')) {\n    if (msg.payload !== 'ON') {\n        msg.payload = 'LIN disconnected!';\n    }\n    else {\n        status = context.get('status');\n        if (status === undefined) {\n            msg.payload = 'OK';\n        }\n        else {\n            msg.payload = status;\n        }\n    }\n    return msg;\n}\n\n\nswitch (msg.payload) {\n    \n    case 0:\n        msg.payload = 'OK';\n        break;\n        \n    case 7:\n        msg.payload = '230V disconnected!';\n        break;\n    \n    case 8:\n        msg.payload = 'Gas interrupted!';  // In mix mode\n        break;\n    \n    case 17:\n        msg.payload = 'Gas interrupted!';\n        break;\n        \n    default:\n        msg.payload = 'Error code: ' + msg.payload;\n        break;\n}\n\ncontext.set('status', msg.payload);\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 370,
-        "y": 1060,
+        "x": 430,
+        "y": 960,
         "wires": [
             [
                 "6192907fb799f322",
