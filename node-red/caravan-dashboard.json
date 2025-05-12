@@ -402,7 +402,7 @@
     {
         "id": "9e2c0db2f38c2b58",
         "type": "ui_tab",
-        "name": "Disabled",
+        "name": "Hidden",
         "icon": "dashboard",
         "order": 4,
         "disabled": true,
@@ -411,7 +411,8 @@
     {
         "id": "9c32c704d83eb416",
         "type": "ui_group",
-        "name": "Disabled",
+        "d": true,
+        "name": "Hidden",
         "tab": "9e2c0db2f38c2b58",
         "order": 1,
         "disp": true,
@@ -489,7 +490,7 @@
         "id": "941135a1b6edb738",
         "type": "ui_template",
         "z": "37a752f35a68bbed",
-        "group": "cf4c6771afb43982",
+        "group": "9c32c704d83eb416",
         "name": "Connectivity check",
         "order": 1,
         "width": 0,
@@ -510,7 +511,7 @@
         "id": "ef5e0433c7f553e3",
         "type": "ui_template",
         "z": "37a752f35a68bbed",
-        "group": "cf4c6771afb43982",
+        "group": "9c32c704d83eb416",
         "name": "Disable text selection",
         "order": 3,
         "width": 0,
@@ -531,7 +532,7 @@
         "id": "7a5ee5e1791de897",
         "type": "ui_template",
         "z": "37a752f35a68bbed",
-        "group": "cf4c6771afb43982",
+        "group": "9c32c704d83eb416",
         "name": "Disable zoom",
         "order": 2,
         "width": 0,
@@ -1315,7 +1316,7 @@
         "z": "2561d49b29c858c7",
         "name": "",
         "group": "cf4c6771afb43982",
-        "order": 9,
+        "order": 6,
         "width": 3,
         "height": 3,
         "gtype": "donut",
@@ -1369,7 +1370,7 @@
         "z": "2561d49b29c858c7",
         "name": "",
         "group": "cf4c6771afb43982",
-        "order": 5,
+        "order": 2,
         "width": 3,
         "height": 3,
         "gtype": "donut",
@@ -1424,7 +1425,7 @@
         "d": true,
         "name": "",
         "group": "9c32c704d83eb416",
-        "order": 11,
+        "order": 4,
         "width": 3,
         "height": 3,
         "gtype": "donut",
@@ -1479,7 +1480,7 @@
         "z": "2561d49b29c858c7",
         "name": "",
         "group": "cf4c6771afb43982",
-        "order": 6,
+        "order": 3,
         "width": 3,
         "height": 3,
         "gtype": "donut",
@@ -1581,7 +1582,7 @@
         "z": "2561d49b29c858c7",
         "name": "",
         "group": "cf4c6771afb43982",
-        "order": 8,
+        "order": 5,
         "width": 3,
         "height": 3,
         "gtype": "donut",
@@ -1608,7 +1609,7 @@
         "type": "ui_text",
         "z": "2561d49b29c858c7",
         "group": "cf4c6771afb43982",
-        "order": 10,
+        "order": 7,
         "width": 6,
         "height": 1,
         "name": "",
@@ -1652,7 +1653,7 @@
         "z": "2561d49b29c858c7",
         "name": "",
         "group": "cf4c6771afb43982",
-        "order": 7,
+        "order": 4,
         "width": 3,
         "height": 3,
         "gtype": "donut",
@@ -1793,7 +1794,7 @@
         "z": "2561d49b29c858c7",
         "name": "",
         "group": "cf4c6771afb43982",
-        "order": 4,
+        "order": 1,
         "width": 3,
         "height": 3,
         "gtype": "donut",
@@ -2521,7 +2522,7 @@
         "type": "function",
         "z": "391f51e7377c8273",
         "name": "Energy combine",
-        "func": "\n// Define the same lookup table\nconst lookupTable = {\n    \"gas\":       { value1: \"gas\",         value2: 0    },\n    \"electric1\": { value1: \"electricity\", value2: 900  },\n    \"electric2\": { value1: \"electricity\", value2: 1800 },\n    \"mix1\":      { value1: \"mix\",         value2: 900  },\n    \"mix2\":      { value1: \"mix\",         value2: 1800 }\n};\n\nif (msg.topic.includes('energy_mix')) {\n    context.set('energy_mix', msg.payload);\n}\nelse if (msg.topic.includes('el_power_level')) {\n    context.set('el_power', msg.payload);\n}\n\nlet value1 = context.get('energy_mix');\nlet value2 = context.get('el_power');\n\n// Perform reverse lookup\nlet foundKey = null;\nfor (let key in lookupTable) {\n    let entry = lookupTable[key];\n    if (entry.value1 === value1 && entry.value2 === value2) {\n        foundKey = key;\n        break;\n    }\n}\n\n// Return the key as payload (or a fallback if not found)\nmsg.payload = foundKey || 'unknown';\nreturn msg;\n",
+        "func": "\n// Define the same lookup table\nconst lookupTable = {\n    \"gas\":       { value1: \"gas\",         value2: 0    },\n    \"electric1\": { value1: \"electricity\", value2: 900  },\n    \"electric2\": { value1: \"electricity\", value2: 1800 },\n    \"mix1\":      { value1: \"mix\",         value2: 900  },\n    \"mix2\":      { value1: \"mix\",         value2: 1800 }\n};\n\n\nif (msg.topic.includes('energy_mix')) {\n    context.set('energy_mix', msg.payload);\n}\nelse if (msg.topic.includes('el_power_level')) {\n    context.set('el_power', msg.payload);\n}\n\nlet value1 = context.get('energy_mix');\nlet value2 = context.get('el_power');\n\n// Perform reverse lookup\nlet foundKey = null;\nfor (let key in lookupTable) {\n    let entry = lookupTable[key];\n    if (entry.value1 === value1 && entry.value2 === value2) {\n        foundKey = key;\n        break;\n    }\n}\n\n// Return the key as payload (or a fallback if not found)\nmsg.payload = foundKey || 'unknown';\nreturn msg;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -2545,7 +2546,7 @@
         "order": 7,
         "width": 0,
         "height": 0,
-        "format": "\n<style>\n.red {\n    color: red !important;\n    font-weight: bold;\n}\n</style>\n\n<script>\n(function(scope) {\n    scope.$watch('msg.payload', function(value) {\n        const controls = document.querySelectorAll('.red-error');\n        controls.forEach(el => {\n            if (value === \"OK\") {\n                el.classList.remove('red');\n            } else {\n                el.classList.add('red');\n            }\n        });\n    });\n})(scope);\n</script>\n",
+        "format": "\n<style>\n.red {\n    color: red !important;\n    font-weight: bold;\n}\n</style>\n\n<script>\n(function(scope) {\n    scope.$watch('msg.payload', function(value) {\n        const controls = document.querySelectorAll('.red-error');\n        controls.forEach(el => {\n            if (value === 'OK') {\n                el.classList.remove('red');\n            } else {\n                el.classList.add('red');\n            }\n        });\n    });\n})(scope);\n</script>\n",
         "storeOutMessages": true,
         "fwdInMessages": true,
         "resendOnRefresh": true,
@@ -3042,7 +3043,7 @@
         "type": "function",
         "z": "391f51e7377c8273",
         "name": "Alarm",
-        "func": "\nif (msg.topic.includes('control_status/a')) {\n    return null;\n}\n\nlet val = msg.payload;\n\nlet lastAlarm = context.get('lastAlarm') || false;\nlet alarm = false;\n\nif (val != 'OK') {\n    alarm = val;\n}\nelse {\n    alarm = false;\n    context.set('lastAlarm', alarm);\n}\n\nif (alarm && alarm != lastAlarm) {\n    context.set('lastAlarm', alarm);\n    msg.payload = `⚠️ Caravan alert!\\nTruma error code:\\n${val}`;\n    node.warn(msg.payload);\n    return msg;\n}\nelse {\n    return null;\n}\n\n",
+        "func": "\n\nif (msg.topic.includes('alive')) {\n    return null;\n}\n\nlet val = msg.payload;\n\nlet lastAlarm = context.get('lastAlarm') || false;\nlet alarm = false;\n\nif (val === 'OK') {\n    alarm = false;\n    context.set('lastAlarm', alarm);\n}\nelse {\n    alarm = val;\n}\n\nif (alarm && alarm != lastAlarm) {\n    context.set('lastAlarm', alarm);\n    msg.payload = `⚠️ Caravan alert!\\nTruma error code:\\n${val}`;\n    node.warn(msg.payload);\n    return msg;\n}\nelse {\n    return null;\n}\n\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -3159,8 +3160,8 @@
         "type": "function",
         "z": "391f51e7377c8273",
         "name": "Decode error",
-        "func": "\nif (msg.topic.includes('control_status/a')) {\n    if (msg.payload !== 'ON') {\n        msg.payload = 'LIN disconnected!';\n    }\n    else {\n        status = context.get('status');\n        if (status === undefined) {\n            msg.payload = 'OK';\n        }\n        else {\n            msg.payload = status;\n        }\n    }\n    return msg;\n}\n\n\nswitch (msg.payload) {\n    \n    case 0:\n        msg.payload = 'OK';\n        break;\n        \n    case 7:\n        msg.payload = '230V disconnected!';\n        break;\n    \n    case 8:\n        msg.payload = 'Gas interrupted!';  // In mix mode\n        break;\n    \n    case 17:\n        msg.payload = 'Gas interrupted!';\n        break;\n        \n    default:\n        msg.payload = 'Error code: ' + msg.payload;\n        break;\n}\n\ncontext.set('status', msg.payload);\nreturn msg;",
-        "outputs": 1,
+        "func": "\n\nif (msg.topic === 'heartbeat') {\n    heartbeat = context.get('heartbeat') || '◎'; // ◧ ◨ ◎ ◉\n    \n    if (heartbeat === '◎') {\n        context.set('heartbeat', '◉');\n    }\n    else {\n        context.set('heartbeat', '◎');\n    }\n\n    output = context.get('output');\n    msg.payload = output + ' ' + heartbeat;\n    return [msg, null];\n}\n\nelse if (msg.topic.includes('alive')) {\n    if (msg.payload !== 'ON') {\n        msg.payload = 'LIN disconnect!';\n    }\n    else {\n        status = context.get('status');\n        if (status === undefined) {\n            msg.payload = 'OK';\n        }\n        else {\n            msg.payload = status;\n        }\n    }\n    context.set('output', msg.payload);\n    return [null, msg];\n}\n\nelse {\n    \n    switch (+msg.payload) {\n        \n        case 0:\n            msg.payload = 'OK';\n            break;\n            \n        case 7:\n            msg.payload = '230V disconnect!';\n            break;\n        \n        case 8:\n            msg.payload = 'Gas interrupted!';  // In mix mode\n            break;\n        \n        case 17:\n            msg.payload = 'Gas interrupted!';\n            break;\n            \n        default:\n            msg.payload = 'Error code: ' + msg.payload;\n            break;\n    }\n    \n    context.set('status', msg.payload);\n    context.set('output', msg.payload);\n    return [null, msg];\n}",
+        "outputs": 2,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
@@ -3170,9 +3171,11 @@
         "y": 960,
         "wires": [
             [
-                "6192907fb799f322",
-                "cf6b3e9d9b5ca767",
-                "97600a7142d22145"
+                "6192907fb799f322"
+            ],
+            [
+                "97600a7142d22145",
+                "cf6b3e9d9b5ca767"
             ]
         ]
     },
@@ -3269,7 +3272,7 @@
         "id": "175e4cc78278dcd3",
         "type": "function",
         "z": "391f51e7377c8273",
-        "name": "filter",
+        "name": "Filter",
         "func": "\nif (msg.payload === 0) {\n    return null;\n}\nelse {\n    return msg;\n}\n",
         "outputs": 1,
         "timeout": 0,
@@ -3289,7 +3292,7 @@
         "id": "fe950be63ef24341",
         "type": "function",
         "z": "391f51e7377c8273",
-        "name": "filter",
+        "name": "Filter",
         "func": "\nif (msg.payload === 'off') {\n    return null;\n}\nelse {\n    return msg;\n}\n",
         "outputs": 1,
         "timeout": 0,
@@ -3302,6 +3305,35 @@
         "wires": [
             [
                 "f6d22ec56a889695"
+            ]
+        ]
+    },
+    {
+        "id": "52ba73d2c9e9a9ee",
+        "type": "inject",
+        "z": "391f51e7377c8273",
+        "name": "Heartbeat",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "1",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "topic": "heartbeat",
+        "payload": "",
+        "payloadType": "date",
+        "x": 190,
+        "y": 1080,
+        "wires": [
+            [
+                "41c6c5947e4f9cf9"
             ]
         ]
     }
