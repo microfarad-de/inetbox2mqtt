@@ -159,7 +159,7 @@ Once the hardware is connected, you will need to pair the Truma CP Plus control 
 
     - Current Truma Combi settings
     - Room and water temperature values
-    - `"ON"` in the **Connection status** field
+    - `"OK"` in the **System status** field
 
 The dashboard can also be accessed remotely via the Victron VRM portal under the **Venus OS Large** section.
 
