@@ -81,7 +81,7 @@ async def callback(topic, msg, retained, qos):
     if topic.startswith(SET_PREFIX):
         topic = topic[len(SET_PREFIX):]
         if topic in lin.app.status.keys():
-            log.info("inet-key:"+str(topic)+" value: "+str(msg))
+            log.info("inet-key: "+str(topic)+" value: "+str(msg))
             async with lock:
                 try:
                     lin.app.set_status(topic, msg)

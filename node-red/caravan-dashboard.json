@@ -32,6 +32,14 @@
         "env": []
     },
     {
+        "id": "c74d4096e08fa272",
+        "type": "tab",
+        "label": "Climate Control V2",
+        "disabled": true,
+        "info": "",
+        "env": []
+    },
+    {
         "id": "26a48bdabf7607df",
         "type": "subflow",
         "name": "Alarm",
@@ -423,7 +431,7 @@
     {
         "id": "6af9ec52f6b6cf0c",
         "type": "ui_group",
-        "name": "Gas",
+        "name": "Propane",
         "tab": "3e1087bac2188791",
         "order": 3,
         "disp": true,
@@ -705,7 +713,7 @@
         "name": "",
         "onlyChanges": false,
         "roundValues": "2",
-        "x": 170,
+        "x": 180,
         "y": 560,
         "wires": [
             [
@@ -888,7 +896,7 @@
         "name": "",
         "onlyChanges": false,
         "roundValues": "2",
-        "x": 150,
+        "x": 160,
         "y": 120,
         "wires": [
             [
@@ -1176,7 +1184,7 @@
         "width": 3,
         "height": 4,
         "gtype": "wave",
-        "title": "Left",
+        "title": "Left tank",
         "label": " %",
         "format": "{{value}}",
         "min": 0,
@@ -1190,7 +1198,7 @@
         "seg2": "",
         "diff": false,
         "className": "",
-        "x": 710,
+        "x": 720,
         "y": 740,
         "wires": []
     },
@@ -1204,7 +1212,7 @@
         "width": 3,
         "height": 4,
         "gtype": "wave",
-        "title": "Right",
+        "title": "Right tank",
         "label": " %",
         "format": "{{value}}",
         "min": 0,
@@ -1218,7 +1226,7 @@
         "seg2": "",
         "diff": false,
         "className": "",
-        "x": 710,
+        "x": 730,
         "y": 800,
         "wires": []
     },
@@ -2563,7 +2571,7 @@
         "type": "ui_dropdown",
         "z": "391f51e7377c8273",
         "name": "",
-        "label": "&nbsp;Temperature &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;",
+        "label": "&nbsp;Temperature &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;",
         "tooltip": "",
         "place": "",
         "group": "9b3a8c49293c5c6a",
@@ -3334,6 +3342,1147 @@
         "wires": [
             [
                 "41c6c5947e4f9cf9"
+            ]
+        ]
+    },
+    {
+        "id": "6cb8252a67629962",
+        "type": "ui_dropdown",
+        "z": "c74d4096e08fa272",
+        "name": "",
+        "label": "&nbsp;Fan setting &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;",
+        "tooltip": "",
+        "place": "",
+        "group": "9b3a8c49293c5c6a",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "passthru": false,
+        "multiple": false,
+        "options": [
+            {
+                "label": "ECO",
+                "value": "eco",
+                "type": "str"
+            },
+            {
+                "label": "HIGH",
+                "value": "high",
+                "type": "str"
+            }
+        ],
+        "payload": "",
+        "topic": "fan",
+        "topicType": "str",
+        "className": "grayout-target fan-target",
+        "x": 675,
+        "y": 320,
+        "wires": [
+            [
+                "c470d923eeaf436c",
+                "b95d223c430a2047",
+                "5b3b355a63ca805e"
+            ]
+        ],
+        "l": false
+    },
+    {
+        "id": "e38253167f8eb65b",
+        "type": "ui_dropdown",
+        "z": "c74d4096e08fa272",
+        "name": "",
+        "label": "&nbsp;Water temperature &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;",
+        "tooltip": "",
+        "place": "",
+        "group": "9b3a8c49293c5c6a",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "passthru": false,
+        "multiple": false,
+        "options": [
+            {
+                "label": "OFF",
+                "value": 0,
+                "type": "num"
+            },
+            {
+                "label": "ECO",
+                "value": 40,
+                "type": "num"
+            },
+            {
+                "label": "HOT",
+                "value": 60,
+                "type": "num"
+            }
+        ],
+        "payload": "",
+        "topic": "water",
+        "topicType": "str",
+        "className": "water-target",
+        "x": 675,
+        "y": 460,
+        "wires": [
+            [
+                "7acc40bd20f556a5",
+                "2a8c65247fe2b853",
+                "375b24ad920e78fd"
+            ]
+        ],
+        "l": false
+    },
+    {
+        "id": "ea30ab539cdc3901",
+        "type": "ui_dropdown",
+        "z": "c74d4096e08fa272",
+        "name": "",
+        "label": "&nbsp;Energy selection &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;",
+        "tooltip": "",
+        "place": "",
+        "group": "9b3a8c49293c5c6a",
+        "order": 4,
+        "width": 0,
+        "height": 0,
+        "passthru": false,
+        "multiple": false,
+        "options": [
+            {
+                "label": "Gas",
+                "value": "gas",
+                "type": "str"
+            },
+            {
+                "label": "Electric 1",
+                "value": "electric1",
+                "type": "str"
+            },
+            {
+                "label": "Electric 2",
+                "value": "electric2",
+                "type": "str"
+            },
+            {
+                "label": "Mix 1",
+                "value": "mix1",
+                "type": "str"
+            },
+            {
+                "label": "Mix 2",
+                "value": "mix2",
+                "type": "str"
+            }
+        ],
+        "payload": "",
+        "topic": "mix",
+        "topicType": "str",
+        "className": "grayout-target-2 mix-target",
+        "x": 675,
+        "y": 620,
+        "wires": [
+            [
+                "bac16c6e60310b9f",
+                "ef835c0120eecc9d"
+            ]
+        ],
+        "l": false
+    },
+    {
+        "id": "8c46379d52aa9f0a",
+        "type": "ui_text",
+        "z": "c74d4096e08fa272",
+        "group": "ab3a9f0b2e4b8d1b",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "Room temperature",
+        "format": "{{value}} °C",
+        "layout": "row-spread",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#000000",
+        "x": 670,
+        "y": 840,
+        "wires": []
+    },
+    {
+        "id": "1394ab4823e09e34",
+        "type": "ui_text",
+        "z": "c74d4096e08fa272",
+        "group": "ab3a9f0b2e4b8d1b",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "Water temperature",
+        "format": "{{value}} °C",
+        "layout": "row-spread",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#000000",
+        "x": 670,
+        "y": 900,
+        "wires": []
+    },
+    {
+        "id": "290e1633a57bc091",
+        "type": "ui_text",
+        "z": "c74d4096e08fa272",
+        "group": "ab3a9f0b2e4b8d1b",
+        "order": 4,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "System status",
+        "format": "{{value}}",
+        "layout": "row-spread",
+        "className": "red-error",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#000000",
+        "x": 660,
+        "y": 960,
+        "wires": []
+    },
+    {
+        "id": "0ae1054a76ada25f",
+        "type": "ui_template",
+        "z": "c74d4096e08fa272",
+        "group": "9b3a8c49293c5c6a",
+        "name": "Grayout 1",
+        "order": 6,
+        "width": 0,
+        "height": 0,
+        "format": "<style>\n.grayout {\n    pointer-events: none;\n    filter: opacity(50%);\n    /*display: none;*/\n}\n</style>\n\n<script>\n(function(scope) {\n    scope.$watch('msg.payload', function(value) {\n        const controls = document.querySelectorAll('.grayout-target');\n        controls.forEach(el => {\n            if (!value) {\n                el.classList.add('grayout');\n            } else {\n                el.classList.remove('grayout');\n            }\n        });\n    });\n})(scope);\n</script>\n",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 900,
+        "y": 120,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "7acc40bd20f556a5",
+        "type": "ui_template",
+        "z": "c74d4096e08fa272",
+        "group": "9b3a8c49293c5c6a",
+        "name": "Grayout 2",
+        "order": 11,
+        "width": 0,
+        "height": 0,
+        "format": "<script>\n(function(scope) {\n    let states = { switch1: false, switch2: false };\n\n    scope.$watch('msg', function(msg) {\n        if (!msg || typeof msg.payload === 'undefined') return;\n\n        // Update the state depending on which switch sent the message\n        if (msg.topic === \"temp\") states.switch1 = msg.payload;\n        if (msg.topic === \"water\") states.switch2 = msg.payload;\n\n        // Enable if either switch is true\n        const shouldEnable = states.switch1 || states.switch2;\n\n        // Add or remove the 'grayout' class from the grayout-target elements\n        const elements = document.querySelectorAll('.grayout-target-2');\n        elements.forEach(el => {\n            if (shouldEnable) {\n                el.classList.remove('grayout');\n            } else {\n                el.classList.add('grayout');\n            }\n        });\n    });\n})(scope);\n</script>\n",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 900,
+        "y": 160,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "e797340e231f7c0d",
+        "type": "function",
+        "z": "c74d4096e08fa272",
+        "name": "Energy select",
+        "func": "\n// Define the lookup table\nconst lookupTable = {\n    \"gas\":       { value1: \"gas\",         value2: 0    },\n    \"electric1\": { value1: \"electricity\", value2: 900  },\n    \"electric2\": { value1: \"electricity\", value2: 1800 },\n    \"mix1\":      { value1: \"mix\",         value2: 900  },\n    \"mix2\":      { value1: \"mix\",         value2: 1800 }\n};\n\n// Get the input value (e.g., from msg.payload)\nlet inputValue = msg.payload;\n\n// Check the lookup table and get the results\nlet result = lookupTable[inputValue] || { value1: \"gas\", value2: 0 };\n\n// Prepare two different messages\nlet msg1 = { payload: result.value1, topic: 'mix' };  // Message for the first output\nlet msg2 = { payload: result.value2, topic: 'mix' };  // Message for the second output\n\n// Return both messages to different outputs\nreturn [msg1, msg2];  // Sends msg1 to output 1, and msg2 to output 2\n",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 920,
+        "y": 680,
+        "wires": [
+            [
+                "fe6f1dbf2c0b0a80"
+            ],
+            [
+                "118396f3190fdecb"
+            ]
+        ]
+    },
+    {
+        "id": "4be8133838ed7b00",
+        "type": "ui_text",
+        "z": "c74d4096e08fa272",
+        "group": "ab3a9f0b2e4b8d1b",
+        "order": 5,
+        "width": 6,
+        "height": 2,
+        "name": "",
+        "label": "",
+        "format": "",
+        "layout": "row-spread",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#000000",
+        "x": 630,
+        "y": 1080,
+        "wires": [],
+        "info": "Dummy block used as a spacer"
+    },
+    {
+        "id": "b95d223c430a2047",
+        "type": "function",
+        "z": "c74d4096e08fa272",
+        "name": "Set fan",
+        "func": "\nflow.set(\"fan\", msg.payload);\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 900,
+        "y": 320,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "4ec59e63f4ab1d7d",
+        "type": "function",
+        "z": "c74d4096e08fa272",
+        "name": "Heating trigger",
+        "func": "\nlet temp = +msg.payload;\n\nif (temp !== 0) {\n    \n    let fan      = flow.get('fan') || 'eco';\n    let lastTemp = context.get('last_temp') || 0;\n    \n    context.set('last_temp', temp);\n\n    // Prepare two different messages\n    let msg1 = { payload: temp, topic: 'temp' };\n    let msg2 = { payload: fan,  topic: 'fan' };\n    \n    if (lastTemp === 0) {\n        return [msg1, msg2];\n    }\n    else {\n        return [msg1, null];\n    }\n\n}\nelse {\n    context.set('last_temp', 0);\n    \n    let msg1 = { payload: 0,     topic: 'temp' }\n    let msg2 = { payload: 'off', topic: 'fan' };\n    return [msg1, msg2];\n}\n    \n",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 420,
+        "y": 140,
+        "wires": [
+            [
+                "0ae1054a76ada25f",
+                "7acc40bd20f556a5",
+                "7565051f69b6a443"
+            ],
+            [
+                "5b3b355a63ca805e",
+                "c470d923eeaf436c"
+            ]
+        ]
+    },
+    {
+        "id": "57ddf5b217a8f13c",
+        "type": "function",
+        "z": "c74d4096e08fa272",
+        "name": "Energy combine",
+        "func": "\n// Define the same lookup table\nconst lookupTable = {\n    \"gas\":       { value1: \"gas\",         value2: 0    },\n    \"electric1\": { value1: \"electricity\", value2: 900  },\n    \"electric2\": { value1: \"electricity\", value2: 1800 },\n    \"mix1\":      { value1: \"mix\",         value2: 900  },\n    \"mix2\":      { value1: \"mix\",         value2: 1800 }\n};\n\n\nif (msg.topic.includes('energy_mix')) {\n    context.set('energy_mix', msg.payload);\n}\nelse if (msg.topic.includes('el_power_level')) {\n    context.set('el_power', msg.payload);\n}\n\nlet value1 = context.get('energy_mix');\nlet value2 = context.get('el_power');\n\n// Perform reverse lookup\nlet foundKey = null;\nfor (let key in lookupTable) {\n    let entry = lookupTable[key];\n    if (entry.value1 === value1 && entry.value2 === value2) {\n        foundKey = key;\n        break;\n    }\n}\n\n// Return the key as payload (or a fallback if not found)\nmsg.payload = foundKey || 'unknown';\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 380,
+        "y": 680,
+        "wires": [
+            [
+                "ef835c0120eecc9d"
+            ]
+        ]
+    },
+    {
+        "id": "aaa0f6ccd28b66b1",
+        "type": "ui_template",
+        "z": "c74d4096e08fa272",
+        "group": "ab3a9f0b2e4b8d1b",
+        "name": "Red error",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "format": "\n<style>\n.red {\n    color: red !important;\n    font-weight: bold;\n}\n</style>\n\n<script>\n(function(scope) {\n    scope.$watch('msg.payload', function(value) {\n        const controls = document.querySelectorAll('.red-error');\n        controls.forEach(el => {\n            if (value === 'OK') {\n                el.classList.remove('red');\n            } else {\n                el.classList.add('red');\n            }\n        });\n    });\n})(scope);\n</script>\n",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 640,
+        "y": 1040,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "ae8c0784f4981dc2",
+        "type": "ui_dropdown",
+        "z": "c74d4096e08fa272",
+        "name": "",
+        "label": "&nbsp;Temperature &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;",
+        "tooltip": "",
+        "place": "",
+        "group": "9b3a8c49293c5c6a",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "passthru": false,
+        "multiple": false,
+        "options": [
+            {
+                "label": "OFF",
+                "value": 0,
+                "type": "num"
+            },
+            {
+                "label": "5 °C",
+                "value": 5,
+                "type": "num"
+            },
+            {
+                "label": "6 °C",
+                "value": 6,
+                "type": "num"
+            },
+            {
+                "label": "7 °C",
+                "value": 7,
+                "type": "num"
+            },
+            {
+                "label": "8 °C",
+                "value": 8,
+                "type": "num"
+            },
+            {
+                "label": "9 °C",
+                "value": 9,
+                "type": "num"
+            },
+            {
+                "label": "10 °C",
+                "value": 10,
+                "type": "num"
+            },
+            {
+                "label": "11 °C",
+                "value": 11,
+                "type": "num"
+            },
+            {
+                "label": "12 °C",
+                "value": 12,
+                "type": "num"
+            },
+            {
+                "label": "13 °C",
+                "value": 13,
+                "type": "num"
+            },
+            {
+                "label": "14 °C",
+                "value": 14,
+                "type": "num"
+            },
+            {
+                "label": "15 °C",
+                "value": 15,
+                "type": "num"
+            },
+            {
+                "label": "16 °C",
+                "value": 16,
+                "type": "num"
+            },
+            {
+                "label": "17 °C",
+                "value": 17,
+                "type": "num"
+            },
+            {
+                "label": "18 °C",
+                "value": 18,
+                "type": "num"
+            },
+            {
+                "label": "19 °C",
+                "value": 19,
+                "type": "num"
+            },
+            {
+                "label": "20 °C",
+                "value": 20,
+                "type": "num"
+            },
+            {
+                "label": "21 °C",
+                "value": 21,
+                "type": "num"
+            },
+            {
+                "label": "22 °C",
+                "value": 22,
+                "type": "num"
+            },
+            {
+                "label": "23 °C",
+                "value": 23,
+                "type": "num"
+            },
+            {
+                "label": "24 °C",
+                "value": 24,
+                "type": "num"
+            },
+            {
+                "label": "25 °C",
+                "value": 25,
+                "type": "num"
+            },
+            {
+                "label": "26 °C",
+                "value": 26,
+                "type": "num"
+            },
+            {
+                "label": "27 °C",
+                "value": 27,
+                "type": "num"
+            },
+            {
+                "label": "28 °C",
+                "value": 28,
+                "type": "num"
+            },
+            {
+                "label": "29 °C",
+                "value": 29,
+                "type": "num"
+            },
+            {
+                "label": "30 °C",
+                "value": 30,
+                "type": "num"
+            }
+        ],
+        "payload": "",
+        "topic": "temp",
+        "topicType": "str",
+        "className": "temp-target",
+        "x": 675,
+        "y": 220,
+        "wires": [
+            [
+                "1d5f498b49a61fb1",
+                "4ec59e63f4ab1d7d"
+            ]
+        ],
+        "l": false
+    },
+    {
+        "id": "102150e9c523f055",
+        "type": "mqtt out",
+        "z": "c74d4096e08fa272",
+        "name": "Temperature",
+        "topic": "service/truma/set/target_temp_room",
+        "qos": "2",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "2c24d1c82633c69e",
+        "x": 1110,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "159bf7d233075a2b",
+        "type": "mqtt out",
+        "z": "c74d4096e08fa272",
+        "name": "Fan setting",
+        "topic": "service/truma/set/heating_mode",
+        "qos": "2",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "2c24d1c82633c69e",
+        "x": 1110,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "id": "2c6234848be3af9e",
+        "type": "mqtt out",
+        "z": "c74d4096e08fa272",
+        "name": "Water temperature",
+        "topic": "service/truma/set/target_temp_water",
+        "qos": "2",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "2c24d1c82633c69e",
+        "x": 1130,
+        "y": 520,
+        "wires": []
+    },
+    {
+        "id": "fe6f1dbf2c0b0a80",
+        "type": "mqtt out",
+        "z": "c74d4096e08fa272",
+        "name": "Energy mix",
+        "topic": "service/truma/set/energy_mix",
+        "qos": "2",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "2c24d1c82633c69e",
+        "x": 1110,
+        "y": 640,
+        "wires": []
+    },
+    {
+        "id": "118396f3190fdecb",
+        "type": "mqtt out",
+        "z": "c74d4096e08fa272",
+        "name": "El. power",
+        "topic": "service/truma/set/el_power_level",
+        "qos": "2",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "2c24d1c82633c69e",
+        "x": 1100,
+        "y": 700,
+        "wires": []
+    },
+    {
+        "id": "743d4152f8e67158",
+        "type": "mqtt in",
+        "z": "c74d4096e08fa272",
+        "name": "Temperature",
+        "topic": "service/truma/control_status/target_temp_room",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "2c24d1c82633c69e",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 190,
+        "y": 280,
+        "wires": [
+            [
+                "7565051f69b6a443"
+            ]
+        ]
+    },
+    {
+        "id": "c748715438fabfcd",
+        "type": "mqtt in",
+        "z": "c74d4096e08fa272",
+        "name": "Fan setting",
+        "topic": "service/truma/control_status/heating_mode",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "2c24d1c82633c69e",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 180,
+        "y": 380,
+        "wires": [
+            [
+                "cc39a6e2aff74086",
+                "5b3b355a63ca805e"
+            ]
+        ]
+    },
+    {
+        "id": "a9ea96f0e1ddded5",
+        "type": "mqtt in",
+        "z": "c74d4096e08fa272",
+        "name": "Water temperature",
+        "topic": "service/truma/control_status/target_temp_water",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "2c24d1c82633c69e",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 210,
+        "y": 520,
+        "wires": [
+            [
+                "375b24ad920e78fd"
+            ]
+        ]
+    },
+    {
+        "id": "2b1463bd1d674f3e",
+        "type": "mqtt in",
+        "z": "c74d4096e08fa272",
+        "name": "Energy mix",
+        "topic": "service/truma/control_status/energy_mix",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "2c24d1c82633c69e",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 180,
+        "y": 640,
+        "wires": [
+            [
+                "57ddf5b217a8f13c"
+            ]
+        ]
+    },
+    {
+        "id": "44c84c6c152ac72e",
+        "type": "mqtt in",
+        "z": "c74d4096e08fa272",
+        "name": "El. power",
+        "topic": "service/truma/control_status/el_power_level",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "2c24d1c82633c69e",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 180,
+        "y": 700,
+        "wires": [
+            [
+                "57ddf5b217a8f13c"
+            ]
+        ]
+    },
+    {
+        "id": "49463f2823ece9ff",
+        "type": "mqtt in",
+        "z": "c74d4096e08fa272",
+        "name": "Room temperature",
+        "topic": "service/truma/control_status/current_temp_room",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "2c24d1c82633c69e",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 210,
+        "y": 840,
+        "wires": [
+            [
+                "8c46379d52aa9f0a"
+            ]
+        ]
+    },
+    {
+        "id": "ab8c68e6c951999f",
+        "type": "mqtt in",
+        "z": "c74d4096e08fa272",
+        "name": "Water temperature",
+        "topic": "service/truma/control_status/current_temp_water",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "2c24d1c82633c69e",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 210,
+        "y": 900,
+        "wires": [
+            [
+                "1394ab4823e09e34"
+            ]
+        ]
+    },
+    {
+        "id": "a3546477d33a8a89",
+        "type": "mqtt in",
+        "z": "c74d4096e08fa272",
+        "name": "Error code",
+        "topic": "service/truma/control_status/error_code",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "2c24d1c82633c69e",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 180,
+        "y": 1020,
+        "wires": [
+            [
+                "aeeecafd3aba5913"
+            ]
+        ]
+    },
+    {
+        "id": "eeb94ec5ffdea417",
+        "type": "mqtt in",
+        "z": "c74d4096e08fa272",
+        "name": "Connection status",
+        "topic": "service/truma/control_status/alive",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "2c24d1c82633c69e",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 210,
+        "y": 960,
+        "wires": [
+            [
+                "aeeecafd3aba5913"
+            ]
+        ]
+    },
+    {
+        "id": "cc39a6e2aff74086",
+        "type": "function",
+        "z": "c74d4096e08fa272",
+        "name": "Set fan",
+        "func": "\nfan = msg.payload\n    \nif (fan !== 'off'){\n    flow.set('fan', fan);\n}\n\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 340,
+        "y": 360,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "cc06935f987801fd",
+        "type": "function",
+        "z": "c74d4096e08fa272",
+        "name": "Alarm",
+        "func": "\n\nif (msg.topic.includes('alive')) {\n    return null;\n}\n\nlet val = msg.payload;\n\nlet lastAlarm = context.get('lastAlarm') || false;\nlet alarm = false;\n\nif (val === 'OK') {\n    alarm = false;\n    context.set('lastAlarm', alarm);\n}\nelse {\n    alarm = val;\n}\n\nif (alarm && alarm != lastAlarm) {\n    context.set('lastAlarm', alarm);\n    msg.payload = `⚠️ Caravan alert!\\nTruma error code:\\n${val}`;\n    node.warn(msg.payload);\n    return msg;\n}\nelse {\n    return null;\n}\n\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 630,
+        "y": 1000,
+        "wires": [
+            [
+                "60b4291ab1bc4195"
+            ]
+        ]
+    },
+    {
+        "id": "60b4291ab1bc4195",
+        "type": "link out",
+        "z": "c74d4096e08fa272",
+        "name": "link out 4",
+        "mode": "link",
+        "links": [
+            "2f93affb367a865e"
+        ],
+        "x": 805,
+        "y": 1000,
+        "wires": []
+    },
+    {
+        "id": "1d5f498b49a61fb1",
+        "type": "ui_template",
+        "z": "c74d4096e08fa272",
+        "group": "9b3a8c49293c5c6a",
+        "name": "Bold temp",
+        "order": 7,
+        "width": 0,
+        "height": 0,
+        "format": "<style>\n.bold {\n    font-weight: bold;\n}\n</style>\n\n<script>\n(function(scope) {\n    scope.$watch('msg.topic', function(value) {\n        const controls = document.querySelectorAll('.temp-target');\n        controls.forEach(el => {\n            if (value === 'temp') {\n                el.classList.add('bold');\n            } else {\n                el.classList.remove('bold');\n            }\n        });\n    });\n})(scope);\n</script>\n",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 910,
+        "y": 260,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "c470d923eeaf436c",
+        "type": "ui_template",
+        "z": "c74d4096e08fa272",
+        "group": "9b3a8c49293c5c6a",
+        "name": "Bold fan",
+        "order": 8,
+        "width": 0,
+        "height": 0,
+        "format": "<style>\n.bold {\n    font-weight: bold;\n}\n</style>\n\n<script>\n(function(scope) {\n    scope.$watch('msg.topic', function(value) {\n        const controls = document.querySelectorAll('.fan-target');\n        controls.forEach(el => {\n            if (value === 'fan') {\n                el.classList.add('bold');\n            } else {\n                el.classList.remove('bold');\n            }\n        });\n    });\n})(scope);\n</script>\n",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 900,
+        "y": 360,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "2a8c65247fe2b853",
+        "type": "ui_template",
+        "z": "c74d4096e08fa272",
+        "group": "9b3a8c49293c5c6a",
+        "name": "Bold water",
+        "order": 9,
+        "width": 0,
+        "height": 0,
+        "format": "<style>\n.bold {\n    font-weight: bold;\n}\n</style>\n\n<script>\n(function(scope) {\n    scope.$watch('msg.topic', function(value) {\n        const controls = document.querySelectorAll('.water-target');\n        controls.forEach(el => {\n            if (value === 'water') {\n                el.classList.add('bold');\n            } else {\n                el.classList.remove('bold');\n            }\n        });\n    });\n})(scope);\n</script>\n",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 910,
+        "y": 480,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "bac16c6e60310b9f",
+        "type": "ui_template",
+        "z": "c74d4096e08fa272",
+        "group": "9b3a8c49293c5c6a",
+        "name": "Bold mix",
+        "order": 10,
+        "width": 0,
+        "height": 0,
+        "format": "<style>\n.bold {\n    font-weight: bold;\n}\n</style>\n\n<script>\n(function(scope) {\n    scope.$watch('msg.topic', function(value) {\n        const controls = document.querySelectorAll('.mix-target');\n        controls.forEach(el => {\n            if (value === 'mix') {\n                el.classList.add('bold');\n            } else {\n                el.classList.remove('bold');\n            }\n        });\n    });\n})(scope);\n</script>\n",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 900,
+        "y": 640,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "aeeecafd3aba5913",
+        "type": "function",
+        "z": "c74d4096e08fa272",
+        "name": "Decode error",
+        "func": "\n\nif (msg.topic === 'heartbeat') {\n    heartbeat = context.get('heartbeat') || '◎'; // ◧ ◨ ◎ ◉\n    \n    if (heartbeat === '◎') {\n        context.set('heartbeat', '◉');\n    }\n    else {\n        context.set('heartbeat', '◎');\n    }\n\n    output = context.get('output');\n    msg.payload = output + ' ' + heartbeat;\n    return [msg, null];\n}\n\nelse if (msg.topic.includes('alive')) {\n    if (msg.payload !== 'ON') {\n        msg.payload = 'LIN disconnect!';\n    }\n    else {\n        status = context.get('status');\n        if (status === undefined) {\n            msg.payload = 'OK';\n        }\n        else {\n            msg.payload = status;\n        }\n    }\n    context.set('output', msg.payload);\n    return [null, msg];\n}\n\nelse {\n    \n    switch (+msg.payload) {\n        \n        case 0:\n            msg.payload = 'OK';\n            break;\n            \n        case 7:\n            msg.payload = '230V disconnect!';\n            break;\n        \n        case 8:\n            msg.payload = 'Gas interrupted!';  // In mix mode\n            break;\n        \n        case 17:\n            msg.payload = 'Gas interrupted!';\n            break;\n            \n        default:\n            msg.payload = 'Error code: ' + msg.payload;\n            break;\n    }\n    \n    context.set('status', msg.payload);\n    context.set('output', msg.payload);\n    return [null, msg];\n}",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 430,
+        "y": 960,
+        "wires": [
+            [
+                "290e1633a57bc091"
+            ],
+            [
+                "aaa0f6ccd28b66b1",
+                "cc06935f987801fd"
+            ]
+        ]
+    },
+    {
+        "id": "7565051f69b6a443",
+        "type": "subflow:2b1e3a255c9f7549",
+        "z": "c74d4096e08fa272",
+        "name": "",
+        "x": 680,
+        "y": 280,
+        "wires": [
+            [
+                "1d5f498b49a61fb1",
+                "ae8c0784f4981dc2",
+                "df51382627e252a7"
+            ],
+            [
+                "102150e9c523f055"
+            ]
+        ]
+    },
+    {
+        "id": "5b3b355a63ca805e",
+        "type": "subflow:2b1e3a255c9f7549",
+        "z": "c74d4096e08fa272",
+        "name": "",
+        "env": [
+            {
+                "name": "topic",
+                "value": "fan",
+                "type": "str"
+            }
+        ],
+        "x": 680,
+        "y": 380,
+        "wires": [
+            [
+                "c470d923eeaf436c",
+                "4a65ed61376cb495"
+            ],
+            [
+                "159bf7d233075a2b"
+            ]
+        ]
+    },
+    {
+        "id": "375b24ad920e78fd",
+        "type": "subflow:2b1e3a255c9f7549",
+        "z": "c74d4096e08fa272",
+        "name": "",
+        "env": [
+            {
+                "name": "topic",
+                "value": "water",
+                "type": "str"
+            }
+        ],
+        "x": 680,
+        "y": 520,
+        "wires": [
+            [
+                "e38253167f8eb65b",
+                "2a8c65247fe2b853"
+            ],
+            [
+                "2c6234848be3af9e"
+            ]
+        ]
+    },
+    {
+        "id": "ef835c0120eecc9d",
+        "type": "subflow:2b1e3a255c9f7549",
+        "z": "c74d4096e08fa272",
+        "name": "",
+        "env": [
+            {
+                "name": "topic",
+                "value": "mix",
+                "type": "str"
+            }
+        ],
+        "x": 680,
+        "y": 680,
+        "wires": [
+            [
+                "ea30ab539cdc3901",
+                "bac16c6e60310b9f"
+            ],
+            [
+                "e797340e231f7c0d"
+            ]
+        ]
+    },
+    {
+        "id": "4a65ed61376cb495",
+        "type": "function",
+        "z": "c74d4096e08fa272",
+        "name": "Filter",
+        "func": "\nif (msg.payload === 'off') {\n    return null;\n}\nelse {\n    return msg;\n}\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 590,
+        "y": 320,
+        "wires": [
+            [
+                "6cb8252a67629962"
+            ]
+        ]
+    },
+    {
+        "id": "29154267620d677a",
+        "type": "inject",
+        "z": "c74d4096e08fa272",
+        "name": "Heartbeat",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "1",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "topic": "heartbeat",
+        "payload": "",
+        "payloadType": "date",
+        "x": 190,
+        "y": 1080,
+        "wires": [
+            [
+                "aeeecafd3aba5913"
+            ]
+        ]
+    },
+    {
+        "id": "df51382627e252a7",
+        "type": "function",
+        "z": "c74d4096e08fa272",
+        "name": "Set topic",
+        "func": "\nmsg.topic = 'temp';\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 720,
+        "y": 100,
+        "wires": [
+            [
+                "0ae1054a76ada25f",
+                "7acc40bd20f556a5"
             ]
         ]
     }
