@@ -1231,64 +1231,6 @@
         "wires": []
     },
     {
-        "id": "4aa64bad3b5ea8d6",
-        "type": "inject",
-        "z": "b22624498baaa896",
-        "name": "",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": true,
-        "onceDelay": 0.1,
-        "topic": "",
-        "payload": "90",
-        "payloadType": "num",
-        "x": 490,
-        "y": 740,
-        "wires": [
-            [
-                "21eeffd9e1750af5"
-            ]
-        ]
-    },
-    {
-        "id": "434a1bf18e52bbe1",
-        "type": "inject",
-        "z": "b22624498baaa896",
-        "name": "",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": true,
-        "onceDelay": 0.1,
-        "topic": "",
-        "payload": "50",
-        "payloadType": "num",
-        "x": 490,
-        "y": 800,
-        "wires": [
-            [
-                "dba917bec6b15d38"
-            ]
-        ]
-    },
-    {
         "id": "26f7cb849699ceef",
         "type": "subflow:26a48bdabf7607df",
         "z": "b22624498baaa896",
@@ -1315,6 +1257,56 @@
         "wires": [
             [
                 "210d9c2dfb32db9e"
+            ]
+        ]
+    },
+    {
+        "id": "e4fce74766570c21",
+        "type": "victron-input-tank",
+        "z": "b22624498baaa896",
+        "service": "com.victronenergy.tank/21",
+        "path": "/Level",
+        "serviceObj": {
+            "service": "com.victronenergy.tank/21",
+            "name": "Propane Tank 1"
+        },
+        "pathObj": {
+            "path": "/Level",
+            "type": "float",
+            "name": "Tank level (%)"
+        },
+        "name": "",
+        "onlyChanges": false,
+        "x": 170,
+        "y": 740,
+        "wires": [
+            [
+                "21eeffd9e1750af5"
+            ]
+        ]
+    },
+    {
+        "id": "2d9dcd10121f09d4",
+        "type": "victron-input-tank",
+        "z": "b22624498baaa896",
+        "service": "com.victronenergy.tank/20",
+        "path": "/Level",
+        "serviceObj": {
+            "service": "com.victronenergy.tank/20",
+            "name": "Propane Tank 2"
+        },
+        "pathObj": {
+            "path": "/Level",
+            "type": "float",
+            "name": "Tank level (%)"
+        },
+        "name": "",
+        "onlyChanges": false,
+        "x": 170,
+        "y": 800,
+        "wires": [
+            [
+                "dba917bec6b15d38"
             ]
         ]
     },
@@ -1404,6 +1396,7 @@
         "id": "1cbbd964a196c7d8",
         "type": "victron-input-temperature",
         "z": "2561d49b29c858c7",
+        "d": true,
         "service": "com.victronenergy.temperature/20",
         "path": "/Temperature",
         "serviceObj": {
@@ -1419,7 +1412,7 @@
         "onlyChanges": false,
         "roundValues": "1",
         "x": 150,
-        "y": 200,
+        "y": 640,
         "wires": [
             [
                 "a852c58b3b285f49"
@@ -1776,7 +1769,7 @@
         "rh": 0,
         "inputs": 0,
         "x": 130,
-        "y": 120,
+        "y": 100,
         "wires": [
             [
                 "e50497657df013ef"
@@ -1793,7 +1786,7 @@
             "2f93affb367a865e"
         ],
         "x": 755,
-        "y": 160,
+        "y": 140,
         "wires": []
     },
     {
@@ -1821,7 +1814,7 @@
         "diff": false,
         "className": "",
         "x": 790,
-        "y": 120,
+        "y": 100,
         "wires": []
     },
     {
@@ -1842,7 +1835,7 @@
             }
         ],
         "x": 650,
-        "y": 160,
+        "y": 140,
         "wires": [
             [
                 "e1dd06c5c761e4d9"
@@ -2005,32 +1998,11 @@
         "z": "2561d49b29c858c7",
         "name": "",
         "x": 510,
-        "y": 120,
+        "y": 100,
         "wires": [
             [
                 "f8c13de4be546aa7",
                 "9233787d27554fa6"
-            ]
-        ]
-    },
-    {
-        "id": "a852c58b3b285f49",
-        "type": "subflow:43e263465d4c8532",
-        "z": "2561d49b29c858c7",
-        "name": "",
-        "env": [
-            {
-                "name": "offset",
-                "value": "-0.4",
-                "type": "num"
-            }
-        ],
-        "x": 510,
-        "y": 200,
-        "wires": [
-            [
-                "a143838f0999d97b",
-                "e577c0ec5b4af224"
             ]
         ]
     },
@@ -2131,6 +2103,124 @@
             [
                 "713473bc2af8430d"
             ]
+        ]
+    },
+    {
+        "id": "fbb485a57854c7ce",
+        "type": "victron-input-temperature",
+        "z": "2561d49b29c858c7",
+        "service": "com.victronenergy.tank/21",
+        "path": "/Temperature",
+        "serviceObj": {
+            "service": "com.victronenergy.tank/21",
+            "name": "Propane Tank 1"
+        },
+        "pathObj": {
+            "path": "/Temperature",
+            "type": "float",
+            "name": "Temperature (°C)"
+        },
+        "name": "",
+        "onlyChanges": false,
+        "roundValues": "1",
+        "x": 180,
+        "y": 160,
+        "wires": [
+            [
+                "ed0b389fe13487c0"
+            ]
+        ]
+    },
+    {
+        "id": "6a1439c4cd40cd39",
+        "type": "victron-input-temperature",
+        "z": "2561d49b29c858c7",
+        "service": "com.victronenergy.tank/20",
+        "path": "/Temperature",
+        "serviceObj": {
+            "service": "com.victronenergy.tank/20",
+            "name": "Propane Tank 2"
+        },
+        "pathObj": {
+            "path": "/Temperature",
+            "type": "float",
+            "name": "Temperature (°C)"
+        },
+        "name": "",
+        "onlyChanges": false,
+        "roundValues": "1",
+        "x": 180,
+        "y": 220,
+        "wires": [
+            [
+                "4bbd63596c1f0a25"
+            ]
+        ]
+    },
+    {
+        "id": "db7e61c450302526",
+        "type": "function",
+        "z": "2561d49b29c858c7",
+        "name": "Max",
+        "func": "\n// Get the stored array or initialize if it doesn't exist\nlet values = context.get('values') || [];\n\n// Add the new payload\nvalues.push(msg.payload);\n\n// Keep only the last 10 values\nif (values.length > 5) {\n    values.shift(); // Remove the oldest value\n}\n\n// Store the updated array back to context\ncontext.set('values', values);\n\n// Find the maximum value\nlet max = Math.max(...values);\n\n// Send the maximum value\nmsg.payload = max;\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 510,
+        "y": 200,
+        "wires": [
+            [
+                "a143838f0999d97b",
+                "e577c0ec5b4af224"
+            ]
+        ]
+    },
+    {
+        "id": "ed0b389fe13487c0",
+        "type": "subflow:43e263465d4c8532",
+        "z": "2561d49b29c858c7",
+        "name": "",
+        "x": 390,
+        "y": 160,
+        "wires": [
+            [
+                "db7e61c450302526"
+            ]
+        ]
+    },
+    {
+        "id": "4bbd63596c1f0a25",
+        "type": "subflow:43e263465d4c8532",
+        "z": "2561d49b29c858c7",
+        "name": "",
+        "x": 390,
+        "y": 220,
+        "wires": [
+            [
+                "db7e61c450302526"
+            ]
+        ]
+    },
+    {
+        "id": "a852c58b3b285f49",
+        "type": "subflow:43e263465d4c8532",
+        "z": "2561d49b29c858c7",
+        "d": true,
+        "name": "",
+        "env": [
+            {
+                "name": "offset",
+                "value": "-0.4",
+                "type": "num"
+            }
+        ],
+        "x": 510,
+        "y": 640,
+        "wires": [
+            []
         ]
     },
     {
