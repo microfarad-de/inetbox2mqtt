@@ -189,7 +189,7 @@
     {
         "id": "c515380878a4716f",
         "type": "subflow",
-        "name": "Propane percent",
+        "name": "Propane %",
         "info": "",
         "category": "",
         "in": [
@@ -218,12 +218,12 @@
         "env": [
             {
                 "name": "empty",
-                "type": "str",
+                "type": "num",
                 "value": "4"
             },
             {
                 "name": "full",
-                "type": "str",
+                "type": "num",
                 "value": "36.5"
             }
         ],
@@ -543,7 +543,7 @@
         "type": "function",
         "z": "c515380878a4716f",
         "name": "Propane percent",
-        "func": "\nempty = env.get('empty');\nfull  = env.get('full');\n\nlevel = msg.payload;\n\nmsg.payload = (100 * (level - empty) / (full - empty)).toFixed(0);\n\nreturn msg;",
+        "func": "\nempty = env.get('empty');\nfull  = env.get('full');\n\nlevel = msg.payload;\n\npercent = 100 * (level - empty) / (full - empty);\n\nif (percent > 100) {\n    percent = 100;\n}\n\nif (percent < 0) {\n    percent = 0;\n}\n\nmsg.payload = percent.toFixed(0);\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -633,7 +633,9 @@
             "dfc1f32cb802a02e",
             "335af24ca01463cb",
             "210d9c2dfb32db9e",
-            "e1dd06c5c761e4d9"
+            "e1dd06c5c761e4d9",
+            "9141f247602e75b7",
+            "14753609f7bc5747"
         ],
         "x": 55,
         "y": 260,
@@ -1219,7 +1221,7 @@
         "fontSize": 16,
         "color": "#000000",
         "x": 710,
-        "y": 860,
+        "y": 940,
         "wires": [],
         "info": "Dummy block used as a spacer"
     },
@@ -1289,7 +1291,7 @@
         "diff": false,
         "className": "",
         "x": 730,
-        "y": 800,
+        "y": 840,
         "wires": []
     },
     {
@@ -1353,23 +1355,12 @@
         "type": "subflow:c515380878a4716f",
         "z": "b22624498baaa896",
         "name": "",
-        "env": [
-            {
-                "name": "empty",
-                "value": "4",
-                "type": "str"
-            },
-            {
-                "name": "full",
-                "value": "36.5",
-                "type": "str"
-            }
-        ],
-        "x": 480,
+        "x": 400,
         "y": 740,
         "wires": [
             [
-                "21eeffd9e1750af5"
+                "21eeffd9e1750af5",
+                "56bfe721ed8b5675"
             ]
         ]
     },
@@ -1390,11 +1381,12 @@
                 "type": "str"
             }
         ],
-        "x": 480,
-        "y": 800,
+        "x": 400,
+        "y": 840,
         "wires": [
             [
-                "dba917bec6b15d38"
+                "dba917bec6b15d38",
+                "b2790ee93b81319a"
             ]
         ]
     },
@@ -1417,12 +1409,108 @@
         "name": "",
         "onlyChanges": false,
         "x": 170,
-        "y": 800,
+        "y": 840,
         "wires": [
             [
                 "bcbcc2ea62ba3ecd"
             ]
         ]
+    },
+    {
+        "id": "56bfe721ed8b5675",
+        "type": "subflow:26a48bdabf7607df",
+        "z": "b22624498baaa896",
+        "name": "",
+        "env": [
+            {
+                "name": "low",
+                "value": "5",
+                "type": "num"
+            },
+            {
+                "name": "threshold",
+                "value": "10",
+                "type": "num"
+            },
+            {
+                "name": "message",
+                "value": "Left propane tank",
+                "type": "str"
+            },
+            {
+                "name": "unit",
+                "value": "%",
+                "type": "str"
+            }
+        ],
+        "x": 570,
+        "y": 780,
+        "wires": [
+            [
+                "9141f247602e75b7"
+            ]
+        ]
+    },
+    {
+        "id": "9141f247602e75b7",
+        "type": "link out",
+        "z": "b22624498baaa896",
+        "name": "link out 10",
+        "mode": "link",
+        "links": [
+            "2f93affb367a865e"
+        ],
+        "x": 675,
+        "y": 780,
+        "wires": []
+    },
+    {
+        "id": "b2790ee93b81319a",
+        "type": "subflow:26a48bdabf7607df",
+        "z": "b22624498baaa896",
+        "name": "",
+        "env": [
+            {
+                "name": "low",
+                "value": "5",
+                "type": "num"
+            },
+            {
+                "name": "threshold",
+                "value": "10",
+                "type": "num"
+            },
+            {
+                "name": "message",
+                "value": "Right propane tank",
+                "type": "str"
+            },
+            {
+                "name": "unit",
+                "value": "%",
+                "type": "str"
+            }
+        ],
+        "x": 570,
+        "y": 880,
+        "wires": [
+            [
+                "14753609f7bc5747"
+            ]
+        ]
+    },
+    {
+        "id": "14753609f7bc5747",
+        "type": "link out",
+        "z": "b22624498baaa896",
+        "name": "link out 11",
+        "mode": "link",
+        "links": [
+            "2f93affb367a865e"
+        ],
+        "x": 675,
+        "y": 880,
+        "wires": []
     },
     {
         "id": "e17db9ed39276503",
@@ -1584,7 +1672,7 @@
         "y": 700,
         "wires": [
             [
-                "ba91e7b317413a88"
+                "5a1c2139256a9b7c"
             ]
         ]
     },
@@ -1639,28 +1727,6 @@
         "wires": [
             [
                 "3c84ac16a56e8271"
-            ]
-        ]
-    },
-    {
-        "id": "ba91e7b317413a88",
-        "type": "function",
-        "z": "2561d49b29c858c7",
-        "d": true,
-        "name": "Offset",
-        "func": "let hum = msg.payload;\n\nhum = hum - 0;\n\nmsg.payload = (+hum).toFixed(1);\n\nreturn msg;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 510,
-        "y": 700,
-        "wires": [
-            [
-                "cfdc6c99305c58ca",
-                "5b7e97627c330eb3"
             ]
         ]
     },
@@ -2333,6 +2399,21 @@
         "y": 640,
         "wires": [
             []
+        ]
+    },
+    {
+        "id": "5a1c2139256a9b7c",
+        "type": "subflow:43e263465d4c8532",
+        "z": "2561d49b29c858c7",
+        "d": true,
+        "name": "",
+        "x": 510,
+        "y": 700,
+        "wires": [
+            [
+                "cfdc6c99305c58ca",
+                "5b7e97627c330eb3"
+            ]
         ]
     },
     {
