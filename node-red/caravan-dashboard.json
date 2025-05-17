@@ -187,6 +187,50 @@
         "color": "#DDAA99"
     },
     {
+        "id": "c515380878a4716f",
+        "type": "subflow",
+        "name": "Propane percent",
+        "info": "",
+        "category": "",
+        "in": [
+            {
+                "x": 200,
+                "y": 160,
+                "wires": [
+                    {
+                        "id": "5e9aa1427a4e9455"
+                    }
+                ]
+            }
+        ],
+        "out": [
+            {
+                "x": 540,
+                "y": 160,
+                "wires": [
+                    {
+                        "id": "5e9aa1427a4e9455",
+                        "port": 0
+                    }
+                ]
+            }
+        ],
+        "env": [
+            {
+                "name": "empty",
+                "type": "str",
+                "value": "4"
+            },
+            {
+                "name": "full",
+                "type": "str",
+                "value": "36.5"
+            }
+        ],
+        "meta": {},
+        "color": "#DDAA99"
+    },
+    {
         "id": "c627e40abb963e7a",
         "type": "ui_tab",
         "name": "Environment",
@@ -495,6 +539,24 @@
         ]
     },
     {
+        "id": "5e9aa1427a4e9455",
+        "type": "function",
+        "z": "c515380878a4716f",
+        "name": "Propane percent",
+        "func": "\nempty = env.get('empty');\nfull  = env.get('full');\n\nlevel = msg.payload;\n\nmsg.payload = (100 * (level - empty) / (full - empty)).toFixed(0);\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 370,
+        "y": 160,
+        "wires": [
+            []
+        ]
+    },
+    {
         "id": "941135a1b6edb738",
         "type": "ui_template",
         "z": "37a752f35a68bbed",
@@ -713,7 +775,7 @@
         "name": "",
         "onlyChanges": false,
         "roundValues": "2",
-        "x": 180,
+        "x": 170,
         "y": 560,
         "wires": [
             [
@@ -896,7 +958,7 @@
         "name": "",
         "onlyChanges": false,
         "roundValues": "2",
-        "x": 160,
+        "x": 150,
         "y": 120,
         "wires": [
             [
@@ -1261,23 +1323,49 @@
         ]
     },
     {
-        "id": "e4fce74766570c21",
-        "type": "victron-input-tank",
+        "id": "53d71d6f0ddc2d86",
+        "type": "victron-input-custom",
         "z": "b22624498baaa896",
         "service": "com.victronenergy.tank/21",
-        "path": "/Level",
+        "path": "/RawValue",
         "serviceObj": {
             "service": "com.victronenergy.tank/21",
-            "name": "Propane Tank 1"
+            "name": "Propane Tank 1 (21)"
         },
         "pathObj": {
-            "path": "/Level",
-            "type": "float",
-            "name": "Tank level (%)"
+            "path": "/RawValue",
+            "name": "/RawValue",
+            "type": "number",
+            "value": 36.21609878540039
         },
         "name": "",
         "onlyChanges": false,
         "x": 170,
+        "y": 740,
+        "wires": [
+            [
+                "a4fe06dad0e33752"
+            ]
+        ]
+    },
+    {
+        "id": "a4fe06dad0e33752",
+        "type": "subflow:c515380878a4716f",
+        "z": "b22624498baaa896",
+        "name": "",
+        "env": [
+            {
+                "name": "empty",
+                "value": "4",
+                "type": "str"
+            },
+            {
+                "name": "full",
+                "value": "36.5",
+                "type": "str"
+            }
+        ],
+        "x": 480,
         "y": 740,
         "wires": [
             [
@@ -1286,19 +1374,45 @@
         ]
     },
     {
-        "id": "2d9dcd10121f09d4",
-        "type": "victron-input-tank",
+        "id": "bcbcc2ea62ba3ecd",
+        "type": "subflow:c515380878a4716f",
+        "z": "b22624498baaa896",
+        "name": "",
+        "env": [
+            {
+                "name": "empty",
+                "value": "4",
+                "type": "str"
+            },
+            {
+                "name": "full",
+                "value": "36.5",
+                "type": "str"
+            }
+        ],
+        "x": 480,
+        "y": 800,
+        "wires": [
+            [
+                "dba917bec6b15d38"
+            ]
+        ]
+    },
+    {
+        "id": "2abf196677a68301",
+        "type": "victron-input-custom",
         "z": "b22624498baaa896",
         "service": "com.victronenergy.tank/20",
-        "path": "/Level",
+        "path": "/RawValue",
         "serviceObj": {
             "service": "com.victronenergy.tank/20",
-            "name": "Propane Tank 2"
+            "name": "Propane Tank 2 (20)"
         },
         "pathObj": {
-            "path": "/Level",
-            "type": "float",
-            "name": "Tank level (%)"
+            "path": "/RawValue",
+            "name": "/RawValue",
+            "type": "number",
+            "value": 9.189582824707031
         },
         "name": "",
         "onlyChanges": false,
@@ -1306,7 +1420,7 @@
         "y": 800,
         "wires": [
             [
-                "dba917bec6b15d38"
+                "bcbcc2ea62ba3ecd"
             ]
         ]
     },
@@ -1396,7 +1510,6 @@
         "id": "1cbbd964a196c7d8",
         "type": "victron-input-temperature",
         "z": "2561d49b29c858c7",
-        "d": true,
         "service": "com.victronenergy.temperature/20",
         "path": "/Temperature",
         "serviceObj": {
@@ -2208,7 +2321,6 @@
         "id": "a852c58b3b285f49",
         "type": "subflow:43e263465d4c8532",
         "z": "2561d49b29c858c7",
-        "d": true,
         "name": "",
         "env": [
             {
