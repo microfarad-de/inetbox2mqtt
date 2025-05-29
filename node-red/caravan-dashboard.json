@@ -360,7 +360,7 @@
                 "accents": "blue",
                 "warn": "red",
                 "background": "grey",
-                "palette": "dark"
+                "palette": "light"
             }
         },
         "site": {
@@ -623,11 +623,11 @@
             "groupOutline": "#535353"
         },
         "sizes": {
-            "density": "default",
+            "density": "comfortable",
             "pagePadding": "3px",
-            "groupGap": "3px",
+            "groupGap": "4px",
             "groupBorderRadius": "3px",
-            "widgetGap": "12px"
+            "widgetGap": "16px"
         }
     },
     {
@@ -870,6 +870,61 @@
         "groupType": "default"
     },
     {
+        "id": "e96f88435ad61c8c",
+        "type": "ui-spacer",
+        "group": "2b74e6ea7cedf9dc",
+        "name": "spacer",
+        "tooltip": "",
+        "order": 7,
+        "width": 6,
+        "height": 1,
+        "className": ""
+    },
+    {
+        "id": "9f97964497613b18",
+        "type": "ui-spacer",
+        "group": "fc3c351e5707cb90",
+        "name": "spacer",
+        "tooltip": "",
+        "order": 5,
+        "width": "6",
+        "height": "1",
+        "className": ""
+    },
+    {
+        "id": "e57b48aa09852086",
+        "type": "ui-spacer",
+        "group": "64aefdbb4f4733ee",
+        "name": "spacer",
+        "tooltip": "",
+        "order": 6,
+        "width": "6",
+        "height": "1",
+        "className": ""
+    },
+    {
+        "id": "854d115d8aa402fb",
+        "type": "ui-spacer",
+        "group": "459be61f93594b03",
+        "name": "spacer",
+        "tooltip": "",
+        "order": 6,
+        "width": "6",
+        "height": "1",
+        "className": ""
+    },
+    {
+        "id": "c46a29638576f47d",
+        "type": "ui-spacer",
+        "group": "25319c4b021b78d9",
+        "name": "spacer",
+        "tooltip": "",
+        "order": 5,
+        "width": "6",
+        "height": "1",
+        "className": ""
+    },
+    {
         "id": "e7756b84d8b39dfb",
         "type": "function",
         "z": "26a48bdabf7607df",
@@ -910,7 +965,7 @@
         "type": "function",
         "z": "2b1e3a255c9f7549",
         "name": "Retransmit",
-        "func": "\n// Resend the message if setting has not been applied\n\ntopic = env.get('topic');\nstate = context.get('state');\n\nconst DEBUG = false;\n\nif (msg.topic === topic) {\n   \n    if (DEBUG) node.warn(`Sent ${msg.payload}`);\n    context.set('state', msg.payload);\n    \n    let msg1 = {};\n    msg1.ui_update = {};\n    msg1.ui_update.class = 'modified';\n    \n    return [msg1, msg];\n}\nelse {\n    \n    if (state !== undefined) {\n    \n        if (msg.payload === state) {\n            if (DEBUG) node.warn(`Match ${msg.payload}`);\n            context.set('state', undefined);\n            \n            msg.ui_update = {};\n            msg.ui_update.class = '';\n            \n            return [msg, null];\n        }\n        else {\n            msg.payload = state;\n            if (DEBUG) node.warn(`Resend ${msg.payload}`);\n            return [null, msg];\n        }\n        \n    }\n    else {\n        return [msg, null];\n    }\n    \n}\n\n",
+        "func": "\n// Resend the message if setting has not been applied\n\ntopic = env.get('topic');\nstate = context.get('state');\n\nconst DEBUG = false;\n\nif (msg.topic === topic) {\n   \n    if (DEBUG) node.warn(`Sent ${msg.payload}`);\n    context.set('state', msg.payload);\n    \n    let msg1 = {};\n    msg1.topic     = topic;\n    msg1.ui_update = {};\n    msg1.ui_update.class = 'modified';\n    \n    return [msg1, msg];\n}\nelse {\n    \n    if (state !== undefined) {\n    \n        if (msg.payload === state) {\n            if (DEBUG) node.warn(`Match ${msg.payload}`);\n            context.set('state', undefined);\n            \n            msg.ui_update = {};\n            msg.ui_update.class = '';\n            \n            return [msg, null];\n        }\n        else {\n            msg.payload = state;\n            if (DEBUG) node.warn(`Resend ${msg.payload}`);\n            return [null, msg];\n        }\n        \n    }\n    else {\n        return [msg, null];\n    }\n    \n}\n\n",
         "outputs": 2,
         "timeout": 0,
         "noerr": 0,
@@ -1103,7 +1158,7 @@
         "width": 0,
         "height": 0,
         "head": "",
-        "format": "<style>\n\n    .large-text span {\n        font-size: 22px !important;\n    }\n\n    .large-gauge-text span {\n        font-size: 26px !important;\n        padding-bottom: 5px !important;\n    }\n    \n    .small-gauge-text span {\n        font-size: 18px !important;\n        padding-bottom: 3px !important;\n    }\n  \n    .nrdb-ui-gauge-title {\n        font-size:16px;\n        font-weight: normal;\n    }\n    \n    .v-card-title {\n        font-size: 18px;\n        color: #4B9FF4;\n    }\n    \n    .v-list-item-title {\n        font-size: 18px !important;\n        padding-bottom: 4px !important;\n    }\n    \n    .grayout {\n        pointer-events: none;\n        filter: opacity(50%);\n        /*display: none;*/\n    }\n    \n    .error {\n        color: red;\n        font-weight: bold;\n    }\n    \n    .modified {\n        color: #94E3FE;\n    }\n}\n</style>",
+        "format": "<style>\n\n    .large-text span {\n        font-size: 22px !important;\n    }\n\n    .large-gauge-text span {\n        font-size: 26px !important;\n        padding-top: 15px !important;\n        padding-bottom: 5px !important;\n    }\n    \n    .small-gauge-text span {\n        font-size: 18px !important;\n        padding-bottom: 3px !important;\n    }\n  \n    .nrdb-ui-gauge-title {\n        font-size:16px;\n        font-weight: normal;\n    }\n    \n    .v-card-title {\n        font-size: 18px;\n        color: #4B9FF4;\n    }\n    \n    .v-list-item-title {\n        font-size: 18px !important;\n        padding-bottom: 6px !important;\n    }\n    \n    .grayout {\n        pointer-events: none;\n        filter: opacity(50%);\n        /*display: none;*/\n    }\n    \n    .error {\n        color: red;\n        font-weight: bold;\n    }\n    \n    .modified {\n        color: #94E3FE;\n    }\n}\n</style>",
         "storeOutMessages": true,
         "passthru": true,
         "resendOnRefresh": true,
@@ -3024,12 +3079,12 @@
         "id": "25cea28771461383",
         "type": "ui-text",
         "z": "b22624498baaa896",
-        "group": "1769e3f51bb550db",
-        "order": 1,
+        "group": "25319c4b021b78d9",
+        "order": 3,
         "width": 3,
         "height": 0,
         "name": "",
-        "label": "Left temp",
+        "label": "Temp",
         "format": "{{msg.payload}}",
         "layout": "col-center",
         "style": false,
@@ -3038,7 +3093,7 @@
         "color": "#717171",
         "wrapText": false,
         "className": "large-text",
-        "x": 1040,
+        "x": 1030,
         "y": 1340,
         "wires": []
     },
@@ -3059,21 +3114,21 @@
         "id": "7347d45a575a1686",
         "type": "ui-text",
         "z": "b22624498baaa896",
-        "group": "1769e3f51bb550db",
-        "order": 2,
+        "group": "25319c4b021b78d9",
+        "order": 4,
         "width": 3,
         "height": 0,
         "name": "",
-        "label": "Right temp",
+        "label": "Temp",
         "format": "{{msg.payload}}",
-        "layout": "row-center",
+        "layout": "col-center",
         "style": false,
         "font": "",
         "fontSize": 16,
         "color": "#717171",
         "wrapText": false,
         "className": "large-text",
-        "x": 1050,
+        "x": 1030,
         "y": 1400,
         "wires": []
     },
@@ -3089,57 +3144,6 @@
                 "7347d45a575a1686"
             ]
         ]
-    },
-    {
-        "id": "0656d5863205b038",
-        "type": "ui-text",
-        "z": "b22624498baaa896",
-        "group": "25319c4b021b78d9",
-        "order": 3,
-        "width": 6,
-        "height": 0,
-        "name": "",
-        "label": "",
-        "format": "{{msg.payload}}",
-        "layout": "col-center",
-        "style": false,
-        "font": "",
-        "fontSize": 16,
-        "color": "#717171",
-        "wrapText": false,
-        "className": "",
-        "x": 1030,
-        "y": 1460,
-        "wires": []
-    },
-    {
-        "id": "e17db9ed39276503",
-        "type": "ui_gauge",
-        "z": "2561d49b29c858c7",
-        "d": true,
-        "name": "",
-        "group": "9c32c704d83eb416",
-        "order": 7,
-        "width": 3,
-        "height": 3,
-        "gtype": "donut",
-        "title": "CPU",
-        "label": "°C",
-        "format": "{{value}}",
-        "min": "-10",
-        "max": "90",
-        "colors": [
-            "#00b500",
-            "#e6e600",
-            "#ca3838"
-        ],
-        "seg1": "",
-        "seg2": "",
-        "diff": false,
-        "className": "",
-        "x": 790,
-        "y": 1160,
-        "wires": []
     },
     {
         "id": "0d95bf949c201846",
@@ -3765,7 +3769,7 @@
                 "925f92e5f41b2072",
                 "81433703790e3883",
                 "d8bb06d32cf5b8b5",
-                "5664e213cff3b973"
+                "c02cc7af79521236"
             ]
         ]
     },
@@ -3788,8 +3792,8 @@
                 "e7fa40a69f3f7e54",
                 "3e0b6cee6fa14daa",
                 "d160dd8dde0f1ab4",
-                "7da15d8cb4e2a2f9",
-                "1f345342255566d2"
+                "1f345342255566d2",
+                "46dc8d6478b69540"
             ]
         ]
     },
@@ -3802,7 +3806,6 @@
         "y": 1160,
         "wires": [
             [
-                "e17db9ed39276503",
                 "4bd74f30706ccf3c",
                 "14904e43ccce732d",
                 "18f5e3ed47b30eba"
@@ -3829,7 +3832,7 @@
                 "746dd63504103d04",
                 "a61c5737b0176740",
                 "b31b2e7127ee128e",
-                "0ce7c7a091632667"
+                "4fcf371b5d4733f8"
             ]
         ]
     },
@@ -3903,7 +3906,7 @@
             [
                 "a143838f0999d97b",
                 "e577c0ec5b4af224",
-                "8125e522b72bf302"
+                "1ac7db4665ba096a"
             ]
         ]
     },
@@ -3990,8 +3993,8 @@
             [
                 "644e7643d6ba3004",
                 "33503f1b85b1f1f9",
-                "ab81e61b33381c51",
-                "8b3cbd29fad5b5e5"
+                "8b3cbd29fad5b5e5",
+                "211d1220dbbb8e92"
             ]
         ]
     },
@@ -4456,7 +4459,39 @@
         "segments": [
             {
                 "from": "-10",
+                "color": "#00b500"
+            },
+            {
+                "from": "0",
+                "color": "#3baf00"
+            },
+            {
+                "from": "5",
+                "color": "#77a900"
+            },
+            {
+                "from": "10",
+                "color": "#b2a300"
+            },
+            {
+                "from": "15",
                 "color": "#e6e600"
+            },
+            {
+                "from": "20",
+                "color": "#e0b900"
+            },
+            {
+                "from": "25",
+                "color": "#da8c00"
+            },
+            {
+                "from": "30",
+                "color": "#d45f1f"
+            },
+            {
+                "from": "40",
+                "color": "#ca3838"
             }
         ],
         "min": "-10",
@@ -4469,108 +4504,6 @@
         "className": "large-gauge-text",
         "x": 1150,
         "y": 100,
-        "wires": []
-    },
-    {
-        "id": "8125e522b72bf302",
-        "type": "ui-gauge",
-        "z": "2561d49b29c858c7",
-        "name": "",
-        "group": "2b74e6ea7cedf9dc",
-        "order": 5,
-        "width": 3,
-        "height": 3,
-        "gtype": "gauge-34",
-        "gstyle": "rounded",
-        "title": "Outdoor",
-        "units": "°C",
-        "icon": "",
-        "prefix": "",
-        "suffix": "",
-        "segments": [
-            {
-                "from": "-10",
-                "color": "#e6e600"
-            }
-        ],
-        "min": "-10",
-        "max": "40",
-        "sizeThickness": "16",
-        "sizeGap": "0",
-        "sizeKeyThickness": "0",
-        "styleRounded": true,
-        "styleGlow": false,
-        "className": "large-gauge-text",
-        "x": 1160,
-        "y": 260,
-        "wires": []
-    },
-    {
-        "id": "7da15d8cb4e2a2f9",
-        "type": "ui-gauge",
-        "z": "2561d49b29c858c7",
-        "name": "",
-        "group": "2b74e6ea7cedf9dc",
-        "order": 4,
-        "width": 3,
-        "height": 3,
-        "gtype": "gauge-34",
-        "gstyle": "rounded",
-        "title": "Water",
-        "units": "°C",
-        "icon": "",
-        "prefix": "",
-        "suffix": "",
-        "segments": [
-            {
-                "from": "-10",
-                "color": "#e6e600"
-            }
-        ],
-        "min": "-10",
-        "max": "90",
-        "sizeThickness": "16",
-        "sizeGap": "0",
-        "sizeKeyThickness": "0",
-        "styleRounded": true,
-        "styleGlow": false,
-        "className": "large-gauge-text",
-        "x": 1150,
-        "y": 1020,
-        "wires": []
-    },
-    {
-        "id": "ab81e61b33381c51",
-        "type": "ui-gauge",
-        "z": "2561d49b29c858c7",
-        "name": "",
-        "group": "2b74e6ea7cedf9dc",
-        "order": 6,
-        "width": 3,
-        "height": 3,
-        "gtype": "gauge-34",
-        "gstyle": "rounded",
-        "title": "Outdoor RH",
-        "units": "°C",
-        "icon": "",
-        "prefix": "",
-        "suffix": "",
-        "segments": [
-            {
-                "from": "0",
-                "color": "#e6e600"
-            }
-        ],
-        "min": "0",
-        "max": "100",
-        "sizeThickness": "16",
-        "sizeGap": "0",
-        "sizeKeyThickness": "0",
-        "styleRounded": true,
-        "styleGlow": false,
-        "className": "large-gauge-text",
-        "x": 1170,
-        "y": 540,
         "wires": []
     },
     {
@@ -4980,7 +4913,73 @@
         "wires": []
     },
     {
-        "id": "5664e213cff3b973",
+        "id": "1ac7db4665ba096a",
+        "type": "ui-gauge",
+        "z": "2561d49b29c858c7",
+        "name": "",
+        "group": "2b74e6ea7cedf9dc",
+        "order": 5,
+        "width": 3,
+        "height": 3,
+        "gtype": "gauge-34",
+        "gstyle": "rounded",
+        "title": "Outdoor",
+        "units": "°C",
+        "icon": "",
+        "prefix": "",
+        "suffix": "",
+        "segments": [
+            {
+                "from": "-10",
+                "color": "#00b500"
+            },
+            {
+                "from": "0",
+                "color": "#19a507"
+            },
+            {
+                "from": "5",
+                "color": "#32950e"
+            },
+            {
+                "from": "10",
+                "color": "#b2a300"
+            },
+            {
+                "from": "15",
+                "color": "#e6e600"
+            },
+            {
+                "from": "20",
+                "color": "#e0b900"
+            },
+            {
+                "from": "25",
+                "color": "#da8c00"
+            },
+            {
+                "from": "30",
+                "color": "#d45f1f"
+            },
+            {
+                "from": "40",
+                "color": "#ca3838"
+            }
+        ],
+        "min": "-10",
+        "max": "40",
+        "sizeThickness": "16",
+        "sizeGap": "0",
+        "sizeKeyThickness": "0",
+        "styleRounded": true,
+        "styleGlow": false,
+        "className": "large-gauge-text",
+        "x": 1160,
+        "y": 260,
+        "wires": []
+    },
+    {
+        "id": "c02cc7af79521236",
         "type": "ui-gauge",
         "z": "2561d49b29c858c7",
         "name": "",
@@ -4998,7 +4997,39 @@
         "segments": [
             {
                 "from": "-10",
+                "color": "#00b500"
+            },
+            {
+                "from": "0",
+                "color": "#19a507"
+            },
+            {
+                "from": "5",
+                "color": "#32950e"
+            },
+            {
+                "from": "10",
+                "color": "#b2a300"
+            },
+            {
+                "from": "15",
                 "color": "#e6e600"
+            },
+            {
+                "from": "20",
+                "color": "#e0b900"
+            },
+            {
+                "from": "25",
+                "color": "#da8c00"
+            },
+            {
+                "from": "30",
+                "color": "#d45f1f"
+            },
+            {
+                "from": "40",
+                "color": "#ca3838"
             }
         ],
         "min": "-10",
@@ -5014,7 +5045,7 @@
         "wires": []
     },
     {
-        "id": "0ce7c7a091632667",
+        "id": "4fcf371b5d4733f8",
         "type": "ui-gauge",
         "z": "2561d49b29c858c7",
         "name": "",
@@ -5032,7 +5063,39 @@
         "segments": [
             {
                 "from": "-10",
+                "color": "#00b500"
+            },
+            {
+                "from": "0",
+                "color": "#19a507"
+            },
+            {
+                "from": "5",
+                "color": "#32950e"
+            },
+            {
+                "from": "10",
+                "color": "#b2a300"
+            },
+            {
+                "from": "15",
                 "color": "#e6e600"
+            },
+            {
+                "from": "20",
+                "color": "#e0b900"
+            },
+            {
+                "from": "25",
+                "color": "#da8c00"
+            },
+            {
+                "from": "30",
+                "color": "#d45f1f"
+            },
+            {
+                "from": "40",
+                "color": "#ca3838"
             }
         ],
         "min": "-10",
@@ -5045,6 +5108,138 @@
         "className": "large-gauge-text",
         "x": 1160,
         "y": 1340,
+        "wires": []
+    },
+    {
+        "id": "46dc8d6478b69540",
+        "type": "ui-gauge",
+        "z": "2561d49b29c858c7",
+        "name": "",
+        "group": "2b74e6ea7cedf9dc",
+        "order": 4,
+        "width": 3,
+        "height": 3,
+        "gtype": "gauge-34",
+        "gstyle": "rounded",
+        "title": "Water",
+        "units": "°C",
+        "icon": "",
+        "prefix": "",
+        "suffix": "",
+        "segments": [
+            {
+                "from": "-10",
+                "color": "#00b500"
+            },
+            {
+                "from": "10",
+                "color": "#19a507"
+            },
+            {
+                "from": "20",
+                "color": "#32950e"
+            },
+            {
+                "from": "30",
+                "color": "#b2a300"
+            },
+            {
+                "from": "40",
+                "color": "#e6e600"
+            },
+            {
+                "from": "50",
+                "color": "#e0b900"
+            },
+            {
+                "from": "60",
+                "color": "#da8c00"
+            },
+            {
+                "from": "70",
+                "color": "#d45f1f"
+            },
+            {
+                "from": "90",
+                "color": "#ca3838"
+            }
+        ],
+        "min": "-10",
+        "max": "90",
+        "sizeThickness": "16",
+        "sizeGap": "0",
+        "sizeKeyThickness": "0",
+        "styleRounded": true,
+        "styleGlow": false,
+        "className": "large-gauge-text",
+        "x": 1150,
+        "y": 1020,
+        "wires": []
+    },
+    {
+        "id": "211d1220dbbb8e92",
+        "type": "ui-gauge",
+        "z": "2561d49b29c858c7",
+        "name": "",
+        "group": "2b74e6ea7cedf9dc",
+        "order": 6,
+        "width": 3,
+        "height": 3,
+        "gtype": "gauge-34",
+        "gstyle": "rounded",
+        "title": "Outdoor RH",
+        "units": "%",
+        "icon": "",
+        "prefix": "",
+        "suffix": "",
+        "segments": [
+            {
+                "from": "0",
+                "color": "#00b500"
+            },
+            {
+                "from": "20",
+                "color": "#19a507"
+            },
+            {
+                "from": "30",
+                "color": "#32950e"
+            },
+            {
+                "from": "40",
+                "color": "#b2a300"
+            },
+            {
+                "from": "50",
+                "color": "#e6e600"
+            },
+            {
+                "from": "60",
+                "color": "#e0b900"
+            },
+            {
+                "from": "70",
+                "color": "#da8c00"
+            },
+            {
+                "from": "80",
+                "color": "#d45f1f"
+            },
+            {
+                "from": "100",
+                "color": "#ca3838"
+            }
+        ],
+        "min": "0",
+        "max": "100",
+        "sizeThickness": "16",
+        "sizeGap": "0",
+        "sizeKeyThickness": "0",
+        "styleRounded": true,
+        "styleGlow": false,
+        "className": "large-gauge-text",
+        "x": 1170,
+        "y": 540,
         "wires": []
     },
     {
@@ -5352,28 +5547,6 @@
                 "864ec9dedede4187"
             ]
         ]
-    },
-    {
-        "id": "c7fd42bc843cc3f0",
-        "type": "ui_text",
-        "z": "391f51e7377c8273",
-        "group": "ab3a9f0b2e4b8d1b",
-        "order": 4,
-        "width": 0,
-        "height": 0,
-        "name": "",
-        "label": "",
-        "format": "",
-        "layout": "row-spread",
-        "className": "",
-        "style": false,
-        "font": "",
-        "fontSize": 16,
-        "color": "#000000",
-        "x": 650,
-        "y": 1360,
-        "wires": [],
-        "info": "Dummy block used as a spacer"
     },
     {
         "id": "6f65acc61017824f",
@@ -6244,6 +6417,27 @@
         ]
     },
     {
+        "id": "996b2d0a7ccb95a2",
+        "type": "ui_text",
+        "z": "391f51e7377c8273",
+        "group": "ab3a9f0b2e4b8d1b",
+        "order": 5,
+        "width": "6",
+        "height": "1",
+        "name": "",
+        "label": "",
+        "format": "{{msg.payload}}",
+        "layout": "row-spread",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#000000",
+        "x": 650,
+        "y": 1380,
+        "wires": []
+    },
+    {
         "id": "e797340e231f7c0d",
         "type": "function",
         "z": "c74d4096e08fa272",
@@ -6779,7 +6973,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 470,
+        "x": 490,
         "y": 380,
         "wires": [
             [
