@@ -711,15 +711,15 @@
         ],
         "order": 1,
         "className": "",
-        "visible": true,
-        "disabled": false
+        "visible": "true",
+        "disabled": "false"
     },
     {
         "id": "a7be90ba6585cc59",
         "type": "ui-group",
         "name": "Electricity",
         "page": "2611ec2a3e5a9d82",
-        "width": "6",
+        "width": 12,
         "height": "1",
         "order": 1,
         "showTitle": true,
@@ -733,7 +733,7 @@
         "type": "ui-group",
         "name": "Propane",
         "page": "2611ec2a3e5a9d82",
-        "width": "6",
+        "width": 12,
         "height": "1",
         "order": 2,
         "showTitle": true,
@@ -747,7 +747,7 @@
         "type": "ui-group",
         "name": "Battery",
         "page": "2611ec2a3e5a9d82",
-        "width": "6",
+        "width": 12,
         "height": "1",
         "order": 3,
         "showTitle": true,
@@ -761,7 +761,7 @@
         "type": "ui-group",
         "name": "Solar",
         "page": "2611ec2a3e5a9d82",
-        "width": "6",
+        "width": 12,
         "height": "1",
         "order": 4,
         "showTitle": true,
@@ -886,9 +886,9 @@
         "group": "fc3c351e5707cb90",
         "name": "spacer",
         "tooltip": "",
-        "order": 5,
+        "order": 4,
         "width": "6",
-        "height": "1",
+        "height": "2",
         "className": ""
     },
     {
@@ -909,7 +909,7 @@
         "name": "spacer",
         "tooltip": "",
         "order": 6,
-        "width": "6",
+        "width": 12,
         "height": "1",
         "className": ""
     },
@@ -919,8 +919,8 @@
         "group": "25319c4b021b78d9",
         "name": "spacer",
         "tooltip": "",
-        "order": 5,
-        "width": "6",
+        "order": 3,
+        "width": 12,
         "height": "1",
         "className": ""
     },
@@ -1502,7 +1502,8 @@
                 "7043f4ea18184a75",
                 "699563266351b1e3",
                 "eee8f071f0d67fa1",
-                "756d58821a9d15a1"
+                "756d58821a9d15a1",
+                "6a190306423d3c00"
             ]
         ]
     },
@@ -1531,7 +1532,8 @@
                 "f909117d2080cfbd",
                 "205bf35e3297da13",
                 "55335224804eb389",
-                "8b9c506f9132a0c2"
+                "8b9c506f9132a0c2",
+                "5680febb4a7e5edb"
             ]
         ]
     },
@@ -1694,7 +1696,8 @@
         "y": 980,
         "wires": [
             [
-                "53a95fb1c4d6126a"
+                "53a95fb1c4d6126a",
+                "0590cfd130b2ea11"
             ]
         ]
     },
@@ -2437,7 +2440,7 @@
         ],
         "min": "0",
         "max": "100",
-        "sizeThickness": "16",
+        "sizeThickness": "12",
         "sizeGap": "0",
         "sizeKeyThickness": "0",
         "styleRounded": true,
@@ -2471,7 +2474,7 @@
         ],
         "min": "0",
         "max": "240",
-        "sizeThickness": "16",
+        "sizeThickness": "12",
         "sizeGap": "0",
         "sizeKeyThickness": "0",
         "styleRounded": true,
@@ -2485,8 +2488,8 @@
         "id": "226d03b405264f49",
         "type": "ui-text",
         "z": "b22624498baaa896",
-        "group": "a7be90ba6585cc59",
-        "order": 3,
+        "group": "1769e3f51bb550db",
+        "order": 1,
         "width": 2,
         "height": 0,
         "name": "",
@@ -2547,8 +2550,8 @@
         "id": "7efdf80f2a8f5b11",
         "type": "ui-text",
         "z": "b22624498baaa896",
-        "group": "a7be90ba6585cc59",
-        "order": 4,
+        "group": "1769e3f51bb550db",
+        "order": 2,
         "width": 2,
         "height": 0,
         "name": "",
@@ -2589,8 +2592,8 @@
         "id": "2b37da2078e726ee",
         "type": "ui-text",
         "z": "b22624498baaa896",
-        "group": "a7be90ba6585cc59",
-        "order": 5,
+        "group": "1769e3f51bb550db",
+        "order": 3,
         "width": 2,
         "height": 0,
         "name": "",
@@ -2631,7 +2634,7 @@
         ],
         "min": "0",
         "max": "100",
-        "sizeThickness": "16",
+        "sizeThickness": "12",
         "sizeGap": "0",
         "sizeKeyThickness": "0",
         "styleRounded": true,
@@ -2665,7 +2668,7 @@
         ],
         "min": "0",
         "max": "100",
-        "sizeThickness": "16",
+        "sizeThickness": "12",
         "sizeGap": "0",
         "sizeKeyThickness": "0",
         "styleRounded": true,
@@ -3017,7 +3020,7 @@
         "z": "b22624498baaa896",
         "group": "16349d9c5c0afd34",
         "order": 1,
-        "width": 6,
+        "width": 12,
         "height": 0,
         "name": "",
         "label": "",
@@ -3039,7 +3042,7 @@
         "z": "b22624498baaa896",
         "group": "459be61f93594b03",
         "order": 1,
-        "width": 6,
+        "width": 12,
         "height": 0,
         "name": "",
         "label": "",
@@ -3079,8 +3082,8 @@
         "id": "25cea28771461383",
         "type": "ui-text",
         "z": "b22624498baaa896",
-        "group": "25319c4b021b78d9",
-        "order": 3,
+        "group": "1769e3f51bb550db",
+        "order": 5,
         "width": 3,
         "height": 0,
         "name": "",
@@ -3114,7 +3117,7 @@
         "id": "7347d45a575a1686",
         "type": "ui-text",
         "z": "b22624498baaa896",
-        "group": "25319c4b021b78d9",
+        "group": "1769e3f51bb550db",
         "order": 4,
         "width": 3,
         "height": 0,
@@ -3144,6 +3147,172 @@
                 "7347d45a575a1686"
             ]
         ]
+    },
+    {
+        "id": "0590cfd130b2ea11",
+        "type": "ui-gauge",
+        "z": "b22624498baaa896",
+        "name": "",
+        "group": "a7be90ba6585cc59",
+        "order": 5,
+        "width": 2,
+        "height": 2,
+        "gtype": "gauge-34",
+        "gstyle": "rounded",
+        "title": "",
+        "units": "kWh",
+        "icon": "",
+        "prefix": "",
+        "suffix": "",
+        "segments": [
+            {
+                "from": "0",
+                "color": "#e6e600"
+            }
+        ],
+        "min": "0",
+        "max": "1.5",
+        "sizeThickness": "6",
+        "sizeGap": "0",
+        "sizeKeyThickness": "0",
+        "styleRounded": true,
+        "styleGlow": false,
+        "className": "small-gauge-text",
+        "x": 1180,
+        "y": 940,
+        "wires": []
+    },
+    {
+        "id": "5680febb4a7e5edb",
+        "type": "ui-gauge",
+        "z": "b22624498baaa896",
+        "name": "",
+        "group": "a7be90ba6585cc59",
+        "order": 4,
+        "width": 2,
+        "height": 2,
+        "gtype": "gauge-34",
+        "gstyle": "rounded",
+        "title": "",
+        "units": "A",
+        "icon": "",
+        "prefix": "",
+        "suffix": "",
+        "segments": [
+            {
+                "from": "-30",
+                "color": "#ca3838"
+            },
+            {
+                "from": "-21",
+                "color": "#d45f1f"
+            },
+            {
+                "from": "-15",
+                "color": "#da8c00"
+            },
+            {
+                "from": "-9",
+                "color": "#e0b900"
+            },
+            {
+                "from": "-3",
+                "color": "#e6e600"
+            },
+            {
+                "from": "3",
+                "color": "#b2a300"
+            },
+            {
+                "from": "9",
+                "color": "#77a900"
+            },
+            {
+                "from": "15",
+                "color": "#3baf00"
+            },
+            {
+                "from": "21",
+                "color": "#00b500"
+            }
+        ],
+        "min": "-30",
+        "max": "30",
+        "sizeThickness": "6",
+        "sizeGap": "0",
+        "sizeKeyThickness": "0",
+        "styleRounded": true,
+        "styleGlow": false,
+        "className": "small-gauge-text",
+        "x": 1180,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "6a190306423d3c00",
+        "type": "ui-gauge",
+        "z": "b22624498baaa896",
+        "name": "",
+        "group": "a7be90ba6585cc59",
+        "order": 3,
+        "width": 2,
+        "height": 2,
+        "gtype": "gauge-34",
+        "gstyle": "rounded",
+        "title": "",
+        "units": "V",
+        "icon": "",
+        "prefix": "",
+        "suffix": "",
+        "segments": [
+            {
+                "from": "11",
+                "color": "#ca3838"
+            },
+            {
+                "from": "11.6",
+                "color": "#d45f1f"
+            },
+            {
+                "from": "12",
+                "color": "#da8c00"
+            },
+            {
+                "from": "12.4",
+                "color": "#e0b900"
+            },
+            {
+                "from": "12.8",
+                "color": "#e6e600"
+            },
+            {
+                "from": "13.2",
+                "color": "#b2a300"
+            },
+            {
+                "from": "13.6",
+                "color": "#77a900"
+            },
+            {
+                "from": "14",
+                "color": "#3baf00"
+            },
+            {
+                "from": "14.4",
+                "color": "#00b500"
+            }
+        ],
+        "min": "11",
+        "max": "15",
+        "sizeThickness": "6",
+        "sizeGap": "0",
+        "sizeKeyThickness": "0",
+        "styleRounded": true,
+        "styleGlow": false,
+        "className": "small-gauge-text",
+        "x": 1180,
+        "y": 240,
+        "wires": []
     },
     {
         "id": "0d95bf949c201846",
@@ -3177,7 +3346,7 @@
         "z": "2561d49b29c858c7",
         "name": "",
         "group": "cf4c6771afb43982",
-        "order": 5,
+        "order": 3,
         "width": 3,
         "height": 3,
         "gtype": "donut",
@@ -3337,7 +3506,7 @@
         "z": "2561d49b29c858c7",
         "name": "",
         "group": "cf4c6771afb43982",
-        "order": 3,
+        "order": 5,
         "width": 3,
         "height": 3,
         "gtype": "donut",
@@ -3408,7 +3577,7 @@
         "z": "2561d49b29c858c7",
         "name": "",
         "group": "cf4c6771afb43982",
-        "order": 4,
+        "order": 6,
         "width": 3,
         "height": 3,
         "gtype": "donut",
@@ -4351,7 +4520,7 @@
         "z": "2561d49b29c858c7",
         "name": "",
         "group": "cf4c6771afb43982",
-        "order": 6,
+        "order": 4,
         "width": 3,
         "height": 3,
         "gtype": "donut",
@@ -4462,41 +4631,41 @@
                 "color": "#00b500"
             },
             {
-                "from": "0",
+                "from": "-2.5",
                 "color": "#3baf00"
             },
             {
-                "from": "5",
+                "from": "2.5",
                 "color": "#77a900"
             },
             {
-                "from": "10",
+                "from": "7.5",
                 "color": "#b2a300"
             },
             {
-                "from": "15",
+                "from": "12.5",
                 "color": "#e6e600"
             },
             {
-                "from": "20",
+                "from": "17.5",
                 "color": "#e0b900"
             },
             {
-                "from": "25",
+                "from": "22.5",
                 "color": "#da8c00"
             },
             {
-                "from": "30",
+                "from": "27.5",
                 "color": "#d45f1f"
             },
             {
-                "from": "40",
+                "from": "32.5",
                 "color": "#ca3838"
             }
         ],
         "min": "-10",
         "max": "40",
-        "sizeThickness": "16",
+        "sizeThickness": "12",
         "sizeGap": "0",
         "sizeKeyThickness": "0",
         "styleRounded": true,
@@ -4918,7 +5087,7 @@
         "z": "2561d49b29c858c7",
         "name": "",
         "group": "2b74e6ea7cedf9dc",
-        "order": 5,
+        "order": 3,
         "width": 3,
         "height": 3,
         "gtype": "gauge-34",
@@ -4934,41 +5103,41 @@
                 "color": "#00b500"
             },
             {
-                "from": "0",
+                "from": "-7.5",
                 "color": "#19a507"
             },
             {
-                "from": "5",
+                "from": "2.5",
                 "color": "#32950e"
             },
             {
-                "from": "10",
+                "from": "7.5",
                 "color": "#b2a300"
             },
             {
-                "from": "15",
+                "from": "12.5",
                 "color": "#e6e600"
             },
             {
-                "from": "20",
+                "from": "17.5",
                 "color": "#e0b900"
             },
             {
-                "from": "25",
+                "from": "22.5",
                 "color": "#da8c00"
             },
             {
-                "from": "30",
+                "from": "27.5",
                 "color": "#d45f1f"
             },
             {
-                "from": "40",
+                "from": "32.5",
                 "color": "#ca3838"
             }
         ],
         "min": "-10",
         "max": "40",
-        "sizeThickness": "16",
+        "sizeThickness": "12",
         "sizeGap": "0",
         "sizeKeyThickness": "0",
         "styleRounded": true,
@@ -5000,41 +5169,41 @@
                 "color": "#00b500"
             },
             {
-                "from": "0",
+                "from": "-7.5",
                 "color": "#19a507"
             },
             {
-                "from": "5",
+                "from": "2.5",
                 "color": "#32950e"
             },
             {
-                "from": "10",
+                "from": "7.5",
                 "color": "#b2a300"
             },
             {
-                "from": "15",
+                "from": "12.5",
                 "color": "#e6e600"
             },
             {
-                "from": "20",
+                "from": "17.5",
                 "color": "#e0b900"
             },
             {
-                "from": "25",
+                "from": "22.5",
                 "color": "#da8c00"
             },
             {
-                "from": "30",
+                "from": "27.5",
                 "color": "#d45f1f"
             },
             {
-                "from": "40",
+                "from": "32.5",
                 "color": "#ca3838"
             }
         ],
         "min": "-10",
         "max": "40",
-        "sizeThickness": "16",
+        "sizeThickness": "12",
         "sizeGap": "0",
         "sizeKeyThickness": "0",
         "styleRounded": true,
@@ -5050,7 +5219,7 @@
         "z": "2561d49b29c858c7",
         "name": "",
         "group": "2b74e6ea7cedf9dc",
-        "order": 3,
+        "order": 5,
         "width": 3,
         "height": 3,
         "gtype": "gauge-34",
@@ -5066,41 +5235,41 @@
                 "color": "#00b500"
             },
             {
-                "from": "0",
+                "from": "-7.5",
                 "color": "#19a507"
             },
             {
-                "from": "5",
+                "from": "2.5",
                 "color": "#32950e"
             },
             {
-                "from": "10",
+                "from": "7.5",
                 "color": "#b2a300"
             },
             {
-                "from": "15",
+                "from": "12.5",
                 "color": "#e6e600"
             },
             {
-                "from": "20",
+                "from": "17.5",
                 "color": "#e0b900"
             },
             {
-                "from": "25",
+                "from": "22.5",
                 "color": "#da8c00"
             },
             {
-                "from": "30",
+                "from": "27.5",
                 "color": "#d45f1f"
             },
             {
-                "from": "40",
+                "from": "32.5",
                 "color": "#ca3838"
             }
         ],
         "min": "-10",
         "max": "40",
-        "sizeThickness": "16",
+        "sizeThickness": "12",
         "sizeGap": "0",
         "sizeKeyThickness": "0",
         "styleRounded": true,
@@ -5116,7 +5285,7 @@
         "z": "2561d49b29c858c7",
         "name": "",
         "group": "2b74e6ea7cedf9dc",
-        "order": 4,
+        "order": 6,
         "width": 3,
         "height": 3,
         "gtype": "gauge-34",
@@ -5132,41 +5301,41 @@
                 "color": "#00b500"
             },
             {
-                "from": "10",
+                "from": "5",
                 "color": "#19a507"
             },
             {
-                "from": "20",
+                "from": "15",
                 "color": "#32950e"
             },
             {
-                "from": "30",
+                "from": "25",
                 "color": "#b2a300"
             },
             {
-                "from": "40",
+                "from": "35",
                 "color": "#e6e600"
             },
             {
-                "from": "50",
+                "from": "45",
                 "color": "#e0b900"
             },
             {
-                "from": "60",
+                "from": "55",
                 "color": "#da8c00"
             },
             {
-                "from": "70",
+                "from": "65",
                 "color": "#d45f1f"
             },
             {
-                "from": "90",
+                "from": "75",
                 "color": "#ca3838"
             }
         ],
         "min": "-10",
         "max": "90",
-        "sizeThickness": "16",
+        "sizeThickness": "12",
         "sizeGap": "0",
         "sizeKeyThickness": "0",
         "styleRounded": true,
@@ -5182,7 +5351,7 @@
         "z": "2561d49b29c858c7",
         "name": "",
         "group": "2b74e6ea7cedf9dc",
-        "order": 6,
+        "order": 4,
         "width": 3,
         "height": 3,
         "gtype": "gauge-34",
@@ -5198,41 +5367,41 @@
                 "color": "#00b500"
             },
             {
-                "from": "20",
+                "from": "15",
                 "color": "#19a507"
             },
             {
-                "from": "30",
+                "from": "25",
                 "color": "#32950e"
             },
             {
-                "from": "40",
+                "from": "35",
                 "color": "#b2a300"
             },
             {
-                "from": "50",
+                "from": "45",
                 "color": "#e6e600"
             },
             {
-                "from": "60",
+                "from": "55",
                 "color": "#e0b900"
             },
             {
-                "from": "70",
+                "from": "65",
                 "color": "#da8c00"
             },
             {
-                "from": "80",
+                "from": "75",
                 "color": "#d45f1f"
             },
             {
-                "from": "100",
+                "from": "85",
                 "color": "#ca3838"
             }
         ],
         "min": "0",
         "max": "100",
-        "sizeThickness": "16",
+        "sizeThickness": "12",
         "sizeGap": "0",
         "sizeKeyThickness": "0",
         "styleRounded": true,
@@ -7008,10 +7177,10 @@
         "z": "c74d4096e08fa272",
         "group": "df7a1670ae765f1d",
         "name": "",
-        "label": "Temperature",
+        "label": "Temp",
         "tooltip": "",
-        "order": 1,
-        "width": 0,
+        "order": 2,
+        "width": 3,
         "height": 0,
         "passthru": false,
         "multiple": false,
@@ -7160,7 +7329,7 @@
         "className": "temp-target",
         "typeIsComboBox": false,
         "msgTrigger": "onChange",
-        "x": 670,
+        "x": 650,
         "y": 220,
         "wires": [
             [
@@ -7174,10 +7343,10 @@
         "z": "c74d4096e08fa272",
         "group": "df7a1670ae765f1d",
         "name": "",
-        "label": "Fan setting",
+        "label": "Fan",
         "tooltip": "",
-        "order": 2,
-        "width": 0,
+        "order": 4,
+        "width": 3,
         "height": 0,
         "passthru": false,
         "multiple": false,
@@ -7201,7 +7370,7 @@
         "className": "fan-target",
         "typeIsComboBox": false,
         "msgTrigger": "onChange",
-        "x": 670,
+        "x": 650,
         "y": 360,
         "wires": [
             [
@@ -7216,10 +7385,10 @@
         "z": "c74d4096e08fa272",
         "group": "df7a1670ae765f1d",
         "name": "",
-        "label": "Water temperature",
+        "label": "Water",
         "tooltip": "",
-        "order": 3,
-        "width": 0,
+        "order": 6,
+        "width": 3,
         "height": 0,
         "passthru": false,
         "multiple": false,
@@ -7248,7 +7417,7 @@
         "className": "water-target",
         "typeIsComboBox": false,
         "msgTrigger": "onChange",
-        "x": 670,
+        "x": 630,
         "y": 520,
         "wires": [
             [
@@ -7263,10 +7432,10 @@
         "z": "c74d4096e08fa272",
         "group": "df7a1670ae765f1d",
         "name": "",
-        "label": "Energy mix",
+        "label": "Energy",
         "tooltip": "",
-        "order": 4,
-        "width": 0,
+        "order": 8,
+        "width": 3,
         "height": 0,
         "passthru": false,
         "multiple": false,
@@ -7305,7 +7474,7 @@
         "className": "mix-target",
         "typeIsComboBox": false,
         "msgTrigger": "onChange",
-        "x": 670,
+        "x": 650,
         "y": 680,
         "wires": [
             [
@@ -7449,28 +7618,6 @@
         ]
     },
     {
-        "id": "968a63c453db1607",
-        "type": "ui-text",
-        "z": "c74d4096e08fa272",
-        "group": "fc3c351e5707cb90",
-        "order": 4,
-        "width": 0,
-        "height": 0,
-        "name": "",
-        "label": "",
-        "format": "{{msg.payload}}",
-        "layout": "row-spread",
-        "style": false,
-        "font": "",
-        "fontSize": 16,
-        "color": "#717171",
-        "wrapText": false,
-        "className": "",
-        "x": 750,
-        "y": 1160,
-        "wires": []
-    },
-    {
         "id": "78b0cde417cbf16d",
         "type": "function",
         "z": "c74d4096e08fa272",
@@ -7489,5 +7636,93 @@
                 "b95c020a30b25ac7"
             ]
         ]
+    },
+    {
+        "id": "ff6e07d23603fe1d",
+        "type": "ui-text",
+        "z": "c74d4096e08fa272",
+        "group": "df7a1670ae765f1d",
+        "order": 1,
+        "width": 3,
+        "height": 0,
+        "name": "",
+        "label": "Temperature",
+        "format": "{{msg.payload}}",
+        "layout": "row-spread",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#717171",
+        "wrapText": false,
+        "className": "",
+        "x": 410,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "8ea58dfdb532db74",
+        "type": "ui-text",
+        "z": "c74d4096e08fa272",
+        "group": "df7a1670ae765f1d",
+        "order": 3,
+        "width": 3,
+        "height": 0,
+        "name": "",
+        "label": "Fan setting",
+        "format": "{{msg.payload}}",
+        "layout": "row-spread",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#717171",
+        "wrapText": false,
+        "className": "",
+        "x": 410,
+        "y": 320,
+        "wires": []
+    },
+    {
+        "id": "ca359b51012b4ef3",
+        "type": "ui-text",
+        "z": "c74d4096e08fa272",
+        "group": "df7a1670ae765f1d",
+        "order": 5,
+        "width": 3,
+        "height": 0,
+        "name": "",
+        "label": "Water temp",
+        "format": "{{msg.payload}}",
+        "layout": "row-spread",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#717171",
+        "wrapText": false,
+        "className": "",
+        "x": 410,
+        "y": 520,
+        "wires": []
+    },
+    {
+        "id": "1d2f95d0ebe50bb9",
+        "type": "ui-text",
+        "z": "c74d4096e08fa272",
+        "group": "df7a1670ae765f1d",
+        "order": 7,
+        "width": 3,
+        "height": 0,
+        "name": "",
+        "label": "Energy mix",
+        "format": "{{msg.payload}}",
+        "layout": "row-spread",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#717171",
+        "wrapText": false,
+        "className": "",
+        "x": 410,
+        "y": 620,
+        "wires": []
     }
 ]
