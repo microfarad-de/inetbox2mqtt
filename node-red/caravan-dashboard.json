@@ -528,37 +528,6 @@
         "className": ""
     },
     {
-        "id": "5f674da0b0ac0c54",
-        "type": "ui_tab",
-        "name": "Climate Control V2",
-        "icon": "mi-local_fire_department",
-        "order": 5,
-        "disabled": true,
-        "hidden": true
-    },
-    {
-        "id": "beeb1629e827c723",
-        "type": "ui_group",
-        "name": "Heater",
-        "tab": "5f674da0b0ac0c54",
-        "order": 1,
-        "disp": true,
-        "width": "6",
-        "collapse": false,
-        "className": ""
-    },
-    {
-        "id": "d88190495de6c61d",
-        "type": "ui_group",
-        "name": "Status",
-        "tab": "5f674da0b0ac0c54",
-        "order": 2,
-        "disp": true,
-        "width": "6",
-        "collapse": false,
-        "className": ""
-    },
-    {
         "id": "ca96a5462808e65e",
         "type": "ui_group",
         "name": "Electricity",
@@ -618,14 +587,14 @@
         "colors": {
             "surface": "#0470ba",
             "primary": "#0094ce",
-            "bgPage": "#2b2b2b",
-            "groupBg": "#444444",
-            "groupOutline": "#535353"
+            "bgPage": "#595959",
+            "groupBg": "#303030",
+            "groupOutline": "#000000"
         },
         "sizes": {
             "density": "comfortable",
-            "pagePadding": "3px",
-            "groupGap": "4px",
+            "pagePadding": "1px",
+            "groupGap": "1px",
             "groupBorderRadius": "3px",
             "widgetGap": "16px"
         }
@@ -648,15 +617,15 @@
         ],
         "order": 2,
         "className": "",
-        "visible": true,
-        "disabled": false
+        "visible": "true",
+        "disabled": "false"
     },
     {
         "id": "2b74e6ea7cedf9dc",
         "type": "ui-group",
         "name": "Overview",
         "page": "f6f4c01f1f6329b6",
-        "width": 12,
+        "width": "6",
         "height": "1",
         "order": 1,
         "showTitle": true,
@@ -711,20 +680,20 @@
         ],
         "order": 1,
         "className": "",
-        "visible": "true",
-        "disabled": "false"
+        "visible": true,
+        "disabled": false
     },
     {
         "id": "a7be90ba6585cc59",
         "type": "ui-group",
         "name": "Electricity",
         "page": "2611ec2a3e5a9d82",
-        "width": 12,
+        "width": "6",
         "height": "1",
         "order": 1,
         "showTitle": true,
         "className": "",
-        "visible": true,
+        "visible": "true",
         "disabled": "false",
         "groupType": "default"
     },
@@ -733,7 +702,7 @@
         "type": "ui-group",
         "name": "Propane",
         "page": "2611ec2a3e5a9d82",
-        "width": 12,
+        "width": "6",
         "height": "1",
         "order": 2,
         "showTitle": true,
@@ -747,7 +716,7 @@
         "type": "ui-group",
         "name": "Battery",
         "page": "2611ec2a3e5a9d82",
-        "width": 12,
+        "width": "6",
         "height": "1",
         "order": 3,
         "showTitle": true,
@@ -761,7 +730,7 @@
         "type": "ui-group",
         "name": "Solar",
         "page": "2611ec2a3e5a9d82",
-        "width": 12,
+        "width": "6",
         "height": "1",
         "order": 4,
         "showTitle": true,
@@ -838,8 +807,8 @@
         ],
         "order": 3,
         "className": "",
-        "visible": true,
-        "disabled": false
+        "visible": "true",
+        "disabled": "false"
     },
     {
         "id": "df7a1670ae765f1d",
@@ -903,24 +872,24 @@
         "className": ""
     },
     {
-        "id": "854d115d8aa402fb",
+        "id": "f95ee2972e7966ef",
         "type": "ui-spacer",
         "group": "459be61f93594b03",
         "name": "spacer",
         "tooltip": "",
         "order": 6,
-        "width": 12,
+        "width": "6",
         "height": "1",
         "className": ""
     },
     {
-        "id": "c46a29638576f47d",
+        "id": "20bb583a5e0f7740",
         "type": "ui-spacer",
         "group": "25319c4b021b78d9",
         "name": "spacer",
         "tooltip": "",
         "order": 3,
-        "width": 12,
+        "width": "6",
         "height": "1",
         "className": ""
     },
@@ -1131,7 +1100,7 @@
         "z": "37a752f35a68bbed",
         "group": "ca96a5462808e65e",
         "name": "Custom styles",
-        "order": 5,
+        "order": 6,
         "width": 0,
         "height": 0,
         "format": "\n<style>\n  .large-text {\n    font-size: 24px !important;\n  }\n</style>",
@@ -1340,7 +1309,8 @@
             [
                 "4222164f2945fc86",
                 "cf806006b8743774",
-                "e1a329f6afcd64bd"
+                "e1a329f6afcd64bd",
+                "f566bf310f628427"
             ]
         ]
     },
@@ -1501,7 +1471,6 @@
             [
                 "7043f4ea18184a75",
                 "699563266351b1e3",
-                "eee8f071f0d67fa1",
                 "756d58821a9d15a1",
                 "6a190306423d3c00"
             ]
@@ -1531,7 +1500,6 @@
             [
                 "f909117d2080cfbd",
                 "205bf35e3297da13",
-                "55335224804eb389",
                 "8b9c506f9132a0c2",
                 "5680febb4a7e5edb"
             ]
@@ -1719,7 +1687,6 @@
             [
                 "b606e7edf0b64565",
                 "23f82b00596bb58f",
-                "f398e8d7e2602178",
                 "26a998da9c67b3d6"
             ]
         ]
@@ -1885,7 +1852,7 @@
             },
             {
                 "name": "threshold",
-                "value": "20",
+                "value": "50",
                 "type": "num"
             },
             {
@@ -1933,7 +1900,7 @@
             },
             {
                 "name": "threshold",
-                "value": "20",
+                "value": "50",
                 "type": "num"
             },
             {
@@ -1972,6 +1939,7 @@
         "id": "f3ef51f7ef9dc487",
         "type": "ui_text",
         "z": "b22624498baaa896",
+        "d": true,
         "group": "9c32c704d83eb416",
         "order": 3,
         "width": 3,
@@ -1993,6 +1961,7 @@
         "id": "f9f81584fb2117b3",
         "type": "ui_text",
         "z": "b22624498baaa896",
+        "d": true,
         "group": "9c32c704d83eb416",
         "order": 4,
         "width": 3,
@@ -2222,6 +2191,7 @@
         "id": "7b2f7f2e58253c60",
         "type": "ui_text",
         "z": "b22624498baaa896",
+        "d": true,
         "group": "9c32c704d83eb416",
         "order": 1,
         "width": 3,
@@ -2243,6 +2213,7 @@
         "id": "f1b9d5e34d3f83e3",
         "type": "ui_text",
         "z": "b22624498baaa896",
+        "d": true,
         "group": "9c32c704d83eb416",
         "order": 2,
         "width": 3,
@@ -2288,7 +2259,7 @@
         "z": "b22624498baaa896",
         "name": "",
         "group": "ca96a5462808e65e",
-        "order": 3,
+        "order": 4,
         "width": 2,
         "height": 2,
         "gtype": "donut",
@@ -2316,7 +2287,7 @@
         "z": "b22624498baaa896",
         "name": "",
         "group": "ca96a5462808e65e",
-        "order": 4,
+        "order": 3,
         "width": 2,
         "height": 2,
         "gtype": "donut",
@@ -2343,7 +2314,7 @@
         "type": "ui_gauge",
         "z": "b22624498baaa896",
         "name": "",
-        "group": "9c32c704d83eb416",
+        "group": "ca96a5462808e65e",
         "order": 5,
         "width": 2,
         "height": 2,
@@ -2354,9 +2325,9 @@
         "min": 0,
         "max": "20",
         "colors": [
-            "#00b500",
             "#e6e600",
-            "#ca3838"
+            "#e6e600",
+            "#e6e600"
         ],
         "seg1": "",
         "seg2": "",
@@ -2392,8 +2363,9 @@
         "id": "23f82b00596bb58f",
         "type": "ui_gauge",
         "z": "b22624498baaa896",
+        "d": true,
         "name": "",
-        "group": "ca96a5462808e65e",
+        "group": "9c32c704d83eb416",
         "order": 5,
         "width": 2,
         "height": 2,
@@ -2482,132 +2454,6 @@
         "className": "large-gauge-text",
         "x": 1030,
         "y": 580,
-        "wires": []
-    },
-    {
-        "id": "226d03b405264f49",
-        "type": "ui-text",
-        "z": "b22624498baaa896",
-        "group": "1769e3f51bb550db",
-        "order": 1,
-        "width": 2,
-        "height": 0,
-        "name": "",
-        "label": "Voltage",
-        "format": "{{msg.payload}}",
-        "layout": "col-center",
-        "style": false,
-        "font": "",
-        "fontSize": 16,
-        "color": "#717171",
-        "wrapText": false,
-        "className": "large-text",
-        "x": 1040,
-        "y": 260,
-        "wires": []
-    },
-    {
-        "id": "eee8f071f0d67fa1",
-        "type": "subflow:35877746e13a44de",
-        "z": "b22624498baaa896",
-        "name": "",
-        "env": [
-            {
-                "name": "unit",
-                "value": "V",
-                "type": "str"
-            }
-        ],
-        "x": 910,
-        "y": 260,
-        "wires": [
-            [
-                "226d03b405264f49"
-            ]
-        ]
-    },
-    {
-        "id": "55335224804eb389",
-        "type": "subflow:35877746e13a44de",
-        "z": "b22624498baaa896",
-        "name": "",
-        "env": [
-            {
-                "name": "unit",
-                "value": "A",
-                "type": "str"
-            }
-        ],
-        "x": 910,
-        "y": 360,
-        "wires": [
-            [
-                "7efdf80f2a8f5b11"
-            ]
-        ]
-    },
-    {
-        "id": "7efdf80f2a8f5b11",
-        "type": "ui-text",
-        "z": "b22624498baaa896",
-        "group": "1769e3f51bb550db",
-        "order": 2,
-        "width": 2,
-        "height": 0,
-        "name": "",
-        "label": "Current",
-        "format": "{{msg.payload}}",
-        "layout": "col-center",
-        "style": false,
-        "font": "",
-        "fontSize": 16,
-        "color": "#717171",
-        "wrapText": false,
-        "className": "large-text",
-        "x": 1040,
-        "y": 360,
-        "wires": []
-    },
-    {
-        "id": "f398e8d7e2602178",
-        "type": "subflow:35877746e13a44de",
-        "z": "b22624498baaa896",
-        "name": "",
-        "env": [
-            {
-                "name": "unit",
-                "value": "Wh",
-                "type": "str"
-            }
-        ],
-        "x": 910,
-        "y": 960,
-        "wires": [
-            [
-                "2b37da2078e726ee"
-            ]
-        ]
-    },
-    {
-        "id": "2b37da2078e726ee",
-        "type": "ui-text",
-        "z": "b22624498baaa896",
-        "group": "1769e3f51bb550db",
-        "order": 3,
-        "width": 2,
-        "height": 0,
-        "name": "",
-        "label": "Yield",
-        "format": "{{msg.payload}}",
-        "layout": "col-center",
-        "style": false,
-        "font": "",
-        "fontSize": 16,
-        "color": "#717171",
-        "wrapText": false,
-        "className": "large-text",
-        "x": 1030,
-        "y": 960,
         "wires": []
     },
     {
@@ -3082,8 +2928,9 @@
         "id": "25cea28771461383",
         "type": "ui-text",
         "z": "b22624498baaa896",
+        "d": true,
         "group": "1769e3f51bb550db",
-        "order": 5,
+        "order": 2,
         "width": 3,
         "height": 0,
         "name": "",
@@ -3117,8 +2964,9 @@
         "id": "7347d45a575a1686",
         "type": "ui-text",
         "z": "b22624498baaa896",
+        "d": true,
         "group": "1769e3f51bb550db",
-        "order": 4,
+        "order": 1,
         "width": 3,
         "height": 0,
         "name": "",
@@ -3152,9 +3000,10 @@
         "id": "0590cfd130b2ea11",
         "type": "ui-gauge",
         "z": "b22624498baaa896",
+        "d": true,
         "name": "",
-        "group": "a7be90ba6585cc59",
-        "order": 5,
+        "group": "1769e3f51bb550db",
+        "order": 3,
         "width": 2,
         "height": 2,
         "gtype": "gauge-34",
@@ -3178,8 +3027,8 @@
         "styleRounded": true,
         "styleGlow": false,
         "className": "small-gauge-text",
-        "x": 1180,
-        "y": 940,
+        "x": 1040,
+        "y": 960,
         "wires": []
     },
     {
@@ -3188,7 +3037,7 @@
         "z": "b22624498baaa896",
         "name": "",
         "group": "a7be90ba6585cc59",
-        "order": 4,
+        "order": 3,
         "width": 2,
         "height": 2,
         "gtype": "gauge-34",
@@ -3204,35 +3053,35 @@
                 "color": "#ca3838"
             },
             {
-                "from": "-21",
+                "from": "-12",
                 "color": "#d45f1f"
             },
             {
-                "from": "-15",
+                "from": "-8",
                 "color": "#da8c00"
             },
             {
-                "from": "-9",
+                "from": "-4",
                 "color": "#e0b900"
             },
             {
-                "from": "-3",
+                "from": "-1",
                 "color": "#e6e600"
             },
             {
-                "from": "3",
+                "from": "1",
                 "color": "#b2a300"
             },
             {
-                "from": "9",
+                "from": "4",
                 "color": "#77a900"
             },
             {
-                "from": "15",
+                "from": "8",
                 "color": "#3baf00"
             },
             {
-                "from": "21",
+                "from": "12",
                 "color": "#00b500"
             }
         ],
@@ -3244,8 +3093,8 @@
         "styleRounded": true,
         "styleGlow": false,
         "className": "small-gauge-text",
-        "x": 1180,
-        "y": 340,
+        "x": 1040,
+        "y": 360,
         "wires": []
     },
     {
@@ -3254,7 +3103,7 @@
         "z": "b22624498baaa896",
         "name": "",
         "group": "a7be90ba6585cc59",
-        "order": 3,
+        "order": 4,
         "width": 2,
         "height": 2,
         "gtype": "gauge-34",
@@ -3270,36 +3119,36 @@
                 "color": "#ca3838"
             },
             {
-                "from": "11.6",
-                "color": "#d45f1f"
-            },
-            {
                 "from": "12",
-                "color": "#da8c00"
+                "color": "#97572a"
             },
             {
-                "from": "12.4",
-                "color": "#e0b900"
+                "from": "12.6",
+                "color": "#65761c"
             },
             {
-                "from": "12.8",
-                "color": "#e6e600"
+                "from": "13.1",
+                "color": "#32950e"
             },
             {
                 "from": "13.2",
-                "color": "#b2a300"
+                "color": "#00b500"
+            },
+            {
+                "from": "13.3",
+                "color": "#39c100"
+            },
+            {
+                "from": "13.4",
+                "color": "#73cd00"
             },
             {
                 "from": "13.6",
-                "color": "#77a900"
+                "color": "#acd900"
             },
             {
-                "from": "14",
-                "color": "#3baf00"
-            },
-            {
-                "from": "14.4",
-                "color": "#00b500"
+                "from": "13.7",
+                "color": "#e6e600"
             }
         ],
         "min": "11",
@@ -3310,8 +3159,42 @@
         "styleRounded": true,
         "styleGlow": false,
         "className": "small-gauge-text",
-        "x": 1180,
-        "y": 240,
+        "x": 1040,
+        "y": 260,
+        "wires": []
+    },
+    {
+        "id": "f566bf310f628427",
+        "type": "ui-gauge",
+        "z": "b22624498baaa896",
+        "name": "",
+        "group": "a7be90ba6585cc59",
+        "order": 5,
+        "width": 2,
+        "height": 2,
+        "gtype": "gauge-34",
+        "gstyle": "rounded",
+        "title": "",
+        "units": "A",
+        "icon": "",
+        "prefix": "",
+        "suffix": "",
+        "segments": [
+            {
+                "from": "0",
+                "color": "#e6e600"
+            }
+        ],
+        "min": "0",
+        "max": "20",
+        "sizeThickness": "6",
+        "sizeGap": "0",
+        "sizeKeyThickness": "0",
+        "styleRounded": true,
+        "styleGlow": false,
+        "className": "small-gauge-text",
+        "x": 1040,
+        "y": 860,
         "wires": []
     },
     {
@@ -4592,6 +4475,7 @@
         "id": "9421369420060cce",
         "type": "ui_text",
         "z": "2561d49b29c858c7",
+        "d": true,
         "group": "9c32c704d83eb416",
         "order": 4,
         "width": 0,
@@ -6652,7 +6536,7 @@
         "type": "function",
         "z": "c74d4096e08fa272",
         "name": "Heating trigger",
-        "func": "\nif (msg.payload === undefined) {\n    return null;\n}\n\nlet temp = +msg.payload;\n\nif (temp !== 0) {\n    \n    let fan      = flow.get('fan') || 'eco';\n    let lastTemp = context.get('last_temp') || 0;\n    \n    context.set('last_temp', temp);\n\n    // Prepare two different messages\n    let msg1 = { payload: temp, topic: 'temp' };\n    let msg2 = { payload: fan,  topic: 'fan' };\n    \n    if (lastTemp === 0) {\n        return [msg1, msg2];\n    }\n    else {\n        return [msg1, null];\n    }\n\n}\nelse {\n    context.set('last_temp', 0);\n    \n    let msg1 = { payload: 0,     topic: 'temp' }\n    let msg2 = { payload: 'off', topic: 'fan' };\n    return [msg1, msg2];\n}\n    \n",
+        "func": "\nif (msg.payload === undefined) {\n    return null;\n}\n\nlet temp = msg.payload;\n\nif (temp !== 0) {\n    \n    let fan      = flow.get('fan') || 'eco';\n    let lastTemp = context.get('last_temp') || 0;\n    \n    context.set('last_temp', temp);\n\n    // Prepare two different messages\n    let msg1 = { payload: temp, topic: 'temp' };\n    let msg2 = { payload: fan,  topic: 'fan' };\n    \n    if (lastTemp === 0) {\n        return [msg1, msg2];\n    }\n    else {\n        return [msg1, null];\n    }\n\n}\nelse {\n    context.set('last_temp', 0);\n    \n    let msg1 = { payload: 0,     topic: 'temp' }\n    let msg2 = { payload: 'off', topic: 'fan' };\n    return [msg1, msg2];\n}\n    \n",
         "outputs": 2,
         "timeout": 0,
         "noerr": 0,
@@ -6819,7 +6703,6 @@
         "y": 440,
         "wires": [
             [
-                "cc39a6e2aff74086",
                 "5b3b355a63ca805e"
             ]
         ]
@@ -6972,24 +6855,6 @@
         ]
     },
     {
-        "id": "cc39a6e2aff74086",
-        "type": "function",
-        "z": "c74d4096e08fa272",
-        "name": "Set fan",
-        "func": "\nfan = msg.payload\n    \nif (fan !== 'off'){\n    flow.set('fan', fan);\n}\n\n",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 340,
-        "y": 420,
-        "wires": [
-            []
-        ]
-    },
-    {
         "id": "cc06935f987801fd",
         "type": "function",
         "z": "c74d4096e08fa272",
@@ -7038,7 +6903,6 @@
         "y": 1020,
         "wires": [
             [
-                "3764559c61d5efd8",
                 "2e99e7e72a42e0a3",
                 "cc06935f987801fd"
             ]
@@ -7602,7 +7466,7 @@
         "type": "function",
         "z": "c74d4096e08fa272",
         "name": "Red error",
-        "func": "\nlet msg1 = {};\nmsg1.ui_update = {};\n\nif (msg.payload === \"OK\") {\n    msg1.ui_update.class = '';\n}\nelse {\n    msg1.ui_update.class = 'error';\n}\n\nreturn msg1;",
+        "func": "\nlet status = msg.payload;\n\nmsg.ui_update = {};\n\nif (status === \"OK\") {\n    msg.ui_update.class = '';\n}\nelse {\n    msg.ui_update.class = 'error';\n}\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -7610,7 +7474,7 @@
         "finalize": "",
         "libs": [],
         "x": 620,
-        "y": 1060,
+        "y": 1020,
         "wires": [
             [
                 "3764559c61d5efd8"
