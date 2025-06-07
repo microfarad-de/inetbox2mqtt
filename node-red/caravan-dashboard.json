@@ -76,7 +76,7 @@
             },
             {
                 "name": "high",
-                "type": "str",
+                "type": "num",
                 "value": "100"
             },
             {
@@ -271,6 +271,49 @@
                 "value": "°C"
             }
         ],
+        "meta": {},
+        "color": "#DDAA99"
+    },
+    {
+        "id": "1bca7697946c1d3f",
+        "type": "subflow",
+        "name": "Stars",
+        "info": "",
+        "category": "",
+        "in": [
+            {
+                "x": 200,
+                "y": 160,
+                "wires": [
+                    {
+                        "id": "a3d2410121093268"
+                    }
+                ]
+            }
+        ],
+        "out": [
+            {
+                "x": 580,
+                "y": 160,
+                "wires": [
+                    {
+                        "id": "a3d2410121093268",
+                        "port": 0
+                    }
+                ]
+            },
+            {
+                "x": 580,
+                "y": 220,
+                "wires": [
+                    {
+                        "id": "a3d2410121093268",
+                        "port": 1
+                    }
+                ]
+            }
+        ],
+        "env": [],
         "meta": {},
         "color": "#DDAA99"
     },
@@ -615,7 +658,7 @@
                 "cols": "6"
             }
         ],
-        "order": 2,
+        "order": 3,
         "className": "",
         "visible": "true",
         "disabled": "false"
@@ -623,11 +666,11 @@
     {
         "id": "2b74e6ea7cedf9dc",
         "type": "ui-group",
-        "name": "Overview",
-        "page": "f6f4c01f1f6329b6",
+        "name": "Environment",
+        "page": "c4300ca17ae61646",
         "width": "6",
         "height": "1",
-        "order": 1,
+        "order": 2,
         "showTitle": true,
         "className": "",
         "visible": "true",
@@ -641,7 +684,7 @@
         "page": "f6f4c01f1f6329b6",
         "width": "6",
         "height": "1",
-        "order": 2,
+        "order": 1,
         "showTitle": true,
         "className": "",
         "visible": "true",
@@ -655,7 +698,7 @@
         "page": "f6f4c01f1f6329b6",
         "width": "6",
         "height": "1",
-        "order": 3,
+        "order": 2,
         "showTitle": true,
         "className": "",
         "visible": "true",
@@ -678,7 +721,7 @@
                 "cols": "6"
             }
         ],
-        "order": 1,
+        "order": 2,
         "className": "",
         "visible": true,
         "disabled": false
@@ -687,7 +730,7 @@
         "id": "a7be90ba6585cc59",
         "type": "ui-group",
         "name": "Electricity",
-        "page": "2611ec2a3e5a9d82",
+        "page": "c4300ca17ae61646",
         "width": "6",
         "height": "1",
         "order": 1,
@@ -701,10 +744,10 @@
         "id": "25319c4b021b78d9",
         "type": "ui-group",
         "name": "Propane",
-        "page": "2611ec2a3e5a9d82",
+        "page": "c4300ca17ae61646",
         "width": "6",
         "height": "1",
-        "order": 2,
+        "order": 3,
         "showTitle": true,
         "className": "",
         "visible": "true",
@@ -718,7 +761,7 @@
         "page": "2611ec2a3e5a9d82",
         "width": "6",
         "height": "1",
-        "order": 3,
+        "order": 1,
         "showTitle": true,
         "className": "",
         "visible": "true",
@@ -732,7 +775,7 @@
         "page": "2611ec2a3e5a9d82",
         "width": "6",
         "height": "1",
-        "order": 4,
+        "order": 2,
         "showTitle": true,
         "className": "",
         "visible": "true",
@@ -770,7 +813,7 @@
                 "cols": "12"
             }
         ],
-        "order": 4,
+        "order": 5,
         "className": "",
         "visible": false,
         "disabled": "false"
@@ -805,7 +848,7 @@
                 "cols": "6"
             }
         ],
-        "order": 3,
+        "order": 4,
         "className": "",
         "visible": "true",
         "disabled": "false"
@@ -841,10 +884,10 @@
     {
         "id": "e96f88435ad61c8c",
         "type": "ui-spacer",
-        "group": "2b74e6ea7cedf9dc",
+        "group": "bc614f1d5f7543e9",
         "name": "spacer",
         "tooltip": "",
-        "order": 7,
+        "order": 6,
         "width": 6,
         "height": 1,
         "className": ""
@@ -863,10 +906,10 @@
     {
         "id": "e57b48aa09852086",
         "type": "ui-spacer",
-        "group": "64aefdbb4f4733ee",
+        "group": "ba0d9a414ff3a20d",
         "name": "spacer",
         "tooltip": "",
-        "order": 6,
+        "order": 5,
         "width": "6",
         "height": "1",
         "className": ""
@@ -874,24 +917,76 @@
     {
         "id": "f95ee2972e7966ef",
         "type": "ui-spacer",
-        "group": "459be61f93594b03",
+        "group": "2e561758ea16e0b5",
         "name": "spacer",
         "tooltip": "",
-        "order": 6,
+        "order": 7,
         "width": "6",
         "height": "1",
         "className": ""
     },
     {
-        "id": "20bb583a5e0f7740",
-        "type": "ui-spacer",
-        "group": "25319c4b021b78d9",
-        "name": "spacer",
-        "tooltip": "",
-        "order": 3,
+        "id": "c4300ca17ae61646",
+        "type": "ui-page",
+        "name": "Overview",
+        "ui": "93cf16ef6c7e509b",
+        "path": "/overview",
+        "icon": "home",
+        "layout": "grid",
+        "theme": "7fbe7ff5e2bd848b",
+        "breakpoints": [
+            {
+                "name": "Default",
+                "px": "0",
+                "cols": "6"
+            }
+        ],
+        "order": 1,
+        "className": "",
+        "visible": "true",
+        "disabled": "false"
+    },
+    {
+        "id": "2e561758ea16e0b5",
+        "type": "ui-group",
+        "name": "Propane",
+        "page": "2611ec2a3e5a9d82",
         "width": "6",
         "height": "1",
-        "className": ""
+        "order": 3,
+        "showTitle": true,
+        "className": "",
+        "visible": "true",
+        "disabled": "false",
+        "groupType": "default"
+    },
+    {
+        "id": "bc614f1d5f7543e9",
+        "type": "ui-group",
+        "name": "Heating",
+        "page": "c4300ca17ae61646",
+        "width": "6",
+        "height": "1",
+        "order": 4,
+        "showTitle": true,
+        "className": "",
+        "visible": "true",
+        "disabled": "false",
+        "groupType": "default"
+    },
+    {
+        "id": "ba0d9a414ff3a20d",
+        "type": "ui-group",
+        "name": "Sensor Battery",
+        "page": "f6f4c01f1f6329b6",
+        "width": "6",
+        "height": "1",
+        "order": 3,
+        "showTitle": true,
+        "className": "",
+        "visible": "true",
+        "disabled": "false",
+        "groupType": "default"
     },
     {
         "id": "e7756b84d8b39dfb",
@@ -953,7 +1048,7 @@
         "type": "function",
         "z": "c515380878a4716f",
         "name": "Propane percent",
-        "func": "\nempty = env.get('empty');\nfull  = env.get('full');\n\nlevel = msg.payload;\n\npercent = 100 * (level - empty) / (full - empty);\n\nif (percent > 100) {\n    percent = 100;\n}\n\nif (percent < 0) {\n    percent = 0;\n}\n\nmsg.payload = percent.toFixed(0);\n\nreturn msg;",
+        "func": "\n/*\nconst DEBUG = false;\n\n// Handle accelerometer readings\n// detect propan tank movement or swap\nif (msg.topic === 'acceleration') {\n    if (Math.abs(msg.payload) > 0.5) {\n        if (DEBUG) node.warn(`Accel = ${msg.payload}, reset last-percent`);\n        context.set('last-percent', 100);\n        \n    }\n    return null;\n}\n*/\n\nempty = env.get('empty');\nfull  = env.get('full');\nlevel = msg.payload;\n\npercent = 100 * (level - empty) / (full - empty);\n\nif (percent > 100) {\n    percent = 100;\n}\n\nif (percent < 0) {\n    percent = 0;\n}\n\n/*\n// Percent never increases unless a full propane tank\n// has been installed or the vehicle is moving.\nlastPercent = context.get('last-percent');\nif (lastPercent === undefined) {\n    lastPercent = 100;\n}\nif (DEBUG) node.warn(`last-percent = ${lastPercent}`);\n\nif (percent < lastPercent) {\n    let p = (percent + 19*lastPercent) / 20;\n    if (DEBUG) node.warn(`set last-percent = ${p}`);\n    context.set('last-percent', p);\n}\nelse {\n    if (DEBUG) node.warn(`set percent = ${lastPercent}`);\n    percent = lastPercent;\n}\n*/\n\nmsg.payload = percent.toFixed(0);\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -981,6 +1076,25 @@
         "x": 430,
         "y": 220,
         "wires": [
+            []
+        ]
+    },
+    {
+        "id": "a3d2410121093268",
+        "type": "function",
+        "z": "1bca7697946c1d3f",
+        "name": "Stars",
+        "func": "\nswitch (msg.payload) {\n    case 1:\n        msg.payload = \"★\";\n        break;\n    case 2:\n        msg.payload = \"★★\";\n        break;\n    case 3:\n        msg.payload = \"★★★\";\n        break;\n    default:\n        msg.payload = \"--\";\n        break;\n}\n\nlet msg2 = {};\nmsg2.ui_update = {};\nmsg2.ui_update.units = msg.payload + \" %\";\n\nreturn [msg, msg2];",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 390,
+        "y": 160,
+        "wires": [
+            [],
             []
         ]
     },
@@ -1206,7 +1320,7 @@
         "onlyChanges": false,
         "roundValues": "0",
         "x": 240,
-        "y": 600,
+        "y": 740,
         "wires": [
             [
                 "09aa29457cb04e05",
@@ -1234,7 +1348,7 @@
         "fontSize": 16,
         "color": "#000000",
         "x": 720,
-        "y": 700,
+        "y": 840,
         "wires": []
     },
     {
@@ -1256,7 +1370,7 @@
         "onlyChanges": false,
         "roundValues": "2",
         "x": 230,
-        "y": 700,
+        "y": 840,
         "wires": [
             [
                 "0f4851a0740942b4",
@@ -1282,7 +1396,7 @@
         "fontSize": 16,
         "color": "#000000",
         "x": 720,
-        "y": 900,
+        "y": 1040,
         "wires": []
     },
     {
@@ -1303,14 +1417,14 @@
         "name": "",
         "onlyChanges": false,
         "roundValues": "2",
-        "x": 180,
-        "y": 880,
+        "x": 170,
+        "y": 1020,
         "wires": [
             [
                 "4222164f2945fc86",
                 "cf806006b8743774",
                 "e1a329f6afcd64bd",
-                "f566bf310f628427"
+                "aab4dc6ba3952dbb"
             ]
         ]
     },
@@ -1374,7 +1488,7 @@
         "fontSize": 16,
         "color": "#000000",
         "x": 710,
-        "y": 780,
+        "y": 920,
         "wires": []
     },
     {
@@ -1409,7 +1523,7 @@
         "onlyChanges": false,
         "roundValues": "3",
         "x": 160,
-        "y": 780,
+        "y": 920,
         "wires": [
             [
                 "6e13fcff475194b8",
@@ -1523,7 +1637,7 @@
         "fontSize": 16,
         "color": "#000000",
         "x": 740,
-        "y": 520,
+        "y": 660,
         "wires": []
     },
     {
@@ -1545,7 +1659,7 @@
         "onlyChanges": false,
         "roundValues": "1",
         "x": 140,
-        "y": 520,
+        "y": 660,
         "wires": [
             [
                 "150b6139a9534c68"
@@ -1565,7 +1679,7 @@
         "finalize": "",
         "libs": [],
         "x": 570,
-        "y": 520,
+        "y": 660,
         "wires": [
             [
                 "dbf406ca351cbe4a",
@@ -1592,7 +1706,7 @@
         "onlyChanges": false,
         "roundValues": "1",
         "x": 180,
-        "y": 460,
+        "y": 600,
         "wires": [
             [
                 "f33aa0023c70b646",
@@ -1618,7 +1732,7 @@
         "fontSize": 16,
         "color": "#000000",
         "x": 740,
-        "y": 460,
+        "y": 600,
         "wires": []
     },
     {
@@ -1639,7 +1753,7 @@
         "fontSize": 16,
         "color": "#000000",
         "x": 730,
-        "y": 1000,
+        "y": 1140,
         "wires": []
     },
     {
@@ -1661,7 +1775,7 @@
         "onlyChanges": false,
         "roundValues": "3",
         "x": 250,
-        "y": 980,
+        "y": 1120,
         "wires": [
             [
                 "53a95fb1c4d6126a",
@@ -1682,7 +1796,7 @@
         "finalize": "",
         "libs": [],
         "x": 550,
-        "y": 980,
+        "y": 1120,
         "wires": [
             [
                 "b606e7edf0b64565",
@@ -1754,7 +1868,7 @@
         "onlyChanges": false,
         "roundValues": "1",
         "x": 170,
-        "y": 1080,
+        "y": 1200,
         "wires": [
             [
                 "a4fe06dad0e33752"
@@ -1774,13 +1888,14 @@
             }
         ],
         "x": 390,
-        "y": 1080,
+        "y": 1200,
         "wires": [
             [
                 "56bfe721ed8b5675",
                 "415b970528d22d1f",
                 "7b2f7f2e58253c60",
-                "e8180cd3ca37e6c5"
+                "e8180cd3ca37e6c5",
+                "e08ca67adef7fb8c"
             ]
         ]
     },
@@ -1802,13 +1917,14 @@
             }
         ],
         "x": 390,
-        "y": 1220,
+        "y": 1380,
         "wires": [
             [
                 "b2790ee93b81319a",
                 "a3e4eeb2cd73eb95",
                 "f1b9d5e34d3f83e3",
-                "5624583cb2d689af"
+                "5624583cb2d689af",
+                "5e36b6ecf4020bc5"
             ]
         ]
     },
@@ -1826,13 +1942,13 @@
             "path": "/RawValue",
             "name": "/RawValue",
             "type": "number",
-            "value": 4.921152114868164
+            "value": 4.3295793533325195
         },
         "name": "",
         "onlyChanges": false,
         "roundValues": "1",
         "x": 170,
-        "y": 1220,
+        "y": 1380,
         "wires": [
             [
                 "bcbcc2ea62ba3ecd"
@@ -1867,7 +1983,7 @@
             }
         ],
         "x": 570,
-        "y": 1140,
+        "y": 1280,
         "wires": [
             [
                 "9141f247602e75b7"
@@ -1884,7 +2000,7 @@
             "2f93affb367a865e"
         ],
         "x": 675,
-        "y": 1140,
+        "y": 1280,
         "wires": []
     },
     {
@@ -1915,7 +2031,7 @@
             }
         ],
         "x": 570,
-        "y": 1280,
+        "y": 1460,
         "wires": [
             [
                 "14753609f7bc5747"
@@ -1932,7 +2048,7 @@
             "2f93affb367a865e"
         ],
         "x": 675,
-        "y": 1280,
+        "y": 1460,
         "wires": []
     },
     {
@@ -1954,7 +2070,7 @@
         "fontSize": 16,
         "color": "#000000",
         "x": 720,
-        "y": 1340,
+        "y": 1520,
         "wires": []
     },
     {
@@ -1976,7 +2092,7 @@
         "fontSize": 16,
         "color": "#000000",
         "x": 730,
-        "y": 1400,
+        "y": 1580,
         "wires": []
     },
     {
@@ -1998,7 +2114,7 @@
         "onlyChanges": false,
         "roundValues": "1",
         "x": 180,
-        "y": 1340,
+        "y": 1520,
         "wires": [
             [
                 "f3ef51f7ef9dc487",
@@ -2025,7 +2141,7 @@
         "onlyChanges": false,
         "roundValues": "1",
         "x": 180,
-        "y": 1400,
+        "y": 1580,
         "wires": [
             [
                 "f9f81584fb2117b3",
@@ -2086,7 +2202,7 @@
         "diff": false,
         "className": "",
         "x": 710,
-        "y": 580,
+        "y": 720,
         "wires": []
     },
     {
@@ -2114,7 +2230,7 @@
         "diff": false,
         "className": "",
         "x": 710,
-        "y": 1060,
+        "y": 1200,
         "wires": []
     },
     {
@@ -2142,7 +2258,7 @@
         "diff": false,
         "className": "",
         "x": 710,
-        "y": 1200,
+        "y": 1380,
         "wires": []
     },
     {
@@ -2184,7 +2300,7 @@
         "fontSize": "24",
         "color": "#ffffff",
         "x": 710,
-        "y": 620,
+        "y": 760,
         "wires": []
     },
     {
@@ -2206,7 +2322,7 @@
         "fontSize": "24",
         "color": "#ffffff",
         "x": 720,
-        "y": 1100,
+        "y": 1240,
         "wires": []
     },
     {
@@ -2228,7 +2344,7 @@
         "fontSize": "24",
         "color": "#ffffff",
         "x": 730,
-        "y": 1240,
+        "y": 1420,
         "wires": []
     },
     {
@@ -2249,7 +2365,7 @@
         "fontSize": 16,
         "color": "#000000",
         "x": 710,
-        "y": 1460,
+        "y": 1900,
         "wires": [],
         "info": "Dummy block used as a spacer"
     },
@@ -2334,7 +2450,7 @@
         "diff": false,
         "className": "",
         "x": 710,
-        "y": 860,
+        "y": 1000,
         "wires": []
     },
     {
@@ -2355,7 +2471,7 @@
         "fontSize": 16,
         "color": "#000000",
         "x": 710,
-        "y": 1500,
+        "y": 1940,
         "wires": [],
         "info": "Dummy block used as a spacer"
     },
@@ -2385,7 +2501,7 @@
         "diff": false,
         "className": "",
         "x": 710,
-        "y": 960,
+        "y": 1100,
         "wires": []
     },
     {
@@ -2453,7 +2569,7 @@
         "styleGlow": false,
         "className": "large-gauge-text",
         "x": 1030,
-        "y": 580,
+        "y": 720,
         "wires": []
     },
     {
@@ -2487,7 +2603,7 @@
         "styleGlow": false,
         "className": "large-gauge-text",
         "x": 1030,
-        "y": 1080,
+        "y": 1200,
         "wires": []
     },
     {
@@ -2521,7 +2637,7 @@
         "styleGlow": false,
         "className": "large-gauge-text",
         "x": 1030,
-        "y": 1220,
+        "y": 1380,
         "wires": []
     },
     {
@@ -2621,7 +2737,7 @@
             }
         ],
         "x": 910,
-        "y": 460,
+        "y": 600,
         "wires": [
             [
                 "5b2bf08ae8ea4253"
@@ -2633,7 +2749,7 @@
         "type": "ui-text",
         "z": "b22624498baaa896",
         "group": "16349d9c5c0afd34",
-        "order": 4,
+        "order": 6,
         "width": 3,
         "height": 0,
         "name": "",
@@ -2647,7 +2763,7 @@
         "wrapText": false,
         "className": "",
         "x": 1060,
-        "y": 460,
+        "y": 600,
         "wires": []
     },
     {
@@ -2655,7 +2771,7 @@
         "type": "ui-text",
         "z": "b22624498baaa896",
         "group": "16349d9c5c0afd34",
-        "order": 5,
+        "order": 7,
         "width": 3,
         "height": 0,
         "name": "",
@@ -2669,7 +2785,7 @@
         "wrapText": false,
         "className": "",
         "x": 1060,
-        "y": 520,
+        "y": 660,
         "wires": []
     },
     {
@@ -2685,7 +2801,7 @@
             }
         ],
         "x": 910,
-        "y": 700,
+        "y": 840,
         "wires": [
             [
                 "2b9973ea62eb52cc"
@@ -2711,7 +2827,7 @@
         "wrapText": false,
         "className": "",
         "x": 1040,
-        "y": 700,
+        "y": 840,
         "wires": []
     },
     {
@@ -2733,7 +2849,7 @@
         "wrapText": false,
         "className": "",
         "x": 1030,
-        "y": 780,
+        "y": 920,
         "wires": []
     },
     {
@@ -2755,7 +2871,7 @@
         "wrapText": false,
         "className": "",
         "x": 1040,
-        "y": 900,
+        "y": 1040,
         "wires": []
     },
     {
@@ -2771,7 +2887,7 @@
             }
         ],
         "x": 910,
-        "y": 900,
+        "y": 1040,
         "wires": [
             [
                 "7c7d2a05608cc210"
@@ -2797,7 +2913,7 @@
         "wrapText": false,
         "className": "",
         "x": 1050,
-        "y": 1000,
+        "y": 1140,
         "wires": []
     },
     {
@@ -2813,7 +2929,7 @@
             }
         ],
         "x": 910,
-        "y": 1000,
+        "y": 1140,
         "wires": [
             [
                 "944c350128a5e685"
@@ -2833,7 +2949,7 @@
         "finalize": "",
         "libs": [],
         "x": 900,
-        "y": 780,
+        "y": 920,
         "wires": [
             [
                 "4024d7116f937128"
@@ -2901,7 +3017,7 @@
         "wrapText": false,
         "className": "large-text",
         "x": 1030,
-        "y": 620,
+        "y": 760,
         "wires": []
     },
     {
@@ -2917,7 +3033,7 @@
             }
         ],
         "x": 910,
-        "y": 620,
+        "y": 760,
         "wires": [
             [
                 "8ef640bd94b48c1e"
@@ -2928,13 +3044,12 @@
         "id": "25cea28771461383",
         "type": "ui-text",
         "z": "b22624498baaa896",
-        "d": true,
-        "group": "1769e3f51bb550db",
-        "order": 2,
+        "group": "2e561758ea16e0b5",
+        "order": 5,
         "width": 3,
         "height": 0,
         "name": "",
-        "label": "Temp",
+        "label": "Temperature",
         "format": "{{msg.payload}}",
         "layout": "col-center",
         "style": false,
@@ -2942,9 +3057,9 @@
         "fontSize": 16,
         "color": "#717171",
         "wrapText": false,
-        "className": "large-text",
-        "x": 1030,
-        "y": 1340,
+        "className": "",
+        "x": 1050,
+        "y": 1520,
         "wires": []
     },
     {
@@ -2953,7 +3068,7 @@
         "z": "b22624498baaa896",
         "name": "",
         "x": 910,
-        "y": 1340,
+        "y": 1520,
         "wires": [
             [
                 "25cea28771461383"
@@ -2964,13 +3079,12 @@
         "id": "7347d45a575a1686",
         "type": "ui-text",
         "z": "b22624498baaa896",
-        "d": true,
-        "group": "1769e3f51bb550db",
-        "order": 1,
+        "group": "2e561758ea16e0b5",
+        "order": 6,
         "width": 3,
         "height": 0,
         "name": "",
-        "label": "Temp",
+        "label": "Temperature",
         "format": "{{msg.payload}}",
         "layout": "col-center",
         "style": false,
@@ -2978,9 +3092,9 @@
         "fontSize": 16,
         "color": "#717171",
         "wrapText": false,
-        "className": "large-text",
-        "x": 1030,
-        "y": 1400,
+        "className": "",
+        "x": 1050,
+        "y": 1580,
         "wires": []
     },
     {
@@ -2989,7 +3103,7 @@
         "z": "b22624498baaa896",
         "name": "",
         "x": 910,
-        "y": 1400,
+        "y": 1580,
         "wires": [
             [
                 "7347d45a575a1686"
@@ -3003,7 +3117,7 @@
         "d": true,
         "name": "",
         "group": "1769e3f51bb550db",
-        "order": 3,
+        "order": 1,
         "width": 2,
         "height": 2,
         "gtype": "gauge-34",
@@ -3028,7 +3142,7 @@
         "styleGlow": false,
         "className": "small-gauge-text",
         "x": 1040,
-        "y": 960,
+        "y": 1100,
         "wires": []
     },
     {
@@ -3164,7 +3278,459 @@
         "wires": []
     },
     {
-        "id": "f566bf310f628427",
+        "id": "e08ca67adef7fb8c",
+        "type": "subflow:35877746e13a44de",
+        "z": "b22624498baaa896",
+        "name": "",
+        "env": [
+            {
+                "name": "unit",
+                "value": "%",
+                "type": "str"
+            }
+        ],
+        "x": 910,
+        "y": 1240,
+        "wires": [
+            [
+                "e558e37ec5e69804"
+            ]
+        ]
+    },
+    {
+        "id": "e558e37ec5e69804",
+        "type": "ui-text",
+        "z": "b22624498baaa896",
+        "group": "2e561758ea16e0b5",
+        "order": 1,
+        "width": 3,
+        "height": 0,
+        "name": "",
+        "label": "Left",
+        "format": "{{msg.payload}}",
+        "layout": "col-center",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#717171",
+        "wrapText": false,
+        "className": "large-text",
+        "x": 1030,
+        "y": 1240,
+        "wires": []
+    },
+    {
+        "id": "2ae801359341660a",
+        "type": "ui-text",
+        "z": "b22624498baaa896",
+        "group": "2e561758ea16e0b5",
+        "order": 2,
+        "width": 3,
+        "height": 0,
+        "name": "",
+        "label": "Right",
+        "format": "{{msg.payload}}",
+        "layout": "col-center",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#717171",
+        "wrapText": false,
+        "className": "large-text",
+        "x": 1030,
+        "y": 1420,
+        "wires": []
+    },
+    {
+        "id": "5e36b6ecf4020bc5",
+        "type": "subflow:35877746e13a44de",
+        "z": "b22624498baaa896",
+        "name": "",
+        "env": [
+            {
+                "name": "unit",
+                "value": "%",
+                "type": "str"
+            }
+        ],
+        "x": 910,
+        "y": 1420,
+        "wires": [
+            [
+                "2ae801359341660a"
+            ]
+        ]
+    },
+    {
+        "id": "96c0d34b5039f94a",
+        "type": "victron-input-custom",
+        "z": "b22624498baaa896",
+        "service": "com.victronenergy.tank/21",
+        "path": "/Quality",
+        "serviceObj": {
+            "service": "com.victronenergy.tank/21",
+            "name": "Propane Tank 1 (21)"
+        },
+        "pathObj": {
+            "path": "/Quality",
+            "name": "/Quality",
+            "type": "number",
+            "value": 3
+        },
+        "name": "",
+        "onlyChanges": false,
+        "roundValues": "2",
+        "x": 160,
+        "y": 1660,
+        "wires": [
+            [
+                "9833133c96b19773"
+            ]
+        ]
+    },
+    {
+        "id": "4b08dd01887b5c29",
+        "type": "victron-input-custom",
+        "z": "b22624498baaa896",
+        "service": "com.victronenergy.tank/20",
+        "path": "/Quality",
+        "serviceObj": {
+            "service": "com.victronenergy.tank/20",
+            "name": "Propane Tank 2 (20)"
+        },
+        "pathObj": {
+            "path": "/Quality",
+            "name": "/Quality",
+            "type": "number",
+            "value": 3
+        },
+        "name": "",
+        "onlyChanges": false,
+        "roundValues": "2",
+        "x": 160,
+        "y": 1720,
+        "wires": [
+            [
+                "ee1ddc99836d7c5f"
+            ]
+        ]
+    },
+    {
+        "id": "e4faba6018cf1503",
+        "type": "ui-text",
+        "z": "b22624498baaa896",
+        "group": "2e561758ea16e0b5",
+        "order": 3,
+        "width": 3,
+        "height": 0,
+        "name": "",
+        "label": "Quality",
+        "format": "{{msg.payload}}",
+        "layout": "col-center",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#717171",
+        "wrapText": false,
+        "className": "",
+        "x": 1040,
+        "y": 1660,
+        "wires": []
+    },
+    {
+        "id": "090879cfa55fb504",
+        "type": "ui-text",
+        "z": "b22624498baaa896",
+        "group": "2e561758ea16e0b5",
+        "order": 4,
+        "width": 3,
+        "height": 0,
+        "name": "",
+        "label": "Quality",
+        "format": "{{msg.payload}}",
+        "layout": "col-center",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#717171",
+        "wrapText": false,
+        "className": "",
+        "x": 1040,
+        "y": 1720,
+        "wires": []
+    },
+    {
+        "id": "ee945488d6fe810e",
+        "type": "victron-input-custom",
+        "z": "b22624498baaa896",
+        "d": true,
+        "service": "com.victronenergy.tank/21",
+        "path": "/AccelX",
+        "serviceObj": {
+            "service": "com.victronenergy.tank/21",
+            "name": "Propane Tank 1 (21)"
+        },
+        "pathObj": {
+            "path": "/AccelX",
+            "name": "/AccelX",
+            "type": "number",
+            "value": 0.0810546875
+        },
+        "name": "",
+        "onlyChanges": false,
+        "roundValues": "2",
+        "x": 160,
+        "y": 1260,
+        "wires": [
+            [
+                "52bc3eea992a3a5a"
+            ]
+        ]
+    },
+    {
+        "id": "aaf0f2f3cde0ab76",
+        "type": "function",
+        "z": "b22624498baaa896",
+        "d": true,
+        "name": "Set topic",
+        "func": "\nmsg.topic = 'acceleration';\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 360,
+        "y": 1440,
+        "wires": [
+            [
+                "bcbcc2ea62ba3ecd"
+            ]
+        ]
+    },
+    {
+        "id": "03ba7d9fc0045ad2",
+        "type": "victron-input-custom",
+        "z": "b22624498baaa896",
+        "d": true,
+        "service": "com.victronenergy.tank/20",
+        "path": "/AccelX",
+        "serviceObj": {
+            "service": "com.victronenergy.tank/20",
+            "name": "Propane Tank 2 (20)"
+        },
+        "pathObj": {
+            "path": "/AccelX",
+            "name": "/AccelX",
+            "type": "number",
+            "value": -0.0078125
+        },
+        "name": "",
+        "onlyChanges": false,
+        "roundValues": "2",
+        "x": 160,
+        "y": 1440,
+        "wires": [
+            [
+                "aaf0f2f3cde0ab76"
+            ]
+        ]
+    },
+    {
+        "id": "52bc3eea992a3a5a",
+        "type": "function",
+        "z": "b22624498baaa896",
+        "d": true,
+        "name": "Set topic",
+        "func": "\nmsg.topic = 'acceleration';\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 360,
+        "y": 1260,
+        "wires": [
+            [
+                "a4fe06dad0e33752"
+            ]
+        ]
+    },
+    {
+        "id": "9ba732088185b979",
+        "type": "victron-input-custom",
+        "z": "b22624498baaa896",
+        "service": "com.victronenergy.tank/21",
+        "path": "/BatteryVoltage",
+        "serviceObj": {
+            "service": "com.victronenergy.tank/21",
+            "name": "Propane Tank 1 (21)"
+        },
+        "pathObj": {
+            "path": "/BatteryVoltage",
+            "name": "/BatteryVoltage",
+            "type": "number",
+            "value": 2.96875
+        },
+        "name": "",
+        "onlyChanges": false,
+        "roundValues": "2",
+        "x": 190,
+        "y": 1800,
+        "wires": [
+            [
+                "5951f15929c050dc"
+            ]
+        ]
+    },
+    {
+        "id": "40c7e00220faa9b0",
+        "type": "victron-input-custom",
+        "z": "b22624498baaa896",
+        "service": "com.victronenergy.tank/20",
+        "path": "/BatteryVoltage",
+        "serviceObj": {
+            "service": "com.victronenergy.tank/20",
+            "name": "Propane Tank 2 (20)"
+        },
+        "pathObj": {
+            "path": "/BatteryVoltage",
+            "name": "/BatteryVoltage",
+            "type": "number",
+            "value": 3
+        },
+        "name": "",
+        "onlyChanges": false,
+        "roundValues": "2",
+        "x": 190,
+        "y": 1860,
+        "wires": [
+            [
+                "73a635010ccfe4e5"
+            ]
+        ]
+    },
+    {
+        "id": "5951f15929c050dc",
+        "type": "subflow:35877746e13a44de",
+        "z": "b22624498baaa896",
+        "name": "",
+        "env": [
+            {
+                "name": "unit",
+                "value": "V",
+                "type": "str"
+            }
+        ],
+        "x": 910,
+        "y": 1800,
+        "wires": [
+            [
+                "758f57b8a5e519cb"
+            ]
+        ]
+    },
+    {
+        "id": "758f57b8a5e519cb",
+        "type": "ui-text",
+        "z": "b22624498baaa896",
+        "d": true,
+        "group": "1769e3f51bb550db",
+        "order": 2,
+        "width": 3,
+        "height": 0,
+        "name": "",
+        "label": "Battery",
+        "format": "{{msg.payload}}",
+        "layout": "col-center",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#717171",
+        "wrapText": false,
+        "className": "",
+        "x": 1040,
+        "y": 1800,
+        "wires": []
+    },
+    {
+        "id": "73a635010ccfe4e5",
+        "type": "subflow:35877746e13a44de",
+        "z": "b22624498baaa896",
+        "name": "",
+        "env": [
+            {
+                "name": "unit",
+                "value": "V",
+                "type": "str"
+            }
+        ],
+        "x": 910,
+        "y": 1860,
+        "wires": [
+            [
+                "e5b3a808b0a358fa"
+            ]
+        ]
+    },
+    {
+        "id": "e5b3a808b0a358fa",
+        "type": "ui-text",
+        "z": "b22624498baaa896",
+        "d": true,
+        "group": "1769e3f51bb550db",
+        "order": 3,
+        "width": 3,
+        "height": 0,
+        "name": "",
+        "label": "Battery",
+        "format": "{{msg.payload}}",
+        "layout": "col-center",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#717171",
+        "wrapText": false,
+        "className": "",
+        "x": 1040,
+        "y": 1860,
+        "wires": []
+    },
+    {
+        "id": "9833133c96b19773",
+        "type": "subflow:1bca7697946c1d3f",
+        "z": "b22624498baaa896",
+        "name": "",
+        "x": 730,
+        "y": 1660,
+        "wires": [
+            [
+                "e4faba6018cf1503"
+            ],
+            [
+                "e8180cd3ca37e6c5"
+            ]
+        ]
+    },
+    {
+        "id": "ee1ddc99836d7c5f",
+        "type": "subflow:1bca7697946c1d3f",
+        "z": "b22624498baaa896",
+        "name": "",
+        "x": 730,
+        "y": 1720,
+        "wires": [
+            [
+                "090879cfa55fb504"
+            ],
+            [
+                "5624583cb2d689af"
+            ]
+        ]
+    },
+    {
+        "id": "aab4dc6ba3952dbb",
         "type": "ui-gauge",
         "z": "b22624498baaa896",
         "name": "",
@@ -3183,6 +3749,22 @@
             {
                 "from": "0",
                 "color": "#e6e600"
+            },
+            {
+                "from": "1",
+                "color": "#b2a300"
+            },
+            {
+                "from": "4",
+                "color": "#77a900"
+            },
+            {
+                "from": "8",
+                "color": "#3baf00"
+            },
+            {
+                "from": "12",
+                "color": "#00b500"
             }
         ],
         "min": "0",
@@ -3194,8 +3776,137 @@
         "styleGlow": false,
         "className": "small-gauge-text",
         "x": 1040,
-        "y": 860,
+        "y": 1000,
         "wires": []
+    },
+    {
+        "id": "a9b632a6e1f88b5e",
+        "type": "victron-input-battery",
+        "z": "b22624498baaa896",
+        "service": "com.victronenergy.battery/289",
+        "path": "/Dc/0/Power",
+        "serviceObj": {
+            "service": "com.victronenergy.battery/289",
+            "name": "Battery"
+        },
+        "pathObj": {
+            "path": "/Dc/0/Power",
+            "type": "float",
+            "name": "Battery power (W)"
+        },
+        "name": "",
+        "onlyChanges": false,
+        "roundValues": "1",
+        "x": 150,
+        "y": 460,
+        "wires": [
+            [
+                "1a329e25f08e3184"
+            ]
+        ]
+    },
+    {
+        "id": "0ec4965cb5cfd307",
+        "type": "victron-input-battery",
+        "z": "b22624498baaa896",
+        "service": "com.victronenergy.battery/289",
+        "path": "/Dc/0/Temperature",
+        "serviceObj": {
+            "service": "com.victronenergy.battery/289",
+            "name": "Battery"
+        },
+        "pathObj": {
+            "path": "/Dc/0/Temperature",
+            "type": "float",
+            "name": "Battery temperature (°C)"
+        },
+        "name": "",
+        "onlyChanges": false,
+        "roundValues": "1",
+        "x": 170,
+        "y": 520,
+        "wires": [
+            [
+                "3ebad7ace12dbcc4"
+            ]
+        ]
+    },
+    {
+        "id": "a4eeb463b73a220b",
+        "type": "ui-text",
+        "z": "b22624498baaa896",
+        "group": "16349d9c5c0afd34",
+        "order": 4,
+        "width": 3,
+        "height": 0,
+        "name": "",
+        "label": "Power",
+        "format": "{{msg.payload}}",
+        "layout": "col-center",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#717171",
+        "wrapText": false,
+        "className": "",
+        "x": 1030,
+        "y": 460,
+        "wires": []
+    },
+    {
+        "id": "56caddb3dd587e49",
+        "type": "ui-text",
+        "z": "b22624498baaa896",
+        "group": "16349d9c5c0afd34",
+        "order": 5,
+        "width": 3,
+        "height": 0,
+        "name": "",
+        "label": "Temperature",
+        "format": "{{msg.payload}}",
+        "layout": "col-center",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#717171",
+        "wrapText": false,
+        "className": "",
+        "x": 1050,
+        "y": 520,
+        "wires": []
+    },
+    {
+        "id": "1a329e25f08e3184",
+        "type": "subflow:35877746e13a44de",
+        "z": "b22624498baaa896",
+        "name": "",
+        "env": [
+            {
+                "name": "unit",
+                "value": "W",
+                "type": "str"
+            }
+        ],
+        "x": 910,
+        "y": 460,
+        "wires": [
+            [
+                "a4eeb463b73a220b"
+            ]
+        ]
+    },
+    {
+        "id": "3ebad7ace12dbcc4",
+        "type": "subflow:35877746e13a44de",
+        "z": "b22624498baaa896",
+        "name": "",
+        "x": 910,
+        "y": 520,
+        "wires": [
+            [
+                "56caddb3dd587e49"
+            ]
+        ]
     },
     {
         "id": "0d95bf949c201846",
@@ -3216,7 +3927,7 @@
         "onlyChanges": false,
         "roundValues": "1",
         "x": 240,
-        "y": 1160,
+        "y": 1480,
         "wires": [
             [
                 "efcd52eb9123c4b6"
@@ -3270,7 +3981,7 @@
         "onlyChanges": false,
         "roundValues": "1",
         "x": 150,
-        "y": 440,
+        "y": 620,
         "wires": [
             [
                 "a852c58b3b285f49"
@@ -3296,7 +4007,7 @@
         "onlyChanges": false,
         "roundValues": "1",
         "x": 140,
-        "y": 540,
+        "y": 720,
         "wires": [
             [
                 "5a1c2139256a9b7c"
@@ -3328,7 +4039,7 @@
         "diff": false,
         "className": "",
         "x": 790,
-        "y": 740,
+        "y": 1000,
         "wires": []
     },
     {
@@ -3350,7 +4061,7 @@
         "onlyChanges": false,
         "roundValues": "1",
         "x": 150,
-        "y": 740,
+        "y": 1000,
         "wires": [
             [
                 "3c84ac16a56e8271"
@@ -3376,7 +4087,7 @@
         "onlyChanges": false,
         "roundValues": "1",
         "x": 170,
-        "y": 1340,
+        "y": 1660,
         "wires": [
             [
                 "ee9a4211b556cacf"
@@ -3408,7 +4119,7 @@
         "diff": false,
         "className": "",
         "x": 800,
-        "y": 1340,
+        "y": 1660,
         "wires": []
     },
     {
@@ -3429,7 +4140,7 @@
         "fontSize": 16,
         "color": "#000000",
         "x": 790,
-        "y": 1480,
+        "y": 1800,
         "wires": [],
         "info": "Dummy block used as a spacer"
     },
@@ -3447,7 +4158,7 @@
         "rh": 0,
         "inputs": 0,
         "x": 130,
-        "y": 1020,
+        "y": 1340,
         "wires": [
             [
                 "7d902834cd76bb07"
@@ -3479,7 +4190,7 @@
         "diff": false,
         "className": "",
         "x": 790,
-        "y": 1020,
+        "y": 1340,
         "wires": []
     },
     {
@@ -3505,7 +4216,7 @@
             "2f93affb367a865e"
         ],
         "x": 755,
-        "y": 820,
+        "y": 1080,
         "wires": []
     },
     {
@@ -3518,7 +4229,7 @@
             "2f93affb367a865e"
         ],
         "x": 755,
-        "y": 1420,
+        "y": 1740,
         "wires": []
     },
     {
@@ -3531,7 +4242,7 @@
             "2f93affb367a865e"
         ],
         "x": 755,
-        "y": 1240,
+        "y": 1560,
         "wires": []
     },
     {
@@ -3544,7 +4255,7 @@
             "2f93affb367a865e"
         ],
         "x": 755,
-        "y": 1100,
+        "y": 1420,
         "wires": []
     },
     {
@@ -3623,7 +4334,7 @@
             {
                 "name": "high",
                 "value": "30",
-                "type": "str"
+                "type": "num"
             }
         ],
         "x": 650,
@@ -3643,7 +4354,7 @@
             {
                 "name": "high",
                 "value": "30",
-                "type": "str"
+                "type": "num"
             },
             {
                 "name": "message",
@@ -3673,7 +4384,7 @@
             {
                 "name": "high",
                 "value": "6",
-                "type": "str"
+                "type": "num"
             },
             {
                 "name": "message",
@@ -3682,7 +4393,7 @@
             }
         ],
         "x": 650,
-        "y": 820,
+        "y": 1080,
         "wires": [
             [
                 "f59d101299f0716e"
@@ -3712,7 +4423,7 @@
             }
         ],
         "x": 650,
-        "y": 1100,
+        "y": 1420,
         "wires": [
             [
                 "335af24ca01463cb"
@@ -3733,7 +4444,7 @@
             {
                 "name": "high",
                 "value": "60",
-                "type": "str"
+                "type": "num"
             },
             {
                 "name": "threshold",
@@ -3747,7 +4458,7 @@
             }
         ],
         "x": 650,
-        "y": 1240,
+        "y": 1560,
         "wires": [
             [
                 "dfc1f32cb802a02e"
@@ -3768,7 +4479,7 @@
             {
                 "name": "high",
                 "value": "30",
-                "type": "str"
+                "type": "num"
             },
             {
                 "name": "message",
@@ -3777,7 +4488,7 @@
             }
         ],
         "x": 650,
-        "y": 1420,
+        "y": 1740,
         "wires": [
             [
                 "08fe98afcefbc02c"
@@ -3814,7 +4525,7 @@
             }
         ],
         "x": 510,
-        "y": 740,
+        "y": 1000,
         "wires": [
             [
                 "24ad0f6f10a8086e",
@@ -3838,14 +4549,14 @@
             }
         ],
         "x": 510,
-        "y": 1020,
+        "y": 1340,
         "wires": [
             [
                 "e7fa40a69f3f7e54",
                 "3e0b6cee6fa14daa",
                 "d160dd8dde0f1ab4",
                 "1f345342255566d2",
-                "46dc8d6478b69540"
+                "090deb48f0431120"
             ]
         ]
     },
@@ -3855,7 +4566,7 @@
         "z": "2561d49b29c858c7",
         "name": "",
         "x": 510,
-        "y": 1160,
+        "y": 1480,
         "wires": [
             [
                 "4bd74f30706ccf3c",
@@ -3877,7 +4588,7 @@
             }
         ],
         "x": 510,
-        "y": 1340,
+        "y": 1660,
         "wires": [
             [
                 "de056db018f84c0f",
@@ -4019,7 +4730,7 @@
             }
         ],
         "x": 510,
-        "y": 440,
+        "y": 620,
         "wires": [
             [
                 "149f7ce1ff8fae6d",
@@ -4040,7 +4751,7 @@
             }
         ],
         "x": 510,
-        "y": 540,
+        "y": 720,
         "wires": [
             [
                 "644e7643d6ba3004",
@@ -4131,7 +4842,7 @@
         "fontSize": 16,
         "color": "#000000",
         "x": 840,
-        "y": 440,
+        "y": 620,
         "wires": []
     },
     {
@@ -4152,7 +4863,7 @@
         "fontSize": 16,
         "color": "#000000",
         "x": 830,
-        "y": 580,
+        "y": 760,
         "wires": []
     },
     {
@@ -4173,7 +4884,7 @@
         "fontSize": 16,
         "color": "#000000",
         "x": 830,
-        "y": 780,
+        "y": 1040,
         "wires": []
     },
     {
@@ -4195,7 +4906,7 @@
         "onlyChanges": false,
         "roundValues": "1",
         "x": 140,
-        "y": 860,
+        "y": 1120,
         "wires": [
             [
                 "32b738159ce24492"
@@ -4215,7 +4926,7 @@
             }
         ],
         "x": 510,
-        "y": 860,
+        "y": 1120,
         "wires": [
             [
                 "d7558c58023f204e",
@@ -4241,7 +4952,7 @@
         "fontSize": 16,
         "color": "#000000",
         "x": 820,
-        "y": 860,
+        "y": 1120,
         "wires": []
     },
     {
@@ -4263,7 +4974,7 @@
         "onlyChanges": false,
         "roundValues": "1",
         "x": 150,
-        "y": 640,
+        "y": 820,
         "wires": [
             [
                 "042c33c4332e30d9"
@@ -4283,7 +4994,7 @@
             }
         ],
         "x": 510,
-        "y": 640,
+        "y": 820,
         "wires": [
             [
                 "a41d0565a4b07df5",
@@ -4309,7 +5020,7 @@
         "fontSize": 16,
         "color": "#000000",
         "x": 840,
-        "y": 640,
+        "y": 820,
         "wires": []
     },
     {
@@ -4330,7 +5041,7 @@
         "fontSize": 16,
         "color": "#000000",
         "x": 830,
-        "y": 1060,
+        "y": 1380,
         "wires": []
     },
     {
@@ -4351,7 +5062,7 @@
         "fontSize": 16,
         "color": "#000000",
         "x": 830,
-        "y": 1200,
+        "y": 1520,
         "wires": []
     },
     {
@@ -4372,7 +5083,7 @@
         "fontSize": 16,
         "color": "#000000",
         "x": 840,
-        "y": 1380,
+        "y": 1700,
         "wires": []
     },
     {
@@ -4393,7 +5104,7 @@
         "fontSize": 16,
         "color": "#000000",
         "x": 790,
-        "y": 1520,
+        "y": 1840,
         "wires": [],
         "info": "Dummy block used as a spacer"
     },
@@ -4422,7 +5133,7 @@
         "diff": false,
         "className": "",
         "x": 810,
-        "y": 540,
+        "y": 720,
         "wires": []
     },
     {
@@ -4444,7 +5155,7 @@
         "onlyChanges": false,
         "roundValues": "1",
         "x": 140,
-        "y": 920,
+        "y": 1180,
         "wires": [
             [
                 "98e6a917b4fd4888"
@@ -4464,7 +5175,7 @@
             }
         ],
         "x": 510,
-        "y": 920,
+        "y": 1180,
         "wires": [
             [
                 "9421369420060cce"
@@ -4490,7 +5201,7 @@
         "fontSize": 16,
         "color": "#000000",
         "x": 820,
-        "y": 920,
+        "y": 1180,
         "wires": []
     },
     {
@@ -4600,7 +5311,7 @@
         "wrapText": false,
         "className": "",
         "x": 1190,
-        "y": 780,
+        "y": 1040,
         "wires": []
     },
     {
@@ -4622,7 +5333,7 @@
         "z": "2561d49b29c858c7",
         "name": "",
         "x": 1010,
-        "y": 780,
+        "y": 1040,
         "wires": [
             [
                 "b39fbe0d42a248d4"
@@ -4664,7 +5375,7 @@
         "width": 0,
         "height": 0,
         "name": "",
-        "label": "Temperature sensor 1",
+        "label": "Left propane tank temp",
         "format": "{{msg.payload}}",
         "layout": "row-spread",
         "style": false,
@@ -4673,7 +5384,7 @@
         "color": "#717171",
         "wrapText": false,
         "className": "",
-        "x": 1200,
+        "x": 1210,
         "y": 300,
         "wires": []
     },
@@ -4686,7 +5397,7 @@
         "width": 0,
         "height": 0,
         "name": "",
-        "label": "Temperature sensor 2",
+        "label": "Right propane tank temp",
         "format": "{{msg.payload}}",
         "layout": "row-spread",
         "style": false,
@@ -4695,7 +5406,7 @@
         "color": "#717171",
         "wrapText": false,
         "className": "",
-        "x": 1200,
+        "x": 1210,
         "y": 340,
         "wires": []
     },
@@ -4708,7 +5419,7 @@
         "width": 0,
         "height": 0,
         "name": "",
-        "label": "Temperature sensor 3",
+        "label": "Center temperature",
         "format": "{{msg.payload}}",
         "layout": "row-spread",
         "style": false,
@@ -4717,8 +5428,8 @@
         "color": "#717171",
         "wrapText": false,
         "className": "",
-        "x": 1200,
-        "y": 440,
+        "x": 1190,
+        "y": 620,
         "wires": []
     },
     {
@@ -4727,7 +5438,7 @@
         "z": "2561d49b29c858c7",
         "name": "",
         "x": 1010,
-        "y": 440,
+        "y": 620,
         "wires": [
             [
                 "24871667c32d50e2"
@@ -4753,7 +5464,7 @@
         "wrapText": false,
         "className": "",
         "x": 1190,
-        "y": 580,
+        "y": 760,
         "wires": []
     },
     {
@@ -4769,7 +5480,7 @@
             }
         ],
         "x": 1010,
-        "y": 580,
+        "y": 760,
         "wires": [
             [
                 "291c20af2a14a174"
@@ -4795,7 +5506,7 @@
         "wrapText": false,
         "className": "",
         "x": 1200,
-        "y": 640,
+        "y": 820,
         "wires": []
     },
     {
@@ -4811,7 +5522,7 @@
             }
         ],
         "x": 1010,
-        "y": 640,
+        "y": 820,
         "wires": [
             [
                 "802c34362f2c4162"
@@ -4837,7 +5548,7 @@
         "wrapText": false,
         "className": "",
         "x": 1180,
-        "y": 860,
+        "y": 1120,
         "wires": []
     },
     {
@@ -4853,7 +5564,7 @@
             }
         ],
         "x": 1010,
-        "y": 860,
+        "y": 1120,
         "wires": [
             [
                 "1db71ef6c0dd3b89"
@@ -4866,7 +5577,7 @@
         "z": "2561d49b29c858c7",
         "name": "",
         "x": 1010,
-        "y": 1060,
+        "y": 1380,
         "wires": [
             [
                 "b58793209f5ee98a"
@@ -4892,7 +5603,7 @@
         "wrapText": false,
         "className": "",
         "x": 1190,
-        "y": 1060,
+        "y": 1380,
         "wires": []
     },
     {
@@ -4901,7 +5612,7 @@
         "z": "2561d49b29c858c7",
         "name": "",
         "x": 1010,
-        "y": 1200,
+        "y": 1520,
         "wires": [
             [
                 "dd6fe58b20a74178"
@@ -4927,7 +5638,7 @@
         "wrapText": false,
         "className": "",
         "x": 1190,
-        "y": 1200,
+        "y": 1520,
         "wires": []
     },
     {
@@ -4936,7 +5647,7 @@
         "z": "2561d49b29c858c7",
         "name": "",
         "x": 1010,
-        "y": 1380,
+        "y": 1700,
         "wires": [
             [
                 "8e2cd2587cdc9e98"
@@ -4962,7 +5673,7 @@
         "wrapText": false,
         "className": "",
         "x": 1200,
-        "y": 1380,
+        "y": 1700,
         "wires": []
     },
     {
@@ -5094,16 +5805,17 @@
         "styleGlow": false,
         "className": "large-gauge-text",
         "x": 1150,
-        "y": 740,
+        "y": 1000,
         "wires": []
     },
     {
         "id": "4fcf371b5d4733f8",
         "type": "ui-gauge",
         "z": "2561d49b29c858c7",
+        "d": true,
         "name": "",
-        "group": "2b74e6ea7cedf9dc",
-        "order": 5,
+        "group": "1769e3f51bb550db",
+        "order": 4,
         "width": 3,
         "height": 3,
         "gtype": "gauge-34",
@@ -5160,82 +5872,17 @@
         "styleGlow": false,
         "className": "large-gauge-text",
         "x": 1160,
-        "y": 1340,
-        "wires": []
-    },
-    {
-        "id": "46dc8d6478b69540",
-        "type": "ui-gauge",
-        "z": "2561d49b29c858c7",
-        "name": "",
-        "group": "2b74e6ea7cedf9dc",
-        "order": 6,
-        "width": 3,
-        "height": 3,
-        "gtype": "gauge-34",
-        "gstyle": "rounded",
-        "title": "Water",
-        "units": "°C",
-        "icon": "",
-        "prefix": "",
-        "suffix": "",
-        "segments": [
-            {
-                "from": "-10",
-                "color": "#00b500"
-            },
-            {
-                "from": "5",
-                "color": "#19a507"
-            },
-            {
-                "from": "15",
-                "color": "#32950e"
-            },
-            {
-                "from": "25",
-                "color": "#b2a300"
-            },
-            {
-                "from": "35",
-                "color": "#e6e600"
-            },
-            {
-                "from": "45",
-                "color": "#e0b900"
-            },
-            {
-                "from": "55",
-                "color": "#da8c00"
-            },
-            {
-                "from": "65",
-                "color": "#d45f1f"
-            },
-            {
-                "from": "75",
-                "color": "#ca3838"
-            }
-        ],
-        "min": "-10",
-        "max": "90",
-        "sizeThickness": "12",
-        "sizeGap": "0",
-        "sizeKeyThickness": "0",
-        "styleRounded": true,
-        "styleGlow": false,
-        "className": "large-gauge-text",
-        "x": 1150,
-        "y": 1020,
+        "y": 1660,
         "wires": []
     },
     {
         "id": "211d1220dbbb8e92",
         "type": "ui-gauge",
         "z": "2561d49b29c858c7",
+        "d": true,
         "name": "",
-        "group": "2b74e6ea7cedf9dc",
-        "order": 4,
+        "group": "1769e3f51bb550db",
+        "order": 5,
         "width": 3,
         "height": 3,
         "gtype": "gauge-34",
@@ -5292,7 +5939,347 @@
         "styleGlow": false,
         "className": "large-gauge-text",
         "x": 1170,
-        "y": 540,
+        "y": 720,
+        "wires": []
+    },
+    {
+        "id": "7f2ebc86f161bdfa",
+        "type": "victron-input-temperature",
+        "z": "2561d49b29c858c7",
+        "service": "com.victronenergy.temperature/21",
+        "path": "/BatteryVoltage",
+        "serviceObj": {
+            "service": "com.victronenergy.temperature/21",
+            "name": "Fridge"
+        },
+        "pathObj": {
+            "path": "/BatteryVoltage",
+            "type": "float",
+            "name": "Sensor battery voltage (V)"
+        },
+        "name": "",
+        "onlyChanges": false,
+        "roundValues": "2",
+        "x": 180,
+        "y": 1240,
+        "wires": [
+            [
+                "21036f8750650e45"
+            ]
+        ]
+    },
+    {
+        "id": "e40cf8f912e64c7c",
+        "type": "ui-text",
+        "z": "2561d49b29c858c7",
+        "group": "ba0d9a414ff3a20d",
+        "order": 4,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "Fridge sensor",
+        "format": "{{msg.payload}}",
+        "layout": "row-spread",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#717171",
+        "wrapText": false,
+        "className": "",
+        "x": 1180,
+        "y": 1240,
+        "wires": []
+    },
+    {
+        "id": "21036f8750650e45",
+        "type": "subflow:35877746e13a44de",
+        "z": "2561d49b29c858c7",
+        "name": "",
+        "env": [
+            {
+                "name": "unit",
+                "value": "V",
+                "type": "str"
+            }
+        ],
+        "x": 1010,
+        "y": 1240,
+        "wires": [
+            [
+                "e40cf8f912e64c7c"
+            ]
+        ]
+    },
+    {
+        "id": "a7d85432789574b6",
+        "type": "victron-input-temperature",
+        "z": "2561d49b29c858c7",
+        "service": "com.victronenergy.temperature/20",
+        "path": "/BatteryVoltage",
+        "serviceObj": {
+            "service": "com.victronenergy.temperature/20",
+            "name": "Outdoor"
+        },
+        "pathObj": {
+            "path": "/BatteryVoltage",
+            "type": "float",
+            "name": "Sensor battery voltage (V)"
+        },
+        "name": "",
+        "onlyChanges": false,
+        "roundValues": "2",
+        "x": 180,
+        "y": 880,
+        "wires": [
+            [
+                "0f975df191703924"
+            ]
+        ]
+    },
+    {
+        "id": "29a1859ee6666879",
+        "type": "ui-text",
+        "z": "2561d49b29c858c7",
+        "group": "ba0d9a414ff3a20d",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "Outdoor sensor",
+        "format": "{{msg.payload}}",
+        "layout": "row-spread",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#717171",
+        "wrapText": false,
+        "className": "",
+        "x": 1180,
+        "y": 880,
+        "wires": []
+    },
+    {
+        "id": "0f975df191703924",
+        "type": "subflow:35877746e13a44de",
+        "z": "2561d49b29c858c7",
+        "name": "",
+        "env": [
+            {
+                "name": "unit",
+                "value": "V",
+                "type": "str"
+            }
+        ],
+        "x": 1010,
+        "y": 880,
+        "wires": [
+            [
+                "29a1859ee6666879"
+            ]
+        ]
+    },
+    {
+        "id": "47dc45ca632d40ff",
+        "type": "victron-input-custom",
+        "z": "2561d49b29c858c7",
+        "service": "com.victronenergy.tank/21",
+        "path": "/BatteryVoltage",
+        "serviceObj": {
+            "service": "com.victronenergy.tank/21",
+            "name": "Propane Tank 1 (21)"
+        },
+        "pathObj": {
+            "path": "/BatteryVoltage",
+            "name": "/BatteryVoltage",
+            "type": "number",
+            "value": 2.96875
+        },
+        "name": "",
+        "onlyChanges": false,
+        "roundValues": "2",
+        "x": 190,
+        "y": 440,
+        "wires": [
+            [
+                "e6e4d04c2eda2cd9"
+            ]
+        ]
+    },
+    {
+        "id": "99f27aacc1a80525",
+        "type": "victron-input-custom",
+        "z": "2561d49b29c858c7",
+        "service": "com.victronenergy.tank/20",
+        "path": "/BatteryVoltage",
+        "serviceObj": {
+            "service": "com.victronenergy.tank/20",
+            "name": "Propane Tank 2 (20)"
+        },
+        "pathObj": {
+            "path": "/BatteryVoltage",
+            "name": "/BatteryVoltage",
+            "type": "number",
+            "value": 3
+        },
+        "name": "",
+        "onlyChanges": false,
+        "roundValues": "2",
+        "x": 190,
+        "y": 500,
+        "wires": [
+            [
+                "66f6ef672a39ed80"
+            ]
+        ]
+    },
+    {
+        "id": "e6e4d04c2eda2cd9",
+        "type": "subflow:35877746e13a44de",
+        "z": "2561d49b29c858c7",
+        "name": "",
+        "env": [
+            {
+                "name": "unit",
+                "value": "V",
+                "type": "str"
+            }
+        ],
+        "x": 1010,
+        "y": 440,
+        "wires": [
+            [
+                "c02faeb59985c2fa"
+            ]
+        ]
+    },
+    {
+        "id": "c02faeb59985c2fa",
+        "type": "ui-text",
+        "z": "2561d49b29c858c7",
+        "group": "ba0d9a414ff3a20d",
+        "order": 1,
+        "width": "0",
+        "height": 0,
+        "name": "",
+        "label": "Left propane tank",
+        "format": "{{msg.payload}}",
+        "layout": "row-spread",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#717171",
+        "wrapText": false,
+        "className": "",
+        "x": 1190,
+        "y": 440,
+        "wires": []
+    },
+    {
+        "id": "66f6ef672a39ed80",
+        "type": "subflow:35877746e13a44de",
+        "z": "2561d49b29c858c7",
+        "name": "",
+        "env": [
+            {
+                "name": "unit",
+                "value": "V",
+                "type": "str"
+            }
+        ],
+        "x": 1010,
+        "y": 500,
+        "wires": [
+            [
+                "ae45e91d9bfb6e25"
+            ]
+        ]
+    },
+    {
+        "id": "ae45e91d9bfb6e25",
+        "type": "ui-text",
+        "z": "2561d49b29c858c7",
+        "group": "ba0d9a414ff3a20d",
+        "order": 2,
+        "width": "0",
+        "height": 0,
+        "name": "",
+        "label": "Right propane tank",
+        "format": "{{msg.payload}}",
+        "layout": "row-spread",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#717171",
+        "wrapText": false,
+        "className": "",
+        "x": 1190,
+        "y": 500,
+        "wires": []
+    },
+    {
+        "id": "090deb48f0431120",
+        "type": "ui-gauge",
+        "z": "2561d49b29c858c7",
+        "name": "",
+        "group": "2b74e6ea7cedf9dc",
+        "order": 4,
+        "width": 3,
+        "height": 3,
+        "gtype": "gauge-34",
+        "gstyle": "rounded",
+        "title": "Water",
+        "units": "°C",
+        "icon": "",
+        "prefix": "",
+        "suffix": "",
+        "segments": [
+            {
+                "from": "-10",
+                "color": "#00b500"
+            },
+            {
+                "from": "-7.5",
+                "color": "#19a507"
+            },
+            {
+                "from": "2.5",
+                "color": "#32950e"
+            },
+            {
+                "from": "7.5",
+                "color": "#b2a300"
+            },
+            {
+                "from": "12.5",
+                "color": "#e6e600"
+            },
+            {
+                "from": "17.5",
+                "color": "#e0b900"
+            },
+            {
+                "from": "22.5",
+                "color": "#da8c00"
+            },
+            {
+                "from": "27.5",
+                "color": "#d45f1f"
+            },
+            {
+                "from": "32.5",
+                "color": "#ca3838"
+            }
+        ],
+        "min": "-10",
+        "max": "60",
+        "sizeThickness": "12",
+        "sizeGap": "0",
+        "sizeKeyThickness": "0",
+        "styleRounded": true,
+        "styleGlow": false,
+        "className": "large-gauge-text",
+        "x": 1150,
+        "y": 1340,
         "wires": []
     },
     {
@@ -6518,7 +7505,7 @@
         "type": "function",
         "z": "c74d4096e08fa272",
         "name": "Set fan",
-        "func": "\nflow.set(\"fan\", msg.payload);\n",
+        "func": "if (msg.payload === undefined) {\n    return null;\n}\n\nflow.set('fan', msg.payload);\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -6526,7 +7513,7 @@
         "finalize": "",
         "libs": [],
         "x": 880,
-        "y": 380,
+        "y": 400,
         "wires": [
             []
         ]
@@ -6918,7 +7905,8 @@
         "wires": [
             [
                 "df51382627e252a7",
-                "1ffa61af8057c317"
+                "1ffa61af8057c317",
+                "89f945b670c00a5d"
             ],
             [
                 "102150e9c523f055"
@@ -6941,7 +7929,8 @@
         "y": 440,
         "wires": [
             [
-                "4a65ed61376cb495"
+                "4a65ed61376cb495",
+                "756961715ead8e49"
             ],
             [
                 "159bf7d233075a2b"
@@ -6964,7 +7953,8 @@
         "y": 580,
         "wires": [
             [
-                "b016a634d4ca03b4"
+                "b016a634d4ca03b4",
+                "824ddf9f659fc93b"
             ],
             [
                 "2c6234848be3af9e"
@@ -6987,7 +7977,8 @@
         "y": 740,
         "wires": [
             [
-                "78b0cde417cbf16d"
+                "78b0cde417cbf16d",
+                "aa6a9dec4558a20b"
             ],
             [
                 "e797340e231f7c0d"
@@ -7477,7 +8468,8 @@
         "y": 1020,
         "wires": [
             [
-                "3764559c61d5efd8"
+                "3764559c61d5efd8",
+                "975147e68669abdf"
             ]
         ]
     },
@@ -7588,5 +8580,195 @@
         "x": 410,
         "y": 620,
         "wires": []
+    },
+    {
+        "id": "122d78cd25de6ab7",
+        "type": "ui-text",
+        "z": "c74d4096e08fa272",
+        "group": "bc614f1d5f7543e9",
+        "order": 1,
+        "width": 3,
+        "height": "",
+        "name": "",
+        "label": "Temperature",
+        "format": "{{msg.payload}}",
+        "layout": "col-center",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#717171",
+        "wrapText": false,
+        "className": "",
+        "x": 1110,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "1051011b6e1ad9a5",
+        "type": "ui-text",
+        "z": "c74d4096e08fa272",
+        "group": "bc614f1d5f7543e9",
+        "order": 3,
+        "width": 3,
+        "height": null,
+        "name": "",
+        "label": "Fan setting",
+        "format": "{{msg.payload}}",
+        "layout": "col-center",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#717171",
+        "wrapText": false,
+        "className": "",
+        "x": 1110,
+        "y": 360,
+        "wires": []
+    },
+    {
+        "id": "f2d33c43bccfd098",
+        "type": "ui-text",
+        "z": "c74d4096e08fa272",
+        "group": "bc614f1d5f7543e9",
+        "order": 2,
+        "width": 3,
+        "height": "",
+        "name": "",
+        "label": "Water temp",
+        "format": "{{msg.payload}}",
+        "layout": "col-center",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#717171",
+        "wrapText": false,
+        "className": "",
+        "x": 1110,
+        "y": 540,
+        "wires": []
+    },
+    {
+        "id": "65bbd489473ffc87",
+        "type": "ui-text",
+        "z": "c74d4096e08fa272",
+        "group": "bc614f1d5f7543e9",
+        "order": 4,
+        "width": 3,
+        "height": null,
+        "name": "",
+        "label": "Energy mix",
+        "format": "{{msg.payload}}",
+        "layout": "col-center",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#717171",
+        "wrapText": false,
+        "className": "",
+        "x": 1110,
+        "y": 660,
+        "wires": []
+    },
+    {
+        "id": "975147e68669abdf",
+        "type": "ui-text",
+        "z": "c74d4096e08fa272",
+        "group": "bc614f1d5f7543e9",
+        "order": 5,
+        "width": "0",
+        "height": 0,
+        "name": "",
+        "label": "Status",
+        "format": "{{msg.payload}}",
+        "layout": "col-center",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#717171",
+        "wrapText": false,
+        "className": "",
+        "x": 750,
+        "y": 1060,
+        "wires": []
+    },
+    {
+        "id": "89f945b670c00a5d",
+        "type": "function",
+        "z": "c74d4096e08fa272",
+        "name": "Decode",
+        "func": "if (msg.payload === undefined) {\n    return null;\n}\n\nswitch (msg.payload) {\n    case 0:\n        msg.payload = 'OFF';\n        break;\n    \n    default:\n        msg.payload = msg.payload + ' °C';\n        break;\n}\n\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 880,
+        "y": 220,
+        "wires": [
+            [
+                "122d78cd25de6ab7"
+            ]
+        ]
+    },
+    {
+        "id": "756961715ead8e49",
+        "type": "function",
+        "z": "c74d4096e08fa272",
+        "name": "Decode",
+        "func": "if (msg.payload === undefined) {\n    return null;\n}\n\nmsg.payload = msg.payload.toUpperCase();\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 880,
+        "y": 360,
+        "wires": [
+            [
+                "1051011b6e1ad9a5"
+            ]
+        ]
+    },
+    {
+        "id": "824ddf9f659fc93b",
+        "type": "function",
+        "z": "c74d4096e08fa272",
+        "name": "Decode",
+        "func": "if (msg.payload === undefined) {\n    return null;\n}\n\n\nswitch (msg.payload) {\n    case 0:\n        msg.payload = 'OFF';\n        break;\n        \n    case 40:\n        msg.payload = 'ECO';\n        break;\n        \n    case 60:\n        msg.payload = 'HOT';\n        break;\n}\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 880,
+        "y": 540,
+        "wires": [
+            [
+                "f2d33c43bccfd098"
+            ]
+        ]
+    },
+    {
+        "id": "aa6a9dec4558a20b",
+        "type": "function",
+        "z": "c74d4096e08fa272",
+        "name": "Decode",
+        "func": "if (msg.payload === undefined) {\n    return null;\n}\n\nswitch (msg.payload) {\n    case 'gas':\n        msg.payload = 'Gas';\n        break;\n        \n    case 'electric1':\n        msg.payload = 'Electric 1';\n        break;\n        \n    case 'electric2':\n        msg.payload = 'Electric 2';\n        break;\n    \n    case 'mix1':\n        msg.payload = 'Mix 1';\n        break;\n        \n    case 'mix2':\n        msg.payload = 'Mix 2';\n        break;\n}\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 880,
+        "y": 660,
+        "wires": [
+            [
+                "65bbd489473ffc87"
+            ]
+        ]
     }
 ]
