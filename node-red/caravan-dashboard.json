@@ -4197,6 +4197,7 @@
         "id": "f2fa448128ce1972",
         "type": "link out",
         "z": "2561d49b29c858c7",
+        "d": true,
         "name": "Outdoor temp alarm",
         "mode": "link",
         "links": [
@@ -4349,6 +4350,7 @@
         "id": "e577c0ec5b4af224",
         "type": "subflow:26a48bdabf7607df",
         "z": "2561d49b29c858c7",
+        "d": true,
         "name": "",
         "env": [
             {
@@ -4383,7 +4385,7 @@
             },
             {
                 "name": "high",
-                "value": "6",
+                "value": "10",
                 "type": "num"
             },
             {
@@ -4443,7 +4445,7 @@
             },
             {
                 "name": "high",
-                "value": "60",
+                "value": "65",
                 "type": "num"
             },
             {
@@ -4517,13 +4519,6 @@
         "type": "subflow:43e263465d4c8532",
         "z": "2561d49b29c858c7",
         "name": "",
-        "env": [
-            {
-                "name": "offset",
-                "value": "-0.2",
-                "type": "num"
-            }
-        ],
         "x": 510,
         "y": 1000,
         "wires": [
@@ -4607,7 +4602,7 @@
         "path": "/Temperature",
         "serviceObj": {
             "service": "com.victronenergy.tank/21",
-            "name": "Propane Tank 1"
+            "name": "Left Propane Tank"
         },
         "pathObj": {
             "path": "/Temperature",
@@ -4633,7 +4628,7 @@
         "path": "/Temperature",
         "serviceObj": {
             "service": "com.victronenergy.tank/20",
-            "name": "Propane Tank 2"
+            "name": "Right Propane Tank"
         },
         "pathObj": {
             "path": "/Temperature",
@@ -4643,7 +4638,7 @@
         "name": "",
         "onlyChanges": false,
         "roundValues": "1",
-        "x": 180,
+        "x": 190,
         "y": 280,
         "wires": [
             [
@@ -4655,6 +4650,7 @@
         "id": "db7e61c450302526",
         "type": "function",
         "z": "2561d49b29c858c7",
+        "d": true,
         "name": "Max",
         "func": "\n// Get the stored array or initialize if it doesn't exist\nlet values = context.get('values') || [];\n\n// Add the new payload\nvalues.push(msg.payload);\n\n// Keep only the last 10 values\nif (values.length > 5) {\n    values.shift(); // Remove the oldest value\n}\n\n// Store the updated array back to context\ncontext.set('values', values);\n\n// Find the maximum value\nlet max = Math.max(...values);\n\n// Send the maximum value\nmsg.payload = max;\nreturn msg;\n",
         "outputs": 1,
@@ -4663,7 +4659,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 510,
+        "x": 530,
         "y": 260,
         "wires": [
             [
@@ -4685,7 +4681,7 @@
                 "type": "num"
             }
         ],
-        "x": 390,
+        "x": 410,
         "y": 220,
         "wires": [
             [
@@ -4707,7 +4703,7 @@
                 "type": "num"
             }
         ],
-        "x": 390,
+        "x": 410,
         "y": 280,
         "wires": [
             [
@@ -4734,7 +4730,9 @@
         "wires": [
             [
                 "149f7ce1ff8fae6d",
-                "713b900f566507bd"
+                "713b900f566507bd",
+                "a143838f0999d97b",
+                "1ac7db4665ba096a"
             ]
         ]
     },
@@ -7117,8 +7115,9 @@
         "id": "cf6b3e9d9b5ca767",
         "type": "function",
         "z": "391f51e7377c8273",
+        "d": true,
         "name": "Alarm",
-        "func": "\n\nif (msg.topic.includes('alive')) {\n    return null;\n}\n\nlet val = msg.payload;\n\nlet lastAlarm = context.get('lastAlarm') || false;\nlet alarm = false;\n\nif (val === 'OK') {\n    alarm = false;\n    context.set('lastAlarm', alarm);\n}\nelse {\n    alarm = val;\n}\n\nif (alarm && alarm != lastAlarm) {\n    context.set('lastAlarm', alarm);\n    msg.payload = `⚠️ Caravan alert!\\nTruma error code:\\n${val}`;\n    node.warn(msg.payload);\n    return msg;\n}\nelse {\n    return null;\n}\n\n",
+        "func": "\n\n//if (msg.topic.includes('alive')) {\n//    return null;\n//}\n\nlet val = msg.payload;\n\nlet lastAlarm = context.get('lastAlarm') || false;\nlet alarm = false;\n\nif (val === 'OK') {\n    alarm = false;\n    context.set('lastAlarm', alarm);\n}\nelse {\n    alarm = val;\n}\n\nif (alarm && alarm != lastAlarm) {\n    context.set('lastAlarm', alarm);\n    msg.payload = `⚠️ Caravan alert!\\nTruma error code:\\n${val}`;\n    node.warn(msg.payload);\n    return msg;\n}\nelse {\n    return null;\n}\n\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -7137,6 +7136,7 @@
         "id": "f8b062643e6b87e5",
         "type": "link out",
         "z": "391f51e7377c8273",
+        "d": true,
         "name": "Truma alarm",
         "mode": "link",
         "links": [
@@ -7846,7 +7846,7 @@
         "type": "function",
         "z": "c74d4096e08fa272",
         "name": "Alarm",
-        "func": "\n\nif (msg.topic.includes('alive')) {\n    return null;\n}\n\nlet val = msg.payload;\n\nlet lastAlarm = context.get('lastAlarm') || false;\nlet alarm = false;\n\nif (val === 'OK') {\n    alarm = false;\n    context.set('lastAlarm', alarm);\n}\nelse {\n    alarm = val;\n}\n\nif (alarm && alarm != lastAlarm) {\n    context.set('lastAlarm', alarm);\n    msg.payload = `⚠️ Caravan alert!\\nTruma error code:\\n${val}`;\n    node.warn(msg.payload);\n    return msg;\n}\nelse {\n    return null;\n}\n\n",
+        "func": "\n\n//if (msg.topic.includes('alive')) {\n//    return null;\n//}\n\nlet val = msg.payload;\n\nlet lastAlarm = context.get('lastAlarm') || false;\nlet alarm = false;\n\nif (val === 'OK') {\n    alarm = false;\n    context.set('lastAlarm', alarm);\n}\nelse {\n    alarm = val;\n}\n\n//node.warn(`val={val}, alarm={alarm}, lastAlarm={lastAlarm}`);\n\nif (alarm && alarm != lastAlarm) {\n    context.set('lastAlarm', alarm);\n    msg.payload = `⚠️ Caravan alert!\\nTruma error code:\\n${val}`;\n    node.warn(msg.payload);\n    return msg;\n}\nelse {\n    return null;\n}\n\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
