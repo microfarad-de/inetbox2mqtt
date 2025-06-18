@@ -133,10 +133,13 @@ async def main():
                 log.debug("Error in LIN status publishing")
         if lin.app.status["alive"][0]=="OFF":
             if not(wd):
-                asyncio.create_task(lin.watchdog())
+                log.info("LIN disconnected!")
+                #asyncio.create_task(lin.watchdog())
                 wd = True
         else:
-            wd = False
+            if wd:
+                log.info("LIN connected")
+                wd = False
 
         i += 1
         if not(i % 6):
