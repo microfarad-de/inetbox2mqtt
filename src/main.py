@@ -99,6 +99,16 @@ async def conn_callback(client):
 
 
 
+# Write a key-value pair to a file in the tmp folder for use by other scripts
+def write_to_file(key, value):
+    dir_path = "/tmp/truma"
+    os.makedirs(dir_path, exist_ok=True)
+    file_path = os.path.join(dir_path, key)
+    with open(file_path, 'w') as f:
+        f.write(str(value) + '\n')
+
+
+
 # main publisher-loop
 async def main():
     global connect
@@ -116,6 +126,7 @@ async def main():
 
         for key in s.keys():
             log.debug(f'publish {key}:{s[key]}')
+            write_to_file(key, s[key])
             try:
                 await connect.client.publish(STA_PREFIX+key, str(s[key]), qos=1)
             except:
