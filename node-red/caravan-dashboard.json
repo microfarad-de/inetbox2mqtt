@@ -1200,7 +1200,8 @@
             [
                 "26f7cb849699ceef",
                 "c9050cd681deef26",
-                "9e27bfa8f1afece8"
+                "9e27bfa8f1afece8",
+                "68255a9e7f62d58c"
             ]
         ]
     },
@@ -3077,6 +3078,19 @@
                 "56caddb3dd587e49"
             ]
         ]
+    },
+    {
+        "id": "68255a9e7f62d58c",
+        "type": "link out",
+        "z": "b22624498baaa896",
+        "name": "State of charge",
+        "mode": "link",
+        "links": [
+            "9f6ab86ecfedb8cd"
+        ],
+        "x": 555,
+        "y": 80,
+        "wires": []
     },
     {
         "id": "0d95bf949c201846",
@@ -6284,7 +6298,7 @@
         "addpay": "payload",
         "append": "",
         "useSpawn": "false",
-        "timer": "15",
+        "timer": "60",
         "winHide": false,
         "oldrc": false,
         "name": "",
@@ -6302,8 +6316,8 @@
         "id": "c204bef87b041596",
         "type": "debug",
         "z": "fcffa944a0680a42",
-        "name": "debug 1",
-        "active": true,
+        "name": "Debug trace",
+        "active": false,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -6311,7 +6325,7 @@
         "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 860,
+        "x": 870,
         "y": 440,
         "wires": []
     },
@@ -6418,8 +6432,18 @@
                 "type": "num"
             },
             {
+                "label": "4.5 °C",
+                "value": 4.5,
+                "type": "num"
+            },
+            {
                 "label": "5 °C",
                 "value": 5,
+                "type": "num"
+            },
+            {
+                "label": "5.5 °C",
+                "value": 5.5,
                 "type": "num"
             },
             {
@@ -6744,7 +6768,7 @@
             "8b91c74452c84a68"
         ],
         "x": 115,
-        "y": 180,
+        "y": 200,
         "wires": [
             [
                 "463211a9980153c1"
@@ -6756,7 +6780,7 @@
         "type": "function",
         "z": "fcffa944a0680a42",
         "name": "Control loop",
-        "func": "\nlet now    = Date.now();\nlet cmd    = {};\nlet status = {};\nstatus.topic   = \"sensor\";\nstatus.payload = true;\n\n\n// Start fridge and target temperatures\nif (msg.topic === \"target\") {\n    context.set(\"target\", msg.payload);\n    return null;\n}\nelse if (msg.topic === \"fridge\") {\n    context.set(\"fridge\", msg.raw);\n    context.set(\"lastTime\", now);\n    context\n    return null;\n}\n\n\n// Read state variables\nlet target    = context.get(\"target\");\nlet fridge    = context.get(\"fridge\");\nlet lastTemp  = context.get(\"lastTemp\");\nlet lastTime  = context.get(\"lastTime\") || 0;\nlet nextCmd   = context.get(\"nextCmd\");\nlet count     = context.get(\"count\") || 0;\ncount++;\ncontext.set(\"count\", count);\n\n\n// Temperature increase rate calculation\nif (count % 3 === 0 || fridge < lastTemp || lastTemp === undefined) {\n  context.set(\"lastTemp\", fridge);\n}\nlet delta = fridge - lastTemp;\nnode.warn(`fridge=${fridge}, lastTemp=${lastTemp}, delta=${delta}, nextCmd=${nextCmd}`);\n\n\n\n// Execute scheduled command\nif (nextCmd != undefined) {\n    context.set(\"nextCmd\", undefined);\n    cmd.payload = `\\\"c ${nextCmd}\\\"`;\n    return [cmd, null];\n}\n\n\n// Open door detection - temperature spike\nif (delta > 0.1 && nextCmd === undefined) {\n    context.set(\"nextCmd\", 10);  // Schedule max speed\n    cmd.payload = \"\\\"c 20\\\"\";    // Disable defrost\n    return [cmd, null];\n}\n\n\n// Request system status\nif (count % 3 != 0) {\n    cmd.payload = \"\\\"c 30\\\"\";  // Request system status\n    return [cmd, null];\n}\n\n\n// Temperature sensor failure detection\nif (now - lastTime > 60000) {\n    status.payload = false;\n    return [null, status];\n}\n\n\n// Temperature control\nif (target === undefined) return [null, null];\nif (fridge === undefined) return [null, null];\nif (target === 0) {\n    cmd.payload = \"\\\"c 12\\\"\";  // Disable remote operation\n}\nelse if (fridge > target) {\n    cmd.payload = \"\\\"c 11\\\"\";  // Turn on the compressor\n}\nelse {\n    cmd.payload = \"\\\"c 0\\\"\";   // Turn off the compressor\n}\nreturn [cmd, status];",
+        "func": "\nlet now = Date.now();\nlet cmd = {};\nlet openDoor = false;\nlet prio     = false;\nlet sensorStatus = {};\nsensorStatus.topic   = \"sensor\";\nsensorStatus.payload = true;\nlet battStatus = {};\nbattStatus.topic = \"battery\";\nbattStatus.payload = true;\n\n\n// Store received values\nif (msg.topic === \"target\") {\n    context.set(\"target\", msg.payload);\n    return null;\n}\nelse if (msg.topic === \"fridge\") {\n    context.set(\"fridge\", msg.raw);\n    context.set(\"lastTime\", now);\n    return null;\n}\nelse if (msg.topic === \"battery\") {\n    context.set(\"battery\", msg.payload);\n    return null;\n}\n\n\n// Read state variables\nlet target    = context.get(\"target\");\nlet fridge    = context.get(\"fridge\");\nlet battery   = context.get(\"battery\");\nlet lastTemp  = context.get(\"lastTemp\");\nlet wasOpenDr = context.get(\"wasOpenDr\") || false;\nlet lastTime  = context.get(\"lastTime\") || 0;\nlet nextCmd   = context.get(\"nextCmd\");\nlet count     = context.get(\"count\") || 0;\ncount++;\ncontext.set(\"count\", count);\n\n\n// Temperature increase rate calculation\nif (count % 3 === 0 || fridge < lastTemp || lastTemp === undefined) {\n  context.set(\"lastTemp\", fridge);\n}\nlet delta = fridge - lastTemp;\n//node.warn(`fridge=${fridge}, lastTemp=${lastTemp}, delta=${delta}, nextCmd=${nextCmd}`);\n\n// Open door / temperature spike detection\nif ((delta > 0.15 || fridge > target + 2) && wasOpenDr === false) {\n    openDoor = true;\n}\nelse if (fridge < target) {\n    context.set(\"wasOpenDr\", false);\n}\n\n// Temperature sensor failure detection\nif (now - lastTime > 60000 || fridge === undefined) {\n    sensorStatus.payload = false;\n}\n\n// Low battery detection\nif (battery < 15) {\n    battStatus.payload = false;\n}\n\n\n// Request system status\nif (count % 3 != 0 && openDoor === false && nextCmd === undefined) {\n    cmd.payload = \"\\\"c 30\\\"\";  // Request system status\n}\n// Turn off\nelse if (target === 0) {\n    cmd.payload = \"\\\"c 0\\\"\";  // Turn off the compressor\n}\n// Temperature sensor failure detection\nelse if (sensorStatus.payload === false) {\n    cmd = null;   // Don't send command\n}\n// Low battery detection\nelse if (battStatus.payload === false) {\n    cmd.payload = \"\\\"c 0\\\"\";   // Turn off the compressor\n}\n// Execute scheduled command\nelse if (nextCmd != undefined) {\n    context.set(\"nextCmd\", undefined);\n    cmd.payload = nextCmd;\n}\n// Open door detection\nelse if (openDoor && nextCmd === undefined) {\n    context.set(\"wasOpenDr\", true);\n    context.set(\"nextCmd\", \"\\\"c 10\\\"\");  // Schedule max speed\n    cmd.payload = \"\\\"c 20\\\"\";            // Disable defrost\n}\n// Start\nelse if (fridge > target) {\n    cmd.payload = \"\\\"c 11\\\"\";  // Turn on the compressor\n}\n// Stop\nelse {\n    cmd.payload = \"\\\"c 0\\\"\";   // Turn off the compressor\n}\n\nnode.send([null, battStatus]);\nreturn [cmd, sensorStatus];\n\n",
         "outputs": 2,
         "timeout": 0,
         "noerr": 0,
@@ -6796,8 +6820,8 @@
         "topic": "trigger",
         "payload": "",
         "payloadType": "date",
-        "x": 160,
-        "y": 240,
+        "x": 280,
+        "y": 280,
         "wires": [
             [
                 "a8702dfa02f03390"
@@ -6816,8 +6840,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 320,
-        "y": 180,
+        "x": 280,
+        "y": 200,
         "wires": [
             [
                 "a8702dfa02f03390"
@@ -6982,7 +7006,7 @@
         "type": "function",
         "z": "fcffa944a0680a42",
         "name": "Decode error",
-        "func": "\nlet json    = context.get(\"json\") || false;\nlet sensor  = context.get(\"sensor\") || false;\nlet discCnt = context.get(\"discCnt\") || 0;\nlet status  = {};\n\n//node.warn(`topic=${msg.topic}, payload=${msg.payload}`);\n\nif (msg.topic === \"json\") {\n    if (msg.payload === false) {\n        discCnt++;\n    }\n    else {\n        discCnt = 0;\n    }\n    context.set(\"discCnt\", discCnt);\n    if (discCnt >= 3) {\n        json = false;\n    }\n    else {\n        json = true;\n    }\n    context.set(\"json\", json);\n}\nelse if (msg.topic === \"sensor\") {\n    context.set(\"sensor\", msg.payload);\n}\n\n\n//node.warn(`json=${json}, sensor=${sensor}`);\n\nif (json && sensor) {\n    status.payload = \"OK\";    \n}\nelse if (!sensor) {\n    status.payload = \"Sensor error!\";\n}\nelse if (!json) {\n    status.payload = \"Connection lost!\";\n}\n\nreturn status;",
+        "func": "\nlet json    = context.get(\"json\") || false;\nlet sensor  = context.get(\"sensor\") || false;\nlet battery = context.get(\"battery\") || false;\nlet discCnt = context.get(\"discCnt\") || 0;\nlet status  = {};\n\n//node.warn(`topic=${msg.topic}, payload=${msg.payload}`);\n\nif (msg.topic === \"json\") {\n    if (msg.payload === false) {\n        discCnt++;\n    }\n    else {\n        discCnt = 0;\n    }\n    context.set(\"discCnt\", discCnt);\n    if (discCnt >= 3) {\n        json = false;\n    }\n    else {\n        json = true;\n    }\n    context.set(\"json\", json);\n}\nelse if (msg.topic === \"sensor\") {\n    context.set(\"sensor\", msg.payload);\n}\nelse if (msg.topic === \"battery\") {\n    context.set(\"battery\", msg.payload);\n}\n\n\n//node.warn(`json=${json}, sensor=${sensor}`);\n\nif (json && sensor && battery) {\n    status.payload = \"OK\";    \n}\nelse if (!sensor) {\n    status.payload = \"Sensor error!\";\n}\nelse if (!json) {\n    status.payload = \"Connection lost!\";\n}\nelse if (!battery) {\n    status.payload = \"Low battery!\";\n}\nreturn status;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -7014,6 +7038,42 @@
         "wires": [
             [
                 "8697d6c29f673249"
+            ]
+        ]
+    },
+    {
+        "id": "9f6ab86ecfedb8cd",
+        "type": "link in",
+        "z": "fcffa944a0680a42",
+        "name": "State of charge",
+        "links": [
+            "68255a9e7f62d58c"
+        ],
+        "x": 115,
+        "y": 240,
+        "wires": [
+            [
+                "1bf69e775b3364ed"
+            ]
+        ]
+    },
+    {
+        "id": "1bf69e775b3364ed",
+        "type": "function",
+        "z": "fcffa944a0680a42",
+        "name": "Set topic",
+        "func": "\nmsg.topic = \"battery\"\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 280,
+        "y": 240,
+        "wires": [
+            [
+                "a8702dfa02f03390"
             ]
         ]
     }
