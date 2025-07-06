@@ -6299,25 +6299,30 @@
         "addpay": "payload",
         "append": "",
         "useSpawn": "false",
-        "timer": "60",
+        "timer": "30",
         "winHide": false,
         "oldrc": false,
         "name": "",
         "x": 400,
-        "y": 440,
+        "y": 500,
         "wires": [
             [
                 "3122b72243dfd5ad"
             ],
-            [],
-            []
+            [
+                "86470d03d9a70f6b"
+            ],
+            [
+                "86470d03d9a70f6b",
+                "649cea4b62f5fc4c"
+            ]
         ]
     },
     {
         "id": "c204bef87b041596",
         "type": "debug",
         "z": "fcffa944a0680a42",
-        "name": "Debug trace",
+        "name": "Debug log",
         "active": true,
         "tosidebar": true,
         "console": false,
@@ -6518,7 +6523,7 @@
         "type": "function",
         "z": "fcffa944a0680a42",
         "name": "Decode JSON",
-        "func": "\nlet msg1 = {};\nlet msg2 = {};\nlet msg3 = {};\n\nlet minPwm = 190;\nlet maxPwm = 75;\nlet minRpm = 2000;\nlet maxRpm = 3000\n\nif (msg.ok != 30) return;\n\nfunction map (value, inMin, inMax, outMin, outMax) {\n    return (value - inMin) * (outMax - outMin) / (inMax - inMin) + outMin\n}\n\nmsg1.payload = msg.dutyCycle;\n\nmsg2.payload = msg.outputPwm;\n\npwm = msg.outputPwm;\nif (pwm > 0) {\n    speed = map(pwm, minPwm, maxPwm, minRpm, maxRpm);\n    msg2.payload = +(+speed).toFixed(0);\n}\nelse {\n   msg2.payload = 0 ;\n}\n\nswitch (msg.defrost) {\n    case 0:\n        msg3.payload = \"OFF\";\n        break;\n    case 1:\n        msg3.payload = \"ON\";\n        break;\n}\n\nreturn [msg1, msg2, msg3];",
+        "func": "\nlet msg1 = {};\nlet msg2 = {};\nlet msg3 = {};\n\nlet minPwm = 190;\nlet maxPwm = 75;\nlet minRpm = 2000;\nlet maxRpm = 3000\n\nif (msg.ok != 30) return;\n\nfunction map (value, inMin, inMax, outMin, outMax) {\n    return (value - inMin) * (outMax - outMin) / (inMax - inMin) + outMin\n}\n\nmsg1.payload = msg.dutyCycle;\n\nmsg2.payload = msg.outputPwm;\n\npwm = msg.outputPwm;\nif (pwm > 0) {\n    speed = map(pwm, minPwm, maxPwm, minRpm, maxRpm);\n    msg2.payload = +(+speed).toFixed(0);\n}\nelse {\n   msg2.payload = 0 ;\n}\n\nswitch (msg.defrost) {\n    case 0:\n        msg3.payload = \"OFF\";\n        break;\n    case 1:\n        msg3.payload = \"ON\";\n        break;\n    case 2:\n        msg3.payload = \"WAIT\";\n        break;\n}\n\nreturn [msg1, msg2, msg3];\n",
         "outputs": 3,
         "timeout": 0,
         "noerr": 0,
@@ -6770,7 +6775,7 @@
             "8b91c74452c84a68"
         ],
         "x": 115,
-        "y": 160,
+        "y": 200,
         "wires": [
             [
                 "463211a9980153c1"
@@ -6782,7 +6787,7 @@
         "type": "function",
         "z": "fcffa944a0680a42",
         "name": "Control loop",
-        "func": "\nlet now = Date.now();\nlet cmd = {};\nlet sensorStatus = {};\nsensorStatus.topic   = \"sensor\";\nsensorStatus.payload = true;\nlet battStatus = {};\nbattStatus.topic = \"battery\";\nbattStatus.payload = true;\n\n\n// Store received values\nif (msg.topic === \"target\") {\n    context.set(\"target\", msg.payload);\n    return null;\n}\nelse if (msg.topic === \"fridge\") {\n    context.set(\"fridge\", msg.raw);\n    context.set(\"lastTime\", now);\n    return null;\n}\nelse if (msg.topic === \"room\") {\n    context.set(\"room\", msg.payload);\n    return null;\n}\nelse if (msg.topic === \"battery\") {\n    context.set(\"battery\", msg.payload);\n    return null;\n}\nelse if (msg.ok === 30) {\n    context.set(\"sysStatus\", msg);\n    return null;\n}\nelse if (msg.topic != \"trigger\") {\n    return null;\n}\n\n\n// Read state variables\nlet target    = context.get(\"target\");\nlet fridge    = context.get(\"fridge\");\nlet room      = context.get(\"room\");\nlet sysStatus = context.get(\"sysStatus\") || {};\nlet battery   = context.get(\"battery\");\nlet lastTemp  = context.get(\"lastTemp\");\nlet wasOpenDr = context.get(\"wasOpenDr\") || false;\nlet lastTime  = context.get(\"lastTime\") || 0;\nlet nextCmd   = context.get(\"nextCmd\");\nlet count     = context.get(\"count\") || 0;\ncount++;\ncontext.set(\"count\", count);\n\n\n// Temperature increase rate calculation\nif (count % 3 === 0 || fridge < lastTemp || lastTemp === undefined) {\n  context.set(\"lastTemp\", fridge);\n}\nlet delta = fridge - lastTemp;\n//node.warn(`fridge=${fridge}, lastTemp=${lastTemp}, delta=${delta}, nextCmd=${nextCmd}`);\n\n// Open door / temperature spike detection\nif ((delta > 0.15 || (fridge > target + 1 && target != 0)) && wasOpenDr === false && nextCmd === undefined) {\n    nextCmd = \"\\\"c 20\\\"\";                // Disable defrost\n    context.set(\"nextCmd\", \"\\\"c 10\\\"\");  // Schedule max speed\n    context.set(\"wasOpenDr\", true);\n}\nelse if (fridge < target) {\n    context.set(\"wasOpenDr\", false);\n}\n\n// Disable defrost at high room temperatures\nif (room > 25 && sysStatus.defrost === 1 && nextCmd === undefined) {\n    nextCmd = \"\\\"c 20\\\"\";   // Disable defrost\n    sysStatus.defrost = 0;\n    context.set(\"sysStatus\", sysStatus);\n}\n\n// Temperature sensor failure detection\nif (now - lastTime > 60000 || fridge === undefined) {\n    sensorStatus.payload = false;\n}\n\n// Low battery detection\nif (battery < 15) {\n    battStatus.payload = false;\n}\n\n\ncmd.payload = \"\\\"c 30\\\"\";  // Request system status by default\n\n// Request system status\nif (count % 2 === 0 && nextCmd === undefined) {\n    cmd.payload = \"\\\"c 30\\\"\";  // Request system status\n}\n// Turn off\nelse if (target === 0) {\n    if (sysStatus.inputEnabled == 1) {\n        cmd.payload = \"\\\"c 0\\\"\";   // Turn off the compressor\n    }\n}\n// Temperature sensor failure detection\nelse if (sensorStatus.payload === false) {\n    // Don't send command\n}\n// Low battery detection\nelse if (battStatus.payload === false) {\n    if (sysStatus.inputEnabled == 1) {\n        cmd.payload = \"\\\"c 0\\\"\";   // Turn off the compressor\n    }\n}\n// Execute scheduled command\nelse if (nextCmd != undefined) {\n    nextNextCmd = context.get(\"nextCmd\");\n    if (nextNextCmd === nextCmd) {\n        context.set(\"nextCmd\", undefined);\n    }\n    cmd.payload = nextCmd;\n}\n// Start\nelse if (fridge > target) {\n    if (sysStatus.inputEnabled === 0) {\n        cmd.payload = \"\\\"c 11\\\"\";  // Turn on the compressor\n    }\n}\n// Stop\nelse {\n    if (sysStatus.inputEnabled == 1) {\n        cmd.payload = \"\\\"c 0\\\"\";   // Turn off the compressor\n    }\n    \n}\n\nnode.send([null, battStatus]);\nreturn [cmd, sensorStatus];\n\n",
+        "func": "\nlet now = Date.now();\nlet cmd = {};\nlet sensorStatus = {};\nsensorStatus.topic   = \"sensor\";\nsensorStatus.payload = true;\nlet battStatus = {};\nbattStatus.topic = \"battery\";\nbattStatus.payload = true;\n\n\n// Store received values\nif (msg.topic === \"target\") {\n    context.set(\"target\", msg.payload);\n}\nelse if (msg.topic === \"fridge\") {\n    context.set(\"fridge\", msg.raw);\n    context.set(\"lastTime\", now);\n}\nelse if (msg.topic === \"room\") {\n    context.set(\"room\", msg.payload);\n}\nelse if (msg.topic === \"battery\") {\n    context.set(\"battery\", msg.payload);\n}\nelse if (msg.ok === 30) {\n    context.set(\"sysStatus\", msg);\n}\nelse if (msg.topic === \"return\") {\n    context.set(\"msgSent\", false);\n}\n\n// Proceed only if trigger was received\nif (msg.topic != \"trigger\") {\n    return null;\n}\n\n\n// Read state variables\nlet target    = context.get(\"target\");\nlet fridge    = context.get(\"fridge\");\nlet room      = context.get(\"room\");\nlet sysStatus = context.get(\"sysStatus\") || {};\nlet battery   = context.get(\"battery\");\nlet lastTemp  = context.get(\"lastTemp\");\nlet wasOpenDr = context.get(\"wasOpenDr\") || false;\nlet lastTime  = context.get(\"lastTime\") || 0;\nlet nextCmd   = context.get(\"nextCmd\");\nlet msgSent   = context.get(\"msgSent\") || false;\nlet count     = context.get(\"count\") || 0;\n\n//node.warn(sysStatus);\n\n// Temperature increase rate calculation\nif (count % 3 === 0 || fridge < lastTemp || lastTemp === undefined) {\n  context.set(\"lastTemp\", fridge);\n}\nlet delta = fridge - lastTemp;\n//node.warn(`fridge=${fridge}, lastTemp=${lastTemp}, delta=${delta}, nextCmd=${nextCmd}`);\n\n// Open door / temperature spike detection\nif ((delta > 0.15 || (fridge > target + 1 && target != 0)) && wasOpenDr === false && nextCmd === undefined) {\n    nextCmd = \"\\\"c 20\\\"\";                // Disable defrost\n    context.set(\"nextCmd\", \"\\\"c 10\\\"\");  // Schedule max speed\n    context.set(\"wasOpenDr\", true);\n}\nelse if (fridge < target) {\n    context.set(\"wasOpenDr\", false);\n}\n\n// Disable defrost at high room temperatures\nif (room > 25 && sysStatus.defrost != 0 && nextCmd === undefined) {\n    nextCmd = \"\\\"c 20\\\"\";   // Disable defrost\n    sysStatus.defrost = 0;\n    context.set(\"sysStatus\", sysStatus);\n}\n\n// Pre-cool before starting a defrost cycle\nif (sysStatus.defrost === 2 && target >= 1) {\n    target = target - 0.5;\n}\n\n// Temperature sensor failure detection\nif (now - lastTime > 60000 || fridge === undefined) {\n    sensorStatus.payload = false;\n}\n\n// Low battery detection\nif (battery < 15) {\n    battStatus.payload = false;\n}\n\n// Manage event counter\nlet statusEvent = false;\nlet pingEvent   = false;\nif (count % 2 === 0) {\n    statusEvent = true;\n}\nelse if (count % 9 === 0) {\n    pingEvent = true;\n}\ncount++;\ncontext.set(\"count\", count);\n\n\n// Request system status by default\ncmd.payload = \"\\\"c 30\\\"\";  \n\n// Request system status\nif (statusEvent && nextCmd === undefined) {\n    cmd.payload = \"\\\"c 30\\\"\";  // Request system status\n}\n// Turn off\nelse if (target === 0) {\n    if (sysStatus.inputEnabled == 1 || pingEvent) {\n        cmd.payload = \"\\\"c 0\\\"\";   // Turn off the compressor\n    }\n}\n// Temperature sensor failure detection\nelse if (sensorStatus.payload === false) {\n    // Don't send command\n}\n// Low battery detection\nelse if (battStatus.payload === false) {\n    if (sysStatus.inputEnabled == 1 || pingEvent) {\n        cmd.payload = \"\\\"c 0\\\"\";   // Turn off the compressor\n    }\n}\n// Execute scheduled command\nelse if (nextCmd != undefined) {\n    nextNextCmd = context.get(\"nextCmd\");\n    if (nextNextCmd === nextCmd) {\n        context.set(\"nextCmd\", undefined);\n    }\n    cmd.payload = nextCmd;\n}\n// Start\nelse if (fridge > target) {\n    if (sysStatus.inputEnabled === 0 || pingEvent) {\n        cmd.payload = \"\\\"c 11\\\"\";  // Turn on the compressor\n    }\n}\n// Stop\nelse {\n    if (sysStatus.inputEnabled == 1 || pingEvent) {\n        cmd.payload = \"\\\"c 0\\\"\";   // Turn off the compressor\n    }\n    \n}\n\nnode.send([null, battStatus]);\nnode.send([null, sensorStatus]);\n\n// Only send commands if previous command has been executed\nif (msgSent === false) {\n    context.set(\"msgSent\", true);\n    return [cmd, null];\n}\nelse {\n    return null;\n}\n\n\n",
         "outputs": 2,
         "timeout": 0,
         "noerr": 0,
@@ -6823,7 +6828,7 @@
         "payload": "",
         "payloadType": "date",
         "x": 280,
-        "y": 280,
+        "y": 160,
         "wires": [
             [
                 "a8702dfa02f03390"
@@ -6843,7 +6848,7 @@
         "finalize": "",
         "libs": [],
         "x": 280,
-        "y": 160,
+        "y": 200,
         "wires": [
             [
                 "a8702dfa02f03390"
@@ -7052,7 +7057,7 @@
             "68255a9e7f62d58c"
         ],
         "x": 115,
-        "y": 240,
+        "y": 280,
         "wires": [
             [
                 "1bf69e775b3364ed"
@@ -7072,7 +7077,7 @@
         "finalize": "",
         "libs": [],
         "x": 280,
-        "y": 240,
+        "y": 280,
         "wires": [
             [
                 "a8702dfa02f03390"
@@ -7088,7 +7093,7 @@
             "ca728154b5b26204"
         ],
         "x": 115,
-        "y": 200,
+        "y": 240,
         "wires": [
             [
                 "1ff2fab28f1619a1"
@@ -7108,7 +7113,44 @@
         "finalize": "",
         "libs": [],
         "x": 280,
-        "y": 200,
+        "y": 240,
+        "wires": [
+            [
+                "a8702dfa02f03390"
+            ]
+        ]
+    },
+    {
+        "id": "86470d03d9a70f6b",
+        "type": "debug",
+        "z": "fcffa944a0680a42",
+        "name": "Error log",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 860,
+        "y": 500,
+        "wires": []
+    },
+    {
+        "id": "649cea4b62f5fc4c",
+        "type": "function",
+        "z": "fcffa944a0680a42",
+        "name": "Set topic",
+        "func": "\nmsg.topic = \"return\"\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 280,
+        "y": 320,
         "wires": [
             [
                 "a8702dfa02f03390"
