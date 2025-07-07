@@ -318,6 +318,49 @@
         "color": "#DDAA99"
     },
     {
+        "id": "c37eefbf57ce59ee",
+        "type": "subflow",
+        "name": "Parse JSON",
+        "info": "",
+        "category": "",
+        "in": [
+            {
+                "x": 200,
+                "y": 180,
+                "wires": [
+                    {
+                        "id": "d43cc1974dbb38fb"
+                    }
+                ]
+            }
+        ],
+        "out": [
+            {
+                "x": 540,
+                "y": 160,
+                "wires": [
+                    {
+                        "id": "d43cc1974dbb38fb",
+                        "port": 0
+                    }
+                ]
+            },
+            {
+                "x": 540,
+                "y": 220,
+                "wires": [
+                    {
+                        "id": "d43cc1974dbb38fb",
+                        "port": 1
+                    }
+                ]
+            }
+        ],
+        "env": [],
+        "meta": {},
+        "color": "#DDAA99"
+    },
+    {
         "id": "2c24d1c82633c69e",
         "type": "mqtt-broker",
         "name": "Venus",
@@ -589,7 +632,7 @@
     {
         "id": "d379d6807d25f7bd",
         "type": "ui-page",
-        "name": "Climate Control",
+        "name": "Heating",
         "ui": "93cf16ef6c7e509b",
         "path": "/climate-control",
         "icon": "fire",
@@ -610,7 +653,7 @@
     {
         "id": "df7a1670ae765f1d",
         "type": "ui-group",
-        "name": "Heating",
+        "name": "Settings",
         "page": "d379d6807d25f7bd",
         "width": "6",
         "height": "1",
@@ -766,7 +809,7 @@
     {
         "id": "0a055cab4c53c810",
         "type": "ui-group",
-        "name": "Compressor",
+        "name": "Settings",
         "page": "9f3f4a16e11a48a1",
         "width": "6",
         "height": "1",
@@ -799,7 +842,7 @@
         "tooltip": "",
         "order": 7,
         "width": "6",
-        "height": "2",
+        "height": "1",
         "className": ""
     },
     {
@@ -933,6 +976,25 @@
         "libs": [],
         "x": 390,
         "y": 160,
+        "wires": [
+            [],
+            []
+        ]
+    },
+    {
+        "id": "d43cc1974dbb38fb",
+        "type": "function",
+        "z": "c37eefbf57ce59ee",
+        "name": "Parse JSON",
+        "func": "\nlet parsed = {};\nlet status = {};\nstatus.topic = \"json\";\n\ntry {\n    parsed = JSON.parse(msg.payload);\n    status.payload = true;\n    return [parsed, status];\n} catch (e) {\n    //node.error(\"JSON parse failed\", msg);\n    status.payload = false;\n    return [null, status];\n}\n",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 370,
+        "y": 180,
         "wires": [
             [],
             []
@@ -4537,7 +4599,7 @@
         "d": true,
         "name": "",
         "group": "1769e3f51bb550db",
-        "order": 5,
+        "order": 6,
         "width": 3,
         "height": 3,
         "gtype": "gauge-34",
@@ -6267,8 +6329,8 @@
         "links": [
             "ca728154b5b26204"
         ],
-        "x": 565,
-        "y": 660,
+        "x": 605,
+        "y": 720,
         "wires": [
             [
                 "84fee1c01cb4c300"
@@ -6283,8 +6345,8 @@
         "links": [
             "8b91c74452c84a68"
         ],
-        "x": 565,
-        "y": 620,
+        "x": 605,
+        "y": 680,
         "wires": [
             [
                 "01379f4d90d7d2c1"
@@ -6299,15 +6361,15 @@
         "addpay": "payload",
         "append": "",
         "useSpawn": "false",
-        "timer": "30",
+        "timer": "60",
         "winHide": false,
         "oldrc": false,
-        "name": "",
-        "x": 400,
-        "y": 500,
+        "name": "Write UART",
+        "x": 330,
+        "y": 540,
         "wires": [
             [
-                "3122b72243dfd5ad"
+                "cf563ccf97436424"
             ],
             [
                 "86470d03d9a70f6b"
@@ -6323,7 +6385,7 @@
         "type": "debug",
         "z": "fcffa944a0680a42",
         "name": "Debug log",
-        "active": true,
+        "active": false,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -6331,34 +6393,9 @@
         "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 870,
-        "y": 440,
+        "x": 910,
+        "y": 500,
         "wires": []
-    },
-    {
-        "id": "3122b72243dfd5ad",
-        "type": "function",
-        "z": "fcffa944a0680a42",
-        "name": "Parse JSON",
-        "func": "\nlet parsed = {};\nlet status = {};\nstatus.topic = \"json\";\n\ntry {\n    parsed = JSON.parse(msg.payload);\n    status.payload = true;\n    return [parsed, status];  // Send parsed JSON as the new msg object\n} catch (e) {\n    //node.error(\"JSON parse failed\", msg);\n    status.payload = false;\n    return [null, status];\n}\n",
-        "outputs": 2,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 290,
-        "y": 740,
-        "wires": [
-            [
-                "8459ff2385d2a8b6",
-                "c204bef87b041596",
-                "a8702dfa02f03390"
-            ],
-            [
-                "e4cff028ee24380b"
-            ]
-        ]
     },
     {
         "id": "168961b78425eb48",
@@ -6378,8 +6415,8 @@
         "color": "#717171",
         "wrapText": false,
         "className": "",
-        "x": 750,
-        "y": 40,
+        "x": 650,
+        "y": 80,
         "wires": []
     },
     {
@@ -6465,13 +6502,13 @@
         "className": "",
         "typeIsComboBox": false,
         "msgTrigger": "onChange",
-        "x": 720,
-        "y": 100,
+        "x": 670,
+        "y": 120,
         "wires": [
             [
-                "f3fe901756f76d29",
                 "a8702dfa02f03390",
-                "e4af2af2d2beb8aa"
+                "e4af2af2d2beb8aa",
+                "7f99aa8a118563bb"
             ]
         ]
     },
@@ -6493,8 +6530,8 @@
         "color": "#717171",
         "wrapText": false,
         "className": "",
-        "x": 910,
-        "y": 700,
+        "x": 950,
+        "y": 760,
         "wires": []
     },
     {
@@ -6509,8 +6546,8 @@
                 "type": "str"
             }
         ],
-        "x": 730,
-        "y": 700,
+        "x": 770,
+        "y": 760,
         "wires": [
             [
                 "649c370c245facc1",
@@ -6530,8 +6567,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 520,
-        "y": 740,
+        "x": 560,
+        "y": 800,
         "wires": [
             [
                 "23c3aa52142db6ea"
@@ -6563,8 +6600,8 @@
         "color": "#717171",
         "wrapText": false,
         "className": "",
-        "x": 890,
-        "y": 740,
+        "x": 930,
+        "y": 800,
         "wires": []
     },
     {
@@ -6585,8 +6622,8 @@
         "color": "#717171",
         "wrapText": false,
         "className": "",
-        "x": 870,
-        "y": 780,
+        "x": 910,
+        "y": 840,
         "wires": []
     },
     {
@@ -6601,8 +6638,8 @@
                 "type": "str"
             }
         ],
-        "x": 730,
-        "y": 740,
+        "x": 770,
+        "y": 800,
         "wires": [
             [
                 "56a433e018671cd7",
@@ -6628,8 +6665,8 @@
         "color": "#717171",
         "wrapText": false,
         "className": "",
-        "x": 890,
-        "y": 660,
+        "x": 930,
+        "y": 720,
         "wires": []
     },
     {
@@ -6650,8 +6687,8 @@
         "color": "#717171",
         "wrapText": false,
         "className": "",
-        "x": 890,
-        "y": 620,
+        "x": 930,
+        "y": 680,
         "wires": []
     },
     {
@@ -6659,8 +6696,8 @@
         "type": "subflow:35877746e13a44de",
         "z": "fcffa944a0680a42",
         "name": "",
-        "x": 730,
-        "y": 620,
+        "x": 770,
+        "y": 680,
         "wires": [
             [
                 "7452a256cab10eb5"
@@ -6672,8 +6709,8 @@
         "type": "subflow:35877746e13a44de",
         "z": "fcffa944a0680a42",
         "name": "",
-        "x": 730,
-        "y": 660,
+        "x": 770,
+        "y": 720,
         "wires": [
             [
                 "5f5d5081c07c41cb"
@@ -6691,8 +6728,8 @@
         "createDir": false,
         "overwriteFile": "true",
         "encoding": "none",
-        "x": 920,
-        "y": 100,
+        "x": 1120,
+        "y": 180,
         "wires": [
             []
         ]
@@ -6710,10 +6747,10 @@
         "encoding": "none",
         "allProps": false,
         "x": 360,
-        "y": 100,
+        "y": 80,
         "wires": [
             [
-                "46b6cf0ca83cea4d"
+                "aad8bf439cd7b2c3"
             ]
         ]
     },
@@ -6738,31 +6775,11 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 150,
-        "y": 100,
+        "x": 170,
+        "y": 80,
         "wires": [
             [
                 "8b1d7a554c6cf8b2"
-            ]
-        ]
-    },
-    {
-        "id": "46b6cf0ca83cea4d",
-        "type": "function",
-        "z": "fcffa944a0680a42",
-        "name": "To integer",
-        "func": "\nmsg.payload = +msg.payload\n\nreturn msg;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 560,
-        "y": 100,
-        "wires": [
-            [
-                "360e8acd62618140"
             ]
         ]
     },
@@ -6774,8 +6791,8 @@
         "links": [
             "8b91c74452c84a68"
         ],
-        "x": 115,
-        "y": 200,
+        "x": 155,
+        "y": 260,
         "wires": [
             [
                 "463211a9980153c1"
@@ -6787,15 +6804,15 @@
         "type": "function",
         "z": "fcffa944a0680a42",
         "name": "Control loop",
-        "func": "\nlet now = Date.now();\nlet cmd = {};\nlet sensorStatus = {};\nsensorStatus.topic   = \"sensor\";\nsensorStatus.payload = true;\nlet battStatus = {};\nbattStatus.topic = \"battery\";\nbattStatus.payload = true;\n\n\n// Store received values\nif (msg.topic === \"target\") {\n    context.set(\"target\", msg.payload);\n}\nelse if (msg.topic === \"fridge\") {\n    context.set(\"fridge\", msg.raw);\n    context.set(\"lastTime\", now);\n}\nelse if (msg.topic === \"room\") {\n    context.set(\"room\", msg.payload);\n}\nelse if (msg.topic === \"battery\") {\n    context.set(\"battery\", msg.payload);\n}\nelse if (msg.ok === 30) {\n    context.set(\"sysStatus\", msg);\n}\nelse if (msg.topic === \"return\") {\n    context.set(\"msgSent\", false);\n}\n\n// Proceed only if trigger was received\nif (msg.topic != \"trigger\") {\n    return null;\n}\n\n\n// Read state variables\nlet target    = context.get(\"target\");\nlet fridge    = context.get(\"fridge\");\nlet room      = context.get(\"room\");\nlet sysStatus = context.get(\"sysStatus\") || {};\nlet battery   = context.get(\"battery\");\nlet lastTemp  = context.get(\"lastTemp\");\nlet wasOpenDr = context.get(\"wasOpenDr\") || false;\nlet lastTime  = context.get(\"lastTime\") || 0;\nlet nextCmd   = context.get(\"nextCmd\");\nlet msgSent   = context.get(\"msgSent\") || false;\nlet count     = context.get(\"count\") || 0;\n\n//node.warn(sysStatus);\n\n// Temperature increase rate calculation\nif (count % 3 === 0 || fridge < lastTemp || lastTemp === undefined) {\n  context.set(\"lastTemp\", fridge);\n}\nlet delta = fridge - lastTemp;\n//node.warn(`fridge=${fridge}, lastTemp=${lastTemp}, delta=${delta}, nextCmd=${nextCmd}`);\n\n// Open door / temperature spike detection\nif ((delta > 0.15 || (fridge > target + 1 && target != 0)) && wasOpenDr === false && nextCmd === undefined) {\n    nextCmd = \"\\\"c 20\\\"\";                // Disable defrost\n    context.set(\"nextCmd\", \"\\\"c 10\\\"\");  // Schedule max speed\n    context.set(\"wasOpenDr\", true);\n}\nelse if (fridge < target) {\n    context.set(\"wasOpenDr\", false);\n}\n\n// Disable defrost at high room temperatures\nif (room > 25 && sysStatus.defrost != 0 && nextCmd === undefined) {\n    nextCmd = \"\\\"c 20\\\"\";   // Disable defrost\n    sysStatus.defrost = 0;\n    context.set(\"sysStatus\", sysStatus);\n}\n\n// Pre-cool before starting a defrost cycle\nif (sysStatus.defrost === 2 && target >= 1) {\n    target = target - 0.5;\n}\n\n// Temperature sensor failure detection\nif (now - lastTime > 60000 || fridge === undefined) {\n    sensorStatus.payload = false;\n}\n\n// Low battery detection\nif (battery < 15) {\n    battStatus.payload = false;\n}\n\n// Manage event counter\nlet statusEvent = false;\nlet pingEvent   = false;\nif (count % 2 === 0) {\n    statusEvent = true;\n}\nelse if (count % 9 === 0) {\n    pingEvent = true;\n}\ncount++;\ncontext.set(\"count\", count);\n\n\n// Request system status by default\ncmd.payload = \"\\\"c 30\\\"\";  \n\n// Request system status\nif (statusEvent && nextCmd === undefined) {\n    cmd.payload = \"\\\"c 30\\\"\";  // Request system status\n}\n// Turn off\nelse if (target === 0) {\n    if (sysStatus.inputEnabled == 1 || pingEvent) {\n        cmd.payload = \"\\\"c 0\\\"\";   // Turn off the compressor\n    }\n}\n// Temperature sensor failure detection\nelse if (sensorStatus.payload === false) {\n    // Don't send command\n}\n// Low battery detection\nelse if (battStatus.payload === false) {\n    if (sysStatus.inputEnabled == 1 || pingEvent) {\n        cmd.payload = \"\\\"c 0\\\"\";   // Turn off the compressor\n    }\n}\n// Execute scheduled command\nelse if (nextCmd != undefined) {\n    nextNextCmd = context.get(\"nextCmd\");\n    if (nextNextCmd === nextCmd) {\n        context.set(\"nextCmd\", undefined);\n    }\n    cmd.payload = nextCmd;\n}\n// Start\nelse if (fridge > target) {\n    if (sysStatus.inputEnabled === 0 || pingEvent) {\n        cmd.payload = \"\\\"c 11\\\"\";  // Turn on the compressor\n    }\n}\n// Stop\nelse {\n    if (sysStatus.inputEnabled == 1 || pingEvent) {\n        cmd.payload = \"\\\"c 0\\\"\";   // Turn off the compressor\n    }\n    \n}\n\nnode.send([null, battStatus]);\nnode.send([null, sensorStatus]);\n\n// Only send commands if previous command has been executed\nif (msgSent === false) {\n    context.set(\"msgSent\", true);\n    return [cmd, null];\n}\nelse {\n    return null;\n}\n\n\n",
-        "outputs": 2,
+        "func": "\nlet now = Date.now();\nlet cmd = {};\nlet sensorStatus = {};\nsensorStatus.topic   = \"sensor\";\nsensorStatus.payload = true;\nlet battStatus = {};\nbattStatus.topic = \"battery\";\nbattStatus.payload = true;\n\n\n// Store received values\nif (msg.topic === \"target\") {\n    context.set(\"target\", msg.payload);\n}\nif (msg.topic === \"energy\") {\n    context.set(\"energy\", msg.payload);\n}\nelse if (msg.topic === \"fridge\") {\n    context.set(\"fridge\", msg.raw);\n    context.set(\"lastTime\", now);\n}\nelse if (msg.topic === \"room\") {\n    context.set(\"room\", msg.payload);\n}\nelse if (msg.topic === \"battery\") {\n    context.set(\"battery\", msg.payload);\n}\nelse if (msg.ok === 30) {\n    context.set(\"sysStatus\", msg);\n}\nelse if (msg.topic === \"return\") {\n    context.set(\"msgSent\", false);\n}\n\n// Proceed only if trigger was received\nif (msg.topic != \"trigger\") {\n    return null;\n}\n\n\n// Read state variables\nlet target    = context.get(\"target\");\nlet energy    = context.get(\"energy\");\nlet fridge    = context.get(\"fridge\");\nlet room      = context.get(\"room\");\nlet sysStatus = context.get(\"sysStatus\") || {};\nlet battery   = context.get(\"battery\");\nlet lastTemp  = context.get(\"lastTemp\");\nlet wasOpenDr = context.get(\"wasOpenDr\") || false;\nlet defrost   = context.get(\"defrost\") || 0;\nlet lastTime  = context.get(\"lastTime\") || 0;\nlet nextCmd   = context.get(\"nextCmd\");\nlet msgSent   = context.get(\"msgSent\") || false;\nlet count     = context.get(\"count\") || 0;\n\n//node.warn(sysStatus);\n\n// Temperature increase rate calculation\nif (count % 3 === 0 || fridge < lastTemp || lastTemp === undefined) {\n  context.set(\"lastTemp\", fridge);\n}\nlet delta = fridge - lastTemp;\n//node.warn(`fridge=${fridge}, lastTemp=${lastTemp}, delta=${delta}, nextCmd=${nextCmd}`);\n\n// Open door / temperature spike detection\nif ((delta > 0.15 || (fridge > target + 1 && target != 0)) && wasOpenDr === false && nextCmd === undefined) {\n    nextCmd = \"\\\"c 20\\\"\";                // Disable defrost\n    context.set(\"nextCmd\", \"\\\"c 10\\\"\");  // Set max speed\n    context.set(\"wasOpenDr\", true);\n}\nelse if (fridge < target) {\n    context.set(\"wasOpenDr\", false);\n}\n\n// Disable defrost at high room temperatures\nif (room > 25 && sysStatus.defrost != 0 && nextCmd === undefined) {\n    nextCmd = \"\\\"c 20\\\"\";   // Disable defrost\n    sysStatus.defrost = 0;\n    context.set(\"sysStatus\", sysStatus);\n}\n\n// Detect defrost state race condition\nif (sysStatus.defrost === 0) {\n    context.set(\"defrost\", 0);\n}\nelse if (defrost === 0) {\n    // Race condition - sequence must be 0 -> 2 -> 1\n    if (sysStatus.defrost === 1 && nextCmd === undefined) {\n        nextCmd = \"\\\"c 20\\\"\";               // Disable defrost\n        context.set(\"nextCmd\", \"\\\"c 21\\\"\"); // Reenable defrost\n        sysStatus.defrost = 0;\n        context.set(\"sysStatus\", sysStatus);\n    }\n    else if (sysStatus.defrost === 2) {\n        context.set(\"defrost\", 2);\n    }\n}\n\n// Pre-cool before starting a defrost cycle\nif (sysStatus.defrost === 2 && target >= 1) {\n    target = target - 0.5;\n}\n\n// Temperature sensor failure detection\nif (now - lastTime > 60000 || fridge === undefined) {\n    sensorStatus.payload = false;\n}\n\n// Low battery detection\nif (battery < 30) {\n    battStatus.payload = false;\n    context.set(\"lastMode\", energy);\n    let mode = {\"payload\": 0}; // Switch to gas mode\n    node.send([null, null, mode]);\n}\nelse {\n    let lastMode = context.get(\"lastMode\");\n    if (lastMode != undefined) {\n        context.set(\"lastMode\", undefined);\n        let mode = {\"payload\": lastMode}; // Recover previous mode\n        node.send([null, null, mode]);\n    }\n}\n\n// Manage event counter\nlet statusEvent = false;\nlet pingEvent   = false;\nif (count % 2 === 0) {\n    statusEvent = true;\n}\nelse if (count % 9 === 0) {\n    pingEvent = true;\n}\ncount++;\ncontext.set(\"count\", count);\n\n\n// Request system status by default\ncmd.payload = \"\\\"c 30\\\"\";  \n\n// Request system status\nif (statusEvent && nextCmd === undefined) {\n    cmd.payload = \"\\\"c 30\\\"\";  // Request system status\n}\n// Turn off\nelse if (target === 0) {\n    if (sysStatus.inputEnabled == 1 || pingEvent) {\n        cmd.payload = \"\\\"c 0\\\"\";   // Turn off the compressor\n    }\n}\n// Temperature sensor failure detection\nelse if (sensorStatus.payload === false) {\n    // Don't send command\n}\n// Low battery detection\nelse if (battStatus.payload === false) {\n    if (sysStatus.inputEnabled == 1 || pingEvent) {\n        cmd.payload = \"\\\"c 0\\\"\";   // Turn off the compressor\n    }\n}\n// Execute scheduled command\nelse if (nextCmd != undefined) {\n    nextNextCmd = context.get(\"nextCmd\");\n    if (nextNextCmd === nextCmd) {\n        context.set(\"nextCmd\", undefined);\n    }\n    cmd.payload = nextCmd;\n}\n// Start\nelse if (fridge > target) {\n    if (sysStatus.inputEnabled === 0 || pingEvent) {\n        cmd.payload = \"\\\"c 11\\\"\";  // Turn on the compressor\n    }\n}\n// Stop\nelse {\n    if (sysStatus.inputEnabled == 1 || pingEvent) {\n        cmd.payload = \"\\\"c 0\\\"\";   // Turn off the compressor\n    }\n    \n}\n\nnode.send([null, battStatus, null]);\nnode.send([null, sensorStatus, null]);\n\n// Only send a command if the previous command has been executed\nif (msgSent === false) {\n    context.set(\"msgSent\", true);\n    return [cmd, null, null];\n}\nelse {\n    return null;\n}\n\n\n",
+        "outputs": 3,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 550,
-        "y": 240,
+        "x": 590,
+        "y": 300,
         "wires": [
             [
                 "c204bef87b041596",
@@ -6803,6 +6820,9 @@
             ],
             [
                 "e4cff028ee24380b"
+            ],
+            [
+                "1c66410a4fffbe9b"
             ]
         ]
     },
@@ -6827,8 +6847,8 @@
         "topic": "trigger",
         "payload": "",
         "payloadType": "date",
-        "x": 280,
-        "y": 160,
+        "x": 320,
+        "y": 220,
         "wires": [
             [
                 "a8702dfa02f03390"
@@ -6847,8 +6867,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 280,
-        "y": 200,
+        "x": 320,
+        "y": 260,
         "wires": [
             [
                 "a8702dfa02f03390"
@@ -6867,8 +6887,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 700,
-        "y": 820,
+        "x": 740,
+        "y": 880,
         "wires": [
             [
                 "d5196d0babadee3e",
@@ -6894,8 +6914,8 @@
         "color": "#717171",
         "wrapText": false,
         "className": "",
-        "x": 880,
-        "y": 820,
+        "x": 920,
+        "y": 880,
         "wires": []
     },
     {
@@ -6916,8 +6936,8 @@
         "color": "#717171",
         "wrapText": false,
         "className": "",
-        "x": 1070,
-        "y": 180,
+        "x": 1090,
+        "y": 80,
         "wires": []
     },
     {
@@ -6925,7 +6945,7 @@
         "type": "ui-text",
         "z": "fcffa944a0680a42",
         "group": "576d8789f70030f1",
-        "order": 2,
+        "order": 3,
         "width": 3,
         "height": "",
         "name": "",
@@ -6938,8 +6958,8 @@
         "color": "#717171",
         "wrapText": false,
         "className": "",
-        "x": 1130,
-        "y": 700,
+        "x": 1170,
+        "y": 760,
         "wires": []
     },
     {
@@ -6960,16 +6980,17 @@
         "color": "#717171",
         "wrapText": false,
         "className": "",
-        "x": 1110,
-        "y": 740,
+        "x": 1150,
+        "y": 800,
         "wires": []
     },
     {
         "id": "7cde7e874d36ebed",
         "type": "ui-text",
         "z": "fcffa944a0680a42",
-        "group": "576d8789f70030f1",
-        "order": 3,
+        "d": true,
+        "group": "1769e3f51bb550db",
+        "order": 5,
         "width": 3,
         "height": "",
         "name": "",
@@ -6982,8 +7003,8 @@
         "color": "#717171",
         "wrapText": false,
         "className": "",
-        "x": 1120,
-        "y": 780,
+        "x": 1160,
+        "y": 840,
         "wires": []
     },
     {
@@ -7004,8 +7025,8 @@
         "color": "#717171",
         "wrapText": false,
         "className": "",
-        "x": 1110,
-        "y": 820,
+        "x": 1150,
+        "y": 880,
         "wires": []
     },
     {
@@ -7020,8 +7041,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 510,
-        "y": 820,
+        "x": 550,
+        "y": 880,
         "wires": [
             [
                 "5e37ce1d4492f446"
@@ -7041,7 +7062,7 @@
         "finalize": "",
         "libs": [],
         "x": 900,
-        "y": 180,
+        "y": 80,
         "wires": [
             [
                 "8697d6c29f673249"
@@ -7056,8 +7077,8 @@
         "links": [
             "68255a9e7f62d58c"
         ],
-        "x": 115,
-        "y": 280,
+        "x": 155,
+        "y": 340,
         "wires": [
             [
                 "1bf69e775b3364ed"
@@ -7076,8 +7097,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 280,
-        "y": 280,
+        "x": 320,
+        "y": 340,
         "wires": [
             [
                 "a8702dfa02f03390"
@@ -7092,8 +7113,8 @@
         "links": [
             "ca728154b5b26204"
         ],
-        "x": 115,
-        "y": 240,
+        "x": 155,
+        "y": 300,
         "wires": [
             [
                 "1ff2fab28f1619a1"
@@ -7112,8 +7133,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 280,
-        "y": 240,
+        "x": 320,
+        "y": 300,
         "wires": [
             [
                 "a8702dfa02f03390"
@@ -7133,8 +7154,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 860,
-        "y": 500,
+        "x": 900,
+        "y": 560,
         "wires": []
     },
     {
@@ -7149,11 +7170,231 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 280,
-        "y": 320,
+        "x": 320,
+        "y": 380,
         "wires": [
             [
                 "a8702dfa02f03390"
+            ]
+        ]
+    },
+    {
+        "id": "cf563ccf97436424",
+        "type": "subflow:c37eefbf57ce59ee",
+        "z": "fcffa944a0680a42",
+        "name": "",
+        "x": 330,
+        "y": 820,
+        "wires": [
+            [
+                "a8702dfa02f03390",
+                "c204bef87b041596",
+                "8459ff2385d2a8b6"
+            ],
+            [
+                "e4cff028ee24380b"
+            ]
+        ]
+    },
+    {
+        "id": "aad8bf439cd7b2c3",
+        "type": "subflow:c37eefbf57ce59ee",
+        "z": "fcffa944a0680a42",
+        "name": "",
+        "x": 190,
+        "y": 140,
+        "wires": [
+            [
+                "8af34e21bfc8a377"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "1c66410a4fffbe9b",
+        "type": "ui-dropdown",
+        "z": "fcffa944a0680a42",
+        "group": "0a055cab4c53c810",
+        "name": "",
+        "label": "Mode",
+        "tooltip": "",
+        "order": 4,
+        "width": 3,
+        "height": 0,
+        "passthru": true,
+        "multiple": false,
+        "chips": false,
+        "clearable": false,
+        "options": [
+            {
+                "label": "Gas",
+                "value": 0,
+                "type": "num"
+            },
+            {
+                "label": "12V",
+                "value": 1,
+                "type": "num"
+            }
+        ],
+        "payload": "",
+        "topic": "energy",
+        "topicType": "str",
+        "className": "",
+        "typeIsComboBox": false,
+        "msgTrigger": "onChange",
+        "x": 670,
+        "y": 200,
+        "wires": [
+            [
+                "7f99aa8a118563bb",
+                "4d642db5f04a62ce",
+                "c48aa761d863d1ea",
+                "a8702dfa02f03390"
+            ]
+        ]
+    },
+    {
+        "id": "8af34e21bfc8a377",
+        "type": "function",
+        "z": "fcffa944a0680a42",
+        "name": "Decode JSON",
+        "func": "\nlet msg1 = {};\nlet msg2 = {};\n\nmsg1.payload = msg.target;\nmsg2.payload = msg.energy;\n\nreturn [msg1, msg2];\n",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 380,
+        "y": 140,
+        "wires": [
+            [
+                "360e8acd62618140"
+            ],
+            [
+                "1c66410a4fffbe9b"
+            ]
+        ]
+    },
+    {
+        "id": "519dc53bd28a09aa",
+        "type": "ui-text",
+        "z": "fcffa944a0680a42",
+        "group": "0a055cab4c53c810",
+        "order": 3,
+        "width": 3,
+        "height": 0,
+        "name": "",
+        "label": "Absorber mode",
+        "format": "{{msg.payload}}",
+        "layout": "row-spread",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#717171",
+        "wrapText": false,
+        "className": "",
+        "x": 640,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "7f99aa8a118563bb",
+        "type": "function",
+        "z": "fcffa944a0680a42",
+        "name": "Encode JSON",
+        "func": "\nif (msg.topic === \"target\") {\n    context.set(\"target\", msg.payload);\n}\nelse if (msg.topic === \"energy\") {\n    context.set(\"energy\", msg.payload);\n}\n\nlet target = context.get(\"target\");\nlet energy = context.get(\"energy\");\n\nlet json = {};\n\nif (target != undefined && energy != undefined) {\n    json.payload = `{\\\"target\\\": ${target}, \\\"energy\\\": ${energy}}`;\n    return json;\n}\nelse {\n    return null;\n}",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 920,
+        "y": 180,
+        "wires": [
+            [
+                "f3fe901756f76d29"
+            ]
+        ]
+    },
+    {
+        "id": "952f932b5a1e9973",
+        "type": "ui-text",
+        "z": "fcffa944a0680a42",
+        "group": "576d8789f70030f1",
+        "order": 2,
+        "width": 3,
+        "height": "",
+        "name": "",
+        "label": "Absorber mode",
+        "format": "{{msg.payload}}",
+        "layout": "col-center",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#717171",
+        "wrapText": false,
+        "className": "",
+        "x": 1100,
+        "y": 120,
+        "wires": []
+    },
+    {
+        "id": "4d642db5f04a62ce",
+        "type": "function",
+        "z": "fcffa944a0680a42",
+        "name": "Decode",
+        "func": "if (msg.payload === undefined) {\n    return null;\n}\n\nswitch (msg.payload) {\n    case 0:\n        msg.payload = \"Gas\";\n        break;\n    \n    case 1:\n        msg.payload = \"12V\";\n        break;\n}\n\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 900,
+        "y": 120,
+        "wires": [
+            [
+                "952f932b5a1e9973"
+            ]
+        ]
+    },
+    {
+        "id": "797f9429f69e9626",
+        "type": "file",
+        "z": "fcffa944a0680a42",
+        "name": "",
+        "filename": "/tmp/gpio",
+        "filenameType": "str",
+        "appendNewline": true,
+        "createDir": false,
+        "overwriteFile": "true",
+        "encoding": "none",
+        "x": 1080,
+        "y": 260,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "c48aa761d863d1ea",
+        "type": "function",
+        "z": "fcffa944a0680a42",
+        "name": "Encode",
+        "func": "\n\nlet gpioPin = 26;\nlet out = {};\n\nout.payload = `${gpioPin} ${msg.payload}`\n\nreturn out;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 900,
+        "y": 260,
+        "wires": [
+            [
+                "797f9429f69e9626"
             ]
         ]
     }
