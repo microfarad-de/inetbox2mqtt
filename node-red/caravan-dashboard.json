@@ -852,7 +852,7 @@
         "env": [
             {
                 "name": "fridge-settings-file",
-                "value": "/data/home/nodered/node-red-fridge.json",
+                "value": "/data/home/nodered/fridge-settings.json",
                 "type": "str"
             }
         ]
@@ -6361,7 +6361,7 @@
         "addpay": "payload",
         "append": "",
         "useSpawn": "false",
-        "timer": "60",
+        "timer": "720",
         "winHide": false,
         "oldrc": false,
         "name": "Write UART",
@@ -6371,9 +6371,7 @@
             [
                 "cf563ccf97436424"
             ],
-            [
-                "86470d03d9a70f6b"
-            ],
+            [],
             [
                 "86470d03d9a70f6b",
                 "649cea4b62f5fc4c"
@@ -6385,7 +6383,7 @@
         "type": "debug",
         "z": "fcffa944a0680a42",
         "name": "Debug log",
-        "active": false,
+        "active": true,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -6393,8 +6391,8 @@
         "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 910,
-        "y": 500,
+        "x": 870,
+        "y": 520,
         "wires": []
     },
     {
@@ -6779,7 +6777,8 @@
         "y": 80,
         "wires": [
             [
-                "8b1d7a554c6cf8b2"
+                "8b1d7a554c6cf8b2",
+                "67c8b627f2ca4fac"
             ]
         ]
     },
@@ -6804,7 +6803,7 @@
         "type": "function",
         "z": "fcffa944a0680a42",
         "name": "Control loop",
-        "func": "\nlet now = Date.now();\nlet cmd = {};\nlet sensorStatus = {};\nsensorStatus.topic   = \"sensor\";\nsensorStatus.payload = true;\nlet battStatus = {};\nbattStatus.topic = \"battery\";\nbattStatus.payload = true;\n\n\n// Store received values\nif (msg.topic === \"target\") {\n    context.set(\"target\", msg.payload);\n}\nif (msg.topic === \"energy\") {\n    context.set(\"energy\", msg.payload);\n}\nelse if (msg.topic === \"fridge\") {\n    context.set(\"fridge\", msg.raw);\n    context.set(\"lastTime\", now);\n}\nelse if (msg.topic === \"room\") {\n    context.set(\"room\", msg.payload);\n}\nelse if (msg.topic === \"battery\") {\n    context.set(\"battery\", msg.payload);\n}\nelse if (msg.ok === 30) {\n    context.set(\"sysStatus\", msg);\n}\nelse if (msg.topic === \"return\") {\n    context.set(\"msgSent\", false);\n}\n\n// Proceed only if trigger was received\nif (msg.topic != \"trigger\") {\n    return null;\n}\n\n\n// Read state variables\nlet target    = context.get(\"target\");\nlet energy    = context.get(\"energy\");\nlet fridge    = context.get(\"fridge\");\nlet room      = context.get(\"room\");\nlet sysStatus = context.get(\"sysStatus\") || {};\nlet battery   = context.get(\"battery\");\nlet lastTemp  = context.get(\"lastTemp\");\nlet wasOpenDr = context.get(\"wasOpenDr\") || false;\nlet defrost   = context.get(\"defrost\") || 0;\nlet lastTime  = context.get(\"lastTime\") || 0;\nlet nextCmd   = context.get(\"nextCmd\");\nlet msgSent   = context.get(\"msgSent\") || false;\nlet count     = context.get(\"count\") || 0;\n\n//node.warn(sysStatus);\n\n// Temperature increase rate calculation\nif (count % 3 === 0 || fridge < lastTemp || lastTemp === undefined) {\n  context.set(\"lastTemp\", fridge);\n}\nlet delta = fridge - lastTemp;\n//node.warn(`fridge=${fridge}, lastTemp=${lastTemp}, delta=${delta}, nextCmd=${nextCmd}`);\n\n// Open door / temperature spike detection\nif ((delta > 0.15 || (fridge > target + 1 && target != 0)) && wasOpenDr === false && nextCmd === undefined) {\n    nextCmd = \"\\\"c 20\\\"\";                // Disable defrost\n    context.set(\"nextCmd\", \"\\\"c 10\\\"\");  // Set max speed\n    context.set(\"wasOpenDr\", true);\n}\nelse if (fridge < target) {\n    context.set(\"wasOpenDr\", false);\n}\n\n// Disable defrost at high room temperatures\nif (room > 25 && sysStatus.defrost != 0 && nextCmd === undefined) {\n    nextCmd = \"\\\"c 20\\\"\";   // Disable defrost\n    sysStatus.defrost = 0;\n    context.set(\"sysStatus\", sysStatus);\n}\n\n// Detect defrost state race condition\nif (sysStatus.defrost === 0) {\n    context.set(\"defrost\", 0);\n}\nelse if (defrost === 0) {\n    // Race condition - sequence must be 0 -> 2 -> 1\n    if (sysStatus.defrost === 1 && nextCmd === undefined) {\n        nextCmd = \"\\\"c 20\\\"\";               // Disable defrost\n        context.set(\"nextCmd\", \"\\\"c 21\\\"\"); // Reenable defrost\n        sysStatus.defrost = 0;\n        context.set(\"sysStatus\", sysStatus);\n    }\n    else if (sysStatus.defrost === 2) {\n        context.set(\"defrost\", 2);\n    }\n}\n\n// Pre-cool before starting a defrost cycle\nif (sysStatus.defrost === 2 && target >= 1) {\n    target = target - 0.5;\n}\n\n// Temperature sensor failure detection\nif (now - lastTime > 60000 || fridge === undefined) {\n    sensorStatus.payload = false;\n}\n\n// Low battery detection\nif (battery < 30) {\n    battStatus.payload = false;\n    context.set(\"lastMode\", energy);\n    let mode = {\"payload\": 0}; // Switch to gas mode\n    node.send([null, null, mode]);\n}\nelse {\n    let lastMode = context.get(\"lastMode\");\n    if (lastMode != undefined) {\n        context.set(\"lastMode\", undefined);\n        let mode = {\"payload\": lastMode}; // Recover previous mode\n        node.send([null, null, mode]);\n    }\n}\n\n// Manage event counter\nlet statusEvent = false;\nlet pingEvent   = false;\nif (count % 2 === 0) {\n    statusEvent = true;\n}\nelse if (count % 9 === 0) {\n    pingEvent = true;\n}\ncount++;\ncontext.set(\"count\", count);\n\n\n// Request system status by default\ncmd.payload = \"\\\"c 30\\\"\";  \n\n// Request system status\nif (statusEvent && nextCmd === undefined) {\n    cmd.payload = \"\\\"c 30\\\"\";  // Request system status\n}\n// Turn off\nelse if (target === 0) {\n    if (sysStatus.inputEnabled == 1 || pingEvent) {\n        cmd.payload = \"\\\"c 0\\\"\";   // Turn off the compressor\n    }\n}\n// Temperature sensor failure detection\nelse if (sensorStatus.payload === false) {\n    // Don't send command\n}\n// Low battery detection\nelse if (battStatus.payload === false) {\n    if (sysStatus.inputEnabled == 1 || pingEvent) {\n        cmd.payload = \"\\\"c 0\\\"\";   // Turn off the compressor\n    }\n}\n// Execute scheduled command\nelse if (nextCmd != undefined) {\n    nextNextCmd = context.get(\"nextCmd\");\n    if (nextNextCmd === nextCmd) {\n        context.set(\"nextCmd\", undefined);\n    }\n    cmd.payload = nextCmd;\n}\n// Start\nelse if (fridge > target) {\n    if (sysStatus.inputEnabled === 0 || pingEvent) {\n        cmd.payload = \"\\\"c 11\\\"\";  // Turn on the compressor\n    }\n}\n// Stop\nelse {\n    if (sysStatus.inputEnabled == 1 || pingEvent) {\n        cmd.payload = \"\\\"c 0\\\"\";   // Turn off the compressor\n    }\n    \n}\n\nnode.send([null, battStatus, null]);\nnode.send([null, sensorStatus, null]);\n\n// Only send a command if the previous command has been executed\nif (msgSent === false) {\n    context.set(\"msgSent\", true);\n    return [cmd, null, null];\n}\nelse {\n    return null;\n}\n\n\n",
+        "func": "\n// Settings\nconst lowBattSoC       = 30;   // Low battery detection state of charge in %\nconst boostTemp        = 27;   // Temp threshold for activating the gas boost function\nconst defrostMaxTemp   = 25;   // Temp threshold for deaactivating the defrost cycle\nconst defrostTempDec   = 0.5;  // Decrease target temp by this amout when preparing for a defrost cycle\nconst openDoorTempRate = 0.15; // Fridge temp increase rate per trigger interval to raise an open door alarm\nconst openDoorTempInc  = 1;    // Absolute fridge temp increase to raise an open door alarm\n\n\nlet now = Date.now();\nlet cmd = {};\nlet sensorStatus = {\"topic\": \"sensor\", \"payload\": true};\nlet battStatus   = {\"topic\": \"battery\", \"payload\": true};\nlet boostStatus  = {\"topic\": \"boost\", \"payload\": false};\n\n\n// Store received values\nif (msg.topic === \"target\") {\n    context.set(\"target\", msg.payload);\n}\nif (msg.topic === \"energy\") {\n    context.set(\"energy\", msg.payload);\n}\nelse if (msg.topic === \"fridge\") {\n    context.set(\"fridge\", msg.raw);\n    context.set(\"lastTime\", now);\n}\nelse if (msg.topic === \"room\") {\n    context.set(\"room\", msg.payload);\n}\nelse if (msg.topic === \"battery\") {\n    context.set(\"battery\", msg.payload);\n}\nelse if (msg.ok === 30) {\n    context.set(\"sysStatus\", msg);\n}\nelse if (msg.topic === \"return\") {\n    context.set(\"msgSent\", false);\n}\n\n// Proceed only if trigger was received\nif (msg.topic != \"trigger\") {\n    return null;\n}\n\n\n// Read state variables\nlet target    = context.get(\"target\");\nlet energy    = context.get(\"energy\") || 0;\nlet fridge    = context.get(\"fridge\");\nlet room      = context.get(\"room\");\nlet sysStatus = context.get(\"sysStatus\") || {};\nlet battery   = context.get(\"battery\");\nlet lastTemp  = context.get(\"lastTemp\");\nlet defrost   = context.get(\"defrost\") || 0;\nlet lastTime  = context.get(\"lastTime\") || 0;\nlet nextCmd   = context.get(\"nextCmd\");\nlet msgSent   = context.get(\"msgSent\") || false;\nlet count     = context.get(\"count\") || 0;\n\n//node.warn(sysStatus);\n\n// Temperature increase rate calculation\nif (count % 3 === 0 || fridge < lastTemp || lastTemp === undefined) {\n  context.set(\"lastTemp\", fridge);\n}\nlet delta = fridge - lastTemp;\n//node.warn(`fridge=${fridge}, lastTemp=${lastTemp}, delta=${delta}, nextCmd=${nextCmd}`);\n\n// Open door / temperature spike detection\nif ((delta > openDoorTempRate || (fridge > target + openDoorTempInc && target != 0)) && !context.get(\"wasOpenDr\") && nextCmd === undefined) {\n    nextCmd = \"\\\"c 20\\\"\";                // Disable defrost\n    context.set(\"nextCmd\", \"\\\"c 10\\\"\");  // Set max speed\n    context.set(\"wasOpenDr\", true);\n}\nelse if (fridge < target) {\n    context.set(\"wasOpenDr\", false);\n}\n\n// Disable defrost at high room temperatures\nif (room > defrostMaxTemp && sysStatus.defrost != 0 && nextCmd === undefined) {\n    nextCmd = \"\\\"c 20\\\"\";   // Disable defrost\n    sysStatus.defrost = 0;\n    context.set(\"sysStatus\", sysStatus);\n}\n\n// Detect defrost state race condition\nif (sysStatus.defrost === 0) {\n    context.set(\"defrost\", 0);\n}\nelse if (defrost === 0) {\n    // Race condition - sequence must be 0 -> 2 -> 1\n    if (sysStatus.defrost === 1 && nextCmd === undefined) {\n        nextCmd = \"\\\"c 20\\\"\";               // Disable defrost\n        context.set(\"nextCmd\", \"\\\"c 21\\\"\"); // Reenable defrost\n        sysStatus.defrost = 0;\n        context.set(\"sysStatus\", sysStatus);\n    }\n    else if (sysStatus.defrost === 2) {\n        context.set(\"defrost\", 2);\n    }\n}\n\n// Pre-cool before starting a defrost cycle\nif (sysStatus.defrost === 2 && target >= 1) {\n    target = target - defrostTempDec;\n}\n\n// Temperature sensor failure detection\nif (now - lastTime > 60000 || fridge === undefined) {\n    sensorStatus.payload = false;\n}\n\n// Low battery and detection and gas boost activation\nlet lowBatt = (battery < lowBattSoC);\nlet boost   = (room > boostTemp);\nif (lowBatt || boost) {\n    if (lowBatt) {\n        battStatus.payload = false;\n    }\n    if (boost) {\n        boostStatus.payload = true;\n    }\n    if (!context.get(\"boost\")) {\n        context.set(\"boost\", true);\n        let mode = {\"payload\": 0}; // Switch to gas mode\n        node.send([null, null, mode]);\n    }\n}\nelse {\n    if (context.get(\"boost\")) {\n        context.set(\"boost\", false);\n        let mode = {\"payload\": energy}; // Recover previous mode\n        node.send([null, null, mode]);\n    }\n}\n\n// Manage event counter\nlet statusEvent = false;\nlet pingEvent   = false;\nif (count % 2 === 0) {\n    statusEvent = true;\n}\nelse if (count % 9 === 0) {\n    pingEvent = true;\n}\ncount++;\ncontext.set(\"count\", count);\n\n\n// Request system status by default\ncmd.payload = \"\\\"c 30\\\"\";  \n\n// Request system status\nif (statusEvent && nextCmd === undefined) {\n    cmd.payload = \"\\\"c 30\\\"\";  // Request system status\n}\n// Turn off\nelse if (target === 0) {\n    if (sysStatus.inputEnabled == 1 || pingEvent) {\n        cmd.payload = \"\\\"c 0\\\"\";   // Turn off the compressor\n    }\n}\n// Temperature sensor failure detection\nelse if (sensorStatus.payload === false) {\n    // Don't send command\n}\n// Low battery detection\nelse if (battStatus.payload === false) {\n    if (sysStatus.inputEnabled == 1 || pingEvent) {\n        cmd.payload = \"\\\"c 0\\\"\";   // Turn off the compressor\n    }\n}\n// Execute scheduled command\nelse if (nextCmd != undefined) {\n    nextNextCmd = context.get(\"nextCmd\");\n    if (nextNextCmd === nextCmd) {\n        context.set(\"nextCmd\", undefined);\n    }\n    cmd.payload = nextCmd;\n}\n// Start\nelse if (fridge > target) {\n    if (sysStatus.inputEnabled === 0 || pingEvent) {\n        cmd.payload = \"\\\"c 11\\\"\";  // Turn on the compressor\n    }\n}\n// Stop\nelse {\n    if (sysStatus.inputEnabled == 1 || pingEvent) {\n        cmd.payload = \"\\\"c 0\\\"\";   // Turn off the compressor\n    }\n    \n}\n\nnode.send([null, boostStatus, null]);\nnode.send([null, battStatus, null]);\nnode.send([null, sensorStatus, null]);\n\n// Only send a command if the previous command has been executed\nif (msgSent === false) {\n    context.set(\"msgSent\", true);\n    return [cmd, null, null];\n}\nelse {\n    return null;\n}\n\n\n",
         "outputs": 3,
         "timeout": 0,
         "noerr": 0,
@@ -6822,7 +6821,9 @@
                 "e4cff028ee24380b"
             ],
             [
-                "1c66410a4fffbe9b"
+                "1c66410a4fffbe9b",
+                "c48aa761d863d1ea",
+                "4d642db5f04a62ce"
             ]
         ]
     },
@@ -6872,27 +6873,6 @@
         "wires": [
             [
                 "a8702dfa02f03390"
-            ]
-        ]
-    },
-    {
-        "id": "5e37ce1d4492f446",
-        "type": "function",
-        "z": "fcffa944a0680a42",
-        "name": "Red error",
-        "func": "\nlet status = msg.payload;\n\nmsg.ui_update = {};\n\nif (status === \"OK\") {\n    msg.ui_update.class = '';\n}\nelse {\n    msg.ui_update.class = 'error';\n}\n\nreturn msg;\n",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 740,
-        "y": 880,
-        "wires": [
-            [
-                "d5196d0babadee3e",
-                "32c0ad4d04501f99"
             ]
         ]
     },
@@ -7034,18 +7014,19 @@
         "type": "function",
         "z": "fcffa944a0680a42",
         "name": "Decode error",
-        "func": "\nlet json    = context.get(\"json\") || false;\nlet sensor  = context.get(\"sensor\") || false;\nlet battery = context.get(\"battery\") || false;\nlet discCnt = context.get(\"discCnt\") || 0;\nlet status  = {};\n\n//node.warn(`topic=${msg.topic}, payload=${msg.payload}`);\n\nif (msg.topic === \"json\") {\n    if (msg.payload === false) {\n        discCnt++;\n    }\n    else {\n        discCnt = 0;\n    }\n    context.set(\"discCnt\", discCnt);\n    if (discCnt >= 3) {\n        json = false;\n    }\n    else {\n        json = true;\n    }\n    context.set(\"json\", json);\n}\nelse if (msg.topic === \"sensor\") {\n    context.set(\"sensor\", msg.payload);\n}\nelse if (msg.topic === \"battery\") {\n    context.set(\"battery\", msg.payload);\n}\n\n\n//node.warn(`json=${json}, sensor=${sensor}`);\n\nif (json && sensor && battery) {\n    status.payload = \"OK\";    \n}\nelse if (!sensor) {\n    status.payload = \"Sensor error!\";\n}\nelse if (!json) {\n    status.payload = \"Connection lost!\";\n}\nelse if (!battery) {\n    status.payload = \"Low battery!\";\n}\nreturn status;",
+        "func": "\nlet json    = context.get(\"json\") || false;\nlet sensor  = context.get(\"sensor\") || false;\nlet battery = context.get(\"battery\") || false;\nlet boost   = context.get(\"boost\") || false;\nlet discCnt = context.get(\"discCnt\") || 0;\nlet status  = {\"ui_update\": {\"class\": \"\"}};\n\n//node.warn(`topic=${msg.topic}, payload=${msg.payload}`);\n\nif (msg.topic === \"json\") {\n    if (msg.payload === false) {\n        discCnt++;\n    }\n    else {\n        discCnt = 0;\n    }\n    context.set(\"discCnt\", discCnt);\n    if (discCnt >= 3) {\n        json = false;\n    }\n    else {\n        json = true;\n    }\n    context.set(\"json\", json);\n}\nelse if (msg.topic === \"sensor\") {\n    context.set(\"sensor\", msg.payload);\n}\nelse if (msg.topic === \"battery\") {\n    context.set(\"battery\", msg.payload);\n}\nelse if (msg.topic === \"boost\") {\n    context.set(\"boost\", msg.payload);\n}\n\n//node.warn(`json=${json}, sensor=${sensor}`);\n\nif (!sensor) {\n    status.payload = \"Sensor error!\";\n    status.ui_update.class = 'error';\n}\nelse if (!json) {\n    status.payload = \"Connection lost!\";\n    status.ui_update.class = 'error';\n}\nelse if (!battery) {\n    status.payload = \"Low battery!\";\n    status.ui_update.class = 'error';\n}\nelse if (boost) {\n    status.payload = \"BOOST\";\n}\nelse {\n    status.payload = \"OK\"; \n}\nreturn status;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 550,
+        "x": 570,
         "y": 880,
         "wires": [
             [
-                "5e37ce1d4492f446"
+                "d5196d0babadee3e",
+                "32c0ad4d04501f99"
             ]
         ]
     },
@@ -7154,7 +7135,7 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 900,
+        "x": 860,
         "y": 560,
         "wires": []
     },
@@ -7221,7 +7202,7 @@
         "order": 4,
         "width": 3,
         "height": 0,
-        "passthru": true,
+        "passthru": false,
         "multiple": false,
         "chips": false,
         "clearable": false,
@@ -7259,7 +7240,7 @@
         "type": "function",
         "z": "fcffa944a0680a42",
         "name": "Decode JSON",
-        "func": "\nlet msg1 = {};\nlet msg2 = {};\n\nmsg1.payload = msg.target;\nmsg2.payload = msg.energy;\n\nreturn [msg1, msg2];\n",
+        "func": "\nlet msg1 = {};\nlet msg2 = {};\n\nmsg1.payload = msg.target;\nmsg1.topic   = \"target\";\nmsg2.payload = msg.energy;\nmsg2.topic   = \"energy\";\nmsg2.ignore  = false;\n\nreturn [msg1, msg2];\n",
         "outputs": 2,
         "timeout": 0,
         "noerr": 0,
@@ -7273,7 +7254,10 @@
                 "360e8acd62618140"
             ],
             [
-                "1c66410a4fffbe9b"
+                "1c66410a4fffbe9b",
+                "c48aa761d863d1ea",
+                "a8702dfa02f03390",
+                "4d642db5f04a62ce"
             ]
         ]
     },
@@ -7396,6 +7380,26 @@
             [
                 "797f9429f69e9626"
             ]
+        ]
+    },
+    {
+        "id": "67c8b627f2ca4fac",
+        "type": "exec",
+        "z": "fcffa944a0680a42",
+        "command": "rm -rf /tmp/ulock-*.lock",
+        "addpay": "",
+        "append": "",
+        "useSpawn": "false",
+        "timer": "60",
+        "winHide": false,
+        "oldrc": false,
+        "name": "",
+        "x": 370,
+        "y": 40,
+        "wires": [
+            [],
+            [],
+            []
         ]
     }
 ]
