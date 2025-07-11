@@ -1041,7 +1041,7 @@
         "phonenumberinputtypemessage": "msg",
         "inputtypemessage": "msg",
         "rejectssl": false,
-        "x": 200,
+        "x": 340,
         "y": 360,
         "wires": [
             []
@@ -1117,6 +1117,35 @@
         "y": 80,
         "wires": [
             []
+        ]
+    },
+    {
+        "id": "6e318bd0311cf522",
+        "type": "inject",
+        "z": "37a752f35a68bbed",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "Test message",
+        "payloadType": "str",
+        "x": 130,
+        "y": 420,
+        "wires": [
+            [
+                "fceb7b2903eca364"
+            ]
         ]
     },
     {
