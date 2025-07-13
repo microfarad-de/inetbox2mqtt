@@ -26,7 +26,7 @@
     {
         "id": "c74d4096e08fa272",
         "type": "tab",
-        "label": "Climate Control",
+        "label": "Heating",
         "disabled": false,
         "info": "",
         "env": []
@@ -35,6 +35,14 @@
         "id": "fcffa944a0680a42",
         "type": "tab",
         "label": "Fridge",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "fc670f602d442a02",
+        "type": "tab",
+        "label": "Settings",
         "disabled": false,
         "info": "",
         "env": []
@@ -71,12 +79,12 @@
         "env": [
             {
                 "name": "low",
-                "type": "num",
+                "type": "str",
                 "value": "0"
             },
             {
                 "name": "high",
-                "type": "num",
+                "type": "str",
                 "value": "100"
             },
             {
@@ -130,7 +138,7 @@
         "env": [
             {
                 "name": "offset",
-                "type": "num",
+                "type": "str",
                 "value": "0"
             },
             {
@@ -610,7 +618,7 @@
                 "cols": "12"
             }
         ],
-        "order": 6,
+        "order": 7,
         "className": "",
         "visible": false,
         "disabled": "false"
@@ -653,7 +661,7 @@
     {
         "id": "df7a1670ae765f1d",
         "type": "ui-group",
-        "name": "Settings",
+        "name": "Control",
         "page": "d379d6807d25f7bd",
         "width": "6",
         "height": "1",
@@ -803,13 +811,13 @@
         ],
         "order": 5,
         "className": "",
-        "visible": "true",
-        "disabled": "false"
+        "visible": true,
+        "disabled": false
     },
     {
         "id": "0a055cab4c53c810",
         "type": "ui-group",
-        "name": "Settings",
+        "name": "Control",
         "page": "9f3f4a16e11a48a1",
         "width": "6",
         "height": "1",
@@ -851,8 +859,8 @@
         "name": "global-config",
         "env": [
             {
-                "name": "fridge-settings-file",
-                "value": "/data/home/nodered/fridge-settings.json",
+                "name": "system-settings-file",
+                "value": "/data/home/nodered/caravan-settings.json",
                 "type": "str"
             }
         ]
@@ -872,11 +880,85 @@
         "groupType": "default"
     },
     {
+        "id": "b54e758b3b69d202",
+        "type": "ui-page",
+        "name": "Settings",
+        "ui": "93cf16ef6c7e509b",
+        "path": "/settings",
+        "icon": "cog",
+        "layout": "grid",
+        "theme": "7fbe7ff5e2bd848b",
+        "breakpoints": [
+            {
+                "name": "Default",
+                "px": "0",
+                "cols": "6"
+            }
+        ],
+        "order": 6,
+        "className": "",
+        "visible": "true",
+        "disabled": "false"
+    },
+    {
+        "id": "28b10b40908e96b0",
+        "type": "ui-group",
+        "name": "Fridge",
+        "page": "b54e758b3b69d202",
+        "width": "6",
+        "height": "1",
+        "order": 1,
+        "showTitle": true,
+        "className": "",
+        "visible": "true",
+        "disabled": "false",
+        "groupType": "default"
+    },
+    {
+        "id": "87a251b1b078a4c3",
+        "type": "ui-group",
+        "name": "Alarms",
+        "page": "b54e758b3b69d202",
+        "width": "6",
+        "height": "1",
+        "order": 3,
+        "showTitle": true,
+        "className": "",
+        "visible": "true",
+        "disabled": "false",
+        "groupType": "default"
+    },
+    {
+        "id": "7a52027f8ab130e8",
+        "type": "ui-group",
+        "name": "Offsets",
+        "page": "b54e758b3b69d202",
+        "width": "6",
+        "height": "1",
+        "order": 2,
+        "showTitle": true,
+        "className": "",
+        "visible": "true",
+        "disabled": "false",
+        "groupType": "default"
+    },
+    {
+        "id": "7fb822c8e67236bf",
+        "type": "ui-spacer",
+        "group": "87a251b1b078a4c3",
+        "name": "spacer",
+        "tooltip": "",
+        "order": 21,
+        "width": "6",
+        "height": "1",
+        "className": ""
+    },
+    {
         "id": "e7756b84d8b39dfb",
         "type": "function",
         "z": "26a48bdabf7607df",
         "name": "Alarm",
-        "func": "\nlet val = +msg.payload;  // Convert to an integer\n\nlet low     = env.get('low');\nlet high    = env.get('high');\nlet thr     = env.get('threshold');\nlet message = env.get('message');\nlet unit    = env.get('unit');\n\nlet lastAlarm = context.get('lastAlarm') || false;\nlet alarm = false;\n\nif (val < low) {\n    alarm = 'low';\n}\nelse if (val > high) {\n    alarm = 'high';\n}\nelse if (val > (low + thr) && val < (high - thr)) {\n    alarm = false;\n    context.set('lastAlarm', alarm);\n}\n//node.warn(`val=${val}, low=${low}, high=${high}, thr=${thr}, alarm=${alarm}, lastAlarm=${lastAlarm}`);\n\nif (alarm && alarm != lastAlarm) {\n    context.set('lastAlarm', alarm);\n    msg.payload = `⚠️ Caravan alert!\\n${message}: ${val} ${unit}`;\n    node.warn(msg.payload);\n    return msg;\n}\nelse {\n    return null;\n}\n\n",
+        "func": "\nfunction resolveValue(input) {\n    // Check if the input is a number (int or float)\n    if (!isNaN(input) && String(input).trim() !== \"\") {\n        return Number(input);\n    } else {\n        // Otherwise, treat it as a global variable name\n        return global.get(input);\n    }\n}\n\n\nlet val = +msg.payload;  // Convert to an integer\n\nlet low     = resolveValue(env.get('low'));\nlet high    = resolveValue(env.get('high'));\nlet thr     = env.get('threshold');\nlet message = env.get('message');\nlet unit    = env.get('unit');\n\nlet lastAlarm = context.get('lastAlarm') || false;\nlet alarm = false;\n\n\nif (val < low) {\n    alarm = 'low';\n}\nelse if (val > high) {\n    alarm = 'high';\n}\nelse if (val > (low + thr) && val < (high - thr)) {\n    alarm = false;\n    context.set('lastAlarm', alarm);\n}\n//node.warn(`val=${val}, low=${low}, high=${high}, thr=${thr}, alarm=${alarm}, lastAlarm=${lastAlarm}`);\n\nif (alarm && alarm != lastAlarm) {\n    context.set('lastAlarm', alarm);\n    msg.payload = `⚠️ Caravan alert!\\n${message}: ${val} ${unit}`;\n    node.warn(msg.payload);\n    return msg;\n}\nelse {\n    return null;\n}\n\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -894,7 +976,7 @@
         "type": "function",
         "z": "43e263465d4c8532",
         "name": "Offset",
-        "func": "let temp = msg.payload;\n\noffset   = env.get('offset');\nrounding = env.get('rounding');\n\ntemp = temp + offset;\n\nmsg.payload = +(+temp).toFixed(rounding);\nmsg.raw     = temp;\n\nreturn msg;",
+        "func": "\nfunction resolveValue(input) {\n    // Check if the input is a number (int or float)\n    if (!isNaN(input) && String(input).trim() !== \"\") {\n        return Number(input);\n    } else {\n        // Otherwise, treat it as a global variable name\n        return global.get(input);\n    }\n}\n\n\nlet temp = msg.payload;\n\noffset   = resolveValue(env.get('offset'));\nrounding = env.get('rounding');\n\ntemp = temp + offset;\n\nmsg.payload = +(+temp).toFixed(rounding);\nmsg.raw     = temp;\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -1490,8 +1572,8 @@
         "env": [
             {
                 "name": "low",
-                "value": "20",
-                "type": "num"
+                "value": "alarmBattLow",
+                "type": "str"
             },
             {
                 "name": "message",
@@ -1623,8 +1705,8 @@
         "env": [
             {
                 "name": "low",
-                "value": "5",
-                "type": "num"
+                "value": "alarmPropaneLow",
+                "type": "str"
             },
             {
                 "name": "threshold",
@@ -1671,8 +1753,8 @@
         "env": [
             {
                 "name": "low",
-                "value": "5",
-                "type": "num"
+                "value": "alarmPropaneLow",
+                "type": "str"
             },
             {
                 "name": "threshold",
@@ -3442,13 +3524,13 @@
         "env": [
             {
                 "name": "low",
-                "value": "5",
-                "type": "num"
+                "value": "alarmTempRoomLow",
+                "type": "str"
             },
             {
                 "name": "high",
-                "value": "35",
-                "type": "num"
+                "value": "alarmTempRoomHigh",
+                "type": "str"
             }
         ],
         "x": 650,
@@ -3493,13 +3575,13 @@
         "env": [
             {
                 "name": "low",
-                "value": "1",
-                "type": "num"
+                "value": "alarmTempFridgeLow",
+                "type": "str"
             },
             {
                 "name": "high",
-                "value": "10",
-                "type": "num"
+                "value": "alarmTempFridgeHigh",
+                "type": "str"
             },
             {
                 "name": "message",
@@ -3523,8 +3605,8 @@
         "env": [
             {
                 "name": "low",
-                "value": "5",
-                "type": "num"
+                "value": "alarmTempWaterLow",
+                "type": "str"
             },
             {
                 "name": "threshold",
@@ -3553,13 +3635,13 @@
         "env": [
             {
                 "name": "low",
-                "value": "5",
-                "type": "num"
+                "value": "-100",
+                "type": "str"
             },
             {
                 "name": "high",
-                "value": "70",
-                "type": "num"
+                "value": "alarmTempCpuHigh",
+                "type": "str"
             },
             {
                 "name": "threshold",
@@ -3588,13 +3670,13 @@
         "env": [
             {
                 "name": "low",
-                "value": "5",
-                "type": "num"
+                "value": "alarmTempBattLow",
+                "type": "str"
             },
             {
                 "name": "high",
-                "value": "30",
-                "type": "num"
+                "value": "alarmTempBattHigh",
+                "type": "str"
             },
             {
                 "name": "message",
@@ -3615,6 +3697,13 @@
         "type": "subflow:43e263465d4c8532",
         "z": "2561d49b29c858c7",
         "name": "",
+        "env": [
+            {
+                "name": "offset",
+                "value": "offsetTempRoom",
+                "type": "str"
+            }
+        ],
         "x": 510,
         "y": 100,
         "wires": [
@@ -3634,8 +3723,8 @@
         "env": [
             {
                 "name": "offset",
-                "value": "-0.2",
-                "type": "num"
+                "value": "offsetTempFridge",
+                "type": "str"
             }
         ],
         "x": 510,
@@ -3831,8 +3920,8 @@
         "env": [
             {
                 "name": "offset",
-                "value": "-0.4",
-                "type": "num"
+                "value": "offsetTempOutdoor",
+                "type": "str"
             }
         ],
         "x": 510,
@@ -6449,8 +6538,8 @@
         "color": "#717171",
         "wrapText": false,
         "className": "",
-        "x": 650,
-        "y": 80,
+        "x": 210,
+        "y": 120,
         "wires": []
     },
     {
@@ -6531,18 +6620,18 @@
             }
         ],
         "payload": "",
-        "topic": "target",
+        "topic": "fridgeTargetTemp",
         "topicType": "str",
         "className": "",
         "typeIsComboBox": false,
         "msgTrigger": "onChange",
-        "x": 670,
-        "y": 120,
+        "x": 650,
+        "y": 100,
         "wires": [
             [
                 "a8702dfa02f03390",
                 "e4af2af2d2beb8aa",
-                "7f99aa8a118563bb"
+                "236fdb56f87224ab"
             ]
         ]
     },
@@ -6752,43 +6841,6 @@
         ]
     },
     {
-        "id": "f3fe901756f76d29",
-        "type": "file",
-        "z": "fcffa944a0680a42",
-        "name": "",
-        "filename": "fridge-settings-file",
-        "filenameType": "env",
-        "appendNewline": true,
-        "createDir": false,
-        "overwriteFile": "true",
-        "encoding": "none",
-        "x": 1120,
-        "y": 180,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "8b1d7a554c6cf8b2",
-        "type": "file in",
-        "z": "fcffa944a0680a42",
-        "name": "",
-        "filename": "fridge-settings-file",
-        "filenameType": "env",
-        "format": "utf8",
-        "chunk": false,
-        "sendError": false,
-        "encoding": "none",
-        "allProps": false,
-        "x": 360,
-        "y": 80,
-        "wires": [
-            [
-                "aad8bf439cd7b2c3"
-            ]
-        ]
-    },
-    {
         "id": "b4ec11e064e8e830",
         "type": "inject",
         "z": "fcffa944a0680a42",
@@ -6809,11 +6861,10 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 170,
-        "y": 80,
+        "x": 210,
+        "y": 40,
         "wires": [
             [
-                "8b1d7a554c6cf8b2",
                 "67c8b627f2ca4fac"
             ]
         ]
@@ -6839,7 +6890,7 @@
         "type": "function",
         "z": "fcffa944a0680a42",
         "name": "Control loop",
-        "func": "\n// Settings\nconst lowBattSoC       = 30;   // Low battery detection state of charge in %\nconst boostTemp        = 28; // Temp threshold for activating the gas boost function\nconst defrostMaxTemp   = 23;   // Temp threshold for deaactivating the defrost cycle\nconst defrostTempDec   = 0.5;  // Decrease target temp by this amout when preparing for a defrost cycle\nconst openDoorTempRate = 0.15; // Fridge temp increase rate per trigger interval to raise an open door alarm\nconst openDoorTempInc  = 1;    // Absolute fridge temp increase to raise an open door alarm\n\n\nlet now = Date.now();\nlet cmd = {};\nlet sensorStatus = {\"topic\": \"sensor\", \"payload\": true};\nlet battStatus   = {\"topic\": \"battery\", \"payload\": true};\nlet boostStatus  = {\"topic\": \"boost\"};\n\n// Store received values\nif (msg.topic === \"target\") {\n    context.set(\"target\", msg.payload);\n}\nif (msg.topic === \"energy\") {\n    context.set(\"energy\", msg.payload);\n    boostStatus.payload = false;\n    node.send([null, boostStatus, null]);\n}\nelse if (msg.topic === \"fridge\") {\n    context.set(\"fridge\", msg.raw);\n    context.set(\"lastTime\", now);\n}\nelse if (msg.topic === \"room\") {\n    context.set(\"room\", msg.payload);\n}\nelse if (msg.topic === \"battery\") {\n    context.set(\"battery\", msg.payload);\n}\nelse if (msg.ok === 30) {\n    context.set(\"sysStatus\", msg);\n}\nelse if (msg.topic === \"return\") {\n    context.set(\"msgSent\", false);\n}\n\n// Proceed only if trigger was received\nif (msg.topic != \"trigger\") {\n    return null;\n}\n\n\n// Read state variables\nlet target    = context.get(\"target\");\nlet energy    = context.get(\"energy\") || 0;\nlet fridge    = context.get(\"fridge\");\nlet room      = context.get(\"room\");\nlet sysStatus = context.get(\"sysStatus\") || {};\nlet battery   = context.get(\"battery\");\nlet lastTemp  = context.get(\"lastTemp\");\nlet defrost   = context.get(\"defrost\") || 0;\nlet lastTime  = context.get(\"lastTime\") || 0;\nlet nextCmd   = context.get(\"nextCmd\");\nlet msgSent   = context.get(\"msgSent\") || false;\nlet count     = context.get(\"count\") || 0;\n\n//node.warn(sysStatus);\n\n// Temperature increase rate calculation\nif (count % 3 === 0 || fridge < lastTemp || lastTemp === undefined) {\n  context.set(\"lastTemp\", fridge);\n}\nlet delta = fridge - lastTemp;\n//node.warn(`fridge=${fridge}, lastTemp=${lastTemp}, delta=${delta}, nextCmd=${nextCmd}`);\n\n// Open door / temperature spike detection\nif ((delta > openDoorTempRate || (fridge > target + openDoorTempInc && target != 0)) && !context.get(\"wasOpenDr\") && nextCmd === undefined) {\n    nextCmd = \"\\\"c 20\\\"\";                // Disable defrost\n    context.set(\"nextCmd\", \"\\\"c 10\\\"\");  // Set max speed\n    context.set(\"wasOpenDr\", true);\n}\nelse if (fridge < target) {\n    context.set(\"wasOpenDr\", false);\n}\n\n// Disable defrost at high room temperatures\nif (room > defrostMaxTemp && sysStatus.defrost === 1 && nextCmd === undefined) {\n    nextCmd = \"\\\"c 20\\\"\";   // Disable defrost\n    sysStatus.defrost = 0;\n    context.set(\"sysStatus\", sysStatus);\n}\n\n// Detect defrost state race condition\nif (sysStatus.defrost === 0) {\n    context.set(\"defrost\", 0);\n}\nelse if (defrost === 0) {\n    // Race condition - sequence must be 0 -> 2 -> 1\n    if (sysStatus.defrost === 1 && nextCmd === undefined) {\n        nextCmd = \"\\\"c 20\\\"\";               // Disable defrost\n        context.set(\"nextCmd\", \"\\\"c 21\\\"\"); // Reenable defrost\n        sysStatus.defrost = 0;\n        context.set(\"sysStatus\", sysStatus);\n    }\n    else if (sysStatus.defrost === 2) {\n        context.set(\"defrost\", 2);\n    }\n}\n\n// Pre-cool before starting a defrost cycle\nif (sysStatus.defrost === 2 && room <= defrostMaxTemp && target >= 1) {\n    target = target - defrostTempDec;\n}\n\n// Temperature sensor failure detection\nif (now - lastTime > 60000 || fridge === undefined) {\n    sensorStatus.payload = false;\n}\n\n// Low battery detection and gas boost activation\nlet lowBatt = (battery < lowBattSoC);\nlet boost   = context.get(\"boost\") || false;\nif (room >= boostTemp && !boost) {\n    boost = true;\n    context.set(\"boost\", boost);\n}\nelse if (room < boostTemp - 1 && boost) {\n    boost = false;\n    context.set(\"boost\", boost);\n}\nif (lowBatt || boost) {\n    if (lowBatt) {\n        battStatus.payload = false;\n    }\n    if (!context.get(\"boostActive\") && energy === 1) {\n        context.set(\"boostActive\", true);\n        boostStatus.payload = true;\n        let mode = {\"payload\": 0}; // Switch to gas mode\n        node.send([null, boostStatus, mode]);\n    }\n}\nelse {\n    if (context.get(\"boostActive\")) {\n        context.set(\"boostActive\", false);\n        boostStatus.payload = false;\n        let mode = {\"payload\": energy}; // Recover previous mode\n        node.send([null, boostStatus, mode]);\n    }\n}\n\n// Manage event counter\nlet statusEvent = false;\nlet pingEvent   = false;\nif (count % 2 === 0) {\n    statusEvent = true;\n}\nelse if (count % 9 === 0) {\n    pingEvent = true;\n}\ncount++;\ncontext.set(\"count\", count);\n\n\n// Request system status by default\ncmd.payload = \"\\\"c 30\\\"\";  \n\n// Request system status\nif (statusEvent && nextCmd === undefined) {\n    cmd.payload = \"\\\"c 30\\\"\";  // Request system status\n}\n// Turn off\nelse if (target === 0) {\n    if (sysStatus.inputEnabled === 1 || pingEvent) {\n        cmd.payload = \"\\\"c 0\\\"\";   // Turn off the compressor\n    }\n}\n// Temperature sensor failure detection\nelse if (sensorStatus.payload === false) {\n    // Don't send command\n}\n// Low battery detection\nelse if (battStatus.payload === false) {\n    if (sysStatus.inputEnabled === 1 || pingEvent) {\n        cmd.payload = \"\\\"c 0\\\"\";   // Turn off the compressor\n    }\n}\n// Execute scheduled command\nelse if (nextCmd != undefined) {\n    nextNextCmd = context.get(\"nextCmd\");\n    if (nextNextCmd === nextCmd) {\n        context.set(\"nextCmd\", undefined);\n    }\n    cmd.payload = nextCmd;\n}\n// Start\nelse if (fridge > target) {\n    if (sysStatus.inputEnabled === 0 || pingEvent) {\n        cmd.payload = \"\\\"c 11\\\"\";  // Turn on the compressor\n    }\n}\n// Stop\nelse {\n    if (sysStatus.inputEnabled === 1 || pingEvent) {\n        cmd.payload = \"\\\"c 0\\\"\";   // Turn off the compressor\n    }\n    \n}\n\nnode.send([null, battStatus, null]);\nnode.send([null, sensorStatus, null]);\n\n// Only send a command if the previous command has been executed\nif (msgSent === false) {\n    context.set(\"msgSent\", true);\n    return [cmd, null, null];\n}\nelse {\n    return null;\n}\n\n\n",
+        "func": "\n// Settings\nconst lowBattSoC       = global.get(\"fridgeLowBattSoC\");       // Low battery detection state of charge in %\nconst boostTemp        = global.get(\"fridgeBoostTemp\");        // Temp threshold for activating the gas boost function\nconst defrostMaxTemp   = global.get(\"fridgeDefrostMaxTemp\");   // Temp threshold for deaactivating the defrost cycle\nconst defrostTempDec   = global.get(\"fridgeDefrostTempDec\");   // Decrease target temp by this amout when preparing for a defrost cycle\nconst openDoorTempRate = global.get(\"fridgeOpenDoorTempRate\"); // Fridge temp increase rate per trigger interval to raise an open door alarm\nconst openDoorTempInc  = global.get(\"fridgeOpenDoorTempInc\");  // Absolute fridge temp increase to raise an open door alarm\n\n\nlet now = Date.now();\nlet cmd = {};\nlet sensorStatus = {\"topic\": \"sensor\", \"payload\": true};\nlet battStatus   = {\"topic\": \"battery\", \"payload\": true};\nlet boostStatus  = {\"topic\": \"boost\"};\n\n// Store received values\nif (msg.topic === \"fridgeTargetTemp\") {\n    context.set(\"target\", msg.payload);\n}\nif (msg.topic === \"fridgeAbsorberMode\") {\n    context.set(\"absorberMode\", msg.payload);\n    boostStatus.payload = false;\n    node.send([null, boostStatus, null]);\n}\nelse if (msg.topic === \"fridge\") {\n    context.set(\"fridge\", msg.raw);\n    context.set(\"lastTime\", now);\n}\nelse if (msg.topic === \"room\") {\n    context.set(\"room\", msg.payload);\n}\nelse if (msg.topic === \"battery\") {\n    context.set(\"battery\", msg.payload);\n}\nelse if (msg.ok === 30) {\n    context.set(\"sysStatus\", msg);\n}\nelse if (msg.topic === \"return\") {\n    context.set(\"msgSent\", false);\n}\n\n// Proceed only if trigger was received\nif (msg.topic != \"trigger\") {\n    return null;\n}\n\n\n// Read state variables\nlet target    = context.get(\"target\");\nlet absMode   = context.get(\"absorberMode\") || 0;\nlet fridge    = context.get(\"fridge\");\nlet room      = context.get(\"room\");\nlet sysStatus = context.get(\"sysStatus\") || {};\nlet battery   = context.get(\"battery\");\nlet lastTemp  = context.get(\"lastTemp\");\nlet defrost   = context.get(\"defrost\") || 0;\nlet lastTime  = context.get(\"lastTime\") || 0;\nlet nextCmd   = context.get(\"nextCmd\");\nlet msgSent   = context.get(\"msgSent\") || false;\nlet count     = context.get(\"count\") || 0;\n\n//node.warn(sysStatus);\n\n// Temperature increase rate calculation\nif (count % 3 === 0 || fridge < lastTemp || lastTemp === undefined) {\n  context.set(\"lastTemp\", fridge);\n}\nlet delta = fridge - lastTemp;\n//node.warn(`fridge=${fridge}, lastTemp=${lastTemp}, delta=${delta}, nextCmd=${nextCmd}`);\n\n// Open door / temperature spike detection\nif ((delta > openDoorTempRate || (fridge > target + openDoorTempInc && target != 0)) && !context.get(\"wasOpenDr\") && nextCmd === undefined) {\n    nextCmd = \"\\\"c 20\\\"\";                // Disable defrost\n    context.set(\"nextCmd\", \"\\\"c 10\\\"\");  // Set max speed\n    context.set(\"wasOpenDr\", true);\n}\nelse if (fridge < target) {\n    context.set(\"wasOpenDr\", false);\n}\n\n// Disable defrost at high room temperatures\nif (room > defrostMaxTemp && sysStatus.defrost === 1 && nextCmd === undefined) {\n    nextCmd = \"\\\"c 20\\\"\";   // Disable defrost\n    sysStatus.defrost = 0;\n    context.set(\"sysStatus\", sysStatus);\n}\n\n// Detect defrost state race condition\nif (sysStatus.defrost === 0) {\n    context.set(\"defrost\", 0);\n}\nelse if (defrost === 0) {\n    // Race condition - sequence must be 0 -> 2 -> 1\n    if (sysStatus.defrost === 1 && nextCmd === undefined) {\n        nextCmd = \"\\\"c 20\\\"\";               // Disable defrost\n        context.set(\"nextCmd\", \"\\\"c 21\\\"\"); // Reenable defrost\n        sysStatus.defrost = 0;\n        context.set(\"sysStatus\", sysStatus);\n    }\n    else if (sysStatus.defrost === 2) {\n        context.set(\"defrost\", 2);\n    }\n}\n\n// Pre-cool before starting a defrost cycle\nif (sysStatus.defrost === 2 && room <= defrostMaxTemp && target >= 1) {\n    target = target - defrostTempDec;\n}\n\n// Temperature sensor failure detection\nif (now - lastTime > 60000 || fridge === undefined) {\n    sensorStatus.payload = false;\n}\n\n// Low battery detection and gas boost activation\nlet lowBatt = (battery < lowBattSoC);\nlet boost   = context.get(\"boost\") || false;\nif (room >= boostTemp && !boost) {\n    boost = true;\n    context.set(\"boost\", boost);\n}\nelse if (room < boostTemp - 1 && boost) {\n    boost = false;\n    context.set(\"boost\", boost);\n}\nif (lowBatt || boost) {\n    if (lowBatt) {\n        battStatus.payload = false;\n    }\n    if (!context.get(\"boostActive\") && absMode === 1) {\n        context.set(\"boostActive\", true);\n        boostStatus.payload = true;\n        let mode = {\"payload\": 0}; // Switch to gas mode\n        node.send([null, boostStatus, mode]);\n    }\n}\nelse {\n    if (context.get(\"boostActive\")) {\n        context.set(\"boostActive\", false);\n        boostStatus.payload = false;\n        let mode = {\"payload\": absMode}; // Recover previous mode\n        node.send([null, boostStatus, mode]);\n    }\n}\n\n// Manage event counter\nlet statusEvent = false;\nlet pingEvent   = false;\nif (count % 2 === 0) {\n    statusEvent = true;\n}\nelse if (count % 9 === 0) {\n    pingEvent = true;\n}\ncount++;\ncontext.set(\"count\", count);\n\n\n// Request system status by default\ncmd.payload = \"\\\"c 30\\\"\";  \n\n// Request system status\nif (statusEvent && nextCmd === undefined) {\n    cmd.payload = \"\\\"c 30\\\"\";  // Request system status\n}\n// Turn off\nelse if (target === 0) {\n    if (sysStatus.inputEnabled === 1 || pingEvent) {\n        cmd.payload = \"\\\"c 0\\\"\";   // Turn off the compressor\n    }\n}\n// Temperature sensor failure detection\nelse if (sensorStatus.payload === false) {\n    // Don't send command\n}\n// Low battery detection\nelse if (battStatus.payload === false) {\n    if (sysStatus.inputEnabled === 1 || pingEvent) {\n        cmd.payload = \"\\\"c 0\\\"\";   // Turn off the compressor\n    }\n}\n// Execute scheduled command\nelse if (nextCmd != undefined) {\n    nextNextCmd = context.get(\"nextCmd\");\n    if (nextNextCmd === nextCmd) {\n        context.set(\"nextCmd\", undefined);\n    }\n    cmd.payload = nextCmd;\n}\n// Start\nelse if (fridge > target) {\n    if (sysStatus.inputEnabled === 0 || pingEvent) {\n        cmd.payload = \"\\\"c 11\\\"\";  // Turn on the compressor\n    }\n}\n// Stop\nelse {\n    if (sysStatus.inputEnabled === 1 || pingEvent) {\n        cmd.payload = \"\\\"c 0\\\"\";   // Turn off the compressor\n    }\n    \n}\n\nnode.send([null, battStatus, null]);\nnode.send([null, sensorStatus, null]);\n\n// Only send a command if the previous command has been executed\nif (msgSent === false) {\n    context.set(\"msgSent\", true);\n    return [cmd, null, null];\n}\nelse {\n    return null;\n}\n\n\n",
         "outputs": 3,
         "timeout": 0,
         "noerr": 0,
@@ -7214,20 +7265,6 @@
         ]
     },
     {
-        "id": "aad8bf439cd7b2c3",
-        "type": "subflow:c37eefbf57ce59ee",
-        "z": "fcffa944a0680a42",
-        "name": "",
-        "x": 190,
-        "y": 140,
-        "wires": [
-            [
-                "8af34e21bfc8a377"
-            ],
-            []
-        ]
-    },
-    {
         "id": "1c66410a4fffbe9b",
         "type": "ui-dropdown",
         "z": "fcffa944a0680a42",
@@ -7255,45 +7292,19 @@
             }
         ],
         "payload": "",
-        "topic": "energy",
+        "topic": "fridgeAbsorberMode",
         "topicType": "str",
         "className": "",
         "typeIsComboBox": false,
         "msgTrigger": "onChange",
-        "x": 670,
-        "y": 200,
+        "x": 650,
+        "y": 180,
         "wires": [
             [
-                "7f99aa8a118563bb",
                 "4d642db5f04a62ce",
                 "c48aa761d863d1ea",
-                "a8702dfa02f03390"
-            ]
-        ]
-    },
-    {
-        "id": "8af34e21bfc8a377",
-        "type": "function",
-        "z": "fcffa944a0680a42",
-        "name": "Decode JSON",
-        "func": "\nlet msg1 = {};\nlet msg2 = {};\n\nmsg1.payload = msg.target;\nmsg1.topic   = \"target\";\nmsg2.payload = msg.energy;\nmsg2.topic   = \"energy\";\nmsg2.ignore  = false;\n\nreturn [msg1, msg2];\n",
-        "outputs": 2,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 380,
-        "y": 140,
-        "wires": [
-            [
-                "360e8acd62618140"
-            ],
-            [
-                "1c66410a4fffbe9b",
-                "c48aa761d863d1ea",
                 "a8702dfa02f03390",
-                "4d642db5f04a62ce"
+                "236fdb56f87224ab"
             ]
         ]
     },
@@ -7315,29 +7326,9 @@
         "color": "#717171",
         "wrapText": false,
         "className": "",
-        "x": 640,
+        "x": 220,
         "y": 160,
         "wires": []
-    },
-    {
-        "id": "7f99aa8a118563bb",
-        "type": "function",
-        "z": "fcffa944a0680a42",
-        "name": "Encode JSON",
-        "func": "\nif (msg.topic === \"target\") {\n    context.set(\"target\", msg.payload);\n}\nelse if (msg.topic === \"energy\") {\n    context.set(\"energy\", msg.payload);\n}\n\nlet target = context.get(\"target\");\nlet energy = context.get(\"energy\");\n\nlet json = {};\n\nif (target != undefined && energy != undefined) {\n    json.payload = `{\\\"target\\\": ${target}, \\\"energy\\\": ${energy}}`;\n    return json;\n}\nelse {\n    return null;\n}",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 920,
-        "y": 180,
-        "wires": [
-            [
-                "f3fe901756f76d29"
-            ]
-        ]
     },
     {
         "id": "952f932b5a1e9973",
@@ -7430,12 +7421,1852 @@
         "winHide": false,
         "oldrc": false,
         "name": "",
-        "x": 370,
+        "x": 410,
         "y": 40,
         "wires": [
             [],
             [],
             []
         ]
+    },
+    {
+        "id": "0ffbdf4fdf3d401d",
+        "type": "link in",
+        "z": "fcffa944a0680a42",
+        "name": "Fridge absorber mode",
+        "links": [
+            "5516c054e1990d91"
+        ],
+        "x": 365,
+        "y": 160,
+        "wires": [
+            [
+                "4d642db5f04a62ce",
+                "c48aa761d863d1ea",
+                "1c66410a4fffbe9b",
+                "a8702dfa02f03390",
+                "236fdb56f87224ab"
+            ]
+        ]
+    },
+    {
+        "id": "236fdb56f87224ab",
+        "type": "link out",
+        "z": "fcffa944a0680a42",
+        "name": "Settings",
+        "mode": "link",
+        "links": [
+            "ef7f15d0f953b171"
+        ],
+        "x": 875,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "b8de84a1a12a151c",
+        "type": "link in",
+        "z": "fcffa944a0680a42",
+        "name": "Fridge target temp",
+        "links": [
+            "a31fc4d8f53ef9df"
+        ],
+        "x": 365,
+        "y": 120,
+        "wires": [
+            [
+                "360e8acd62618140"
+            ]
+        ]
+    },
+    {
+        "id": "506010c16d2924c9",
+        "type": "function",
+        "z": "fc670f602d442a02",
+        "name": "Decode JSON",
+        "func": "\nfunction makeMessage(key, defaultValue) {\n    let value = (msg[key] !== undefined) ? msg[key] : defaultValue;\n    return {\n        topic: key,\n        payload: value\n    };\n}\n\n\n\nlet msg1  = makeMessage(\"fridgeLowBattSoC\", 30);\nlet msg2  = makeMessage(\"fridgeBoostTemp\", 30);\nlet msg3  = makeMessage(\"fridgeDefrostMaxTemp\", 23);\nlet msg4  = makeMessage(\"fridgeDefrostTempDec\", 0.5);\nlet msg5  = makeMessage(\"fridgeOpenDoorTempRate\", 0.15);\nlet msg6  = makeMessage(\"fridgeOpenDoorTempInc\", 1);\n\nlet msg7  = makeMessage(\"alarmBattLow\", 20);\nlet msg8  = makeMessage(\"alarmPropaneLow\", 5);\nlet msg9  = makeMessage(\"alarmTempRoomLow\", 5);\nlet msg10 = makeMessage(\"alarmTempRoomHigh\", 35);\nlet msg11 = makeMessage(\"alarmTempFridgeLow\", 1);\nlet msg12 = makeMessage(\"alarmTempFridgeHigh\", 10);\nlet msg13 = makeMessage(\"alarmTempWaterLow\", 5);\nlet msg14 = makeMessage(\"alarmTempCpuHigh\", 70);\nlet msg15 = makeMessage(\"alarmTempBattLow\", 5);\nlet msg16 = makeMessage(\"alarmTempBattHigh\", 30);\n\nlet msg17 = makeMessage(\"offsetTempRoom\", 0);\nlet msg18 = makeMessage(\"offsetTempOutdoor\", 0);\nlet msg19 = makeMessage(\"offsetTempFridge\", 0);\n\nlet msg20 = makeMessage(\"fridgeTargetTemp\", 4);\nlet msg21 = makeMessage(\"fridgeAbsorberMode\", 1)\n\nreturn [msg1, msg2, msg3, msg4, msg5, msg6, msg7, \n        msg8, msg9, msg10, msg11, msg12, msg13, msg14, \n        msg15, msg16, msg17, msg18, msg19, msg20, msg21];\n",
+        "outputs": 21,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 580,
+        "y": 300,
+        "wires": [
+            [
+                "fba0ee1de273b115"
+            ],
+            [
+                "bfaf60179a7a3ec4"
+            ],
+            [
+                "f4b8284e3d3b8839"
+            ],
+            [
+                "1f01216242ce5d9e"
+            ],
+            [
+                "ec9b33a5a52234df"
+            ],
+            [
+                "b34eb0f013bae720"
+            ],
+            [
+                "a7111274ce363101"
+            ],
+            [
+                "81bd5b696c87226f"
+            ],
+            [
+                "82e285326856eed3"
+            ],
+            [
+                "e70b81adcb9602b8"
+            ],
+            [
+                "6d16a816d7642db1"
+            ],
+            [
+                "b8fb2935a811a97a"
+            ],
+            [
+                "8d677cec24d11d93"
+            ],
+            [
+                "860bda5c2a9dd42e"
+            ],
+            [
+                "25987568cb65d787"
+            ],
+            [
+                "a5f6c7a1c4b448ad"
+            ],
+            [
+                "d324d134ed7be272"
+            ],
+            [
+                "fcd70ea12a6311cd"
+            ],
+            [
+                "3f3e3c6195895a6a"
+            ],
+            [
+                "a31fc4d8f53ef9df"
+            ],
+            [
+                "5516c054e1990d91"
+            ]
+        ]
+    },
+    {
+        "id": "80562d015d907ff7",
+        "type": "file in",
+        "z": "fc670f602d442a02",
+        "name": "Read settings file",
+        "filename": "system-settings-file",
+        "filenameType": "env",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "allProps": false,
+        "x": 370,
+        "y": 220,
+        "wires": [
+            [
+                "0bed306d5de73b26"
+            ]
+        ]
+    },
+    {
+        "id": "8d498b6002228937",
+        "type": "inject",
+        "z": "fc670f602d442a02",
+        "name": "Once",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 350,
+        "y": 160,
+        "wires": [
+            [
+                "80562d015d907ff7"
+            ]
+        ]
+    },
+    {
+        "id": "0bed306d5de73b26",
+        "type": "subflow:c37eefbf57ce59ee",
+        "z": "fc670f602d442a02",
+        "name": "",
+        "x": 370,
+        "y": 280,
+        "wires": [
+            [
+                "506010c16d2924c9"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "c2daddd28170cbb5",
+        "type": "function",
+        "z": "fc670f602d442a02",
+        "name": "Encode JSON",
+        "func": "\nglobal.set(msg.topic, msg.payload);\ncontext.set(msg.topic, msg.payload);\n\nlet numMsgs  = 21;\nlet msgCount = context.get(\"msgCount\") || 0;\nmsgCount++;\ncontext.set(\"msgCount\", msgCount);\n\n\nlet output = {};\nlet json   = {};\n\nlet keys = context.keys();\n//keys.sort();\nfor (let i = 0; i < keys.length; i++) {\n    json[keys[i]] = context.get(keys[i]);\n}\n\noutput.payload = JSON.stringify(json, null, 2);\n\nreturn (msgCount >= numMsgs) ? output : null;\n\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1220,
+        "y": 300,
+        "wires": [
+            [
+                "845def41d6e53c7a"
+            ]
+        ]
+    },
+    {
+        "id": "845def41d6e53c7a",
+        "type": "file",
+        "z": "fc670f602d442a02",
+        "name": "Write settings file",
+        "filename": "system-settings-file",
+        "filenameType": "env",
+        "appendNewline": true,
+        "createDir": false,
+        "overwriteFile": "true",
+        "encoding": "none",
+        "x": 1290,
+        "y": 360,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "fba0ee1de273b115",
+        "type": "ui-dropdown",
+        "z": "fc670f602d442a02",
+        "group": "28b10b40908e96b0",
+        "name": "Low battery",
+        "label": "SoC",
+        "tooltip": "",
+        "order": 2,
+        "width": 3,
+        "height": "",
+        "passthru": true,
+        "multiple": false,
+        "chips": false,
+        "clearable": false,
+        "options": [
+            {
+                "label": "OFF",
+                "value": -1,
+                "type": "num"
+            },
+            {
+                "label": "10 %",
+                "value": 10,
+                "type": "num"
+            },
+            {
+                "label": "15 %",
+                "value": 15,
+                "type": "num"
+            },
+            {
+                "label": "20 %",
+                "value": 20,
+                "type": "num"
+            },
+            {
+                "label": "25 %",
+                "value": 25,
+                "type": "num"
+            },
+            {
+                "label": "30 %",
+                "value": 30,
+                "type": "num"
+            }
+        ],
+        "payload": "",
+        "topic": "topic",
+        "topicType": "msg",
+        "className": "",
+        "typeIsComboBox": false,
+        "msgTrigger": "onChange",
+        "x": 870,
+        "y": 80,
+        "wires": [
+            [
+                "c2daddd28170cbb5"
+            ]
+        ]
+    },
+    {
+        "id": "18b4c5e32e4b3ecb",
+        "type": "ui-text",
+        "z": "fc670f602d442a02",
+        "group": "28b10b40908e96b0",
+        "order": 1,
+        "width": "3",
+        "height": "1",
+        "name": "",
+        "label": "Low battery",
+        "format": "{{msg.payload}}",
+        "layout": "row-spread",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#717171",
+        "wrapText": false,
+        "className": "",
+        "x": 90,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "e99ba0ba08e83c66",
+        "type": "catch",
+        "z": "fc670f602d442a02",
+        "name": "File not found",
+        "scope": [
+            "80562d015d907ff7"
+        ],
+        "uncaught": false,
+        "x": 370,
+        "y": 320,
+        "wires": [
+            [
+                "506010c16d2924c9"
+            ]
+        ]
+    },
+    {
+        "id": "151a9ae4fdcbf981",
+        "type": "ui-text",
+        "z": "fc670f602d442a02",
+        "group": "28b10b40908e96b0",
+        "order": 3,
+        "width": "3",
+        "height": "1",
+        "name": "",
+        "label": "Boost temp",
+        "format": "{{msg.payload}}",
+        "layout": "row-spread",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#717171",
+        "wrapText": false,
+        "className": "",
+        "x": 90,
+        "y": 120,
+        "wires": []
+    },
+    {
+        "id": "bfaf60179a7a3ec4",
+        "type": "ui-dropdown",
+        "z": "fc670f602d442a02",
+        "group": "28b10b40908e96b0",
+        "name": "Boost temp",
+        "label": "Temp",
+        "tooltip": "",
+        "order": 4,
+        "width": 3,
+        "height": "",
+        "passthru": true,
+        "multiple": false,
+        "chips": false,
+        "clearable": false,
+        "options": [
+            {
+                "label": "OFF",
+                "value": 100,
+                "type": "num"
+            },
+            {
+                "label": "27 °C",
+                "value": 27,
+                "type": "num"
+            },
+            {
+                "label": "28 °C",
+                "value": 28,
+                "type": "num"
+            },
+            {
+                "label": "29 °C",
+                "value": 29,
+                "type": "num"
+            },
+            {
+                "label": "30 °C",
+                "value": 30,
+                "type": "num"
+            },
+            {
+                "label": "31 °C",
+                "value": 31,
+                "type": "num"
+            },
+            {
+                "label": "32 °C",
+                "value": 32,
+                "type": "num"
+            },
+            {
+                "label": "33 °C",
+                "value": 33,
+                "type": "num"
+            },
+            {
+                "label": "34 °C",
+                "value": 34,
+                "type": "num"
+            },
+            {
+                "label": "35 °C",
+                "value": 35,
+                "type": "num"
+            }
+        ],
+        "payload": "",
+        "topic": "topic",
+        "topicType": "msg",
+        "className": "",
+        "typeIsComboBox": false,
+        "msgTrigger": "onChange",
+        "x": 870,
+        "y": 120,
+        "wires": [
+            [
+                "c2daddd28170cbb5"
+            ]
+        ]
+    },
+    {
+        "id": "a1d010ded60a78c2",
+        "type": "ui-text",
+        "z": "fc670f602d442a02",
+        "group": "28b10b40908e96b0",
+        "order": 5,
+        "width": "3",
+        "height": "1",
+        "name": "",
+        "label": "Max defrost temp",
+        "format": "{{msg.payload}}",
+        "layout": "row-spread",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#717171",
+        "wrapText": false,
+        "className": "",
+        "x": 110,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "f4b8284e3d3b8839",
+        "type": "ui-dropdown",
+        "z": "fc670f602d442a02",
+        "group": "28b10b40908e96b0",
+        "name": "Max defrost temp",
+        "label": "Temp",
+        "tooltip": "",
+        "order": 6,
+        "width": 3,
+        "height": "",
+        "passthru": true,
+        "multiple": false,
+        "chips": false,
+        "clearable": false,
+        "options": [
+            {
+                "label": "OFF",
+                "value": 100,
+                "type": "num"
+            },
+            {
+                "label": "20 °C",
+                "value": 20,
+                "type": "num"
+            },
+            {
+                "label": "21 °C",
+                "value": 21,
+                "type": "num"
+            },
+            {
+                "label": "22 °C",
+                "value": 22,
+                "type": "num"
+            },
+            {
+                "label": "23 °C",
+                "value": 23,
+                "type": "num"
+            },
+            {
+                "label": "24 °C",
+                "value": 24,
+                "type": "num"
+            },
+            {
+                "label": "25 °C",
+                "value": 25,
+                "type": "num"
+            }
+        ],
+        "payload": "",
+        "topic": "topic",
+        "topicType": "msg",
+        "className": "",
+        "typeIsComboBox": false,
+        "msgTrigger": "onChange",
+        "x": 890,
+        "y": 160,
+        "wires": [
+            [
+                "c2daddd28170cbb5"
+            ]
+        ]
+    },
+    {
+        "id": "e8b0af4b196a7a41",
+        "type": "ui-text",
+        "z": "fc670f602d442a02",
+        "group": "28b10b40908e96b0",
+        "order": 7,
+        "width": "3",
+        "height": "1",
+        "name": "",
+        "label": "Defrost temp decr",
+        "format": "{{msg.payload}}",
+        "layout": "row-spread",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#717171",
+        "wrapText": false,
+        "className": "",
+        "x": 110,
+        "y": 200,
+        "wires": []
+    },
+    {
+        "id": "1f01216242ce5d9e",
+        "type": "ui-dropdown",
+        "z": "fc670f602d442a02",
+        "group": "28b10b40908e96b0",
+        "name": "Defrost temp decr",
+        "label": "Temp",
+        "tooltip": "",
+        "order": 8,
+        "width": 3,
+        "height": "",
+        "passthru": true,
+        "multiple": false,
+        "chips": false,
+        "clearable": false,
+        "options": [
+            {
+                "label": "OFF",
+                "value": 0,
+                "type": "num"
+            },
+            {
+                "label": "-0.5 °C",
+                "value": 0.5,
+                "type": "num"
+            },
+            {
+                "label": "-0.8 °C",
+                "value": 0.8,
+                "type": "num"
+            },
+            {
+                "label": "-1 °C",
+                "value": 1,
+                "type": "num"
+            }
+        ],
+        "payload": "",
+        "topic": "topic",
+        "topicType": "msg",
+        "className": "",
+        "typeIsComboBox": false,
+        "msgTrigger": "onChange",
+        "x": 890,
+        "y": 200,
+        "wires": [
+            [
+                "c2daddd28170cbb5"
+            ]
+        ]
+    },
+    {
+        "id": "a4d0ddc1c8a5c8dc",
+        "type": "ui-text",
+        "z": "fc670f602d442a02",
+        "group": "28b10b40908e96b0",
+        "order": 9,
+        "width": "3",
+        "height": "1",
+        "name": "",
+        "label": "ODD sensitivity",
+        "format": "{{msg.payload}}",
+        "layout": "row-spread",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#717171",
+        "wrapText": false,
+        "className": "",
+        "x": 100,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "ec9b33a5a52234df",
+        "type": "ui-dropdown",
+        "z": "fc670f602d442a02",
+        "group": "28b10b40908e96b0",
+        "name": "ODD sensitivity",
+        "label": "Sensitivity",
+        "tooltip": "",
+        "order": 10,
+        "width": 3,
+        "height": "",
+        "passthru": true,
+        "multiple": false,
+        "chips": false,
+        "clearable": false,
+        "options": [
+            {
+                "label": "OFF",
+                "value": 100,
+                "type": "num"
+            },
+            {
+                "label": "LOW",
+                "value": 0.2,
+                "type": "num"
+            },
+            {
+                "label": "MED",
+                "value": 0.15,
+                "type": "num"
+            },
+            {
+                "label": "HIGH",
+                "value": 0.1,
+                "type": "num"
+            }
+        ],
+        "payload": "",
+        "topic": "topic",
+        "topicType": "msg",
+        "className": "",
+        "typeIsComboBox": false,
+        "msgTrigger": "onChange",
+        "x": 880,
+        "y": 240,
+        "wires": [
+            [
+                "c2daddd28170cbb5"
+            ]
+        ]
+    },
+    {
+        "id": "a86cc2cc4fef9255",
+        "type": "ui-text",
+        "z": "fc670f602d442a02",
+        "group": "28b10b40908e96b0",
+        "order": 11,
+        "width": "3",
+        "height": "1",
+        "name": "",
+        "label": "ODD trigger temp",
+        "format": "{{msg.payload}}",
+        "layout": "row-spread",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#717171",
+        "wrapText": false,
+        "className": "",
+        "x": 110,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "b34eb0f013bae720",
+        "type": "ui-dropdown",
+        "z": "fc670f602d442a02",
+        "group": "28b10b40908e96b0",
+        "name": "ODD trigger temp",
+        "label": "Temp",
+        "tooltip": "",
+        "order": 12,
+        "width": 3,
+        "height": null,
+        "passthru": true,
+        "multiple": false,
+        "chips": false,
+        "clearable": false,
+        "options": [
+            {
+                "label": "OFF",
+                "value": 100,
+                "type": "num"
+            },
+            {
+                "label": "+1 °C",
+                "value": 1,
+                "type": "num"
+            },
+            {
+                "label": "+1.5 °C",
+                "value": 1.5,
+                "type": "num"
+            },
+            {
+                "label": "+2 °C",
+                "value": 2,
+                "type": "num"
+            }
+        ],
+        "payload": "",
+        "topic": "topic",
+        "topicType": "msg",
+        "className": "",
+        "typeIsComboBox": false,
+        "msgTrigger": "onChange",
+        "x": 890,
+        "y": 280,
+        "wires": [
+            [
+                "c2daddd28170cbb5"
+            ]
+        ]
+    },
+    {
+        "id": "347a2406cb5b4339",
+        "type": "ui-text",
+        "z": "fc670f602d442a02",
+        "group": "87a251b1b078a4c3",
+        "order": 1,
+        "width": "3",
+        "height": "1",
+        "name": "",
+        "label": "Low battery",
+        "format": "{{msg.payload}}",
+        "layout": "row-spread",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#717171",
+        "wrapText": false,
+        "className": "",
+        "x": 90,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "a7111274ce363101",
+        "type": "ui-dropdown",
+        "z": "fc670f602d442a02",
+        "group": "87a251b1b078a4c3",
+        "name": "Low battery",
+        "label": "SoC",
+        "tooltip": "",
+        "order": 2,
+        "width": 3,
+        "height": "",
+        "passthru": true,
+        "multiple": false,
+        "chips": false,
+        "clearable": false,
+        "options": [
+            {
+                "label": "OFF",
+                "value": -1,
+                "type": "num"
+            },
+            {
+                "label": "10 %",
+                "value": 10,
+                "type": "num"
+            },
+            {
+                "label": "15 %",
+                "value": 15,
+                "type": "num"
+            },
+            {
+                "label": "20 %",
+                "value": 20,
+                "type": "num"
+            },
+            {
+                "label": "25 %",
+                "value": 25,
+                "type": "num"
+            },
+            {
+                "label": "30 %",
+                "value": 30,
+                "type": "num"
+            }
+        ],
+        "payload": "",
+        "topic": "topic",
+        "topicType": "msg",
+        "className": "",
+        "typeIsComboBox": false,
+        "msgTrigger": "onChange",
+        "x": 870,
+        "y": 340,
+        "wires": [
+            [
+                "c2daddd28170cbb5"
+            ]
+        ]
+    },
+    {
+        "id": "87614e276e608079",
+        "type": "ui-text",
+        "z": "fc670f602d442a02",
+        "group": "87a251b1b078a4c3",
+        "order": 3,
+        "width": "3",
+        "height": "1",
+        "name": "",
+        "label": "Low propane",
+        "format": "{{msg.payload}}",
+        "layout": "row-spread",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#717171",
+        "wrapText": false,
+        "className": "",
+        "x": 90,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "id": "81bd5b696c87226f",
+        "type": "ui-dropdown",
+        "z": "fc670f602d442a02",
+        "group": "87a251b1b078a4c3",
+        "name": "Low propane",
+        "label": "Level",
+        "tooltip": "",
+        "order": 4,
+        "width": 3,
+        "height": "",
+        "passthru": true,
+        "multiple": false,
+        "chips": false,
+        "clearable": false,
+        "options": [
+            {
+                "label": "OFF",
+                "value": -1,
+                "type": "num"
+            },
+            {
+                "label": "5 %",
+                "value": 5,
+                "type": "num"
+            },
+            {
+                "label": "10 %",
+                "value": 10,
+                "type": "num"
+            },
+            {
+                "label": "15 %",
+                "value": 15,
+                "type": "num"
+            },
+            {
+                "label": "20 %",
+                "value": 20,
+                "type": "num"
+            }
+        ],
+        "payload": "",
+        "topic": "topic",
+        "topicType": "msg",
+        "className": "",
+        "typeIsComboBox": false,
+        "msgTrigger": "onChange",
+        "x": 870,
+        "y": 380,
+        "wires": [
+            [
+                "c2daddd28170cbb5"
+            ]
+        ]
+    },
+    {
+        "id": "5123c94abd63d6d6",
+        "type": "ui-text",
+        "z": "fc670f602d442a02",
+        "group": "87a251b1b078a4c3",
+        "order": 9,
+        "width": "3",
+        "height": "1",
+        "name": "",
+        "label": "Low room temp",
+        "format": "{{msg.payload}}",
+        "layout": "row-spread",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#717171",
+        "wrapText": false,
+        "className": "",
+        "x": 100,
+        "y": 420,
+        "wires": []
+    },
+    {
+        "id": "82e285326856eed3",
+        "type": "ui-dropdown",
+        "z": "fc670f602d442a02",
+        "group": "87a251b1b078a4c3",
+        "name": "Low room temp",
+        "label": "Temp",
+        "tooltip": "",
+        "order": 10,
+        "width": 3,
+        "height": "",
+        "passthru": true,
+        "multiple": false,
+        "chips": false,
+        "clearable": false,
+        "options": [
+            {
+                "label": "OFF",
+                "value": -100,
+                "type": "num"
+            },
+            {
+                "label": "1 °C",
+                "value": 1,
+                "type": "num"
+            },
+            {
+                "label": "3 °C",
+                "value": 3,
+                "type": "num"
+            },
+            {
+                "label": "5 °C",
+                "value": 5,
+                "type": "num"
+            }
+        ],
+        "payload": "",
+        "topic": "topic",
+        "topicType": "msg",
+        "className": "",
+        "typeIsComboBox": false,
+        "msgTrigger": "onChange",
+        "x": 880,
+        "y": 420,
+        "wires": [
+            [
+                "c2daddd28170cbb5"
+            ]
+        ]
+    },
+    {
+        "id": "d6c1b877c8831b43",
+        "type": "ui-text",
+        "z": "fc670f602d442a02",
+        "group": "87a251b1b078a4c3",
+        "order": 11,
+        "width": "3",
+        "height": "1",
+        "name": "",
+        "label": "High room temp",
+        "format": "{{msg.payload}}",
+        "layout": "row-spread",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#717171",
+        "wrapText": false,
+        "className": "",
+        "x": 100,
+        "y": 460,
+        "wires": []
+    },
+    {
+        "id": "e70b81adcb9602b8",
+        "type": "ui-dropdown",
+        "z": "fc670f602d442a02",
+        "group": "87a251b1b078a4c3",
+        "name": "High room temp",
+        "label": "Temp",
+        "tooltip": "",
+        "order": 12,
+        "width": 3,
+        "height": "",
+        "passthru": true,
+        "multiple": false,
+        "chips": false,
+        "clearable": false,
+        "options": [
+            {
+                "label": "OFF",
+                "value": 100,
+                "type": "num"
+            },
+            {
+                "label": "30 °C",
+                "value": 30,
+                "type": "num"
+            },
+            {
+                "label": "35 °C",
+                "value": 35,
+                "type": "num"
+            },
+            {
+                "label": "40 °C",
+                "value": 40,
+                "type": "num"
+            }
+        ],
+        "payload": "",
+        "topic": "topic",
+        "topicType": "msg",
+        "className": "",
+        "typeIsComboBox": false,
+        "msgTrigger": "onChange",
+        "x": 880,
+        "y": 460,
+        "wires": [
+            [
+                "c2daddd28170cbb5"
+            ]
+        ]
+    },
+    {
+        "id": "8186a35e8b5e6e89",
+        "type": "ui-text",
+        "z": "fc670f602d442a02",
+        "group": "87a251b1b078a4c3",
+        "order": 13,
+        "width": "3",
+        "height": "1",
+        "name": "",
+        "label": "Low fridge temp",
+        "format": "{{msg.payload}}",
+        "layout": "row-spread",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#717171",
+        "wrapText": false,
+        "className": "",
+        "x": 100,
+        "y": 500,
+        "wires": []
+    },
+    {
+        "id": "9f6dd093e80efbed",
+        "type": "ui-text",
+        "z": "fc670f602d442a02",
+        "group": "87a251b1b078a4c3",
+        "order": 15,
+        "width": "3",
+        "height": "1",
+        "name": "",
+        "label": "High fridge temp",
+        "format": "{{msg.payload}}",
+        "layout": "row-spread",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#717171",
+        "wrapText": false,
+        "className": "",
+        "x": 110,
+        "y": 540,
+        "wires": []
+    },
+    {
+        "id": "6d16a816d7642db1",
+        "type": "ui-dropdown",
+        "z": "fc670f602d442a02",
+        "group": "87a251b1b078a4c3",
+        "name": "Low fridge temp",
+        "label": "Temp",
+        "tooltip": "",
+        "order": 14,
+        "width": 3,
+        "height": "",
+        "passthru": true,
+        "multiple": false,
+        "chips": false,
+        "clearable": false,
+        "options": [
+            {
+                "label": "OFF",
+                "value": -100,
+                "type": "num"
+            },
+            {
+                "label": "0 °C",
+                "value": 0,
+                "type": "num"
+            },
+            {
+                "label": "1 °C",
+                "value": 1,
+                "type": "num"
+            }
+        ],
+        "payload": "",
+        "topic": "topic",
+        "topicType": "msg",
+        "className": "",
+        "typeIsComboBox": false,
+        "msgTrigger": "onChange",
+        "x": 880,
+        "y": 500,
+        "wires": [
+            [
+                "c2daddd28170cbb5"
+            ]
+        ]
+    },
+    {
+        "id": "b8fb2935a811a97a",
+        "type": "ui-dropdown",
+        "z": "fc670f602d442a02",
+        "group": "87a251b1b078a4c3",
+        "name": "High fridge temp",
+        "label": "Temp",
+        "tooltip": "",
+        "order": 16,
+        "width": 3,
+        "height": "",
+        "passthru": true,
+        "multiple": false,
+        "chips": false,
+        "clearable": false,
+        "options": [
+            {
+                "label": "OFF",
+                "value": 100,
+                "type": "num"
+            },
+            {
+                "label": "7 °C",
+                "value": 7,
+                "type": "num"
+            },
+            {
+                "label": "10 °C",
+                "value": 10,
+                "type": "num"
+            }
+        ],
+        "payload": "",
+        "topic": "topic",
+        "topicType": "msg",
+        "className": "",
+        "typeIsComboBox": false,
+        "msgTrigger": "onChange",
+        "x": 890,
+        "y": 540,
+        "wires": [
+            [
+                "c2daddd28170cbb5"
+            ]
+        ]
+    },
+    {
+        "id": "22210b7502b7c1a4",
+        "type": "ui-text",
+        "z": "fc670f602d442a02",
+        "group": "87a251b1b078a4c3",
+        "order": 17,
+        "width": "3",
+        "height": "1",
+        "name": "",
+        "label": "Low water temp",
+        "format": "{{msg.payload}}",
+        "layout": "row-spread",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#717171",
+        "wrapText": false,
+        "className": "",
+        "x": 100,
+        "y": 580,
+        "wires": []
+    },
+    {
+        "id": "8d677cec24d11d93",
+        "type": "ui-dropdown",
+        "z": "fc670f602d442a02",
+        "group": "87a251b1b078a4c3",
+        "name": "Low water temp",
+        "label": "Temp",
+        "tooltip": "",
+        "order": 18,
+        "width": 3,
+        "height": "",
+        "passthru": true,
+        "multiple": false,
+        "chips": false,
+        "clearable": false,
+        "options": [
+            {
+                "label": "OFF",
+                "value": -100,
+                "type": "num"
+            },
+            {
+                "label": "1 °C",
+                "value": 1,
+                "type": "num"
+            },
+            {
+                "label": "3 °C",
+                "value": 3,
+                "type": "num"
+            },
+            {
+                "label": "5 °C",
+                "value": 5,
+                "type": "num"
+            }
+        ],
+        "payload": "",
+        "topic": "topic",
+        "topicType": "msg",
+        "className": "",
+        "typeIsComboBox": false,
+        "msgTrigger": "onChange",
+        "x": 880,
+        "y": 580,
+        "wires": [
+            [
+                "c2daddd28170cbb5"
+            ]
+        ]
+    },
+    {
+        "id": "a19269c6fc555be2",
+        "type": "ui-text",
+        "z": "fc670f602d442a02",
+        "group": "87a251b1b078a4c3",
+        "order": 19,
+        "width": "3",
+        "height": "1",
+        "name": "",
+        "label": "High CPU temp",
+        "format": "{{msg.payload}}",
+        "layout": "row-spread",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#717171",
+        "wrapText": false,
+        "className": "",
+        "x": 100,
+        "y": 620,
+        "wires": []
+    },
+    {
+        "id": "860bda5c2a9dd42e",
+        "type": "ui-dropdown",
+        "z": "fc670f602d442a02",
+        "group": "87a251b1b078a4c3",
+        "name": "High CPU temp",
+        "label": "Temp",
+        "tooltip": "",
+        "order": 20,
+        "width": 3,
+        "height": "",
+        "passthru": true,
+        "multiple": false,
+        "chips": false,
+        "clearable": false,
+        "options": [
+            {
+                "label": "OFF",
+                "value": 1000,
+                "type": "num"
+            },
+            {
+                "label": "70 °C",
+                "value": 70,
+                "type": "num"
+            },
+            {
+                "label": "75 °C",
+                "value": 75,
+                "type": "num"
+            },
+            {
+                "label": "80 °C",
+                "value": 80,
+                "type": "num"
+            }
+        ],
+        "payload": "",
+        "topic": "topic",
+        "topicType": "msg",
+        "className": "",
+        "typeIsComboBox": false,
+        "msgTrigger": "onChange",
+        "x": 880,
+        "y": 620,
+        "wires": [
+            [
+                "c2daddd28170cbb5"
+            ]
+        ]
+    },
+    {
+        "id": "37d2c5cb64e6a204",
+        "type": "ui-text",
+        "z": "fc670f602d442a02",
+        "group": "87a251b1b078a4c3",
+        "order": 5,
+        "width": "3",
+        "height": "1",
+        "name": "",
+        "label": "Low battery temp",
+        "format": "{{msg.payload}}",
+        "layout": "row-spread",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#717171",
+        "wrapText": false,
+        "className": "",
+        "x": 110,
+        "y": 660,
+        "wires": []
+    },
+    {
+        "id": "55ba3760bf3146e8",
+        "type": "ui-text",
+        "z": "fc670f602d442a02",
+        "group": "87a251b1b078a4c3",
+        "order": 7,
+        "width": "3",
+        "height": "1",
+        "name": "",
+        "label": "High battery temp",
+        "format": "{{msg.payload}}",
+        "layout": "row-spread",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#717171",
+        "wrapText": false,
+        "className": "",
+        "x": 110,
+        "y": 700,
+        "wires": []
+    },
+    {
+        "id": "a5f6c7a1c4b448ad",
+        "type": "ui-dropdown",
+        "z": "fc670f602d442a02",
+        "group": "87a251b1b078a4c3",
+        "name": "High battery temp",
+        "label": "Temp",
+        "tooltip": "",
+        "order": 8,
+        "width": 3,
+        "height": "",
+        "passthru": true,
+        "multiple": false,
+        "chips": false,
+        "clearable": false,
+        "options": [
+            {
+                "label": "OFF",
+                "value": 100,
+                "type": "num"
+            },
+            {
+                "label": "30 °C",
+                "value": 30,
+                "type": "num"
+            },
+            {
+                "label": "35 °C",
+                "value": 35,
+                "type": "num"
+            },
+            {
+                "label": "40 °C",
+                "value": 40,
+                "type": "num"
+            }
+        ],
+        "payload": "",
+        "topic": "topic",
+        "topicType": "msg",
+        "className": "",
+        "typeIsComboBox": false,
+        "msgTrigger": "onChange",
+        "x": 890,
+        "y": 700,
+        "wires": [
+            [
+                "c2daddd28170cbb5"
+            ]
+        ]
+    },
+    {
+        "id": "25987568cb65d787",
+        "type": "ui-dropdown",
+        "z": "fc670f602d442a02",
+        "group": "87a251b1b078a4c3",
+        "name": "Low battery temp",
+        "label": "Temp",
+        "tooltip": "",
+        "order": 6,
+        "width": 3,
+        "height": "",
+        "passthru": true,
+        "multiple": false,
+        "chips": false,
+        "clearable": false,
+        "options": [
+            {
+                "label": "OFF",
+                "value": -100,
+                "type": "num"
+            },
+            {
+                "label": "1 °C",
+                "value": 1,
+                "type": "num"
+            },
+            {
+                "label": "3 °C",
+                "value": 3,
+                "type": "num"
+            },
+            {
+                "label": "5 °C",
+                "value": 5,
+                "type": "num"
+            }
+        ],
+        "payload": "",
+        "topic": "topic",
+        "topicType": "msg",
+        "className": "",
+        "typeIsComboBox": false,
+        "msgTrigger": "onChange",
+        "x": 890,
+        "y": 660,
+        "wires": [
+            [
+                "c2daddd28170cbb5"
+            ]
+        ]
+    },
+    {
+        "id": "7d5ec36ed650166a",
+        "type": "ui-text",
+        "z": "fc670f602d442a02",
+        "group": "7a52027f8ab130e8",
+        "order": 1,
+        "width": "3",
+        "height": "1",
+        "name": "",
+        "label": "Room temp",
+        "format": "{{msg.payload}}",
+        "layout": "row-spread",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#717171",
+        "wrapText": false,
+        "className": "",
+        "x": 90,
+        "y": 760,
+        "wires": []
+    },
+    {
+        "id": "d324d134ed7be272",
+        "type": "ui-dropdown",
+        "z": "fc670f602d442a02",
+        "group": "7a52027f8ab130e8",
+        "name": "Room temp",
+        "label": "Offset",
+        "tooltip": "",
+        "order": 2,
+        "width": 3,
+        "height": "",
+        "passthru": true,
+        "multiple": false,
+        "chips": false,
+        "clearable": false,
+        "options": [
+            {
+                "label": "-0.5 °C",
+                "value": -0.5,
+                "type": "num"
+            },
+            {
+                "label": "-0.4 °C",
+                "value": -0.4,
+                "type": "num"
+            },
+            {
+                "label": "-0.3 °C",
+                "value": -0.3,
+                "type": "num"
+            },
+            {
+                "label": "-0.2 °C",
+                "value": -0.2,
+                "type": "num"
+            },
+            {
+                "label": "-0.1 °C",
+                "value": -0.1,
+                "type": "num"
+            },
+            {
+                "label": "0 °C",
+                "value": 0,
+                "type": "num"
+            },
+            {
+                "label": "0.1 °C",
+                "value": 0.1,
+                "type": "num"
+            },
+            {
+                "label": "0.2 °C",
+                "value": 0.2,
+                "type": "num"
+            },
+            {
+                "label": "0.3 °C",
+                "value": 0.3,
+                "type": "num"
+            },
+            {
+                "label": "0.4 °C",
+                "value": 0.4,
+                "type": "num"
+            },
+            {
+                "label": "0.5 °C",
+                "value": 0.5,
+                "type": "num"
+            }
+        ],
+        "payload": "",
+        "topic": "topic",
+        "topicType": "msg",
+        "className": "",
+        "typeIsComboBox": false,
+        "msgTrigger": "onChange",
+        "x": 870,
+        "y": 760,
+        "wires": [
+            [
+                "c2daddd28170cbb5"
+            ]
+        ]
+    },
+    {
+        "id": "92b7ed45b9d16c2d",
+        "type": "ui-text",
+        "z": "fc670f602d442a02",
+        "group": "7a52027f8ab130e8",
+        "order": 3,
+        "width": "3",
+        "height": "1",
+        "name": "",
+        "label": "Outdoor temp",
+        "format": "{{msg.payload}}",
+        "layout": "row-spread",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#717171",
+        "wrapText": false,
+        "className": "",
+        "x": 100,
+        "y": 800,
+        "wires": []
+    },
+    {
+        "id": "fcd70ea12a6311cd",
+        "type": "ui-dropdown",
+        "z": "fc670f602d442a02",
+        "group": "7a52027f8ab130e8",
+        "name": "Outdoor temp",
+        "label": "Offset",
+        "tooltip": "",
+        "order": 4,
+        "width": 3,
+        "height": "",
+        "passthru": true,
+        "multiple": false,
+        "chips": false,
+        "clearable": false,
+        "options": [
+            {
+                "label": "-0.5 °C",
+                "value": -0.5,
+                "type": "num"
+            },
+            {
+                "label": "-0.4 °C",
+                "value": -0.4,
+                "type": "num"
+            },
+            {
+                "label": "-0.3 °C",
+                "value": -0.3,
+                "type": "num"
+            },
+            {
+                "label": "-0.2 °C",
+                "value": -0.2,
+                "type": "num"
+            },
+            {
+                "label": "-0.1 °C",
+                "value": -0.1,
+                "type": "num"
+            },
+            {
+                "label": "0 °C",
+                "value": 0,
+                "type": "num"
+            },
+            {
+                "label": "0.1 °C",
+                "value": 0.1,
+                "type": "num"
+            },
+            {
+                "label": "0.2 °C",
+                "value": 0.2,
+                "type": "num"
+            },
+            {
+                "label": "0.3 °C",
+                "value": 0.3,
+                "type": "num"
+            },
+            {
+                "label": "0.4 °C",
+                "value": 0.4,
+                "type": "num"
+            },
+            {
+                "label": "0.5 °C",
+                "value": 0.5,
+                "type": "num"
+            }
+        ],
+        "payload": "",
+        "topic": "topic",
+        "topicType": "msg",
+        "className": "",
+        "typeIsComboBox": false,
+        "msgTrigger": "onChange",
+        "x": 880,
+        "y": 800,
+        "wires": [
+            [
+                "c2daddd28170cbb5"
+            ]
+        ]
+    },
+    {
+        "id": "236ffef52d62e8b8",
+        "type": "ui-text",
+        "z": "fc670f602d442a02",
+        "group": "7a52027f8ab130e8",
+        "order": 5,
+        "width": "3",
+        "height": "1",
+        "name": "",
+        "label": "Fridge temp",
+        "format": "{{msg.payload}}",
+        "layout": "row-spread",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#717171",
+        "wrapText": false,
+        "className": "",
+        "x": 90,
+        "y": 840,
+        "wires": []
+    },
+    {
+        "id": "3f3e3c6195895a6a",
+        "type": "ui-dropdown",
+        "z": "fc670f602d442a02",
+        "group": "7a52027f8ab130e8",
+        "name": "Fridge temp",
+        "label": "Offset",
+        "tooltip": "",
+        "order": 6,
+        "width": 3,
+        "height": "",
+        "passthru": true,
+        "multiple": false,
+        "chips": false,
+        "clearable": false,
+        "options": [
+            {
+                "label": "-0.5 °C",
+                "value": -0.5,
+                "type": "num"
+            },
+            {
+                "label": "-0.4 °C",
+                "value": -0.4,
+                "type": "num"
+            },
+            {
+                "label": "-0.3 °C",
+                "value": -0.3,
+                "type": "num"
+            },
+            {
+                "label": "-0.2 °C",
+                "value": -0.2,
+                "type": "num"
+            },
+            {
+                "label": "-0.1 °C",
+                "value": -0.1,
+                "type": "num"
+            },
+            {
+                "label": "0 °C",
+                "value": 0,
+                "type": "num"
+            },
+            {
+                "label": "0.1 °C",
+                "value": 0.1,
+                "type": "num"
+            },
+            {
+                "label": "0.2 °C",
+                "value": 0.2,
+                "type": "num"
+            },
+            {
+                "label": "0.3 °C",
+                "value": 0.3,
+                "type": "num"
+            },
+            {
+                "label": "0.4 °C",
+                "value": 0.4,
+                "type": "num"
+            },
+            {
+                "label": "0.5 °C",
+                "value": 0.5,
+                "type": "num"
+            }
+        ],
+        "payload": "",
+        "topic": "topic",
+        "topicType": "msg",
+        "className": "",
+        "typeIsComboBox": false,
+        "msgTrigger": "onChange",
+        "x": 870,
+        "y": 840,
+        "wires": [
+            [
+                "c2daddd28170cbb5"
+            ]
+        ]
+    },
+    {
+        "id": "ef7f15d0f953b171",
+        "type": "link in",
+        "z": "fc670f602d442a02",
+        "name": "Settings",
+        "links": [
+            "236fdb56f87224ab"
+        ],
+        "x": 1165,
+        "y": 240,
+        "wires": [
+            [
+                "c2daddd28170cbb5"
+            ]
+        ]
+    },
+    {
+        "id": "a31fc4d8f53ef9df",
+        "type": "link out",
+        "z": "fc670f602d442a02",
+        "name": "Fridge target temp",
+        "mode": "link",
+        "links": [
+            "b8de84a1a12a151c"
+        ],
+        "x": 815,
+        "y": 900,
+        "wires": []
+    },
+    {
+        "id": "5516c054e1990d91",
+        "type": "link out",
+        "z": "fc670f602d442a02",
+        "name": "Fridge absorber mode",
+        "mode": "link",
+        "links": [
+            "0ffbdf4fdf3d401d"
+        ],
+        "x": 815,
+        "y": 940,
+        "wires": []
     }
 ]
