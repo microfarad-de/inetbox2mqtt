@@ -948,7 +948,7 @@
         "group": "87a251b1b078a4c3",
         "name": "spacer",
         "tooltip": "",
-        "order": 21,
+        "order": 22,
         "width": "6",
         "height": "1",
         "className": ""
@@ -7451,8 +7451,8 @@
         "type": "function",
         "z": "fc670f602d442a02",
         "name": "DecodeJSON",
-        "func": "\nlet json = msg.payload;\n\nfunction makeMessage(key, defaultValue) {\n    let value = (json[key] !== undefined) ? json[key] : defaultValue;\n    return {\n        topic: key,\n        payload: value\n    };\n}\n\n\n\nlet msg1  = makeMessage(\"fridgeLowBattSoC\", 30);\nlet msg2  = makeMessage(\"fridgeBoostTemp\", 30);\nlet msg3  = makeMessage(\"fridgeDefrostMaxTemp\", 23);\nlet msg4  = makeMessage(\"fridgeDefrostTempDec\", 0.5);\nlet msg5  = makeMessage(\"fridgeOpenDoorTempRate\", 0.15);\nlet msg6  = makeMessage(\"fridgeOpenDoorTempInc\", 1);\n\nlet msg7  = makeMessage(\"alarmBattLow\", 20);\nlet msg8  = makeMessage(\"alarmPropaneLow\", 5);\nlet msg9  = makeMessage(\"alarmTempRoomLow\", 5);\nlet msg10 = makeMessage(\"alarmTempRoomHigh\", 35);\nlet msg11 = makeMessage(\"alarmTempFridgeLow\", 1);\nlet msg12 = makeMessage(\"alarmTempFridgeHigh\", 10);\nlet msg13 = makeMessage(\"alarmTempWaterLow\", 5);\nlet msg14 = makeMessage(\"alarmTempCpuHigh\", 70);\nlet msg15 = makeMessage(\"alarmTempBattLow\", 5);\nlet msg16 = makeMessage(\"alarmTempBattHigh\", 30);\n\nlet msg17 = makeMessage(\"offsetTempRoom\", 0);\nlet msg18 = makeMessage(\"offsetTempOutdoor\", 0);\nlet msg19 = makeMessage(\"offsetTempFridge\", 0);\n\nlet msg20 = makeMessage(\"fridgeTargetTemp\", 4);\nlet msg21 = makeMessage(\"fridgeAbsorberMode\", 1)\n\nreturn [msg1, msg2, msg3, msg4, msg5, msg6, msg7, \n        msg8, msg9, msg10, msg11, msg12, msg13, msg14, \n        msg15, msg16, msg17, msg18, msg19, msg20, msg21];\n",
-        "outputs": 21,
+        "func": "\nlet json = msg.payload;\n\nfunction makeMessage(key, defaultValue) {\n    let value = (json[key] !== undefined) ? json[key] : defaultValue;\n    return {\n        topic: key,\n        payload: value\n    };\n}\n\n\n\nlet msg1  = makeMessage(\"fridgeLowBattSoC\", 30);\nlet msg2  = makeMessage(\"fridgeBoostTemp\", 30);\nlet msg3  = makeMessage(\"fridgeDefrostMaxTemp\", 23);\nlet msg4  = makeMessage(\"fridgeDefrostTempDec\", 0.5);\nlet msg5  = makeMessage(\"fridgeOpenDoorTempRate\", 0.15);\nlet msg6  = makeMessage(\"fridgeOpenDoorTempInc\", 1);\n\nlet msg7  = makeMessage(\"alarmBattLow\", 20);\nlet msg8  = makeMessage(\"alarmPropaneLow\", 5);\nlet msg9  = makeMessage(\"alarmTempRoomLow\", 5);\nlet msg10 = makeMessage(\"alarmTempRoomHigh\", 35);\nlet msg11 = makeMessage(\"alarmTempFridgeLow\", 1);\nlet msg12 = makeMessage(\"alarmTempFridgeHigh\", 10);\nlet msg13 = makeMessage(\"alarmTempWaterLow\", 5);\nlet msg14 = makeMessage(\"alarmTempCpuHigh\", 70);\nlet msg15 = makeMessage(\"alarmTempBattLow\", 5);\nlet msg16 = makeMessage(\"alarmTempBattHigh\", 30);\n\nlet msg17 = makeMessage(\"offsetTempRoom\", 0);\nlet msg18 = makeMessage(\"offsetTempOutdoor\", 0);\nlet msg19 = makeMessage(\"offsetTempFridge\", 0);\n\nlet msg20 = makeMessage(\"fridgeTargetTemp\", 4);\nlet msg21 = makeMessage(\"fridgeAbsorberMode\", 1);\n\nlet apply = {topic: \"apply\"};\n\nreturn [msg1, msg2, msg3, msg4, msg5, msg6, msg7, \n        msg8, msg9, msg10, msg11, msg12, msg13, msg14, \n        msg15, msg16, msg17, msg18, msg19, msg20, msg21, apply];\n",
+        "outputs": 22,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
@@ -7523,6 +7523,9 @@
             ],
             [
                 "5516c054e1990d91"
+            ],
+            [
+                "a1a0a631bcda2bf9"
             ]
         ]
     },
@@ -7594,15 +7597,15 @@
         "type": "function",
         "z": "fc670f602d442a02",
         "name": "EncodeJSON",
-        "func": "\nglobal.set(msg.topic, msg.payload);\ncontext.set(msg.topic, msg.payload);\n\nnode.log(`Setting: ${msg.topic} = ${msg.payload}`)\n\nlet numMsgs  = 21;\nlet msgCount = context.get(\"msgCount\") || 0;\nmsgCount++;\ncontext.set(\"msgCount\", msgCount);\n\n\nlet output = {};\nlet json   = {};\n\nlet keys = context.keys();\n//keys.sort();\nfor (let i = 0; i < keys.length; i++) {\n    json[keys[i]] = context.get(keys[i]);\n}\n\noutput.payload = JSON.stringify(json, null, 2);\n\nreturn (msgCount >= numMsgs) ? output : null;\n\n",
+        "func": "\nglobal.set(msg.topic, msg.payload);\ncontext.set(msg.topic, msg.payload);\n\n\nlet numMsgs  = 21;\nlet msgCount = context.get(\"msgCount\") || 0;\nmsgCount++;\ncontext.set(\"msgCount\", msgCount);\n\nif (msg.topic === \"reset\") {\n    context.set(\"msgCount\", 0);\n    return null;\n}\nelse {\n    node.log(`Setting: ${msg.topic} = ${msg.payload}`);\n}\n\nlet output = {};\nlet json   = {};\n\nlet keys = context.keys();\nkeys = keys.filter(k => k !== \"msgCount\");\n//keys.sort();\nfor (let i = 0; i < keys.length; i++) {\n    json[keys[i]] = context.get(keys[i]);\n}\n\noutput.payload = JSON.stringify(json, null, 2);\n\nreturn (msgCount >= numMsgs) ? output : null;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1220,
-        "y": 300,
+        "x": 1380,
+        "y": 360,
         "wires": [
             [
                 "845def41d6e53c7a"
@@ -7620,8 +7623,8 @@
         "createDir": false,
         "overwriteFile": "true",
         "encoding": "none",
-        "x": 1290,
-        "y": 360,
+        "x": 1450,
+        "y": 420,
         "wires": [
             []
         ]
@@ -7683,7 +7686,7 @@
         "y": 80,
         "wires": [
             [
-                "c2daddd28170cbb5"
+                "9b8d7098547ac4d7"
             ]
         ]
     },
@@ -7825,7 +7828,7 @@
         "y": 120,
         "wires": [
             [
-                "c2daddd28170cbb5"
+                "9b8d7098547ac4d7"
             ]
         ]
     },
@@ -7913,7 +7916,7 @@
         "y": 160,
         "wires": [
             [
-                "c2daddd28170cbb5"
+                "9b8d7098547ac4d7"
             ]
         ]
     },
@@ -7986,7 +7989,7 @@
         "y": 200,
         "wires": [
             [
-                "c2daddd28170cbb5"
+                "9b8d7098547ac4d7"
             ]
         ]
     },
@@ -8059,7 +8062,7 @@
         "y": 240,
         "wires": [
             [
-                "c2daddd28170cbb5"
+                "9b8d7098547ac4d7"
             ]
         ]
     },
@@ -8132,7 +8135,7 @@
         "y": 280,
         "wires": [
             [
-                "c2daddd28170cbb5"
+                "9b8d7098547ac4d7"
             ]
         ]
     },
@@ -8215,7 +8218,7 @@
         "y": 340,
         "wires": [
             [
-                "c2daddd28170cbb5"
+                "9b8d7098547ac4d7"
             ]
         ]
     },
@@ -8293,7 +8296,7 @@
         "y": 380,
         "wires": [
             [
-                "c2daddd28170cbb5"
+                "9b8d7098547ac4d7"
             ]
         ]
     },
@@ -8366,7 +8369,7 @@
         "y": 420,
         "wires": [
             [
-                "c2daddd28170cbb5"
+                "9b8d7098547ac4d7"
             ]
         ]
     },
@@ -8439,7 +8442,7 @@
         "y": 460,
         "wires": [
             [
-                "c2daddd28170cbb5"
+                "9b8d7098547ac4d7"
             ]
         ]
     },
@@ -8534,7 +8537,7 @@
         "y": 500,
         "wires": [
             [
-                "c2daddd28170cbb5"
+                "9b8d7098547ac4d7"
             ]
         ]
     },
@@ -8585,7 +8588,7 @@
         "y": 540,
         "wires": [
             [
-                "c2daddd28170cbb5"
+                "9b8d7098547ac4d7"
             ]
         ]
     },
@@ -8658,7 +8661,7 @@
         "y": 580,
         "wires": [
             [
-                "c2daddd28170cbb5"
+                "9b8d7098547ac4d7"
             ]
         ]
     },
@@ -8731,7 +8734,7 @@
         "y": 620,
         "wires": [
             [
-                "c2daddd28170cbb5"
+                "9b8d7098547ac4d7"
             ]
         ]
     },
@@ -8826,7 +8829,7 @@
         "y": 700,
         "wires": [
             [
-                "c2daddd28170cbb5"
+                "9b8d7098547ac4d7"
             ]
         ]
     },
@@ -8877,7 +8880,7 @@
         "y": 660,
         "wires": [
             [
-                "c2daddd28170cbb5"
+                "9b8d7098547ac4d7"
             ]
         ]
     },
@@ -8985,7 +8988,7 @@
         "y": 760,
         "wires": [
             [
-                "c2daddd28170cbb5"
+                "9b8d7098547ac4d7"
             ]
         ]
     },
@@ -9093,7 +9096,7 @@
         "y": 800,
         "wires": [
             [
-                "c2daddd28170cbb5"
+                "9b8d7098547ac4d7"
             ]
         ]
     },
@@ -9201,7 +9204,7 @@
         "y": 840,
         "wires": [
             [
-                "c2daddd28170cbb5"
+                "9b8d7098547ac4d7"
             ]
         ]
     },
@@ -9213,8 +9216,8 @@
         "links": [
             "236fdb56f87224ab"
         ],
-        "x": 1165,
-        "y": 240,
+        "x": 1305,
+        "y": 280,
         "wires": [
             [
                 "c2daddd28170cbb5"
@@ -9246,5 +9249,171 @@
         "x": 815,
         "y": 940,
         "wires": []
+    },
+    {
+        "id": "eaa15de8f7205f01",
+        "type": "ui-button",
+        "z": "fc670f602d442a02",
+        "group": "28b10b40908e96b0",
+        "name": "",
+        "label": "Apply",
+        "order": 13,
+        "width": 0,
+        "height": 0,
+        "emulateClick": true,
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "",
+        "iconPosition": "left",
+        "payload": "",
+        "payloadType": "str",
+        "topic": "apply",
+        "topicType": "str",
+        "buttonColor": "",
+        "textColor": "",
+        "iconColor": "",
+        "enableClick": true,
+        "enablePointerdown": false,
+        "pointerdownPayload": "",
+        "pointerdownPayloadType": "str",
+        "enablePointerup": false,
+        "pointerupPayload": "",
+        "pointerupPayloadType": "str",
+        "x": 870,
+        "y": 1000,
+        "wires": [
+            [
+                "9b8d7098547ac4d7"
+            ]
+        ]
+    },
+    {
+        "id": "9b8d7098547ac4d7",
+        "type": "function",
+        "z": "fc670f602d442a02",
+        "name": "Gate",
+        "func": "\n// Duration in milliseconds\nconst TIMEOUT = 20000; \n\nlet existingTimer = context.get(\"timer\");\nif (existingTimer) {\n    clearTimeout(existingTimer);\n}\n\n\nif (msg.topic === \"apply\") {\n    let output = {};\n    let keys = context.keys();\n    keys = keys.filter(k => k !== \"timer\");\n    for (let i = 0; i < keys.length; i++) {\n        output.topic   = keys[i];\n        output.payload = context.get(keys[i]);\n        context.set(keys[i], undefined);\n        node.send([output, null]);\n    }\n}\nelse {\n    context.set(msg.topic, msg.payload);\n    \n    let newTimer = setTimeout(() => {\n        node.send([null, { topic: \"reset\"}]);\n        context.set(\"timer\", null);\n    }, TIMEOUT);\n    context.set(\"timer\", newTimer);\n}\n\nreturn null;\n\n",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1170,
+        "y": 360,
+        "wires": [
+            [
+                "c2daddd28170cbb5"
+            ],
+            [
+                "80562d015d907ff7",
+                "c2daddd28170cbb5"
+            ]
+        ]
+    },
+    {
+        "id": "a1a0a631bcda2bf9",
+        "type": "delay",
+        "z": "fc670f602d442a02",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "1",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 720,
+        "y": 1000,
+        "wires": [
+            [
+                "eaa15de8f7205f01"
+            ]
+        ]
+    },
+    {
+        "id": "25ff927976e89036",
+        "type": "ui-button",
+        "z": "fc670f602d442a02",
+        "group": "87a251b1b078a4c3",
+        "name": "",
+        "label": "Apply",
+        "order": 21,
+        "width": 0,
+        "height": 0,
+        "emulateClick": true,
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "",
+        "iconPosition": "left",
+        "payload": "",
+        "payloadType": "str",
+        "topic": "apply",
+        "topicType": "str",
+        "buttonColor": "",
+        "textColor": "",
+        "iconColor": "",
+        "enableClick": true,
+        "enablePointerdown": false,
+        "pointerdownPayload": "",
+        "pointerdownPayloadType": "str",
+        "enablePointerup": false,
+        "pointerupPayload": "",
+        "pointerupPayloadType": "str",
+        "x": 870,
+        "y": 1080,
+        "wires": [
+            [
+                "9b8d7098547ac4d7"
+            ]
+        ]
+    },
+    {
+        "id": "5c3e7eda6064c1be",
+        "type": "ui-button",
+        "z": "fc670f602d442a02",
+        "group": "7a52027f8ab130e8",
+        "name": "",
+        "label": "Apply",
+        "order": 7,
+        "width": 0,
+        "height": 0,
+        "emulateClick": true,
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "",
+        "iconPosition": "left",
+        "payload": "",
+        "payloadType": "str",
+        "topic": "apply",
+        "topicType": "str",
+        "buttonColor": "",
+        "textColor": "",
+        "iconColor": "",
+        "enableClick": true,
+        "enablePointerdown": false,
+        "pointerdownPayload": "",
+        "pointerdownPayloadType": "str",
+        "enablePointerup": false,
+        "pointerupPayload": "",
+        "pointerupPayloadType": "str",
+        "x": 870,
+        "y": 1040,
+        "wires": [
+            [
+                "9b8d7098547ac4d7"
+            ]
+        ]
     }
 ]
