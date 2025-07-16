@@ -369,6 +369,45 @@
         "color": "#DDAA99"
     },
     {
+        "id": "04a8d6feb3e5bdc7",
+        "type": "subflow",
+        "name": "Topic",
+        "info": "",
+        "category": "",
+        "in": [
+            {
+                "x": 240,
+                "y": 220,
+                "wires": [
+                    {
+                        "id": "596159eb11ca95b3"
+                    }
+                ]
+            }
+        ],
+        "out": [
+            {
+                "x": 620,
+                "y": 220,
+                "wires": [
+                    {
+                        "id": "596159eb11ca95b3",
+                        "port": 0
+                    }
+                ]
+            }
+        ],
+        "env": [
+            {
+                "name": "topic",
+                "type": "str",
+                "value": ""
+            }
+        ],
+        "meta": {},
+        "color": "#DDAA99"
+    },
+    {
         "id": "2c24d1c82633c69e",
         "type": "mqtt-broker",
         "name": "Venus",
@@ -465,8 +504,8 @@
         ],
         "order": 3,
         "className": "",
-        "visible": "true",
-        "disabled": "false"
+        "visible": true,
+        "disabled": false
     },
     {
         "id": "2b74e6ea7cedf9dc",
@@ -862,6 +901,11 @@
                 "name": "system-settings-file",
                 "value": "/data/home/nodered/caravan-settings.json",
                 "type": "str"
+            },
+            {
+                "name": "fridge-gpio-pin",
+                "value": "26",
+                "type": "str"
             }
         ]
     },
@@ -1012,7 +1056,7 @@
         "id": "5e9aa1427a4e9455",
         "type": "function",
         "z": "c515380878a4716f",
-        "name": "Propane percent",
+        "name": "PropanePercent",
         "func": "\n/*\nconst DEBUG = false;\n\n// Handle accelerometer readings\n// detect propan tank movement or swap\nif (msg.topic === 'acceleration') {\n    if (Math.abs(msg.payload) > 0.5) {\n        if (DEBUG) node.warn(`Accel = ${msg.payload}, reset last-percent`);\n        context.set('last-percent', 100);\n        \n    }\n    return null;\n}\n*/\n\nempty = env.get('empty');\nfull  = env.get('full');\nlevel = msg.payload;\n\npercent = 100 * (level - empty) / (full - empty);\n\nif (percent > 100) {\n    percent = 100;\n}\n\nif (percent < 0) {\n    percent = 0;\n}\n\n/*\n// Percent never increases unless a full propane tank\n// has been installed or the vehicle is moving.\nlastPercent = context.get('last-percent');\nif (lastPercent === undefined) {\n    lastPercent = 100;\n}\nif (DEBUG) node.warn(`last-percent = ${lastPercent}`);\n\nif (percent < lastPercent) {\n    let p = (percent + 19*lastPercent) / 20;\n    if (DEBUG) node.warn(`set last-percent = ${p}`);\n    context.set('last-percent', p);\n}\nelse {\n    if (DEBUG) node.warn(`set percent = ${lastPercent}`);\n    percent = lastPercent;\n}\n*/\n\nmsg.payload = percent.toFixed(0);\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": 0,
@@ -1020,7 +1064,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 370,
+        "x": 360,
         "y": 160,
         "wires": [
             []
@@ -1030,8 +1074,8 @@
         "id": "ac9ffcf81506378b",
         "type": "function",
         "z": "35877746e13a44de",
-        "name": "Append unit",
-        "func": "\nunit = env.get('unit');\n\nmsg.payload = msg.payload + ' ' + unit;\n\nreturn msg;",
+        "name": "AppendUnit",
+        "func": "\nlet unit = env.get('unit');\n\nmsg.payload = msg.payload + ' ' + unit;\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -1083,6 +1127,24 @@
         ]
     },
     {
+        "id": "596159eb11ca95b3",
+        "type": "function",
+        "z": "04a8d6feb3e5bdc7",
+        "name": "SetTopic",
+        "func": "\nif (msg.payload === undefined) {\n    return null;\n}\n\nlet topic = env.get(\"topic\");\nmsg.topic = topic\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 420,
+        "y": 220,
+        "wires": [
+            []
+        ]
+    },
+    {
         "id": "2f93affb367a865e",
         "type": "link in",
         "z": "37a752f35a68bbed",
@@ -1101,8 +1163,8 @@
             "f59d101299f0716e",
             "f8b062643e6b87e5"
         ],
-        "x": 55,
-        "y": 360,
+        "x": 185,
+        "y": 300,
         "wires": [
             [
                 "fceb7b2903eca364"
@@ -1123,8 +1185,8 @@
         "phonenumberinputtypemessage": "msg",
         "inputtypemessage": "msg",
         "rejectssl": false,
-        "x": 340,
-        "y": 360,
+        "x": 380,
+        "y": 300,
         "wires": [
             []
         ]
@@ -1223,7 +1285,7 @@
         "payload": "Test message",
         "payloadType": "str",
         "x": 130,
-        "y": 420,
+        "y": 360,
         "wires": [
             [
                 "fceb7b2903eca364"
@@ -1248,7 +1310,7 @@
         "name": "",
         "onlyChanges": false,
         "roundValues": "0",
-        "x": 270,
+        "x": 240,
         "y": 740,
         "wires": [
             [
@@ -1275,7 +1337,7 @@
         "name": "",
         "onlyChanges": false,
         "roundValues": "2",
-        "x": 250,
+        "x": 230,
         "y": 840,
         "wires": [
             [
@@ -1301,7 +1363,7 @@
         "name": "",
         "onlyChanges": false,
         "roundValues": "2",
-        "x": 180,
+        "x": 170,
         "y": 1020,
         "wires": [
             [
@@ -1396,7 +1458,7 @@
         "name": "",
         "onlyChanges": false,
         "roundValues": "2",
-        "x": 160,
+        "x": 150,
         "y": 280,
         "wires": [
             [
@@ -1423,7 +1485,7 @@
         "name": "",
         "onlyChanges": false,
         "roundValues": "2",
-        "x": 160,
+        "x": 150,
         "y": 380,
         "wires": [
             [
@@ -1496,7 +1558,7 @@
         "name": "",
         "onlyChanges": false,
         "roundValues": "1",
-        "x": 190,
+        "x": 180,
         "y": 600,
         "wires": [
             [
@@ -1522,7 +1584,7 @@
         "name": "",
         "onlyChanges": false,
         "roundValues": "3",
-        "x": 280,
+        "x": 250,
         "y": 1120,
         "wires": [
             [
@@ -1543,7 +1605,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 720,
+        "x": 570,
         "y": 1120,
         "wires": [
             [
@@ -1613,7 +1675,7 @@
         "name": "",
         "onlyChanges": false,
         "roundValues": "1",
-        "x": 200,
+        "x": 170,
         "y": 1200,
         "wires": [
             [
@@ -1689,7 +1751,7 @@
         "name": "",
         "onlyChanges": false,
         "roundValues": "1",
-        "x": 200,
+        "x": 170,
         "y": 1380,
         "wires": [
             [
@@ -1811,7 +1873,7 @@
         "name": "",
         "onlyChanges": false,
         "roundValues": "1",
-        "x": 210,
+        "x": 180,
         "y": 1520,
         "wires": [
             [
@@ -1837,7 +1899,7 @@
         "name": "",
         "onlyChanges": false,
         "roundValues": "1",
-        "x": 210,
+        "x": 180,
         "y": 1580,
         "wires": [
             [
@@ -1852,13 +1914,15 @@
         "name": "",
         "group": "a7be90ba6585cc59",
         "order": 1,
+        "value": "payload",
+        "valueType": "msg",
         "width": 3,
         "height": 3,
         "gtype": "gauge-34",
         "gstyle": "rounded",
         "title": "Battery",
         "units": "%",
-        "icon": "",
+        "icon": "car-battery",
         "prefix": "",
         "suffix": "",
         "segments": [
@@ -1875,7 +1939,7 @@
         "styleRounded": true,
         "styleGlow": false,
         "className": "large-gauge-text",
-        "x": 1040,
+        "x": 920,
         "y": 100,
         "wires": []
     },
@@ -1909,7 +1973,7 @@
         "styleRounded": true,
         "styleGlow": false,
         "className": "large-gauge-text",
-        "x": 1030,
+        "x": 910,
         "y": 720,
         "wires": []
     },
@@ -1943,7 +2007,7 @@
         "styleRounded": true,
         "styleGlow": false,
         "className": "large-gauge-text",
-        "x": 1030,
+        "x": 910,
         "y": 1200,
         "wires": []
     },
@@ -1977,7 +2041,7 @@
         "styleRounded": true,
         "styleGlow": false,
         "className": "large-gauge-text",
-        "x": 1030,
+        "x": 910,
         "y": 1380,
         "wires": []
     },
@@ -1999,7 +2063,7 @@
         "color": "#717171",
         "wrapText": false,
         "className": "",
-        "x": 1040,
+        "x": 920,
         "y": 300,
         "wires": []
     },
@@ -2015,7 +2079,7 @@
                 "type": "str"
             }
         ],
-        "x": 910,
+        "x": 790,
         "y": 300,
         "wires": [
             [
@@ -2035,7 +2099,7 @@
                 "type": "str"
             }
         ],
-        "x": 910,
+        "x": 790,
         "y": 400,
         "wires": [
             [
@@ -2061,7 +2125,7 @@
         "color": "#717171",
         "wrapText": false,
         "className": "",
-        "x": 1040,
+        "x": 920,
         "y": 400,
         "wires": []
     },
@@ -2077,7 +2141,7 @@
                 "type": "str"
             }
         ],
-        "x": 910,
+        "x": 790,
         "y": 600,
         "wires": [
             [
@@ -2103,7 +2167,7 @@
         "color": "#717171",
         "wrapText": false,
         "className": "",
-        "x": 1060,
+        "x": 940,
         "y": 600,
         "wires": []
     },
@@ -2125,7 +2189,7 @@
         "color": "#717171",
         "wrapText": false,
         "className": "",
-        "x": 1060,
+        "x": 940,
         "y": 660,
         "wires": []
     },
@@ -2141,7 +2205,7 @@
                 "type": "str"
             }
         ],
-        "x": 910,
+        "x": 790,
         "y": 840,
         "wires": [
             [
@@ -2167,7 +2231,7 @@
         "color": "#717171",
         "wrapText": false,
         "className": "",
-        "x": 1040,
+        "x": 920,
         "y": 840,
         "wires": []
     },
@@ -2189,7 +2253,7 @@
         "color": "#717171",
         "wrapText": false,
         "className": "",
-        "x": 1030,
+        "x": 910,
         "y": 920,
         "wires": []
     },
@@ -2211,7 +2275,7 @@
         "color": "#717171",
         "wrapText": false,
         "className": "",
-        "x": 1040,
+        "x": 920,
         "y": 1040,
         "wires": []
     },
@@ -2227,7 +2291,7 @@
                 "type": "str"
             }
         ],
-        "x": 910,
+        "x": 790,
         "y": 1040,
         "wires": [
             [
@@ -2253,7 +2317,7 @@
         "color": "#717171",
         "wrapText": false,
         "className": "",
-        "x": 1050,
+        "x": 930,
         "y": 1140,
         "wires": []
     },
@@ -2269,7 +2333,7 @@
                 "type": "str"
             }
         ],
-        "x": 910,
+        "x": 790,
         "y": 1140,
         "wires": [
             [
@@ -2289,7 +2353,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 880,
+        "x": 560,
         "y": 920,
         "wires": [
             [
@@ -2312,7 +2376,7 @@
                 "type": "str"
             }
         ],
-        "x": 910,
+        "x": 790,
         "y": 140,
         "wires": [
             [
@@ -2338,7 +2402,7 @@
         "color": "#717171",
         "wrapText": false,
         "className": "large-text",
-        "x": 1060,
+        "x": 940,
         "y": 140,
         "wires": []
     },
@@ -2360,7 +2424,7 @@
         "color": "#717171",
         "wrapText": false,
         "className": "large-text",
-        "x": 1030,
+        "x": 910,
         "y": 760,
         "wires": []
     },
@@ -2376,7 +2440,7 @@
                 "type": "str"
             }
         ],
-        "x": 910,
+        "x": 790,
         "y": 760,
         "wires": [
             [
@@ -2402,7 +2466,7 @@
         "color": "#717171",
         "wrapText": false,
         "className": "",
-        "x": 1050,
+        "x": 930,
         "y": 1520,
         "wires": []
     },
@@ -2411,7 +2475,7 @@
         "type": "subflow:35877746e13a44de",
         "z": "b22624498baaa896",
         "name": "",
-        "x": 910,
+        "x": 790,
         "y": 1520,
         "wires": [
             [
@@ -2437,7 +2501,7 @@
         "color": "#717171",
         "wrapText": false,
         "className": "",
-        "x": 1050,
+        "x": 930,
         "y": 1580,
         "wires": []
     },
@@ -2446,7 +2510,7 @@
         "type": "subflow:35877746e13a44de",
         "z": "b22624498baaa896",
         "name": "",
-        "x": 910,
+        "x": 790,
         "y": 1580,
         "wires": [
             [
@@ -2485,7 +2549,7 @@
         "styleRounded": true,
         "styleGlow": false,
         "className": "small-gauge-text",
-        "x": 1040,
+        "x": 920,
         "y": 1100,
         "wires": []
     },
@@ -2551,7 +2615,7 @@
         "styleRounded": true,
         "styleGlow": false,
         "className": "small-gauge-text",
-        "x": 1040,
+        "x": 920,
         "y": 360,
         "wires": []
     },
@@ -2617,7 +2681,7 @@
         "styleRounded": true,
         "styleGlow": false,
         "className": "small-gauge-text",
-        "x": 1040,
+        "x": 920,
         "y": 260,
         "wires": []
     },
@@ -2633,7 +2697,7 @@
                 "type": "str"
             }
         ],
-        "x": 910,
+        "x": 790,
         "y": 1240,
         "wires": [
             [
@@ -2659,7 +2723,7 @@
         "color": "#717171",
         "wrapText": false,
         "className": "large-text",
-        "x": 1030,
+        "x": 910,
         "y": 1240,
         "wires": []
     },
@@ -2681,7 +2745,7 @@
         "color": "#717171",
         "wrapText": false,
         "className": "large-text",
-        "x": 1030,
+        "x": 910,
         "y": 1420,
         "wires": []
     },
@@ -2697,7 +2761,7 @@
                 "type": "str"
             }
         ],
-        "x": 910,
+        "x": 790,
         "y": 1420,
         "wires": [
             [
@@ -2724,7 +2788,7 @@
         "name": "",
         "onlyChanges": false,
         "roundValues": "2",
-        "x": 190,
+        "x": 160,
         "y": 1660,
         "wires": [
             [
@@ -2751,7 +2815,7 @@
         "name": "",
         "onlyChanges": false,
         "roundValues": "2",
-        "x": 190,
+        "x": 160,
         "y": 1720,
         "wires": [
             [
@@ -2777,7 +2841,7 @@
         "color": "#717171",
         "wrapText": false,
         "className": "",
-        "x": 1040,
+        "x": 920,
         "y": 1660,
         "wires": []
     },
@@ -2799,107 +2863,9 @@
         "color": "#717171",
         "wrapText": false,
         "className": "",
-        "x": 1040,
+        "x": 920,
         "y": 1720,
         "wires": []
-    },
-    {
-        "id": "ee945488d6fe810e",
-        "type": "victron-input-custom",
-        "z": "b22624498baaa896",
-        "d": true,
-        "service": "com.victronenergy.tank/21",
-        "path": "/AccelX",
-        "serviceObj": {
-            "service": "com.victronenergy.tank/21",
-            "name": "Propane Tank 1 (21)"
-        },
-        "pathObj": {
-            "path": "/AccelX",
-            "name": "/AccelX",
-            "type": "number",
-            "value": 0.0810546875
-        },
-        "name": "",
-        "onlyChanges": false,
-        "roundValues": "2",
-        "x": 150,
-        "y": 1260,
-        "wires": [
-            [
-                "52bc3eea992a3a5a"
-            ]
-        ]
-    },
-    {
-        "id": "aaf0f2f3cde0ab76",
-        "type": "function",
-        "z": "b22624498baaa896",
-        "d": true,
-        "name": "SetTopic",
-        "func": "\nmsg.topic = 'acceleration';\nreturn msg;\n",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 390,
-        "y": 1440,
-        "wires": [
-            [
-                "bcbcc2ea62ba3ecd"
-            ]
-        ]
-    },
-    {
-        "id": "03ba7d9fc0045ad2",
-        "type": "victron-input-custom",
-        "z": "b22624498baaa896",
-        "d": true,
-        "service": "com.victronenergy.tank/20",
-        "path": "/AccelX",
-        "serviceObj": {
-            "service": "com.victronenergy.tank/20",
-            "name": "Propane Tank 2 (20)"
-        },
-        "pathObj": {
-            "path": "/AccelX",
-            "name": "/AccelX",
-            "type": "number",
-            "value": -0.0078125
-        },
-        "name": "",
-        "onlyChanges": false,
-        "roundValues": "2",
-        "x": 160,
-        "y": 1440,
-        "wires": [
-            [
-                "aaf0f2f3cde0ab76"
-            ]
-        ]
-    },
-    {
-        "id": "52bc3eea992a3a5a",
-        "type": "function",
-        "z": "b22624498baaa896",
-        "d": true,
-        "name": "SetTopic",
-        "func": "\nmsg.topic = 'acceleration';\nreturn msg;\n",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 390,
-        "y": 1260,
-        "wires": [
-            [
-                "a4fe06dad0e33752"
-            ]
-        ]
     },
     {
         "id": "9ba732088185b979",
@@ -2967,7 +2933,7 @@
                 "type": "str"
             }
         ],
-        "x": 910,
+        "x": 790,
         "y": 1800,
         "wires": [
             [
@@ -2994,7 +2960,7 @@
         "color": "#717171",
         "wrapText": false,
         "className": "",
-        "x": 1040,
+        "x": 920,
         "y": 1800,
         "wires": []
     },
@@ -3010,7 +2976,7 @@
                 "type": "str"
             }
         ],
-        "x": 910,
+        "x": 790,
         "y": 1860,
         "wires": [
             [
@@ -3037,7 +3003,7 @@
         "color": "#717171",
         "wrapText": false,
         "className": "",
-        "x": 1040,
+        "x": 920,
         "y": 1860,
         "wires": []
     },
@@ -3046,7 +3012,7 @@
         "type": "subflow:1bca7697946c1d3f",
         "z": "b22624498baaa896",
         "name": "",
-        "x": 730,
+        "x": 570,
         "y": 1660,
         "wires": [
             [
@@ -3062,7 +3028,7 @@
         "type": "subflow:1bca7697946c1d3f",
         "z": "b22624498baaa896",
         "name": "",
-        "x": 730,
+        "x": 570,
         "y": 1720,
         "wires": [
             [
@@ -3119,7 +3085,7 @@
         "styleRounded": true,
         "styleGlow": false,
         "className": "small-gauge-text",
-        "x": 1040,
+        "x": 920,
         "y": 1000,
         "wires": []
     },
@@ -3141,7 +3107,7 @@
         "name": "",
         "onlyChanges": false,
         "roundValues": "1",
-        "x": 160,
+        "x": 150,
         "y": 460,
         "wires": [
             [
@@ -3193,7 +3159,7 @@
         "color": "#717171",
         "wrapText": false,
         "className": "",
-        "x": 1030,
+        "x": 910,
         "y": 460,
         "wires": []
     },
@@ -3215,7 +3181,7 @@
         "color": "#717171",
         "wrapText": false,
         "className": "",
-        "x": 1050,
+        "x": 930,
         "y": 520,
         "wires": []
     },
@@ -3231,7 +3197,7 @@
                 "type": "str"
             }
         ],
-        "x": 910,
+        "x": 790,
         "y": 460,
         "wires": [
             [
@@ -3244,7 +3210,7 @@
         "type": "subflow:35877746e13a44de",
         "z": "b22624498baaa896",
         "name": "",
-        "x": 910,
+        "x": 790,
         "y": 520,
         "wires": [
             [
@@ -3284,7 +3250,7 @@
         "onlyChanges": false,
         "roundValues": "1",
         "x": 240,
-        "y": 1480,
+        "y": 1500,
         "wires": [
             [
                 "efcd52eb9123c4b6"
@@ -3417,20 +3383,6 @@
         ]
     },
     {
-        "id": "f2fa448128ce1972",
-        "type": "link out",
-        "z": "2561d49b29c858c7",
-        "d": true,
-        "name": "Outdoor temp alarm",
-        "mode": "link",
-        "links": [
-            "2f93affb367a865e"
-        ],
-        "x": 755,
-        "y": 380,
-        "wires": []
-    },
-    {
         "id": "f59d101299f0716e",
         "type": "link out",
         "z": "2561d49b29c858c7",
@@ -3439,8 +3391,8 @@
         "links": [
             "2f93affb367a865e"
         ],
-        "x": 755,
-        "y": 1080,
+        "x": 745,
+        "y": 1060,
         "wires": []
     },
     {
@@ -3512,8 +3464,8 @@
         "links": [
             "2f93affb367a865e"
         ],
-        "x": 755,
-        "y": 180,
+        "x": 745,
+        "y": 160,
         "wires": []
     },
     {
@@ -3534,36 +3486,10 @@
             }
         ],
         "x": 650,
-        "y": 180,
+        "y": 160,
         "wires": [
             [
                 "e1dd06c5c761e4d9"
-            ]
-        ]
-    },
-    {
-        "id": "e577c0ec5b4af224",
-        "type": "subflow:26a48bdabf7607df",
-        "z": "2561d49b29c858c7",
-        "d": true,
-        "name": "",
-        "env": [
-            {
-                "name": "high",
-                "value": "30",
-                "type": "num"
-            },
-            {
-                "name": "message",
-                "value": "Outdoor temperature",
-                "type": "str"
-            }
-        ],
-        "x": 650,
-        "y": 380,
-        "wires": [
-            [
-                "f2fa448128ce1972"
             ]
         ]
     },
@@ -3590,7 +3516,7 @@
             }
         ],
         "x": 650,
-        "y": 1080,
+        "y": 1060,
         "wires": [
             [
                 "f59d101299f0716e"
@@ -3766,7 +3692,7 @@
         "z": "2561d49b29c858c7",
         "name": "",
         "x": 510,
-        "y": 1480,
+        "y": 1500,
         "wires": [
             [
                 "4bd74f30706ccf3c",
@@ -3815,7 +3741,7 @@
         "onlyChanges": false,
         "roundValues": "1",
         "x": 180,
-        "y": 220,
+        "y": 260,
         "wires": [
             [
                 "ed0b389fe13487c0"
@@ -3841,7 +3767,7 @@
         "onlyChanges": false,
         "roundValues": "1",
         "x": 190,
-        "y": 280,
+        "y": 320,
         "wires": [
             [
                 "4bbd63596c1f0a25"
@@ -3861,11 +3787,10 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 530,
-        "y": 260,
+        "x": 550,
+        "y": 300,
         "wires": [
             [
-                "e577c0ec5b4af224",
                 "1ac7db4665ba096a"
             ]
         ]
@@ -3883,7 +3808,7 @@
             }
         ],
         "x": 410,
-        "y": 220,
+        "y": 260,
         "wires": [
             [
                 "db7e61c450302526",
@@ -3904,7 +3829,7 @@
             }
         ],
         "x": 410,
-        "y": 280,
+        "y": 320,
         "wires": [
             [
                 "db7e61c450302526",
@@ -4053,13 +3978,15 @@
         "name": "",
         "group": "2b74e6ea7cedf9dc",
         "order": 1,
+        "value": "payload",
+        "valueType": "msg",
         "width": 3,
         "height": 3,
         "gtype": "gauge-34",
         "gstyle": "rounded",
         "title": "Indoor",
         "units": "°C",
-        "icon": "",
+        "icon": "thermometer",
         "prefix": "",
         "suffix": "",
         "segments": [
@@ -4108,7 +4035,7 @@
         "styleRounded": true,
         "styleGlow": false,
         "className": "large-gauge-text",
-        "x": 1090,
+        "x": 950,
         "y": 80,
         "wires": []
     },
@@ -4130,7 +4057,7 @@
         "color": "#717171",
         "wrapText": false,
         "className": "",
-        "x": 1130,
+        "x": 990,
         "y": 120,
         "wires": []
     },
@@ -4152,7 +4079,7 @@
         "color": "#717171",
         "wrapText": false,
         "className": "",
-        "x": 1130,
+        "x": 990,
         "y": 1020,
         "wires": []
     },
@@ -4161,7 +4088,7 @@
         "type": "subflow:35877746e13a44de",
         "z": "2561d49b29c858c7",
         "name": "",
-        "x": 950,
+        "x": 810,
         "y": 120,
         "wires": [
             [
@@ -4174,7 +4101,7 @@
         "type": "subflow:35877746e13a44de",
         "z": "2561d49b29c858c7",
         "name": "",
-        "x": 950,
+        "x": 810,
         "y": 1020,
         "wires": [
             [
@@ -4187,8 +4114,8 @@
         "type": "subflow:35877746e13a44de",
         "z": "2561d49b29c858c7",
         "name": "",
-        "x": 950,
-        "y": 280,
+        "x": 810,
+        "y": 260,
         "wires": [
             [
                 "c6fef6a98ae25101"
@@ -4200,7 +4127,7 @@
         "type": "subflow:35877746e13a44de",
         "z": "2561d49b29c858c7",
         "name": "",
-        "x": 950,
+        "x": 810,
         "y": 320,
         "wires": [
             [
@@ -4226,8 +4153,8 @@
         "color": "#717171",
         "wrapText": false,
         "className": "",
-        "x": 1150,
-        "y": 280,
+        "x": 1010,
+        "y": 260,
         "wires": []
     },
     {
@@ -4248,7 +4175,7 @@
         "color": "#717171",
         "wrapText": false,
         "className": "",
-        "x": 1150,
+        "x": 1010,
         "y": 320,
         "wires": []
     },
@@ -4270,8 +4197,8 @@
         "color": "#717171",
         "wrapText": false,
         "className": "",
-        "x": 1130,
-        "y": 600,
+        "x": 990,
+        "y": 620,
         "wires": []
     },
     {
@@ -4279,8 +4206,8 @@
         "type": "subflow:35877746e13a44de",
         "z": "2561d49b29c858c7",
         "name": "",
-        "x": 950,
-        "y": 600,
+        "x": 810,
+        "y": 620,
         "wires": [
             [
                 "24871667c32d50e2"
@@ -4305,7 +4232,7 @@
         "color": "#717171",
         "wrapText": false,
         "className": "",
-        "x": 1130,
+        "x": 990,
         "y": 740,
         "wires": []
     },
@@ -4321,7 +4248,7 @@
                 "type": "str"
             }
         ],
-        "x": 950,
+        "x": 810,
         "y": 740,
         "wires": [
             [
@@ -4347,7 +4274,7 @@
         "color": "#717171",
         "wrapText": false,
         "className": "",
-        "x": 1140,
+        "x": 1000,
         "y": 800,
         "wires": []
     },
@@ -4363,7 +4290,7 @@
                 "type": "str"
             }
         ],
-        "x": 950,
+        "x": 810,
         "y": 800,
         "wires": [
             [
@@ -4389,8 +4316,8 @@
         "color": "#717171",
         "wrapText": false,
         "className": "",
-        "x": 1120,
-        "y": 1100,
+        "x": 980,
+        "y": 1120,
         "wires": []
     },
     {
@@ -4405,8 +4332,8 @@
                 "type": "str"
             }
         ],
-        "x": 950,
-        "y": 1100,
+        "x": 810,
+        "y": 1120,
         "wires": [
             [
                 "1db71ef6c0dd3b89"
@@ -4418,7 +4345,7 @@
         "type": "subflow:35877746e13a44de",
         "z": "2561d49b29c858c7",
         "name": "",
-        "x": 950,
+        "x": 810,
         "y": 1360,
         "wires": [
             [
@@ -4444,7 +4371,7 @@
         "color": "#717171",
         "wrapText": false,
         "className": "",
-        "x": 1130,
+        "x": 990,
         "y": 1360,
         "wires": []
     },
@@ -4453,7 +4380,7 @@
         "type": "subflow:35877746e13a44de",
         "z": "2561d49b29c858c7",
         "name": "",
-        "x": 950,
+        "x": 810,
         "y": 1500,
         "wires": [
             [
@@ -4479,7 +4406,7 @@
         "color": "#717171",
         "wrapText": false,
         "className": "",
-        "x": 1130,
+        "x": 990,
         "y": 1500,
         "wires": []
     },
@@ -4488,7 +4415,7 @@
         "type": "subflow:35877746e13a44de",
         "z": "2561d49b29c858c7",
         "name": "",
-        "x": 950,
+        "x": 810,
         "y": 1680,
         "wires": [
             [
@@ -4514,7 +4441,7 @@
         "color": "#717171",
         "wrapText": false,
         "className": "",
-        "x": 1140,
+        "x": 1000,
         "y": 1680,
         "wires": []
     },
@@ -4525,13 +4452,15 @@
         "name": "",
         "group": "2b74e6ea7cedf9dc",
         "order": 3,
+        "value": "payload",
+        "valueType": "msg",
         "width": 3,
         "height": 3,
         "gtype": "gauge-34",
         "gstyle": "rounded",
         "title": "Outdoor",
         "units": "°C",
-        "icon": "",
+        "icon": "thermometer",
         "prefix": "",
         "suffix": "",
         "segments": [
@@ -4580,8 +4509,8 @@
         "styleRounded": true,
         "styleGlow": false,
         "className": "large-gauge-text",
-        "x": 1100,
-        "y": 240,
+        "x": 960,
+        "y": 580,
         "wires": []
     },
     {
@@ -4591,13 +4520,15 @@
         "name": "",
         "group": "2b74e6ea7cedf9dc",
         "order": 2,
+        "value": "payload",
+        "valueType": "msg",
         "width": 3,
         "height": 3,
         "gtype": "gauge-34",
         "gstyle": "rounded",
         "title": "Fridge",
         "units": "°C",
-        "icon": "",
+        "icon": "thermometer",
         "prefix": "",
         "suffix": "",
         "segments": [
@@ -4646,7 +4577,7 @@
         "styleRounded": true,
         "styleGlow": false,
         "className": "large-gauge-text",
-        "x": 1090,
+        "x": 950,
         "y": 980,
         "wires": []
     },
@@ -4713,7 +4644,7 @@
         "styleRounded": true,
         "styleGlow": false,
         "className": "large-gauge-text",
-        "x": 1100,
+        "x": 960,
         "y": 1640,
         "wires": []
     },
@@ -4780,7 +4711,7 @@
         "styleRounded": true,
         "styleGlow": false,
         "className": "large-gauge-text",
-        "x": 1110,
+        "x": 970,
         "y": 700,
         "wires": []
     },
@@ -4803,7 +4734,7 @@
         "onlyChanges": false,
         "roundValues": "2",
         "x": 180,
-        "y": 1240,
+        "y": 1220,
         "wires": [
             [
                 "21036f8750650e45"
@@ -4828,7 +4759,7 @@
         "color": "#717171",
         "wrapText": false,
         "className": "",
-        "x": 1120,
+        "x": 980,
         "y": 1220,
         "wires": []
     },
@@ -4844,7 +4775,7 @@
                 "type": "str"
             }
         ],
-        "x": 950,
+        "x": 810,
         "y": 1220,
         "wires": [
             [
@@ -4896,8 +4827,8 @@
         "color": "#717171",
         "wrapText": false,
         "className": "",
-        "x": 1120,
-        "y": 860,
+        "x": 980,
+        "y": 880,
         "wires": []
     },
     {
@@ -4912,8 +4843,8 @@
                 "type": "str"
             }
         ],
-        "x": 950,
-        "y": 860,
+        "x": 810,
+        "y": 880,
         "wires": [
             [
                 "29a1859ee6666879"
@@ -4940,7 +4871,7 @@
         "onlyChanges": false,
         "roundValues": "2",
         "x": 190,
-        "y": 440,
+        "y": 420,
         "wires": [
             [
                 "e6e4d04c2eda2cd9"
@@ -4967,7 +4898,7 @@
         "onlyChanges": false,
         "roundValues": "2",
         "x": 190,
-        "y": 500,
+        "y": 480,
         "wires": [
             [
                 "66f6ef672a39ed80"
@@ -4986,7 +4917,7 @@
                 "type": "str"
             }
         ],
-        "x": 950,
+        "x": 810,
         "y": 420,
         "wires": [
             [
@@ -5012,7 +4943,7 @@
         "color": "#717171",
         "wrapText": false,
         "className": "",
-        "x": 1130,
+        "x": 990,
         "y": 420,
         "wires": []
     },
@@ -5028,7 +4959,7 @@
                 "type": "str"
             }
         ],
-        "x": 950,
+        "x": 810,
         "y": 480,
         "wires": [
             [
@@ -5054,7 +4985,7 @@
         "color": "#717171",
         "wrapText": false,
         "className": "",
-        "x": 1130,
+        "x": 990,
         "y": 480,
         "wires": []
     },
@@ -5065,13 +4996,15 @@
         "name": "",
         "group": "2b74e6ea7cedf9dc",
         "order": 4,
+        "value": "payload",
+        "valueType": "msg",
         "width": 3,
         "height": 3,
         "gtype": "gauge-34",
         "gstyle": "rounded",
         "title": "Water",
         "units": "°C",
-        "icon": "",
+        "icon": "thermometer",
         "prefix": "",
         "suffix": "",
         "segments": [
@@ -5120,7 +5053,7 @@
         "styleRounded": true,
         "styleGlow": false,
         "className": "large-gauge-text",
-        "x": 1090,
+        "x": 950,
         "y": 1320,
         "wires": []
     },
@@ -5135,7 +5068,7 @@
             "bd479a673f65a239"
         ],
         "x": 705,
-        "y": 40,
+        "y": 60,
         "wires": []
     },
     {
@@ -5179,7 +5112,7 @@
         "id": "b95d223c430a2047",
         "type": "function",
         "z": "c74d4096e08fa272",
-        "name": "Set fan",
+        "name": "SetFan",
         "func": "if (msg.payload === undefined) {\n    return null;\n}\n\nflow.set('fan', msg.payload);\n",
         "outputs": 1,
         "timeout": 0,
@@ -5197,7 +5130,7 @@
         "id": "4ec59e63f4ab1d7d",
         "type": "function",
         "z": "c74d4096e08fa272",
-        "name": "Heating trigger",
+        "name": "HeatingTrigger",
         "func": "\nif (msg.payload === undefined) {\n    return null;\n}\n\nlet temp = msg.payload;\n\nif (temp !== 0) {\n    \n    let fan      = flow.get('fan') || 'eco';\n    let lastTemp = context.get('last_temp') || 0;\n    \n    context.set('last_temp', temp);\n\n    // Prepare two different messages\n    let msg1 = { payload: temp, topic: 'temp' };\n    let msg2 = { payload: fan,  topic: 'fan' };\n    \n    if (lastTemp === 0) {\n        return [msg1, msg2];\n    }\n    else {\n        return [msg1, null];\n    }\n\n}\nelse {\n    context.set('last_temp', 0);\n    \n    let msg1 = { payload: 0,     topic: 'temp' }\n    let msg2 = { payload: 'off', topic: 'fan' };\n    return [msg1, msg2];\n}\n    \n",
         "outputs": 2,
         "timeout": 0,
@@ -5579,9 +5512,9 @@
         "y": 280,
         "wires": [
             [
-                "df51382627e252a7",
                 "1ffa61af8057c317",
-                "89f945b670c00a5d"
+                "89f945b670c00a5d",
+                "813ff97549cc920b"
             ],
             [
                 "102150e9c523f055"
@@ -5678,26 +5611,6 @@
             [
                 "b95d223c430a2047",
                 "2bb0230acd2f9d87"
-            ]
-        ]
-    },
-    {
-        "id": "df51382627e252a7",
-        "type": "function",
-        "z": "c74d4096e08fa272",
-        "name": "Set topic",
-        "func": "\nif (msg.payload === undefined) {\n    return null;\n}\n\nmsg.topic = 'temp';\nreturn msg;\n",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 880,
-        "y": 260,
-        "wires": [
-            [
-                "e0a363c704a9509a"
             ]
         ]
     },
@@ -5947,7 +5860,7 @@
         "className": "water-target",
         "typeIsComboBox": false,
         "msgTrigger": "onChange",
-        "x": 630,
+        "x": 650,
         "y": 520,
         "wires": [
             [
@@ -6447,6 +6360,26 @@
         ]
     },
     {
+        "id": "813ff97549cc920b",
+        "type": "subflow:04a8d6feb3e5bdc7",
+        "z": "c74d4096e08fa272",
+        "name": "",
+        "env": [
+            {
+                "name": "topic",
+                "value": "temp",
+                "type": "str"
+            }
+        ],
+        "x": 870,
+        "y": 260,
+        "wires": [
+            [
+                "e0a363c704a9509a"
+            ]
+        ]
+    },
+    {
         "id": "d892337cb1c8691c",
         "type": "link in",
         "z": "fcffa944a0680a42",
@@ -6499,7 +6432,7 @@
             [],
             [
                 "86470d03d9a70f6b",
-                "649cea4b62f5fc4c"
+                "9015a4834ff0024c"
             ]
         ]
     },
@@ -6852,7 +6785,7 @@
         "y": 260,
         "wires": [
             [
-                "463211a9980153c1"
+                "27d9a5edb0ba97a5"
             ]
         ]
     },
@@ -6861,7 +6794,7 @@
         "type": "function",
         "z": "fcffa944a0680a42",
         "name": "ControlLoop",
-        "func": "\n// Settings\nconst lowBattSoC       = global.get(\"fridgeLowBattSoC\");       // Low battery detection state of charge in %\nconst boostTemp        = global.get(\"fridgeBoostTemp\");        // Temp threshold for activating the gas boost function\nconst defrostMaxTemp   = global.get(\"fridgeDefrostMaxTemp\");   // Temp threshold for deaactivating the defrost cycle\nconst defrostTempDec   = global.get(\"fridgeDefrostTempDec\");   // Decrease target temp by this amout when preparing for a defrost cycle\nconst openDoorTempRate = global.get(\"fridgeOpenDoorTempRate\"); // Fridge temp increase rate per trigger interval to raise an open door alarm\nconst openDoorTempInc  = global.get(\"fridgeOpenDoorTempInc\");  // Absolute fridge temp increase to raise an open door alarm\n\n\nlet now = Date.now();\nlet cmd = {};\nlet sensorStatus = {\"topic\": \"sensor\", \"payload\": true};\nlet battStatus   = {\"topic\": \"battery\", \"payload\": true};\nlet boostStatus  = {\"topic\": \"boost\"};\n\n// Store received values\nif (msg.topic === \"fridgeTargetTemp\") {\n    context.set(\"target\", msg.payload);\n}\nif (msg.topic === \"fridgeAbsorberMode\") {\n    context.set(\"absorberMode\", msg.payload);\n    boostStatus.payload = false;\n    node.send([null, boostStatus, null]);\n}\nelse if (msg.topic === \"fridge\") {\n    context.set(\"fridge\", msg.raw);\n    context.set(\"lastTime\", now);\n}\nelse if (msg.topic === \"room\") {\n    context.set(\"room\", msg.payload);\n}\nelse if (msg.topic === \"battery\") {\n    context.set(\"battery\", msg.payload);\n}\nelse if (msg.topic === \"jsonConfig\" && msg.payload.ok === 30) {\n    context.set(\"sysStatus\", msg.payload);\n}\nelse if (msg.topic === \"return\") {\n    context.set(\"msgSent\", false);\n}\n\n// Proceed only if trigger was received\nif (msg.topic != \"trigger\") {\n    return null;\n}\n\n\n// Read state variables\nlet target    = context.get(\"target\");\nlet absMode   = context.get(\"absorberMode\") || 0;\nlet fridge    = context.get(\"fridge\");\nlet room      = context.get(\"room\");\nlet sysStatus = context.get(\"sysStatus\") || {};\nlet battery   = context.get(\"battery\");\nlet lastTemp  = context.get(\"lastTemp\");\nlet defrost   = context.get(\"defrost\") || 0;\nlet lastTime  = context.get(\"lastTime\") || 0;\nlet nextCmd   = context.get(\"nextCmd\");\nlet msgSent   = context.get(\"msgSent\") || false;\nlet count     = context.get(\"count\") || 0;\n\n//node.warn(sysStatus);\n\n// Temperature increase rate calculation\nif (count % 3 === 0 || fridge < lastTemp || lastTemp === undefined) {\n  context.set(\"lastTemp\", fridge);\n}\nlet delta = fridge - lastTemp;\n//node.warn(`fridge=${fridge}, lastTemp=${lastTemp}, delta=${delta}, nextCmd=${nextCmd}`);\n\n// Open door / temperature surge detection\nif ((delta > openDoorTempRate || (fridge > target + openDoorTempInc && target != 0)) && !context.get(\"wasOpenDr\") && nextCmd === undefined) {\n    node.log(`Temperature surge: delta = ${delta}, fridge = ${fridge}`);\n    nextCmd = \"\\\"c 20\\\"\";                // Disable defrost\n    context.set(\"nextCmd\", \"\\\"c 10\\\"\");  // Set max speed\n    context.set(\"wasOpenDr\", true);\n}\nelse if (fridge < target) {\n    context.set(\"wasOpenDr\", false);\n}\n\n// Disable defrost at high room temperatures\nif (room > defrostMaxTemp && sysStatus.defrost === 1 && nextCmd === undefined) {\n    node.log(`Cancelling defrost: room = ${room}`);\n    nextCmd = \"\\\"c 20\\\"\";   // Disable defrost\n    sysStatus.defrost = 0;\n    context.set(\"sysStatus\", sysStatus);\n}\n\n// Detect defrost state race condition\nif (sysStatus.defrost === 0) {\n    context.set(\"defrost\", 0);\n}\nelse if (defrost === 0) {\n    // Race condition - sequence must be 0 -> 2 -> 1\n    if (sysStatus.defrost === 1 && nextCmd === undefined) {\n        node.log(\"Restarting defrost for pre-cool\");\n        nextCmd = \"\\\"c 20\\\"\";               // Disable defrost\n        context.set(\"nextCmd\", \"\\\"c 21\\\"\"); // Reenable defrost\n        sysStatus.defrost = 0;\n        context.set(\"sysStatus\", sysStatus);\n    }\n    else if (sysStatus.defrost === 2) {\n        context.set(\"defrost\", 2);\n    }\n}\n\n// Pre-cool before starting a defrost cycle\nif (sysStatus.defrost === 2 && room <= defrostMaxTemp && target >= 1) {\n    target = target - defrostTempDec;\n}\n\n// Temperature sensor failure detection\nif (now - lastTime > 60000 || fridge === undefined) {\n    sensorStatus.payload = false;\n}\n\n// Low battery detection and gas boost activation\nlet lowBatt = (battery < lowBattSoC);\nlet boost   = context.get(\"boost\") || false;\nif (room >= boostTemp && !boost) {\n    boost = true;\n    context.set(\"boost\", boost);\n}\nelse if (room < boostTemp - 1 && boost) {\n    boost = false;\n    context.set(\"boost\", boost);\n}\nif (lowBatt || boost) {\n    if (lowBatt) {\n        battStatus.payload = false;\n    }\n    if (!context.get(\"boostActive\") && absMode === 1) {\n        node.log(`Enabled boost: lowBatt = ${lowBatt}, boost = ${boost}`);\n        context.set(\"boostActive\", true);\n        boostStatus.payload = true;\n        let mode = {\"payload\": 0}; // Switch to gas mode\n        node.send([null, boostStatus, mode]);\n    }\n}\nelse {\n    if (context.get(\"boostActive\")) {\n        node.log(\"Disabled boost\");\n        context.set(\"boostActive\", false);\n        boostStatus.payload = false;\n        let mode = {\"payload\": absMode}; // Recover previous mode\n        node.send([null, boostStatus, mode]);\n    }\n}\n\n// Manage event counter\nlet statusEvent = false;\nlet pingEvent   = false;\nif (count % 2 === 0) {\n    statusEvent = true;\n}\nelse if (count % 5 === 0) {\n    pingEvent = true;\n}\n\ncount++;\ncontext.set(\"count\", count);\n\n\n// Request system status by default\ncmd.payload = \"\\\"c 30\\\"\";  \n\n// Request system status\nif (statusEvent && nextCmd === undefined) {\n    cmd.payload = \"\\\"c 30\\\"\";  // Request system status\n}\n// Turn off\nelse if (target === 0) {\n    if (sysStatus.inputEnabled === 1 || pingEvent) {\n        cmd.payload = \"\\\"c 0\\\"\";   // Turn off the compressor\n    }\n}\n// Temperature sensor failure detection\nelse if (sensorStatus.payload === false) {\n    //node.log(\"Temperature sensor no signal\");\n    // Don't send command\n}\n// Low battery detection\nelse if (battStatus.payload === false) {\n    if (sysStatus.inputEnabled === 1 || pingEvent) {\n        node.log(`Low battery shutdown: battery = ${battery}`);\n        cmd.payload = \"\\\"c 0\\\"\";   // Turn off the compressor\n    }\n}\n// Execute scheduled command\nelse if (nextCmd != undefined) {\n    nextNextCmd = context.get(\"nextCmd\");\n    if (nextNextCmd === nextCmd) {\n        context.set(\"nextCmd\", undefined);\n    }\n    cmd.payload = nextCmd;\n}\n// Start\nelse if (fridge > target) {\n    if (sysStatus.inputEnabled === 0 || pingEvent) {\n        cmd.payload = \"\\\"c 11\\\"\";  // Turn on the compressor\n    }\n}\n// Stop\nelse {\n    if (sysStatus.inputEnabled === 1 || pingEvent) {\n        cmd.payload = \"\\\"c 0\\\"\";   // Turn off the compressor\n    }\n    \n}\n\nnode.send([null, battStatus, null]);\nnode.send([null, sensorStatus, null]);\n\n// Only send a command if the previous command has been executed\nif (msgSent === false) {\n    if (cmd.payload != \"\\\"c 30\\\"\") {\n        node.log(`Sent fridge command: ${cmd.payload}`);\n    }\n    context.set(\"msgSent\", true);\n    return [cmd, null, null];\n}\nelse {\n    return null;\n}\n\n\n",
+        "func": "\n// Settings\nconst lowBattSoC       = global.get(\"fridgeLowBattSoC\");       // Low battery detection state of charge in %\nconst boostTemp        = global.get(\"fridgeBoostTemp\");        // Temp threshold for activating the gas boost function\nconst boostHyst        = global.get(\"fridgeBoostHyst\");        // Temp reduction for deactivating the gas boost function\nconst defrostMaxTemp   = global.get(\"fridgeDefrostMaxTemp\");   // Temp threshold for deaactivating the defrost cycle\nconst defrostTempDec   = global.get(\"fridgeDefrostTempDec\");   // Decrease target temp by this amout when preparing for a defrost cycle\nconst openDoorTempRate = global.get(\"fridgeOpenDoorTempRate\"); // Fridge temp increase rate per trigger interval to raise an open door alarm\nconst openDoorTempInc  = global.get(\"fridgeOpenDoorTempInc\");  // Absolute fridge temp increase to raise an open door alarm\n\n\nlet now = Date.now();\nlet cmd = {};\nlet sensorStatus = {\"topic\": \"sensor\", \"payload\": true};\nlet battStatus   = {\"topic\": \"battery\", \"payload\": true};\nlet boostStatus  = {\"topic\": \"boost\"};\n\n// Store received values\nif (msg.topic === \"fridgeTargetTemp\") {\n    context.set(\"target\", msg.payload);\n}\nif (msg.topic === \"fridgeAbsorberMode\") {\n    context.set(\"absorberMode\", msg.payload);\n    boostStatus.payload = false;\n    node.send([null, boostStatus, null]);\n}\nelse if (msg.topic === \"fridge\") {\n    context.set(\"fridge\", msg.raw);\n    context.set(\"lastTime\", now);\n}\nelse if (msg.topic === \"room\") {\n    context.set(\"room\", msg.payload);\n}\nelse if (msg.topic === \"battery\") {\n    context.set(\"battery\", msg.payload);\n}\nelse if (msg.topic === \"jsonConfig\" && msg.payload.ok === 30) {\n    context.set(\"sysStatus\", msg.payload);\n}\nelse if (msg.topic === \"return\") {\n    context.set(\"msgSent\", false);\n}\n\n// Proceed only if trigger was received\nif (msg.topic != \"trigger\") {\n    return null;\n}\n\n\n// Read state variables\nlet target    = context.get(\"target\");\nlet absMode   = context.get(\"absorberMode\") || 0;\nlet fridge    = context.get(\"fridge\");\nlet room      = context.get(\"room\");\nlet sysStatus = context.get(\"sysStatus\") || {};\nlet battery   = context.get(\"battery\");\nlet lastTemp  = context.get(\"lastTemp\");\nlet defrost   = context.get(\"defrost\") || 0;\nlet lastTime  = context.get(\"lastTime\") || 0;\nlet nextCmd   = context.get(\"nextCmd\");\nlet msgSent   = context.get(\"msgSent\") || false;\nlet count     = context.get(\"count\") || 0;\n\n//node.warn(sysStatus);\n\n// Temperature increase rate calculation\nif (count % 3 === 0 || fridge < lastTemp || lastTemp === undefined) {\n  context.set(\"lastTemp\", fridge);\n}\nlet delta = fridge - lastTemp;\n//node.warn(`fridge=${fridge}, lastTemp=${lastTemp}, delta=${delta}, nextCmd=${nextCmd}`);\n\n// Open door / temperature surge detection\nif (((delta > openDoorTempRate && fridge > target) || (fridge > target + openDoorTempInc && target != 0)) && !context.get(\"wasOpenDr\") && nextCmd === undefined) {\n    node.log(`Temperature surge: delta = ${delta.toFixed(3)}, fridge = ${fridge.toFixed(3)}`);\n    nextCmd = \"\\\"c 20\\\"\";                // Disable defrost\n    context.set(\"nextCmd\", \"\\\"c 10\\\"\");  // Set max speed\n    context.set(\"wasOpenDr\", true);\n}\nelse if (fridge < target) {\n    context.set(\"wasOpenDr\", false);\n}\n\n// Disable defrost at high room temperatures\nif (room > defrostMaxTemp && sysStatus.defrost === 1 && nextCmd === undefined) {\n    node.log(`Cancelling defrost: room = ${room}`);\n    nextCmd = \"\\\"c 20\\\"\";   // Disable defrost\n    sysStatus.defrost = 0;\n    context.set(\"sysStatus\", sysStatus);\n}\n\n// Detect defrost state race condition\nif (sysStatus.defrost === 0) {\n    context.set(\"defrost\", 0);\n}\nelse if (defrost === 0) {\n    // Race condition - sequence must be 0 -> 2 -> 1\n    if (sysStatus.defrost === 1 && nextCmd === undefined) {\n        node.log(\"Restarting defrost for pre-cool\");\n        nextCmd = \"\\\"c 20\\\"\";               // Disable defrost\n        context.set(\"nextCmd\", \"\\\"c 21\\\"\"); // Reenable defrost\n        sysStatus.defrost = 0;\n        context.set(\"sysStatus\", sysStatus);\n    }\n    else if (sysStatus.defrost === 2) {\n        context.set(\"defrost\", 2);\n    }\n}\n\n// Pre-cool before starting a defrost cycle\nif (sysStatus.defrost === 2 && room <= defrostMaxTemp && target >= 1) {\n    target = target - defrostTempDec;\n}\n\n// Temperature sensor failure detection\nif (now - lastTime > 60000 || fridge === undefined) {\n    sensorStatus.payload = false;\n}\n\n// Low battery detection and gas boost activation\nlet lowBatt = (battery < lowBattSoC);\nlet boost   = context.get(\"boost\") || false;\nif (room >= boostTemp && !boost) {\n    boost = true;\n    context.set(\"boost\", boost);\n}\nelse if (room < boostTemp - boostHyst && boost) {\n    boost = false;\n    context.set(\"boost\", boost);\n}\nif (lowBatt || boost) {\n    if (lowBatt) {\n        battStatus.payload = false;\n    }\n    if (!context.get(\"boostActive\") && absMode === 1) {\n        node.log(`Enabled boost: lowBatt = ${lowBatt}, boost = ${boost}`);\n        context.set(\"boostActive\", true);\n        boostStatus.payload = true;\n        let mode = {\"payload\": 0};  // Switch to gas mode\n        node.send([null, boostStatus, mode]);\n    }\n}\nelse {\n    if (context.get(\"boostActive\")) {\n        node.log(\"Disabled boost\");\n        context.set(\"boostActive\", false);\n        boostStatus.payload = false;\n        let mode = {\"payload\": absMode};  // Recover previous mode\n        node.send([null, boostStatus, mode]);\n    }\n}\n\n// Manage event counter\nlet statusEvent = false;\nlet pingEvent   = false;\nif (count % 2 === 0) {\n    statusEvent = true;\n}\nelse if (count % 5 === 0) {\n    pingEvent = true;\n}\n\ncount++;\ncontext.set(\"count\", count);\n\n\n// Request system status by default\ncmd.payload = \"\\\"c 30\\\"\";  \n\n// Request system status\nif (statusEvent && nextCmd === undefined) {\n    cmd.payload = \"\\\"c 30\\\"\";  // Request system status\n}\n// Turn off\nelse if (target === 0) {\n    if (sysStatus.inputEnabled === 1 || pingEvent) {\n        cmd.payload = \"\\\"c 0\\\"\";   // Turn off the compressor\n    }\n}\n// Temperature sensor failure detection\nelse if (sensorStatus.payload === false) {\n    //node.log(\"Temperature sensor no signal\");\n    // Don't send command\n}\n// Low battery detection\nelse if (battStatus.payload === false) {\n    if (sysStatus.inputEnabled === 1 || pingEvent) {\n        node.log(`Low battery shutdown: battery = ${battery}`);\n        cmd.payload = \"\\\"c 0\\\"\";   // Turn off the compressor\n    }\n}\n// Execute scheduled command\nelse if (nextCmd != undefined) {\n    nextNextCmd = context.get(\"nextCmd\");\n    if (nextNextCmd === nextCmd) {\n        context.set(\"nextCmd\", undefined);\n    }\n    cmd.payload = nextCmd;\n}\n// Start\nelse if (fridge > target) {\n    if (sysStatus.inputEnabled === 0 || pingEvent) {\n        cmd.payload = \"\\\"c 11\\\"\";  // Turn on the compressor\n    }\n}\n// Stop\nelse {\n    if (sysStatus.inputEnabled === 1 || pingEvent) {\n        cmd.payload = \"\\\"c 0\\\"\";   // Turn off the compressor\n    }\n    \n}\n\nnode.send([null, battStatus, null]);\nnode.send([null, sensorStatus, null]);\n\n// Only send a command if the previous command has been executed\nif (msgSent === false) {\n    if (cmd.payload != \"\\\"c 30\\\"\") {\n        node.log(`Sent: ${cmd.payload}`);\n    }\n    context.set(\"msgSent\", true);\n    return [cmd, null, null];\n}\nelse {\n    return null;\n}\n\n\n",
         "outputs": 3,
         "timeout": 0,
         "noerr": 0,
@@ -6906,28 +6839,8 @@
         "topic": "trigger",
         "payload": "",
         "payloadType": "date",
-        "x": 320,
+        "x": 300,
         "y": 220,
-        "wires": [
-            [
-                "a8702dfa02f03390"
-            ]
-        ]
-    },
-    {
-        "id": "463211a9980153c1",
-        "type": "function",
-        "z": "fcffa944a0680a42",
-        "name": "SetTopic",
-        "func": "\nmsg.topic = \"fridge\"\n\nreturn msg;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 320,
-        "y": 260,
         "wires": [
             [
                 "a8702dfa02f03390"
@@ -7120,27 +7033,7 @@
         "y": 340,
         "wires": [
             [
-                "1bf69e775b3364ed"
-            ]
-        ]
-    },
-    {
-        "id": "1bf69e775b3364ed",
-        "type": "function",
-        "z": "fcffa944a0680a42",
-        "name": "SetTopic",
-        "func": "\nmsg.topic = \"battery\"\n\nreturn msg;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 320,
-        "y": 340,
-        "wires": [
-            [
-                "a8702dfa02f03390"
+                "c3c2a02d311239d0"
             ]
         ]
     },
@@ -7156,27 +7049,7 @@
         "y": 300,
         "wires": [
             [
-                "1ff2fab28f1619a1"
-            ]
-        ]
-    },
-    {
-        "id": "1ff2fab28f1619a1",
-        "type": "function",
-        "z": "fcffa944a0680a42",
-        "name": "SetTopic",
-        "func": "\nmsg.topic = \"room\"\n\nreturn msg;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 320,
-        "y": 300,
-        "wires": [
-            [
-                "a8702dfa02f03390"
+                "e2ea3fae15ab213f"
             ]
         ]
     },
@@ -7196,26 +7069,6 @@
         "x": 850,
         "y": 540,
         "wires": []
-    },
-    {
-        "id": "649cea4b62f5fc4c",
-        "type": "function",
-        "z": "fcffa944a0680a42",
-        "name": "SetTopic",
-        "func": "\nmsg.topic = \"return\"\n\nreturn msg;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 320,
-        "y": 380,
-        "wires": [
-            [
-                "a8702dfa02f03390"
-            ]
-        ]
     },
     {
         "id": "cf563ccf97436424",
@@ -7347,14 +7200,14 @@
         "id": "797f9429f69e9626",
         "type": "file",
         "z": "fcffa944a0680a42",
-        "name": "",
-        "filename": "/tmp/gpio",
+        "name": "Write GPIO",
+        "filename": "/tmp/gpio-out",
         "filenameType": "str",
         "appendNewline": true,
         "createDir": false,
         "overwriteFile": "true",
         "encoding": "none",
-        "x": 1080,
+        "x": 1070,
         "y": 260,
         "wires": [
             []
@@ -7365,7 +7218,7 @@
         "type": "function",
         "z": "fcffa944a0680a42",
         "name": "Encode",
-        "func": "\n\nlet gpioPin = 26;\nlet out = {};\n\nout.payload = `${gpioPin} ${msg.payload}`\n\nreturn out;\n",
+        "func": "\n\nlet gpioPin = env.get(\"fridge-gpio-pin\");\nlet out = {};\n\nout.payload = `${gpioPin} ${msg.payload}`\n\nreturn out;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -7386,7 +7239,9 @@
         "z": "fcffa944a0680a42",
         "name": "Fridge absorber mode",
         "links": [
-            "5516c054e1990d91"
+            "5516c054e1990d91",
+            "3d85942573ccab81",
+            "bd3005bcf8f17047"
         ],
         "x": 365,
         "y": 160,
@@ -7447,12 +7302,105 @@
         "wires": []
     },
     {
+        "id": "27d9a5edb0ba97a5",
+        "type": "subflow:04a8d6feb3e5bdc7",
+        "z": "fcffa944a0680a42",
+        "name": "",
+        "env": [
+            {
+                "name": "topic",
+                "value": "fridge",
+                "type": "str"
+            }
+        ],
+        "x": 310,
+        "y": 260,
+        "wires": [
+            [
+                "a8702dfa02f03390"
+            ]
+        ]
+    },
+    {
+        "id": "e2ea3fae15ab213f",
+        "type": "subflow:04a8d6feb3e5bdc7",
+        "z": "fcffa944a0680a42",
+        "name": "",
+        "env": [
+            {
+                "name": "topic",
+                "value": "room",
+                "type": "str"
+            }
+        ],
+        "x": 310,
+        "y": 300,
+        "wires": [
+            [
+                "a8702dfa02f03390"
+            ]
+        ]
+    },
+    {
+        "id": "c3c2a02d311239d0",
+        "type": "subflow:04a8d6feb3e5bdc7",
+        "z": "fcffa944a0680a42",
+        "name": "",
+        "env": [
+            {
+                "name": "topic",
+                "value": "battery",
+                "type": "str"
+            }
+        ],
+        "x": 310,
+        "y": 340,
+        "wires": [
+            [
+                "a8702dfa02f03390"
+            ]
+        ]
+    },
+    {
+        "id": "9015a4834ff0024c",
+        "type": "subflow:04a8d6feb3e5bdc7",
+        "z": "fcffa944a0680a42",
+        "name": "",
+        "env": [
+            {
+                "name": "topic",
+                "value": "return",
+                "type": "str"
+            }
+        ],
+        "x": 310,
+        "y": 380,
+        "wires": [
+            [
+                "a8702dfa02f03390"
+            ]
+        ]
+    },
+    {
+        "id": "bd3005bcf8f17047",
+        "type": "link out",
+        "z": "fcffa944a0680a42",
+        "name": "Fridge absorber mode",
+        "mode": "link",
+        "links": [
+            "0ffbdf4fdf3d401d"
+        ],
+        "x": 1175,
+        "y": 300,
+        "wires": []
+    },
+    {
         "id": "506010c16d2924c9",
         "type": "function",
         "z": "fc670f602d442a02",
         "name": "DecodeJSON",
-        "func": "\nlet json = msg.payload;\n\nfunction makeMessage(key, defaultValue) {\n    let value = (json[key] !== undefined) ? json[key] : defaultValue;\n    return {\n        topic: key,\n        payload: value\n    };\n}\n\n\n\nlet msg1  = makeMessage(\"fridgeLowBattSoC\", 30);\nlet msg2  = makeMessage(\"fridgeBoostTemp\", 30);\nlet msg3  = makeMessage(\"fridgeDefrostMaxTemp\", 23);\nlet msg4  = makeMessage(\"fridgeDefrostTempDec\", 0.5);\nlet msg5  = makeMessage(\"fridgeOpenDoorTempRate\", 0.15);\nlet msg6  = makeMessage(\"fridgeOpenDoorTempInc\", 1);\n\nlet msg7  = makeMessage(\"alarmBattLow\", 20);\nlet msg8  = makeMessage(\"alarmPropaneLow\", 5);\nlet msg9  = makeMessage(\"alarmTempRoomLow\", 5);\nlet msg10 = makeMessage(\"alarmTempRoomHigh\", 35);\nlet msg11 = makeMessage(\"alarmTempFridgeLow\", 1);\nlet msg12 = makeMessage(\"alarmTempFridgeHigh\", 10);\nlet msg13 = makeMessage(\"alarmTempWaterLow\", 5);\nlet msg14 = makeMessage(\"alarmTempCpuHigh\", 70);\nlet msg15 = makeMessage(\"alarmTempBattLow\", 5);\nlet msg16 = makeMessage(\"alarmTempBattHigh\", 30);\n\nlet msg17 = makeMessage(\"offsetTempRoom\", 0);\nlet msg18 = makeMessage(\"offsetTempOutdoor\", 0);\nlet msg19 = makeMessage(\"offsetTempFridge\", 0);\n\nlet msg20 = makeMessage(\"fridgeTargetTemp\", 4);\nlet msg21 = makeMessage(\"fridgeAbsorberMode\", 1);\n\nlet apply = {topic: \"apply\"};\n\nreturn [msg1, msg2, msg3, msg4, msg5, msg6, msg7, \n        msg8, msg9, msg10, msg11, msg12, msg13, msg14, \n        msg15, msg16, msg17, msg18, msg19, msg20, msg21, apply];\n",
-        "outputs": 22,
+        "func": "\nlet json = msg.payload;\nlet msgCount = 0\n\nfunction makeMessage(key, defaultValue) {\n    msgCount++;\n    flow.set(\"msgCount\", msgCount);\n    let value = (json[key] !== undefined) ? json[key] : defaultValue;\n    return {\n        topic: key,\n        payload: value\n    };\n}\n\n\nlet messages = [\n    makeMessage(\"fridgeLowBattSoC\", 30),\n    makeMessage(\"fridgeBoostTemp\", 30),\n    makeMessage(\"fridgeBoostHyst\", 5),\n    makeMessage(\"fridgeDefrostMaxTemp\", 23),\n    makeMessage(\"fridgeDefrostTempDec\", 0.8),\n    makeMessage(\"fridgeOpenDoorTempRate\", 0.15),\n    makeMessage(\"fridgeOpenDoorTempInc\", 1),\n\n    makeMessage(\"alarmBattLow\", 20),\n    makeMessage(\"alarmPropaneLow\", 5),\n    makeMessage(\"alarmTempRoomLow\", 5),\n    makeMessage(\"alarmTempRoomHigh\", 35),\n    makeMessage(\"alarmTempFridgeLow\", 1),\n    makeMessage(\"alarmTempFridgeHigh\", 10),\n    makeMessage(\"alarmTempWaterLow\", 5),\n    makeMessage(\"alarmTempCpuHigh\", 70),\n    makeMessage(\"alarmTempBattLow\", 5),\n    makeMessage(\"alarmTempBattHigh\", 30),\n\n    makeMessage(\"offsetTempRoom\", 0),\n    makeMessage(\"offsetTempOutdoor\", 0),\n    makeMessage(\"offsetTempFridge\", 0),\n\n    makeMessage(\"fridgeTargetTemp\", 4),\n    makeMessage(\"fridgeAbsorberMode\", 1),\n\n    {topic: \"apply\"}\n];\n\nreturn messages;\n",
+        "outputs": 23,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
@@ -7466,6 +7414,9 @@
             ],
             [
                 "bfaf60179a7a3ec4"
+            ],
+            [
+                "ccaf28b40887c3b2"
             ],
             [
                 "f4b8284e3d3b8839"
@@ -7597,7 +7548,7 @@
         "type": "function",
         "z": "fc670f602d442a02",
         "name": "EncodeJSON",
-        "func": "\nglobal.set(msg.topic, msg.payload);\ncontext.set(msg.topic, msg.payload);\n\n\nlet numMsgs  = 21;\nlet msgCount = context.get(\"msgCount\") || 0;\nmsgCount++;\ncontext.set(\"msgCount\", msgCount);\n\nif (msg.topic === \"reset\") {\n    context.set(\"msgCount\", 0);\n    return null;\n}\nelse {\n    node.log(`Setting: ${msg.topic} = ${msg.payload}`);\n}\n\nlet output = {};\nlet json   = {};\n\nlet keys = context.keys();\nkeys = keys.filter(k => k !== \"msgCount\");\n//keys.sort();\nfor (let i = 0; i < keys.length; i++) {\n    json[keys[i]] = context.get(keys[i]);\n}\n\noutput.payload = JSON.stringify(json, null, 2);\n\nreturn (msgCount >= numMsgs) ? output : null;\n",
+        "func": "\nif (msg.topic === \"reset\") {\n    context.set(\"msgCount\", 0);\n    context.set(\"traceEnable\", false);\n    return null;\n}\n\nglobal.set(msg.topic, msg.payload);\ncontext.set(msg.topic, msg.payload);\n\n\nlet numMsgs  = flow.get(\"msgCount\");\nlet msgCount = context.get(\"msgCount\") || 0;\nmsgCount++;\ncontext.set(\"msgCount\", msgCount);\n\nlet traceEnable = context.get(\"traceEnable\");\nif (traceEnable === undefined) traceEnable = true;\nif (traceEnable) {\n    node.log(`Setting: ${msg.topic} = ${msg.payload}`);\n}\n\nlet output = {};\nlet json   = {};\n\nlet keys = context.keys();\nkeys = keys.filter(k => k !== \"msgCount\");\nkeys = keys.filter(k => k !== \"traceEnable\");\n//keys.sort();\nfor (let i = 0; i < keys.length; i++) {\n    json[keys[i]] = context.get(keys[i]);\n}\n\noutput.payload = JSON.stringify(json, null, 2);\n\n \nif (msgCount >= numMsgs) {\n    context.set(\"traceEnable\", true);\n    return output;\n}\nelse {\n    return null;\n}\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -7673,6 +7624,16 @@
             {
                 "label": "30 %",
                 "value": 30,
+                "type": "num"
+            },
+            {
+                "label": "35 %",
+                "value": 35,
+                "type": "num"
+            },
+            {
+                "label": "40 %",
+                "value": 40,
                 "type": "num"
             }
         ],
@@ -7837,7 +7798,7 @@
         "type": "ui-text",
         "z": "fc670f602d442a02",
         "group": "28b10b40908e96b0",
-        "order": 5,
+        "order": 7,
         "width": "3",
         "height": "1",
         "name": "",
@@ -7851,7 +7812,7 @@
         "wrapText": false,
         "className": "",
         "x": 110,
-        "y": 160,
+        "y": 200,
         "wires": []
     },
     {
@@ -7862,7 +7823,7 @@
         "name": "Max defrost temp",
         "label": "Temp",
         "tooltip": "",
-        "order": 6,
+        "order": 8,
         "width": 3,
         "height": "",
         "passthru": true,
@@ -7913,7 +7874,7 @@
         "typeIsComboBox": false,
         "msgTrigger": "onChange",
         "x": 890,
-        "y": 160,
+        "y": 200,
         "wires": [
             [
                 "9b8d7098547ac4d7"
@@ -7925,7 +7886,7 @@
         "type": "ui-text",
         "z": "fc670f602d442a02",
         "group": "28b10b40908e96b0",
-        "order": 7,
+        "order": 9,
         "width": "3",
         "height": "1",
         "name": "",
@@ -7939,7 +7900,7 @@
         "wrapText": false,
         "className": "",
         "x": 100,
-        "y": 200,
+        "y": 240,
         "wires": []
     },
     {
@@ -7950,7 +7911,7 @@
         "name": "Defrost pre-cool",
         "label": "Offset",
         "tooltip": "",
-        "order": 8,
+        "order": 10,
         "width": 3,
         "height": "",
         "passthru": true,
@@ -7986,7 +7947,7 @@
         "typeIsComboBox": false,
         "msgTrigger": "onChange",
         "x": 880,
-        "y": 200,
+        "y": 240,
         "wires": [
             [
                 "9b8d7098547ac4d7"
@@ -7998,7 +7959,7 @@
         "type": "ui-text",
         "z": "fc670f602d442a02",
         "group": "28b10b40908e96b0",
-        "order": 9,
+        "order": 11,
         "width": "3",
         "height": "1",
         "name": "",
@@ -8012,7 +7973,7 @@
         "wrapText": false,
         "className": "",
         "x": 100,
-        "y": 240,
+        "y": 280,
         "wires": []
     },
     {
@@ -8023,7 +7984,7 @@
         "name": "ODD rate trigger",
         "label": "Sensitivity",
         "tooltip": "",
-        "order": 10,
+        "order": 12,
         "width": 3,
         "height": "",
         "passthru": true,
@@ -8059,7 +8020,7 @@
         "typeIsComboBox": false,
         "msgTrigger": "onChange",
         "x": 880,
-        "y": 240,
+        "y": 280,
         "wires": [
             [
                 "9b8d7098547ac4d7"
@@ -8071,7 +8032,7 @@
         "type": "ui-text",
         "z": "fc670f602d442a02",
         "group": "28b10b40908e96b0",
-        "order": 11,
+        "order": 13,
         "width": "3",
         "height": "1",
         "name": "",
@@ -8085,7 +8046,7 @@
         "wrapText": false,
         "className": "",
         "x": 110,
-        "y": 280,
+        "y": 320,
         "wires": []
     },
     {
@@ -8096,7 +8057,7 @@
         "name": "ODD temp trigger",
         "label": "Offset",
         "tooltip": "",
-        "order": 12,
+        "order": 14,
         "width": 3,
         "height": "",
         "passthru": true,
@@ -8132,7 +8093,7 @@
         "typeIsComboBox": false,
         "msgTrigger": "onChange",
         "x": 890,
-        "y": 280,
+        "y": 320,
         "wires": [
             [
                 "9b8d7098547ac4d7"
@@ -8158,7 +8119,7 @@
         "wrapText": false,
         "className": "",
         "x": 90,
-        "y": 340,
+        "y": 380,
         "wires": []
     },
     {
@@ -8215,7 +8176,7 @@
         "typeIsComboBox": false,
         "msgTrigger": "onChange",
         "x": 870,
-        "y": 340,
+        "y": 380,
         "wires": [
             [
                 "9b8d7098547ac4d7"
@@ -8241,7 +8202,7 @@
         "wrapText": false,
         "className": "",
         "x": 90,
-        "y": 380,
+        "y": 420,
         "wires": []
     },
     {
@@ -8293,7 +8254,7 @@
         "typeIsComboBox": false,
         "msgTrigger": "onChange",
         "x": 870,
-        "y": 380,
+        "y": 420,
         "wires": [
             [
                 "9b8d7098547ac4d7"
@@ -8319,7 +8280,7 @@
         "wrapText": false,
         "className": "",
         "x": 100,
-        "y": 420,
+        "y": 460,
         "wires": []
     },
     {
@@ -8366,7 +8327,7 @@
         "typeIsComboBox": false,
         "msgTrigger": "onChange",
         "x": 880,
-        "y": 420,
+        "y": 460,
         "wires": [
             [
                 "9b8d7098547ac4d7"
@@ -8392,7 +8353,7 @@
         "wrapText": false,
         "className": "",
         "x": 100,
-        "y": 460,
+        "y": 500,
         "wires": []
     },
     {
@@ -8439,7 +8400,7 @@
         "typeIsComboBox": false,
         "msgTrigger": "onChange",
         "x": 880,
-        "y": 460,
+        "y": 500,
         "wires": [
             [
                 "9b8d7098547ac4d7"
@@ -8465,7 +8426,7 @@
         "wrapText": false,
         "className": "",
         "x": 100,
-        "y": 500,
+        "y": 540,
         "wires": []
     },
     {
@@ -8487,7 +8448,7 @@
         "wrapText": false,
         "className": "",
         "x": 110,
-        "y": 540,
+        "y": 580,
         "wires": []
     },
     {
@@ -8534,7 +8495,7 @@
         "typeIsComboBox": false,
         "msgTrigger": "onChange",
         "x": 880,
-        "y": 500,
+        "y": 540,
         "wires": [
             [
                 "9b8d7098547ac4d7"
@@ -8585,7 +8546,7 @@
         "typeIsComboBox": false,
         "msgTrigger": "onChange",
         "x": 890,
-        "y": 540,
+        "y": 580,
         "wires": [
             [
                 "9b8d7098547ac4d7"
@@ -8611,7 +8572,7 @@
         "wrapText": false,
         "className": "",
         "x": 100,
-        "y": 580,
+        "y": 620,
         "wires": []
     },
     {
@@ -8658,7 +8619,7 @@
         "typeIsComboBox": false,
         "msgTrigger": "onChange",
         "x": 880,
-        "y": 580,
+        "y": 620,
         "wires": [
             [
                 "9b8d7098547ac4d7"
@@ -8684,7 +8645,7 @@
         "wrapText": false,
         "className": "",
         "x": 100,
-        "y": 620,
+        "y": 660,
         "wires": []
     },
     {
@@ -8731,7 +8692,7 @@
         "typeIsComboBox": false,
         "msgTrigger": "onChange",
         "x": 880,
-        "y": 620,
+        "y": 660,
         "wires": [
             [
                 "9b8d7098547ac4d7"
@@ -8757,7 +8718,7 @@
         "wrapText": false,
         "className": "",
         "x": 110,
-        "y": 660,
+        "y": 700,
         "wires": []
     },
     {
@@ -8779,7 +8740,7 @@
         "wrapText": false,
         "className": "",
         "x": 110,
-        "y": 700,
+        "y": 740,
         "wires": []
     },
     {
@@ -8826,7 +8787,7 @@
         "typeIsComboBox": false,
         "msgTrigger": "onChange",
         "x": 890,
-        "y": 700,
+        "y": 740,
         "wires": [
             [
                 "9b8d7098547ac4d7"
@@ -8877,7 +8838,7 @@
         "typeIsComboBox": false,
         "msgTrigger": "onChange",
         "x": 890,
-        "y": 660,
+        "y": 700,
         "wires": [
             [
                 "9b8d7098547ac4d7"
@@ -8903,7 +8864,7 @@
         "wrapText": false,
         "className": "",
         "x": 90,
-        "y": 760,
+        "y": 800,
         "wires": []
     },
     {
@@ -8985,7 +8946,7 @@
         "typeIsComboBox": false,
         "msgTrigger": "onChange",
         "x": 870,
-        "y": 760,
+        "y": 800,
         "wires": [
             [
                 "9b8d7098547ac4d7"
@@ -9011,7 +8972,7 @@
         "wrapText": false,
         "className": "",
         "x": 100,
-        "y": 800,
+        "y": 840,
         "wires": []
     },
     {
@@ -9093,7 +9054,7 @@
         "typeIsComboBox": false,
         "msgTrigger": "onChange",
         "x": 880,
-        "y": 800,
+        "y": 840,
         "wires": [
             [
                 "9b8d7098547ac4d7"
@@ -9119,7 +9080,7 @@
         "wrapText": false,
         "className": "",
         "x": 90,
-        "y": 840,
+        "y": 880,
         "wires": []
     },
     {
@@ -9201,7 +9162,7 @@
         "typeIsComboBox": false,
         "msgTrigger": "onChange",
         "x": 870,
-        "y": 840,
+        "y": 880,
         "wires": [
             [
                 "9b8d7098547ac4d7"
@@ -9216,8 +9177,8 @@
         "links": [
             "236fdb56f87224ab"
         ],
-        "x": 1305,
-        "y": 280,
+        "x": 1025,
+        "y": 960,
         "wires": [
             [
                 "c2daddd28170cbb5"
@@ -9234,7 +9195,7 @@
             "b8de84a1a12a151c"
         ],
         "x": 815,
-        "y": 900,
+        "y": 940,
         "wires": []
     },
     {
@@ -9247,7 +9208,7 @@
             "0ffbdf4fdf3d401d"
         ],
         "x": 815,
-        "y": 940,
+        "y": 980,
         "wires": []
     },
     {
@@ -9255,9 +9216,9 @@
         "type": "ui-button",
         "z": "fc670f602d442a02",
         "group": "28b10b40908e96b0",
-        "name": "",
+        "name": "Apply 1",
         "label": "Apply",
-        "order": 13,
+        "order": 15,
         "width": 0,
         "height": 0,
         "emulateClick": true,
@@ -9281,8 +9242,8 @@
         "enablePointerup": false,
         "pointerupPayload": "",
         "pointerupPayloadType": "str",
-        "x": 870,
-        "y": 1000,
+        "x": 880,
+        "y": 1040,
         "wires": [
             [
                 "9b8d7098547ac4d7"
@@ -9319,8 +9280,8 @@
         "z": "fc670f602d442a02",
         "name": "",
         "pauseType": "delay",
-        "timeout": "1",
-        "timeoutUnits": "seconds",
+        "timeout": "100",
+        "timeoutUnits": "milliseconds",
         "rate": "1",
         "nbRateUnits": "1",
         "rateUnits": "second",
@@ -9330,8 +9291,8 @@
         "drop": false,
         "allowrate": false,
         "outputs": 1,
-        "x": 720,
-        "y": 1000,
+        "x": 730,
+        "y": 1040,
         "wires": [
             [
                 "eaa15de8f7205f01"
@@ -9343,7 +9304,7 @@
         "type": "ui-button",
         "z": "fc670f602d442a02",
         "group": "87a251b1b078a4c3",
-        "name": "",
+        "name": "Apply 3",
         "label": "Apply",
         "order": 21,
         "width": 0,
@@ -9369,8 +9330,8 @@
         "enablePointerup": false,
         "pointerupPayload": "",
         "pointerupPayloadType": "str",
-        "x": 870,
-        "y": 1080,
+        "x": 880,
+        "y": 1120,
         "wires": [
             [
                 "9b8d7098547ac4d7"
@@ -9382,7 +9343,7 @@
         "type": "ui-button",
         "z": "fc670f602d442a02",
         "group": "7a52027f8ab130e8",
-        "name": "",
+        "name": "Apply 2",
         "label": "Apply",
         "order": 7,
         "width": 0,
@@ -9408,12 +9369,120 @@
         "enablePointerup": false,
         "pointerupPayload": "",
         "pointerupPayloadType": "str",
-        "x": 870,
-        "y": 1040,
+        "x": 880,
+        "y": 1080,
         "wires": [
             [
                 "9b8d7098547ac4d7"
             ]
         ]
+    },
+    {
+        "id": "ccaf28b40887c3b2",
+        "type": "ui-dropdown",
+        "z": "fc670f602d442a02",
+        "group": "28b10b40908e96b0",
+        "name": "Boost stop hyst",
+        "label": "Offset",
+        "tooltip": "",
+        "order": 6,
+        "width": 3,
+        "height": "",
+        "passthru": true,
+        "multiple": false,
+        "chips": false,
+        "clearable": false,
+        "options": [
+            {
+                "label": "0 °C",
+                "value": 0,
+                "type": "num"
+            },
+            {
+                "label": "-1 °C",
+                "value": 1,
+                "type": "num"
+            },
+            {
+                "label": "-2 °C",
+                "value": 2,
+                "type": "num"
+            },
+            {
+                "label": "-3 °C",
+                "value": 3,
+                "type": "num"
+            },
+            {
+                "label": "-4 °C",
+                "value": 4,
+                "type": "num"
+            },
+            {
+                "label": "-5 °C",
+                "value": 5,
+                "type": "num"
+            },
+            {
+                "label": "-6 °C",
+                "value": 6,
+                "type": "num"
+            },
+            {
+                "label": "-7 °C",
+                "value": 7,
+                "type": "num"
+            },
+            {
+                "label": "-8 °C",
+                "value": 8,
+                "type": "num"
+            },
+            {
+                "label": "-9 °C",
+                "value": 9,
+                "type": "num"
+            },
+            {
+                "label": "-10 °C",
+                "value": 10,
+                "type": "num"
+            }
+        ],
+        "payload": "",
+        "topic": "topic",
+        "topicType": "msg",
+        "className": "",
+        "typeIsComboBox": false,
+        "msgTrigger": "onChange",
+        "x": 880,
+        "y": 160,
+        "wires": [
+            [
+                "9b8d7098547ac4d7"
+            ]
+        ]
+    },
+    {
+        "id": "702408012e192f10",
+        "type": "ui-text",
+        "z": "fc670f602d442a02",
+        "group": "28b10b40908e96b0",
+        "order": 5,
+        "width": "3",
+        "height": "1",
+        "name": "",
+        "label": "Boost stop hyst",
+        "format": "{{msg.payload}}",
+        "layout": "row-spread",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#717171",
+        "wrapText": false,
+        "className": "",
+        "x": 100,
+        "y": 160,
+        "wires": []
     }
 ]
