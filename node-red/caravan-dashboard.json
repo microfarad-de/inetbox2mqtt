@@ -408,6 +408,59 @@
         "color": "#DDAA99"
     },
     {
+        "id": "521836fa35cf581b",
+        "type": "subflow",
+        "name": "Gate",
+        "info": "",
+        "category": "",
+        "in": [
+            {
+                "x": 320,
+                "y": 320,
+                "wires": [
+                    {
+                        "id": "070ca012bd78c327"
+                    }
+                ]
+            }
+        ],
+        "out": [
+            {
+                "x": 660,
+                "y": 260,
+                "wires": [
+                    {
+                        "id": "070ca012bd78c327",
+                        "port": 0
+                    }
+                ]
+            },
+            {
+                "x": 660,
+                "y": 320,
+                "wires": [
+                    {
+                        "id": "070ca012bd78c327",
+                        "port": 1
+                    }
+                ]
+            },
+            {
+                "x": 660,
+                "y": 380,
+                "wires": [
+                    {
+                        "id": "070ca012bd78c327",
+                        "port": 2
+                    }
+                ]
+            }
+        ],
+        "env": [],
+        "meta": {},
+        "color": "#DDAA99"
+    },
+    {
         "id": "2c24d1c82633c69e",
         "type": "mqtt-broker",
         "name": "Venus",
@@ -1141,6 +1194,26 @@
         "x": 420,
         "y": 220,
         "wires": [
+            []
+        ]
+    },
+    {
+        "id": "070ca012bd78c327",
+        "type": "function",
+        "z": "521836fa35cf581b",
+        "name": "Gate",
+        "func": "\n// Duration in milliseconds\nconst TIMEOUT = 20000; \n\nlet existingTimer = context.get(\"timer\");\nif (existingTimer) {\n    clearTimeout(existingTimer);\n}\n\n\nif (msg.topic === \"apply\") {\n    let output = {};\n    let keys = context.keys();\n    keys = keys.filter(k => k !== \"timer\");\n    for (let i = 0; i < keys.length; i++) {\n        output.topic   = keys[i];\n        output.payload = context.get(keys[i]);\n        context.set(keys[i], undefined);\n        node.send([output, null, {ui_update: {class: 'grayout'}}]);\n    }\n}\nelse {\n    context.set(msg.topic, msg.payload);\n    node.send([null, null, {ui_update: {class: ''}}])\n    \n    let newTimer = setTimeout(() => {\n        node.send([null, { topic: \"reset\"}, null]);\n        context.set(\"timer\", null);\n    }, TIMEOUT);\n    context.set(\"timer\", newTimer);\n}\n\nreturn null;\n\n",
+        "outputs": 3,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 490,
+        "y": 320,
+        "wires": [
+            [],
+            [],
             []
         ]
     },
@@ -7383,24 +7456,11 @@
         ]
     },
     {
-        "id": "bd3005bcf8f17047",
-        "type": "link out",
-        "z": "fcffa944a0680a42",
-        "name": "Fridge absorber mode",
-        "mode": "link",
-        "links": [
-            "0ffbdf4fdf3d401d"
-        ],
-        "x": 1175,
-        "y": 300,
-        "wires": []
-    },
-    {
         "id": "506010c16d2924c9",
         "type": "function",
         "z": "fc670f602d442a02",
         "name": "DecodeJSON",
-        "func": "\nlet json = msg.payload;\nlet msgCount = 0\n\nfunction makeMessage(key, defaultValue) {\n    msgCount++;\n    flow.set(\"msgCount\", msgCount);\n    let value = (json[key] !== undefined) ? json[key] : defaultValue;\n    return {\n        topic: key,\n        payload: value\n    };\n}\n\n\nlet messages = [\n    makeMessage(\"fridgeFreezerInstalled\", false),\n    makeMessage(\"fridgeLowBattSoC\", 30),\n    makeMessage(\"fridgeBoostTemp\", 30),\n    makeMessage(\"fridgeBoostHyst\", 5),\n    makeMessage(\"fridgeDefrostMaxTemp\", 23),\n    makeMessage(\"fridgeDefrostTempDec\", 0.8),\n    makeMessage(\"fridgeOpenDoorTempRate\", 0.15),\n    makeMessage(\"fridgeOpenDoorTempInc\", 1),\n\n    makeMessage(\"alarmBattLow\", 20),\n    makeMessage(\"alarmPropaneLow\", 5),\n    makeMessage(\"alarmTempRoomLow\", 5),\n    makeMessage(\"alarmTempRoomHigh\", 35),\n    makeMessage(\"alarmTempFridgeLow\", 1),\n    makeMessage(\"alarmTempFridgeHigh\", 10),\n    makeMessage(\"alarmTempWaterLow\", 5),\n    makeMessage(\"alarmTempCpuHigh\", 70),\n    makeMessage(\"alarmTempBattLow\", 5),\n    makeMessage(\"alarmTempBattHigh\", 30),\n\n    makeMessage(\"offsetTempRoom\", 0),\n    makeMessage(\"offsetTempOutdoor\", 0),\n    makeMessage(\"offsetTempFridge\", 0),\n\n    makeMessage(\"fridgeTargetTemp\", 4),\n    makeMessage(\"fridgeAbsorberMode\", 1),\n\n    {topic: \"apply\"}\n];\n\nreturn messages;\n",
+        "func": "\nlet json = msg.payload;\nlet msgCount = 0\n\nfunction makeMessage(key, defaultValue) {\n    msgCount++;\n    flow.set(\"msgCount\", msgCount);\n    let value = (json[key] !== undefined) ? json[key] : defaultValue;\n    return {\n        topic: key,\n        payload: value\n    };\n}\n\n\nlet messages = [\n    makeMessage(\"fridgeFreezerInstalled\", false),\n    makeMessage(\"fridgeLowBattSoC\", 30),\n    makeMessage(\"fridgeBoostTemp\", 30),\n    makeMessage(\"fridgeBoostHyst\", 5),\n    makeMessage(\"fridgeDefrostMaxTemp\", 23),\n    makeMessage(\"fridgeDefrostTempDec\", 0.8),\n    makeMessage(\"fridgeOpenDoorTempRate\", 0.15),\n    makeMessage(\"fridgeOpenDoorTempInc\", 1),\n\n    makeMessage(\"alarmBattLow\", 20),\n    makeMessage(\"alarmPropaneLow\", 5),\n    makeMessage(\"alarmTempRoomLow\", 5),\n    makeMessage(\"alarmTempRoomHigh\", 35),\n    makeMessage(\"alarmTempFridgeLow\", 1),\n    makeMessage(\"alarmTempFridgeHigh\", 10),\n    makeMessage(\"alarmTempWaterLow\", 5),\n    makeMessage(\"alarmTempCpuHigh\", 70),\n    makeMessage(\"alarmTempBattLow\", 5),\n    makeMessage(\"alarmTempBattHigh\", 30),\n\n    makeMessage(\"offsetTempRoom\", 0),\n    makeMessage(\"offsetTempOutdoor\", 0),\n    makeMessage(\"offsetTempFridge\", 0),\n\n    makeMessage(\"fridgeTargetTemp\", 4),\n    makeMessage(\"fridgeAbsorberMode\", 1),\n\n    {topic: \"apply\", payload: \"\"}\n];\n\nreturn messages;\n",
         "outputs": 24,
         "timeout": 0,
         "noerr": 0,
@@ -7651,7 +7711,7 @@
         "y": 80,
         "wires": [
             [
-                "9b8d7098547ac4d7"
+                "9417300a8154fe41"
             ]
         ]
     },
@@ -7793,7 +7853,7 @@
         "y": 120,
         "wires": [
             [
-                "9b8d7098547ac4d7"
+                "9417300a8154fe41"
             ]
         ]
     },
@@ -7881,7 +7941,7 @@
         "y": 200,
         "wires": [
             [
-                "9b8d7098547ac4d7"
+                "9417300a8154fe41"
             ]
         ]
     },
@@ -7954,7 +8014,7 @@
         "y": 240,
         "wires": [
             [
-                "9b8d7098547ac4d7"
+                "9417300a8154fe41"
             ]
         ]
     },
@@ -8027,7 +8087,7 @@
         "y": 280,
         "wires": [
             [
-                "9b8d7098547ac4d7"
+                "9417300a8154fe41"
             ]
         ]
     },
@@ -8100,7 +8160,7 @@
         "y": 320,
         "wires": [
             [
-                "9b8d7098547ac4d7"
+                "9417300a8154fe41"
             ]
         ]
     },
@@ -8180,10 +8240,10 @@
         "typeIsComboBox": false,
         "msgTrigger": "onChange",
         "x": 870,
-        "y": 380,
+        "y": 440,
         "wires": [
             [
-                "9b8d7098547ac4d7"
+                "c5cd6710bd410a34"
             ]
         ]
     },
@@ -8258,10 +8318,10 @@
         "typeIsComboBox": false,
         "msgTrigger": "onChange",
         "x": 870,
-        "y": 420,
+        "y": 480,
         "wires": [
             [
-                "9b8d7098547ac4d7"
+                "c5cd6710bd410a34"
             ]
         ]
     },
@@ -8331,10 +8391,10 @@
         "typeIsComboBox": false,
         "msgTrigger": "onChange",
         "x": 880,
-        "y": 460,
+        "y": 520,
         "wires": [
             [
-                "9b8d7098547ac4d7"
+                "c5cd6710bd410a34"
             ]
         ]
     },
@@ -8404,10 +8464,10 @@
         "typeIsComboBox": false,
         "msgTrigger": "onChange",
         "x": 880,
-        "y": 500,
+        "y": 560,
         "wires": [
             [
-                "9b8d7098547ac4d7"
+                "c5cd6710bd410a34"
             ]
         ]
     },
@@ -8499,10 +8559,10 @@
         "typeIsComboBox": false,
         "msgTrigger": "onChange",
         "x": 880,
-        "y": 540,
+        "y": 600,
         "wires": [
             [
-                "9b8d7098547ac4d7"
+                "c5cd6710bd410a34"
             ]
         ]
     },
@@ -8550,10 +8610,10 @@
         "typeIsComboBox": false,
         "msgTrigger": "onChange",
         "x": 890,
-        "y": 580,
+        "y": 640,
         "wires": [
             [
-                "9b8d7098547ac4d7"
+                "c5cd6710bd410a34"
             ]
         ]
     },
@@ -8623,10 +8683,10 @@
         "typeIsComboBox": false,
         "msgTrigger": "onChange",
         "x": 880,
-        "y": 620,
+        "y": 680,
         "wires": [
             [
-                "9b8d7098547ac4d7"
+                "c5cd6710bd410a34"
             ]
         ]
     },
@@ -8696,10 +8756,10 @@
         "typeIsComboBox": false,
         "msgTrigger": "onChange",
         "x": 880,
-        "y": 660,
+        "y": 720,
         "wires": [
             [
-                "9b8d7098547ac4d7"
+                "c5cd6710bd410a34"
             ]
         ]
     },
@@ -8791,10 +8851,10 @@
         "typeIsComboBox": false,
         "msgTrigger": "onChange",
         "x": 890,
-        "y": 740,
+        "y": 800,
         "wires": [
             [
-                "9b8d7098547ac4d7"
+                "c5cd6710bd410a34"
             ]
         ]
     },
@@ -8842,10 +8902,10 @@
         "typeIsComboBox": false,
         "msgTrigger": "onChange",
         "x": 890,
-        "y": 700,
+        "y": 760,
         "wires": [
             [
-                "9b8d7098547ac4d7"
+                "c5cd6710bd410a34"
             ]
         ]
     },
@@ -8950,10 +9010,10 @@
         "typeIsComboBox": false,
         "msgTrigger": "onChange",
         "x": 870,
-        "y": 800,
+        "y": 920,
         "wires": [
             [
-                "9b8d7098547ac4d7"
+                "08ebf0b647182af1"
             ]
         ]
     },
@@ -9058,10 +9118,10 @@
         "typeIsComboBox": false,
         "msgTrigger": "onChange",
         "x": 880,
-        "y": 840,
+        "y": 960,
         "wires": [
             [
-                "9b8d7098547ac4d7"
+                "08ebf0b647182af1"
             ]
         ]
     },
@@ -9166,10 +9226,10 @@
         "typeIsComboBox": false,
         "msgTrigger": "onChange",
         "x": 870,
-        "y": 880,
+        "y": 1000,
         "wires": [
             [
-                "9b8d7098547ac4d7"
+                "08ebf0b647182af1"
             ]
         ]
     },
@@ -9182,7 +9242,7 @@
             "236fdb56f87224ab"
         ],
         "x": 1025,
-        "y": 960,
+        "y": 1140,
         "wires": [
             [
                 "c2daddd28170cbb5"
@@ -9199,7 +9259,7 @@
             "b8de84a1a12a151c"
         ],
         "x": 815,
-        "y": 940,
+        "y": 1120,
         "wires": []
     },
     {
@@ -9212,7 +9272,7 @@
             "0ffbdf4fdf3d401d"
         ],
         "x": 815,
-        "y": 980,
+        "y": 1160,
         "wires": []
     },
     {
@@ -9225,7 +9285,7 @@
         "order": 17,
         "width": 0,
         "height": 0,
-        "emulateClick": true,
+        "emulateClick": false,
         "tooltip": "",
         "color": "",
         "bgcolor": "",
@@ -9247,34 +9307,10 @@
         "pointerupPayload": "",
         "pointerupPayloadType": "str",
         "x": 880,
-        "y": 1100,
+        "y": 380,
         "wires": [
             [
-                "9b8d7098547ac4d7"
-            ]
-        ]
-    },
-    {
-        "id": "9b8d7098547ac4d7",
-        "type": "function",
-        "z": "fc670f602d442a02",
-        "name": "Gate",
-        "func": "\n// Duration in milliseconds\nconst TIMEOUT = 20000; \n\nlet existingTimer = context.get(\"timer\");\nif (existingTimer) {\n    clearTimeout(existingTimer);\n}\n\n\nif (msg.topic === \"apply\") {\n    let output = {};\n    let keys = context.keys();\n    keys = keys.filter(k => k !== \"timer\");\n    for (let i = 0; i < keys.length; i++) {\n        output.topic   = keys[i];\n        output.payload = context.get(keys[i]);\n        context.set(keys[i], undefined);\n        node.send([output, null]);\n    }\n}\nelse {\n    context.set(msg.topic, msg.payload);\n    \n    let newTimer = setTimeout(() => {\n        node.send([null, { topic: \"reset\"}]);\n        context.set(\"timer\", null);\n    }, TIMEOUT);\n    context.set(\"timer\", newTimer);\n}\n\nreturn null;\n\n",
-        "outputs": 2,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 1170,
-        "y": 360,
-        "wires": [
-            [
-                "c2daddd28170cbb5"
-            ],
-            [
-                "80562d015d907ff7",
-                "c2daddd28170cbb5"
+                "9417300a8154fe41"
             ]
         ]
     },
@@ -9284,7 +9320,7 @@
         "z": "fc670f602d442a02",
         "name": "",
         "pauseType": "delay",
-        "timeout": "100",
+        "timeout": "10",
         "timeoutUnits": "milliseconds",
         "rate": "1",
         "nbRateUnits": "1",
@@ -9295,11 +9331,13 @@
         "drop": false,
         "allowrate": false,
         "outputs": 1,
-        "x": 730,
-        "y": 1100,
+        "x": 590,
+        "y": 540,
         "wires": [
             [
-                "eaa15de8f7205f01"
+                "9417300a8154fe41",
+                "c5cd6710bd410a34",
+                "08ebf0b647182af1"
             ]
         ]
     },
@@ -9307,13 +9345,13 @@
         "id": "25ff927976e89036",
         "type": "ui-button",
         "z": "fc670f602d442a02",
-        "group": "87a251b1b078a4c3",
+        "group": "7a52027f8ab130e8",
         "name": "Apply 3",
         "label": "Apply",
-        "order": 21,
+        "order": 7,
         "width": 0,
         "height": 0,
-        "emulateClick": true,
+        "emulateClick": false,
         "tooltip": "",
         "color": "",
         "bgcolor": "",
@@ -9335,10 +9373,10 @@
         "pointerupPayload": "",
         "pointerupPayloadType": "str",
         "x": 880,
-        "y": 1180,
+        "y": 1060,
         "wires": [
             [
-                "9b8d7098547ac4d7"
+                "08ebf0b647182af1"
             ]
         ]
     },
@@ -9346,13 +9384,13 @@
         "id": "5c3e7eda6064c1be",
         "type": "ui-button",
         "z": "fc670f602d442a02",
-        "group": "7a52027f8ab130e8",
+        "group": "87a251b1b078a4c3",
         "name": "Apply 2",
         "label": "Apply",
-        "order": 7,
+        "order": 21,
         "width": 0,
         "height": 0,
-        "emulateClick": true,
+        "emulateClick": false,
         "tooltip": "",
         "color": "",
         "bgcolor": "",
@@ -9374,10 +9412,10 @@
         "pointerupPayload": "",
         "pointerupPayloadType": "str",
         "x": 880,
-        "y": 1140,
+        "y": 860,
         "wires": [
             [
-                "9b8d7098547ac4d7"
+                "c5cd6710bd410a34"
             ]
         ]
     },
@@ -9463,7 +9501,7 @@
         "y": 160,
         "wires": [
             [
-                "9b8d7098547ac4d7"
+                "9417300a8154fe41"
             ]
         ]
     },
@@ -9526,7 +9564,7 @@
         "y": 40,
         "wires": [
             [
-                "9b8d7098547ac4d7"
+                "9417300a8154fe41"
             ]
         ]
     },
@@ -9551,5 +9589,65 @@
         "x": 100,
         "y": 40,
         "wires": []
+    },
+    {
+        "id": "9417300a8154fe41",
+        "type": "subflow:521836fa35cf581b",
+        "z": "fc670f602d442a02",
+        "name": "",
+        "x": 1170,
+        "y": 240,
+        "wires": [
+            [
+                "c2daddd28170cbb5"
+            ],
+            [
+                "80562d015d907ff7",
+                "c2daddd28170cbb5"
+            ],
+            [
+                "eaa15de8f7205f01"
+            ]
+        ]
+    },
+    {
+        "id": "c5cd6710bd410a34",
+        "type": "subflow:521836fa35cf581b",
+        "z": "fc670f602d442a02",
+        "name": "",
+        "x": 1170,
+        "y": 480,
+        "wires": [
+            [
+                "c2daddd28170cbb5"
+            ],
+            [
+                "c2daddd28170cbb5",
+                "80562d015d907ff7"
+            ],
+            [
+                "5c3e7eda6064c1be"
+            ]
+        ]
+    },
+    {
+        "id": "08ebf0b647182af1",
+        "type": "subflow:521836fa35cf581b",
+        "z": "fc670f602d442a02",
+        "name": "",
+        "x": 1170,
+        "y": 900,
+        "wires": [
+            [
+                "c2daddd28170cbb5"
+            ],
+            [
+                "c2daddd28170cbb5",
+                "80562d015d907ff7"
+            ],
+            [
+                "25ff927976e89036"
+            ]
+        ]
     }
 ]
