@@ -1,0 +1,3 @@
+#!/bin/sh
+exec 2>&1
+exec /usr/bin/python3 /opt/inetbox2mqtt/src/RpiTemperature.py

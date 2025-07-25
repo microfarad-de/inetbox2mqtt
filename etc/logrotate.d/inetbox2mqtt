@@ -1,0 +1,7 @@
+# KHr
+/var/log/inetbox2mqtt.log
+{
+  rotate 10
+  size 1000k 
+  copytruncate
+}
