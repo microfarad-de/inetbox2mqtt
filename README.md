@@ -103,6 +103,11 @@ Before starting the inetbox2mqtt service, configure the following in Venus OS:
 
     Also, comment out any other lines in that file referring to the same serial device `ID_MODEL`.
 
+4. To enable classic Bluetooth for RFCOMM communication (optional, but required for the fridge controller at [https://github.com/microfarad-de/fridge-controller](https://github.com/microfarad-de/fridge-controller)), update `/etc/bluetooth/ble.conf` by changing the value of `ControllerMode` from `le` to `dual`:
+
+    ```text
+    ControllerMode = dual
+    ```
 
 ## Bring-Up
 
