@@ -57,18 +57,19 @@ Follow these steps for installation:
 
 1. Clone this repository to `/opt/inetbox2mqtt`.
 
-2. Create symbolic links for the configuration and init.d startup scripts:
+2. Create symbolic link for the service startup script:
 
     ```bash
-    ln -s /opt/inetbox2mqtt/etc/inetbox2mqtt /etc/inetbox2mqtt
-    ln -s /opt/inetbox2mqtt/etc/init.d/inetbox2mqtt /etc/init.d/inetbox2mqtt
+    ln -s /opt/inetbox2mqtt/service/inetbox2mqtt /opt/victronenergy/service/inetbox2mqtt
     ```
 
-3. Enable auto-start for the service:
+3. Create symbolic link for the temperature reporting script -
+   enables displaying the room and water temperatures in the Victron GUI V2 as well as VRM portal:
 
     ```bash
-    ln -s /etc/init.d/inetbox2mqtt /etc/rc5.d/S99inetbox2mqtt
+    ln -s /opt/inetbox2mqtt/service/RpiTemperature /opt/victronenergy/service/RpiTemperature
     ```
+
 
 4. Edit the configuration parameters in `/etc/inetbox2mqtt`:
     - Use `localhost` and port `1883` for connecting to the local MQTT server provided by Venus OS.
@@ -103,13 +104,13 @@ Before starting the inetbox2mqtt service, configure the following in Venus OS:
 
 The user interface has been implemented using the Node-Red Dashboard V2 addon by @flowfuse. Once Node-Red is activated, follow these steps to install the dashboard:
 
-1. Log in to the Node-Red editor at `https://<ip_address>:1881`, replacing `<ip_address>` with your Raspberry Pi's IP address. Depending on the Venus OS security settings, you might need to use `http` insetead of `https`.
+1. Log in to the Node-Red editor at `https://<ip_address>:1881`, replacing `<ip_address>` with your Raspberry Pi's IP address. Depending on the Venus OS security settings, you might need to use `http://<ip_address>:1880` instead.
 
 2. Click the **hamburger menu** (top right) and select **Manage Palette**. Then find and install the `@flowfuse/node-red-dashboard` addon.
 
 3. Use the **Import** menu option to import the `node-red/caravan-dashboard.json` file.
 
-4. Open the dashboard by going to `https://<ip_address>:1881/dashboard` (may need to use `http`).
+4. Open the dashboard by going to `https://<ip_address>:1881/dashboard` (may need to use `http://<ip_address>:1880/dashboard`).
 
     The Truma Combi dashboard will appear under the **Climate Control** tab. You may disable any additional tabs that are not relevant to your setup.
 
@@ -119,31 +120,46 @@ The following picture shows a screenshot of the Truma Combi control dashboard, c
 
 > **Tip:** On iOS devices, create a home screen shortcut for the dashboard URL. Opening it this way gives it a more native app appearance, hiding the Safari address bar and navigation buttons.
 
+**Note:** The Node-Red dashboard is also acessible via the VRM portal through to the "Venus OS Large" menu at https://vrm.victronenergy.com.
+
 ## Bring-Up
 
 Once the hardware is connected, you will need to pair the Truma CP Plus control panel with the new setup.
 
-1. Disconnect any existing iNet Box, and navigate to **RESET > PR SET** on your CP Plus to initialize it without the iNet Box.
+1. Reboot the Raspbery Pi by calling `reboot`
 
-2. Go to the **INDEX** menu to confirm that the following two entries appear:
+2. Stop the inetbox2mqtt service:
+
+    ```bash
+    svc -d /service/inetbox2mqtt
+    ```
+
+3. Disconnect any existing iNet Box, and navigate to **RESET > PR SET** on your CP Plus to initialize it without the iNet Box.
+
+4. Go to the **INDEX** menu to confirm that the following two entries appear:
 
     - `TRUMA: Hx.00.nn`
     - `CPplus: Cy.0z.00`
 
-3. Start the inetbox2mqtt service:
+5. Start the inetbox2mqtt service:
 
     ```bash
-    /etc/init.d/inetbox2mqtt start
+    svc -u /service/inetbox2mqtt
     ```
 
-4. Connect the LIN bus cable to the inetbox2mqtt setup and repeat the initialization process. You should now see three entries in the **INDEX** menu:
+6. Connect the LIN bus cable to the inetbox2mqtt setup and repeat the initialization process. You should now see three entries in the **INDEX** menu:
 
     - `TRUMA: Hx.00.nn`
     - `CPplus: Cy.0z.00`
     - `inetbox: T23.70.0`
 
-5. Check `/var/log/inetbox2mqtt` for output like this:
+7. Check the log by calling:
 
+    ```bash
+    cat /var/log/inetbox2mqtt/current | tai64nlocal
+    ```
+
+    to see output like this:
     ```text
     2025-04-29 20:57:30,833 [connect] INFO: Detected cpython 3.8.18.final.0 on port: linux
     2025-04-29 20:57:30,840 [connect] INFO: MQTT Port is switched to port: 1883
@@ -155,7 +171,7 @@ Once the hardware is connected, you will need to pair the Truma CP Plus control 
     2025-04-29 20:57:50,949 [connect] INFO: MQTT connected
     ```
 
-6. Access the Node-Red dashboard at `https://<ip_address>:1881/dashboard`. It should display:
+6. Access the Node-Red dashboard at `https://<ip_address>:1881/dashboard` (or `http://<ip_address>:1880/dashboard`). It should display:
 
     - Current Truma Combi settings
     - Room and water temperature values
