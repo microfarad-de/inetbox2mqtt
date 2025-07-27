@@ -12,15 +12,15 @@ Since Venus OS manages its own network connectivity, all network configuration c
 
 The status LED functionality previously used for LIN bus debugging has also been disabled, as users can now access the log files directly.
 
-Additionally, a Node-Red dashboard for controlling the Truma Combi heater is included under `node-red/caravan-dashboard.json`.
+Additionally, a Node-RED dashboard for controlling the Truma Combi heater is included under `node-red/caravan-dashboard.json`.
 
 ## Prerequisites
 
-This setup has been tested on a Raspberry Pi 3 running the Victron Venus OS Large version with Node-Red enabled. This guide assumes you have a working Venus OS installation and are familiar with Victron Cerbo GX, Venus OS, and Node-Red concepts.
+This setup has been tested on a Raspberry Pi 3 running the Victron Venus OS Large version with Node-RED enabled. This guide assumes you have a working Venus OS installation and are familiar with Victron Cerbo GX, Venus OS, and Node-RED concepts.
 
 It also assumes you have configured SSH root access to Venus OS.
 
-For general Venus OS Large and Node-Red setup instructions, visit [https://www.victronenergy.com/live/venus-os:large](https://www.victronenergy.com/live/venus-os:large).
+For general Venus OS Large and Node-RED setup instructions, visit [https://www.victronenergy.com/live/venus-os:large](https://www.victronenergy.com/live/venus-os:large).
 
 ## Hardware Setup
 
@@ -70,11 +70,14 @@ Follow these steps for installation:
     ln -s /opt/inetbox2mqtt/service/RpiTemperature /opt/victronenergy/service/RpiTemperature
     ```
 
-
 4. Edit the configuration parameters in `/etc/inetbox2mqtt`:
     - Use `localhost` and port `1883` for connecting to the local MQTT server provided by Venus OS.
     - Set the serial device path to your FTDI-compatible adapter, e.g.:
       `/dev/serial/by-id/usb-FTDI_FT232R_USB_UART_00000000-if00-port0`
+
+5. Additional services—such as **bt-daemon** (for enabling RFCOMM Bluetooth devices) and **gpio-daemon** (for allowing GPIO control by non‑root users)—are available at [https://github.com/microfarad-de/nastia-server/tree/venus-os](https://github.com/microfarad-de/nastia-server/tree/venus-os).
+   These scripts are required for the fridge controller Node‑RED flow described at [https://github.com/microfarad-de/fridge-controller](https://github.com/microfarad-de/fridge-controller).
+
 
 ## Venus OS Configuration
 
@@ -82,7 +85,7 @@ Before starting the inetbox2mqtt service, configure the following in Venus OS:
 
 1. Enable MQTT access via the Venus GUI under **Settings > Services**.
 
-2. Enable Node-Red under **Settings > Venus OS Large features**. This will provide the web interface to control your Truma Combi.
+2. Enable Node-RED under **Settings > Venus OS Large features**. This will provide the web interface to control your Truma Combi.
 
 3. Prevent Venus OS from automatically using the serial port by adding the following line to `/etc/udev/rules.d/serial-starter.rules`:
 
@@ -100,11 +103,11 @@ Before starting the inetbox2mqtt service, configure the following in Venus OS:
 
     Also, comment out any other lines in that file referring to the same serial device `ID_MODEL`.
 
-## Installing the Node-Red Dashboard V2
+## Installing the Node-RED Dashboard V2
 
-The user interface has been implemented using the Node-Red Dashboard V2 addon by @flowfuse. Once Node-Red is activated, follow these steps to install the dashboard:
+The user interface has been implemented using the Node-RED Dashboard V2 addon by @flowfuse. Once Node-RED is activated, follow these steps to install the dashboard:
 
-1. Log in to the Node-Red editor at `https://<ip_address>:1881`, replacing `<ip_address>` with your Raspberry Pi's IP address. Depending on the Venus OS security settings, you might need to use `http://<ip_address>:1880` instead.
+1. Log in to the Node-RED editor at `https://<ip_address>:1881`, replacing `<ip_address>` with your Raspberry Pi's IP address. Depending on the Venus OS security settings, you might need to use `http://<ip_address>:1880` instead.
 
 2. Click the **hamburger menu** (top right) and select **Manage Palette**. Then find and install the `@flowfuse/node-red-dashboard` addon.
 
@@ -116,11 +119,11 @@ The user interface has been implemented using the Node-Red Dashboard V2 addon by
 
 The following picture shows a screenshot of the Truma Combi control dashboard, closely resembling the original Truma iNet System app:
 
-![Node-Red dashboard](doc/node-red.png)
+![Node-RED dashboard](doc/node-red.png)
 
 > **Tip:** On iOS devices, create a home screen shortcut for the dashboard URL. Opening it this way gives it a more native app appearance, hiding the Safari address bar and navigation buttons.
 
-**Note:** The Node-Red dashboard is also acessible via the VRM portal through to the "Venus OS Large" menu at https://vrm.victronenergy.com.
+**Note:** The Node-RED dashboard is also acessible via the VRM portal through to the "Venus OS Large" menu at https://vrm.victronenergy.com.
 
 ## Bring-Up
 
@@ -171,7 +174,7 @@ Once the hardware is connected, you will need to pair the Truma CP Plus control 
     2025-04-29 20:57:50,949 [connect] INFO: MQTT connected
     ```
 
-6. Access the Node-Red dashboard at `https://<ip_address>:1881/dashboard` (or `http://<ip_address>:1880/dashboard`). It should display:
+6. Access the Node-RED dashboard at `https://<ip_address>:1881/dashboard` (or `http://<ip_address>:1880/dashboard`). It should display:
 
     - Current Truma Combi settings
     - Room and water temperature values
