@@ -56,7 +56,7 @@
         "in": [
             {
                 "x": 200,
-                "y": 100,
+                "y": 120,
                 "wires": [
                     {
                         "id": "e7756b84d8b39dfb"
@@ -72,6 +72,16 @@
                     {
                         "id": "e7756b84d8b39dfb",
                         "port": 0
+                    }
+                ]
+            },
+            {
+                "x": 500,
+                "y": 160,
+                "wires": [
+                    {
+                        "id": "e7756b84d8b39dfb",
+                        "port": 1
                     }
                 ]
             }
@@ -1084,7 +1094,7 @@
         "group": "87a251b1b078a4c3",
         "name": "spacer",
         "tooltip": "",
-        "order": 22,
+        "order": 24,
         "width": "6",
         "height": "1",
         "className": ""
@@ -1094,16 +1104,17 @@
         "type": "function",
         "z": "26a48bdabf7607df",
         "name": "Alarm",
-        "func": "\nfunction resolveValue(input) {\n    // Check if the input is a number (int or float)\n    if (!isNaN(input) && String(input).trim() !== \"\") {\n        return Number(input);\n    } else {\n        // Otherwise, treat it as a global variable name\n        return global.get(input);\n    }\n}\n\n\nlet val = +msg.payload;  // Convert to an integer\n\nlet low     = resolveValue(env.get('low'));\nlet high    = resolveValue(env.get('high'));\nlet thr     = env.get('threshold');\nlet message = env.get('message');\nlet unit    = env.get('unit');\n\nlet lastAlarm = context.get('lastAlarm') || false;\nlet alarm = false;\n\n\nif (val < low) {\n    alarm = 'low';\n}\nelse if (val > high) {\n    alarm = 'high';\n}\nelse if (val > (low + thr) && val < (high - thr)) {\n    alarm = false;\n    context.set('lastAlarm', alarm);\n}\n//node.warn(`val=${val}, low=${low}, high=${high}, thr=${thr}, alarm=${alarm}, lastAlarm=${lastAlarm}`);\n\nif (alarm && alarm != lastAlarm) {\n    context.set('lastAlarm', alarm);\n    msg.payload = `⚠️ Caravan alert!\\n${message}: ${val} ${unit}`;\n    node.warn(`⚠️ ${message}: ${val} ${unit}`);\n    return msg;\n}\nelse {\n    return null;\n}\n\n",
-        "outputs": 1,
+        "func": "\nfunction resolveValue(input) {\n    // Check if the input is a number (int or float)\n    if (!isNaN(input) && String(input).trim() !== \"\") {\n        return Number(input);\n    } else {\n        // Otherwise, treat it as a global variable name\n        return global.get(input);\n    }\n}\n\n\nlet val = +msg.payload;  // Convert to an integer\n\nlet low     = resolveValue(env.get('low'));\nlet high    = resolveValue(env.get('high'));\nlet thr     = env.get('threshold');\nlet message = env.get('message');\nlet unit    = env.get('unit');\nlet style   = {\"ui_update\": {\"class\": \"\"}};\n\nlet lastAlarm = context.get('lastAlarm') || false;\nlet alarm = false;\n\n\nif (val < low) {\n    alarm = 'low';\n}\nelse if (val > high) {\n    alarm = 'high';\n}\nelse if (val > (low + thr) && val < (high - thr)) {\n    alarm = false;\n    context.set('lastAlarm', alarm);\n    return [null, style];\n}\n//node.warn(`val=${val}, low=${low}, high=${high}, thr=${thr}, alarm=${alarm}, lastAlarm=${lastAlarm}`);\n\nif (alarm && alarm != lastAlarm) {\n    context.set('lastAlarm', alarm);\n    style.ui_update.class = \"error\";\n    msg.payload = `⚠️ Caravan alert!\\n${message}: ${val} ${unit}`;\n    node.warn(`⚠️ ${message}: ${val} ${unit}`);\n    return [msg, style];\n}\nelse {\n    return null;\n}\n\n",
+        "outputs": 2,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
         "x": 350,
-        "y": 100,
+        "y": 120,
         "wires": [
+            [],
             []
         ]
     },
@@ -1291,7 +1302,11 @@
             "e1dd06c5c761e4d9",
             "f2fa448128ce1972",
             "f59d101299f0716e",
-            "f8b062643e6b87e5"
+            "f8b062643e6b87e5",
+            "c9f48f0fd15a2481",
+            "30ec2d30d9a6c151",
+            "eb62a9a32e858911",
+            "55ed9207847adf8d"
         ],
         "x": 185,
         "y": 300,
@@ -1783,6 +1798,10 @@
         "wires": [
             [
                 "210d9c2dfb32db9e"
+            ],
+            [
+                "55f16741df7ccb35",
+                "c9050cd681deef26"
             ]
         ]
     },
@@ -1921,6 +1940,10 @@
         "wires": [
             [
                 "9141f247602e75b7"
+            ],
+            [
+                "e558e37ec5e69804",
+                "e8180cd3ca37e6c5"
             ]
         ]
     },
@@ -1969,6 +1992,10 @@
         "wires": [
             [
                 "14753609f7bc5747"
+            ],
+            [
+                "2ae801359341660a",
+                "5624583cb2d689af"
             ]
         ]
     },
@@ -3534,7 +3561,7 @@
         "links": [
             "2f93affb367a865e"
         ],
-        "x": 755,
+        "x": 745,
         "y": 1740,
         "wires": []
     },
@@ -3620,6 +3647,10 @@
         "wires": [
             [
                 "e1dd06c5c761e4d9"
+            ],
+            [
+                "47fc4a27405d5b1a",
+                "6dbdd0e9fbc3fcaa"
             ]
         ]
     },
@@ -3650,6 +3681,10 @@
         "wires": [
             [
                 "f59d101299f0716e"
+            ],
+            [
+                "b39fbe0d42a248d4",
+                "c02cc7af79521236"
             ]
         ]
     },
@@ -3680,6 +3715,10 @@
         "wires": [
             [
                 "335af24ca01463cb"
+            ],
+            [
+                "b58793209f5ee98a",
+                "090deb48f0431120"
             ]
         ]
     },
@@ -3715,6 +3754,9 @@
         "wires": [
             [
                 "dfc1f32cb802a02e"
+            ],
+            [
+                "dd6fe58b20a74178"
             ]
         ]
     },
@@ -3745,6 +3787,9 @@
         "wires": [
             [
                 "08fe98afcefbc02c"
+            ],
+            [
+                "8e2cd2587cdc9e98"
             ]
         ]
     },
@@ -4867,7 +4912,8 @@
         "y": 1220,
         "wires": [
             [
-                "21036f8750650e45"
+                "21036f8750650e45",
+                "5b123744a3e0fc78"
             ]
         ]
     },
@@ -4935,7 +4981,8 @@
         "y": 880,
         "wires": [
             [
-                "0f975df191703924"
+                "0f975df191703924",
+                "d621075a310392c0"
             ]
         ]
     },
@@ -5004,7 +5051,8 @@
         "y": 420,
         "wires": [
             [
-                "e6e4d04c2eda2cd9"
+                "e6e4d04c2eda2cd9",
+                "c14086bf468a46fc"
             ]
         ]
     },
@@ -5028,10 +5076,11 @@
         "onlyChanges": false,
         "roundValues": "2",
         "x": 190,
-        "y": 480,
+        "y": 500,
         "wires": [
             [
-                "66f6ef672a39ed80"
+                "66f6ef672a39ed80",
+                "e58706be9dad540d"
             ]
         ]
     },
@@ -5090,7 +5139,7 @@
             }
         ],
         "x": 810,
-        "y": 480,
+        "y": 500,
         "wires": [
             [
                 "ae45e91d9bfb6e25"
@@ -5116,7 +5165,7 @@
         "wrapText": false,
         "className": "",
         "x": 990,
-        "y": 480,
+        "y": 500,
         "wires": []
     },
     {
@@ -5213,6 +5262,210 @@
         ],
         "x": 705,
         "y": 960,
+        "wires": []
+    },
+    {
+        "id": "5b123744a3e0fc78",
+        "type": "subflow:26a48bdabf7607df",
+        "z": "2561d49b29c858c7",
+        "name": "",
+        "env": [
+            {
+                "name": "low",
+                "value": "alarmSensorBatt",
+                "type": "str"
+            },
+            {
+                "name": "threshold",
+                "value": "0.3",
+                "type": "num"
+            },
+            {
+                "name": "message",
+                "value": "Fridge sensor battery",
+                "type": "str"
+            },
+            {
+                "name": "unit",
+                "value": "V",
+                "type": "str"
+            }
+        ],
+        "x": 650,
+        "y": 1260,
+        "wires": [
+            [
+                "c9f48f0fd15a2481"
+            ],
+            [
+                "e40cf8f912e64c7c"
+            ]
+        ]
+    },
+    {
+        "id": "c9f48f0fd15a2481",
+        "type": "link out",
+        "z": "2561d49b29c858c7",
+        "name": "Fridge sensor battery alarm",
+        "mode": "link",
+        "links": [
+            "2f93affb367a865e"
+        ],
+        "x": 745,
+        "y": 1260,
+        "wires": []
+    },
+    {
+        "id": "d621075a310392c0",
+        "type": "subflow:26a48bdabf7607df",
+        "z": "2561d49b29c858c7",
+        "name": "",
+        "env": [
+            {
+                "name": "low",
+                "value": "alarmSensorBatt",
+                "type": "str"
+            },
+            {
+                "name": "threshold",
+                "value": "0.3",
+                "type": "num"
+            },
+            {
+                "name": "message",
+                "value": "Outdoor sensor battery",
+                "type": "str"
+            },
+            {
+                "name": "unit",
+                "value": "V",
+                "type": "str"
+            }
+        ],
+        "x": 650,
+        "y": 920,
+        "wires": [
+            [
+                "30ec2d30d9a6c151"
+            ],
+            [
+                "29a1859ee6666879"
+            ]
+        ]
+    },
+    {
+        "id": "30ec2d30d9a6c151",
+        "type": "link out",
+        "z": "2561d49b29c858c7",
+        "name": "Outdoor temp alarm",
+        "mode": "link",
+        "links": [
+            "2f93affb367a865e"
+        ],
+        "x": 745,
+        "y": 920,
+        "wires": []
+    },
+    {
+        "id": "e58706be9dad540d",
+        "type": "subflow:26a48bdabf7607df",
+        "z": "2561d49b29c858c7",
+        "name": "",
+        "env": [
+            {
+                "name": "low",
+                "value": "alarmSensorBatt",
+                "type": "str"
+            },
+            {
+                "name": "threshold",
+                "value": "0.3",
+                "type": "num"
+            },
+            {
+                "name": "message",
+                "value": "Right propane sensor battery",
+                "type": "str"
+            },
+            {
+                "name": "unit",
+                "value": "V",
+                "type": "str"
+            }
+        ],
+        "x": 630,
+        "y": 540,
+        "wires": [
+            [
+                "eb62a9a32e858911"
+            ],
+            [
+                "ae45e91d9bfb6e25"
+            ]
+        ]
+    },
+    {
+        "id": "eb62a9a32e858911",
+        "type": "link out",
+        "z": "2561d49b29c858c7",
+        "name": "Propane 2 battery alarm",
+        "mode": "link",
+        "links": [
+            "2f93affb367a865e"
+        ],
+        "x": 725,
+        "y": 540,
+        "wires": []
+    },
+    {
+        "id": "c14086bf468a46fc",
+        "type": "subflow:26a48bdabf7607df",
+        "z": "2561d49b29c858c7",
+        "name": "",
+        "env": [
+            {
+                "name": "low",
+                "value": "alarmSensorBatt",
+                "type": "str"
+            },
+            {
+                "name": "threshold",
+                "value": "0.3",
+                "type": "num"
+            },
+            {
+                "name": "message",
+                "value": "Left propane sensor battery",
+                "type": "str"
+            },
+            {
+                "name": "unit",
+                "value": "V",
+                "type": "str"
+            }
+        ],
+        "x": 630,
+        "y": 460,
+        "wires": [
+            [
+                "55ed9207847adf8d"
+            ],
+            [
+                "c02faeb59985c2fa"
+            ]
+        ]
+    },
+    {
+        "id": "55ed9207847adf8d",
+        "type": "link out",
+        "z": "2561d49b29c858c7",
+        "name": "Propane 1 battery alarm",
+        "mode": "link",
+        "links": [
+            "2f93affb367a865e"
+        ],
+        "x": 725,
+        "y": 460,
         "wires": []
     },
     {
@@ -5597,7 +5850,7 @@
         "type": "function",
         "z": "c74d4096e08fa272",
         "name": "DecodeError",
-        "func": "\nif (msg.topic.includes('alive')) {\n    if (msg.payload !== 'ON') {\n        msg.payload = 'Connection lost!';\n    }\n    else {\n        status = context.get('status');\n        if (status === undefined) {\n            msg.payload = 'OK';\n        }\n        else {\n            msg.payload = status;\n        }\n    }\n    \n    return msg;\n}\n\nelse {\n    \n    switch (+msg.payload) {\n        \n        case 0:\n            msg.payload = 'OK';\n            break;\n            \n        case 7:\n            msg.payload = '230V disconnect!';\n            break;\n        \n        case 8:\n            msg.payload = 'Gas interrupted!';  // In mix mode\n            break;\n        \n        case 17:\n            msg.payload = 'Gas interrupted!';\n            break;\n            \n        default:\n            msg.payload = 'Error code: ' + msg.payload;\n            break;\n    }\n    \n    context.set('status', msg.payload);\n    \n    return msg;\n}",
+        "func": "\nlet status = { payload: '', ui_update: {class: ''} };\n\nif (msg.topic.includes('alive')) {\n    if (msg.payload !== 'ON') {\n        status.payload = 'Connection lost!';\n        status.ui_update.class = 'error';\n    }\n    else {\n        lastStatus = context.get('lastStatus');\n        if (lastStatus === undefined) {\n            status.payload = 'OK';\n        }\n        else {\n            status = lastStatus;\n        }\n    }\n    \n    return status;\n}\n\nelse {\n    \n    switch (+msg.payload) {\n        \n        case 0:\n            status.payload = 'OK';\n            break;\n            \n        case 7:\n            status.payload = '230 V disconnect!';\n            status.ui_update.class = 'error';\n            break;\n        \n        case 8:\n            status.payload = 'Gas interrupted!';  // In mix mode\n            status.ui_update.class = 'error';\n            break;\n        \n        case 17:\n            status.payload = 'Gas interrupted!';\n            status.ui_update.class = 'error';\n            break;\n            \n        default:\n            status.payload = 'Error code: ' + msg.payload;\n            status.ui_update.class = 'error';\n            break;\n    }\n\n    context.set('lastStatus', status);\n    \n    return status;\n}\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -5608,7 +5861,8 @@
         "y": 1020,
         "wires": [
             [
-                "2e99e7e72a42e0a3",
+                "3764559c61d5efd8",
+                "975147e68669abdf",
                 "2cb60131ed577e2e"
             ]
         ]
@@ -6151,27 +6405,6 @@
         "wires": []
     },
     {
-        "id": "2e99e7e72a42e0a3",
-        "type": "function",
-        "z": "c74d4096e08fa272",
-        "name": "RedError",
-        "func": "\nlet status = msg.payload;\n\nmsg.ui_update = {};\n\nif (status === \"OK\") {\n    msg.ui_update.class = '';\n}\nelse {\n    msg.ui_update.class = 'error';\n}\n\nreturn msg;\n",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 620,
-        "y": 1020,
-        "wires": [
-            [
-                "3764559c61d5efd8",
-                "975147e68669abdf"
-            ]
-        ]
-    },
-    {
         "id": "78b0cde417cbf16d",
         "type": "function",
         "z": "c74d4096e08fa272",
@@ -6494,13 +6727,6 @@
         "type": "subflow:1230e5122b3b7f25",
         "z": "c74d4096e08fa272",
         "name": "",
-        "env": [
-            {
-                "name": "message",
-                "value": "Truma",
-                "type": "str"
-            }
-        ],
         "x": 630,
         "y": 1100,
         "wires": [
@@ -6592,7 +6818,7 @@
         "width": 3,
         "height": 0,
         "name": "",
-        "label": "Temperature",
+        "label": "Compressor",
         "format": "{{msg.payload}}",
         "layout": "row-spread",
         "style": false,
@@ -6746,7 +6972,7 @@
         "type": "function",
         "z": "fcffa944a0680a42",
         "name": "DecodeJSON",
-        "func": "\nlet json = msg.payload;\n\nlet msg1 = {};\nlet msg2 = {};\nlet msg3 = {};\n\nlet minPwm = 190;\nlet maxPwm = 75;\nlet minRpm = 2000;\nlet maxRpm = 3000\n\nif (json.ok != 30) return;\n\nfunction map (value, inMin, inMax, outMin, outMax) {\n    return (value - inMin) * (outMax - outMin) / (inMax - inMin) + outMin\n}\n\nmsg1.payload = json.dutyCycle;\n\nmsg2.payload = json.outputPwm;\n\npwm = json.outputPwm;\nif (pwm > 0) {\n    speed = map(pwm, minPwm, maxPwm, minRpm, maxRpm);\n    msg2.payload = +(+speed).toFixed(0);\n}\nelse {\n   msg2.payload = 0 ;\n}\n\nswitch (json.defrost) {\n    case 0:\n        msg3.payload = \"OFF\";\n        break;\n    case 1:\n        msg3.payload = \"ON\";\n        break;\n    case 2:\n        msg3.payload = \"WAIT\";\n        break;\n}\n\nreturn [msg1, msg2, msg3];\n",
+        "func": "\nlet json = msg.payload;\n\nlet msg1 = {};\nlet msg2 = {};\nlet msg3 = {};\n\nlet minPwm = 190;\nlet maxPwm = 75;\nlet minRpm = 2000;\nlet maxRpm = 3000\n\nif (json.ok != 30) return;\n\nfunction map (value, inMin, inMax, outMin, outMax) {\n    return (value - inMin) * (outMax - outMin) / (inMax - inMin) + outMin\n}\n\nmsg1.payload = json.dutyCycle;\n\nmsg2.payload = json.outputPwm;\n\npwm = json.outputPwm;\nif (pwm > 0) {\n    speed = map(pwm, minPwm, maxPwm, minRpm, maxRpm);\n    msg2.payload = +(+speed).toFixed(0);\n}\nelse {\n   msg2.payload = 0 ;\n}\n\nswitch (json.defrost) {\n    case 0:\n    case -1:\n        msg3.payload = \"OFF\";\n        break;\n    case 1:\n        msg3.payload = \"ON\";\n        break;\n    case 2:\n        msg3.payload = \"WAIT\";\n        break;\n}\n\nreturn [msg1, msg2, msg3];\n",
         "outputs": 3,
         "timeout": 0,
         "noerr": 0,
@@ -7008,7 +7234,7 @@
         "width": 3,
         "height": "",
         "name": "",
-        "label": "Temperature",
+        "label": "Compressor",
         "format": "{{msg.payload}}",
         "layout": "col-center",
         "style": false,
@@ -7115,7 +7341,7 @@
         "type": "function",
         "z": "fcffa944a0680a42",
         "name": "DecodeError",
-        "func": "\nlet json    = context.get(\"json\") || false;\nlet sensor  = context.get(\"sensor\") || false;\nlet battery = context.get(\"battery\") || false;\nlet boost   = context.get(\"boost\") || false;\nlet discCnt = context.get(\"discCnt\") || 0;\nlet status  = {\"ui_update\": {\"class\": \"\"}};\n\n//node.warn(`topic=${msg.topic}, payload=${msg.payload}`);\n\nif (msg.topic === \"json\") {\n    if (msg.payload === false) {\n        discCnt++;\n    }\n    else {\n        discCnt = 0;\n    }\n    context.set(\"discCnt\", discCnt);\n    if (discCnt >= 3) {\n        json = false;\n    }\n    else {\n        json = true;\n    }\n    context.set(\"json\", json);\n}\nelse if (msg.topic === \"sensor\") {\n    context.set(\"sensor\", msg.payload);\n}\nelse if (msg.topic === \"battery\") {\n    context.set(\"battery\", msg.payload);\n}\nelse if (msg.topic === \"boost\") {\n    context.set(\"boost\", msg.payload);\n}\n\n//node.warn(`json=${json}, sensor=${sensor}`);\n\nif (!sensor) {\n    status.payload = \"Sensor error!\";\n    status.ui_update.class = 'error';\n}\nelse if (!json) {\n    status.payload = \"Connection lost!\";\n    status.ui_update.class = 'error';\n}\nelse if (!battery) {\n    status.payload = \"Low battery!\";\n    status.ui_update.class = 'error';\n}\nelse if (boost) {\n    status.payload = \"BOOST\";\n}\nelse {\n    status.payload = \"OK\"; \n}\nreturn status;\n",
+        "func": "\nlet json    = context.get(\"json\") || false;\nlet sensor  = context.get(\"sensor\") || false;\nlet battery = context.get(\"battery\") || false;\nlet boost   = context.get(\"boost\") || false;\nlet discCnt = context.get(\"discCnt\") || 0;\nlet status  = {\"ui_update\": {\"class\": \"\"}};\n\n//node.warn(`topic=${msg.topic}, payload=${msg.payload}`);\n\nif (msg.topic === \"json\") {\n    if (msg.payload === false) {\n        discCnt++;\n    }\n    else {\n        discCnt = 0;\n    }\n    context.set(\"discCnt\", discCnt);\n    if (discCnt >= 3) {\n        json = false;\n    }\n    else {\n        json = true;\n    }\n    context.set(\"json\", json);\n}\nelse if (msg.topic === \"sensor\") {\n    context.set(\"sensor\", msg.payload);\n}\nelse if (msg.topic === \"battery\") {\n    context.set(\"battery\", msg.payload);\n}\nelse if (msg.topic === \"boost\") {\n    context.set(\"boost\", msg.payload);\n}\n\n//node.warn(`json=${json}, sensor=${sensor}`);\n\nif (!sensor) {\n    status.payload = \"Sensor error!\";\n    status.ui_update.class = \"error\";\n}\nelse if (!json) {\n    status.payload = \"Connection lost!\";\n    status.ui_update.class = \"error\";\n}\nelse if (!battery) {\n    status.payload = \"Low battery!\";\n    status.ui_update.class = \"error\";\n}\nelse if (boost) {\n    status.payload = \"BOOST\";\n}\nelse {\n    status.payload = \"OK\"; \n}\nreturn status;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -7225,7 +7451,7 @@
         "z": "fcffa944a0680a42",
         "group": "0a055cab4c53c810",
         "name": "",
-        "label": "Mode",
+        "label": "Source",
         "tooltip": "",
         "order": 4,
         "width": 3,
@@ -7252,7 +7478,7 @@
         "className": "",
         "typeIsComboBox": false,
         "msgTrigger": "onChange",
-        "x": 650,
+        "x": 660,
         "y": 200,
         "wires": [
             [
@@ -7270,7 +7496,7 @@
         "width": 3,
         "height": 0,
         "name": "",
-        "label": "Absorbtion mode",
+        "label": "Absorber",
         "format": "{{msg.payload}}",
         "layout": "row-spread",
         "style": false,
@@ -7279,7 +7505,7 @@
         "color": "#717171",
         "wrapText": false,
         "className": "",
-        "x": 230,
+        "x": 200,
         "y": 160,
         "wires": []
     },
@@ -7292,7 +7518,7 @@
         "width": 3,
         "height": "",
         "name": "",
-        "label": "Absorbtion mode",
+        "label": "Absorber",
         "format": "{{msg.payload}}",
         "layout": "col-center",
         "style": false,
@@ -7301,7 +7527,7 @@
         "color": "#717171",
         "wrapText": false,
         "className": "",
-        "x": 1110,
+        "x": 1080,
         "y": 120,
         "wires": []
     },
@@ -7551,8 +7777,8 @@
         "type": "function",
         "z": "fc670f602d442a02",
         "name": "DecodeJSON",
-        "func": "\nlet json = msg.payload;\nlet msgCount = 0\n\nfunction makeMessage(key, defaultValue) {\n    msgCount++;\n    flow.set(\"msgCount\", msgCount);\n    let value = (json[key] !== undefined) ? json[key] : defaultValue;\n    return {\n        topic: key,\n        payload: value\n    };\n}\n\n\nlet messages = [\n    makeMessage(\"fridgeFreezerInstalled\", false),\n    makeMessage(\"fridgeLowBattSoC\", 30),\n    makeMessage(\"fridgeBoostTemp\", 30),\n    makeMessage(\"fridgeBoostHyst\", 5),\n    makeMessage(\"fridgeDefrostMaxTemp\", 23),\n    makeMessage(\"fridgeDefrostTempDec\", 0.8),\n    makeMessage(\"fridgeOpenDoorTempRate\", 0.15),\n    makeMessage(\"fridgeOpenDoorTempInc\", 1),\n\n    makeMessage(\"alarmBattLow\", 20),\n    makeMessage(\"alarmPropaneLow\", 5),\n    makeMessage(\"alarmTempRoomLow\", 5),\n    makeMessage(\"alarmTempRoomHigh\", 35),\n    makeMessage(\"alarmTempFridgeLow\", 1),\n    makeMessage(\"alarmTempFridgeHigh\", 10),\n    makeMessage(\"alarmTempWaterLow\", 5),\n    makeMessage(\"alarmTempCpuHigh\", 70),\n    makeMessage(\"alarmTempBattLow\", 5),\n    makeMessage(\"alarmTempBattHigh\", 30),\n\n    makeMessage(\"offsetTempRoom\", 0),\n    makeMessage(\"offsetTempOutdoor\", 0),\n    makeMessage(\"offsetTempFridge\", 0),\n\n    makeMessage(\"fridgeTargetTemp\", 4),\n    makeMessage(\"fridgeAbsorberMode\", 1),\n\n    {topic: \"apply\", payload: \"\"}\n];\n\nreturn messages;\n",
-        "outputs": 24,
+        "func": "\nlet json = msg.payload;\nlet msgCount = 0\n\nfunction makeMessage(key, defaultValue) {\n    msgCount++;\n    flow.set(\"msgCount\", msgCount);\n    let value = (json[key] !== undefined) ? json[key] : defaultValue;\n    return {\n        topic: key,\n        payload: value\n    };\n}\n\n\nlet messages = [\n    makeMessage(\"fridgeFreezerInstalled\", false),\n    makeMessage(\"fridgeLowBattSoC\", 30),\n    makeMessage(\"fridgeBoostTemp\", 30),\n    makeMessage(\"fridgeBoostHyst\", 5),\n    makeMessage(\"fridgeDefrostMaxTemp\", 23),\n    makeMessage(\"fridgeDefrostTempDec\", 0.8),\n    makeMessage(\"fridgeOpenDoorTempRate\", 0.15),\n    makeMessage(\"fridgeOpenDoorTempInc\", 1),\n\n    makeMessage(\"alarmBattLow\", 20),\n    makeMessage(\"alarmPropaneLow\", 5),\n    makeMessage(\"alarmTempRoomLow\", 5),\n    makeMessage(\"alarmTempRoomHigh\", 35),\n    makeMessage(\"alarmTempFridgeLow\", 1),\n    makeMessage(\"alarmTempFridgeHigh\", 10),\n    makeMessage(\"alarmTempWaterLow\", 5),\n    makeMessage(\"alarmTempCpuHigh\", 70),\n    makeMessage(\"alarmTempBattLow\", 5),\n    makeMessage(\"alarmTempBattHigh\", 30),\n    makeMessage(\"alarmSensorBatt\", 2.7),\n\n    makeMessage(\"offsetTempRoom\", 0),\n    makeMessage(\"offsetTempOutdoor\", 0),\n    makeMessage(\"offsetTempFridge\", 0),\n\n    makeMessage(\"fridgeTargetTemp\", 4),\n    makeMessage(\"fridgeAbsorberMode\", 1),\n\n    {topic: \"apply\", payload: \"\"}\n];\n\nreturn messages;\n",
+        "outputs": 25,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
@@ -7614,6 +7840,9 @@
             ],
             [
                 "a5f6c7a1c4b448ad"
+            ],
+            [
+                "cb05b33c54e67be7"
             ],
             [
                 "d324d134ed7be272"
@@ -8274,7 +8503,7 @@
         "wrapText": false,
         "className": "",
         "x": 90,
-        "y": 380,
+        "y": 440,
         "wires": []
     },
     {
@@ -8357,7 +8586,7 @@
         "wrapText": false,
         "className": "",
         "x": 90,
-        "y": 420,
+        "y": 480,
         "wires": []
     },
     {
@@ -8435,7 +8664,7 @@
         "wrapText": false,
         "className": "",
         "x": 100,
-        "y": 460,
+        "y": 520,
         "wires": []
     },
     {
@@ -8508,7 +8737,7 @@
         "wrapText": false,
         "className": "",
         "x": 100,
-        "y": 500,
+        "y": 560,
         "wires": []
     },
     {
@@ -8581,7 +8810,7 @@
         "wrapText": false,
         "className": "",
         "x": 100,
-        "y": 540,
+        "y": 600,
         "wires": []
     },
     {
@@ -8603,7 +8832,7 @@
         "wrapText": false,
         "className": "",
         "x": 110,
-        "y": 580,
+        "y": 640,
         "wires": []
     },
     {
@@ -8727,7 +8956,7 @@
         "wrapText": false,
         "className": "",
         "x": 100,
-        "y": 620,
+        "y": 680,
         "wires": []
     },
     {
@@ -8800,7 +9029,7 @@
         "wrapText": false,
         "className": "",
         "x": 100,
-        "y": 660,
+        "y": 720,
         "wires": []
     },
     {
@@ -8873,7 +9102,7 @@
         "wrapText": false,
         "className": "",
         "x": 110,
-        "y": 700,
+        "y": 760,
         "wires": []
     },
     {
@@ -8895,7 +9124,7 @@
         "wrapText": false,
         "className": "",
         "x": 110,
-        "y": 740,
+        "y": 800,
         "wires": []
     },
     {
@@ -9019,7 +9248,7 @@
         "wrapText": false,
         "className": "",
         "x": 90,
-        "y": 800,
+        "y": 960,
         "wires": []
     },
     {
@@ -9101,7 +9330,7 @@
         "typeIsComboBox": false,
         "msgTrigger": "onChange",
         "x": 870,
-        "y": 920,
+        "y": 960,
         "wires": [
             [
                 "08ebf0b647182af1"
@@ -9127,7 +9356,7 @@
         "wrapText": false,
         "className": "",
         "x": 100,
-        "y": 840,
+        "y": 1000,
         "wires": []
     },
     {
@@ -9209,7 +9438,7 @@
         "typeIsComboBox": false,
         "msgTrigger": "onChange",
         "x": 880,
-        "y": 960,
+        "y": 1000,
         "wires": [
             [
                 "08ebf0b647182af1"
@@ -9235,7 +9464,7 @@
         "wrapText": false,
         "className": "",
         "x": 90,
-        "y": 880,
+        "y": 1040,
         "wires": []
     },
     {
@@ -9317,7 +9546,7 @@
         "typeIsComboBox": false,
         "msgTrigger": "onChange",
         "x": 870,
-        "y": 1000,
+        "y": 1040,
         "wires": [
             [
                 "08ebf0b647182af1"
@@ -9333,7 +9562,7 @@
             "236fdb56f87224ab"
         ],
         "x": 1025,
-        "y": 1140,
+        "y": 1180,
         "wires": [
             [
                 "c2daddd28170cbb5"
@@ -9350,7 +9579,7 @@
             "b8de84a1a12a151c"
         ],
         "x": 815,
-        "y": 1120,
+        "y": 1160,
         "wires": []
     },
     {
@@ -9363,7 +9592,7 @@
             "0ffbdf4fdf3d401d"
         ],
         "x": 815,
-        "y": 1160,
+        "y": 1200,
         "wires": []
     },
     {
@@ -9464,7 +9693,7 @@
         "pointerupPayload": "",
         "pointerupPayloadType": "str",
         "x": 880,
-        "y": 1060,
+        "y": 1100,
         "wires": [
             [
                 "08ebf0b647182af1"
@@ -9478,7 +9707,7 @@
         "group": "87a251b1b078a4c3",
         "name": "Apply 2",
         "label": "Apply",
-        "order": 21,
+        "order": 23,
         "width": 0,
         "height": 0,
         "emulateClick": false,
@@ -9503,7 +9732,7 @@
         "pointerupPayload": "",
         "pointerupPayloadType": "str",
         "x": 880,
-        "y": 860,
+        "y": 900,
         "wires": [
             [
                 "c5cd6710bd410a34"
@@ -9727,7 +9956,7 @@
         "z": "fc670f602d442a02",
         "name": "",
         "x": 1170,
-        "y": 900,
+        "y": 940,
         "wires": [
             [
                 "c2daddd28170cbb5"
@@ -9740,5 +9969,68 @@
                 "25ff927976e89036"
             ]
         ]
+    },
+    {
+        "id": "cb05b33c54e67be7",
+        "type": "ui-dropdown",
+        "z": "fc670f602d442a02",
+        "group": "87a251b1b078a4c3",
+        "name": "Sensor battery",
+        "label": "State",
+        "tooltip": "",
+        "order": 22,
+        "width": 3,
+        "height": "",
+        "passthru": true,
+        "multiple": false,
+        "chips": false,
+        "clearable": false,
+        "options": [
+            {
+                "label": "OFF",
+                "value": 0,
+                "type": "num"
+            },
+            {
+                "label": "ON",
+                "value": 2.7,
+                "type": "num"
+            }
+        ],
+        "payload": "",
+        "topic": "topic",
+        "topicType": "msg",
+        "className": "",
+        "typeIsComboBox": false,
+        "msgTrigger": "onChange",
+        "x": 880,
+        "y": 840,
+        "wires": [
+            [
+                "c5cd6710bd410a34"
+            ]
+        ]
+    },
+    {
+        "id": "130cb3339fd8b8de",
+        "type": "ui-text",
+        "z": "fc670f602d442a02",
+        "group": "87a251b1b078a4c3",
+        "order": 21,
+        "width": "3",
+        "height": "1",
+        "name": "",
+        "label": "Sensor battery",
+        "format": "{{msg.payload}}",
+        "layout": "row-spread",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#717171",
+        "wrapText": false,
+        "className": "",
+        "x": 100,
+        "y": 840,
+        "wires": []
     }
 ]
