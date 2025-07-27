@@ -75,8 +75,8 @@ Follow these steps for installation:
     - Set the serial device path to your FTDI-compatible adapter, e.g.:
       `/dev/serial/by-id/usb-FTDI_FT232R_USB_UART_00000000-if00-port0`
 
-5. Additional services—such as **bt-daemon** (for enabling RFCOMM Bluetooth devices) and **gpio-daemon** (for allowing GPIO control by non‑root users)—are available at [https://github.com/microfarad-de/nastia-server/tree/venus-os](https://github.com/microfarad-de/nastia-server/tree/venus-os).
-   These scripts are required for the fridge controller Node‑RED flow described at [https://github.com/microfarad-de/fridge-controller](https://github.com/microfarad-de/fridge-controller).
+5. Additional services—such as **bt-daemon** (for enabling RFCOMM Bluetooth devices) and **gpio-daemon** (for allowing GPIO control by non‑root users)—are available at https://github.com/microfarad-de/nastia-server/tree/venus-os.
+   These scripts are required for the fridge controller Node‑RED flow described at https://github.com/microfarad-de/fridge-controller.
 
 
 ## Venus OS Configuration
@@ -103,27 +103,6 @@ Before starting the inetbox2mqtt service, configure the following in Venus OS:
 
     Also, comment out any other lines in that file referring to the same serial device `ID_MODEL`.
 
-## Installing the Node-RED Dashboard V2
-
-The user interface has been implemented using the Node-RED Dashboard V2 addon by @flowfuse. Once Node-RED is activated, follow these steps to install the dashboard:
-
-1. Log in to the Node-RED editor at `https://<ip_address>:1881`, replacing `<ip_address>` with your Raspberry Pi's IP address. Depending on the Venus OS security settings, you might need to use `http://<ip_address>:1880` instead.
-
-2. Click the **hamburger menu** (top right) and select **Manage Palette**. Then find and install the `@flowfuse/node-red-dashboard` addon.
-
-3. Use the **Import** menu option to import the `node-red/caravan-dashboard.json` file.
-
-4. Open the dashboard by going to `https://<ip_address>:1881/dashboard` (may need to use `http://<ip_address>:1880/dashboard`).
-
-    The Truma Combi dashboard will appear under the **Climate Control** tab. You may disable any additional tabs that are not relevant to your setup.
-
-The following picture shows a screenshot of the Truma Combi control dashboard, closely resembling the original Truma iNet System app:
-
-![Node-RED dashboard](doc/node-red.png)
-
-> **Tip:** On iOS devices, create a home screen shortcut for the dashboard URL. Opening it this way gives it a more native app appearance, hiding the Safari address bar and navigation buttons.
-
-**Note:** The Node-RED dashboard is also acessible via the VRM portal through to the "Venus OS Large" menu at https://vrm.victronenergy.com.
 
 ## Bring-Up
 
@@ -242,3 +221,58 @@ For the Aventa aircon, only certain combinations of `aircon_operating_mode` and 
 - `off-low`
 - `auto-auto`
 - `vent/cool/hot` with `low/mid/high`
+
+
+## Node-RED Dashboard
+
+The user interface is built using the **Node-RED Dashboard V2** add‑on by **@flowfuse**.
+To set up the dashboard after Node-RED is running, follow these steps:
+
+1. **Access the Node-RED editor** at `https://<ip_address>:1881`, replacing `<ip_address>` with your Raspberry Pi’s IP address.
+   If Venus OS security settings require it, use `http://<ip_address>:1880` instead.
+
+2. Open the **menu** (☰ in the top‑right corner), select **Manage Palette**, and install the `@flowfuse/node-red-dashboard` add‑on.
+
+3. Go to **Import** in the menu and import the file `node-red/caravan-dashboard.json`.
+
+4. Open the dashboard in a browser at `https://<ip_address>:1881/dashboard`.
+   (If necessary, use `http://<ip_address>:1880/dashboard`.)
+
+> **Note:** The dashboard can also be accessed through the **VRM portal** under the *Venus OS Large* menu:
+> [https://vrm.victronenergy.com](https://vrm.victronenergy.com)
+
+> **Tip:** On iOS devices, you can add the dashboard URL to your home screen.
+> Launching it from the home screen hides Safari’s address bar and navigation buttons, making it feel like a native app.
+
+
+### Truma Combi Control
+
+The **Truma Combi** dashboard is available under the **Heating** tab.
+It resembles the original Truma iNet System app, as shown below:
+
+![Truma Combi Dashboard](doc/dashboard-1.png)
+
+
+### Fridge Control Dashboard
+
+The **Fridge** tab provides controls for the **Fridge Controller Arduino project** described here:
+[https://github.com/microfarad-de/fridge-controller](https://github.com/microfarad-de/fridge-controller)
+
+![Fridge Control Dashboard](doc/dashboard-2.png)
+
+
+### Additional Dashboards
+
+Several other dashboards are available:
+
+- **Overview** – Key system parameters at a glance
+- **Energy** – Battery, solar charge controller, and propane tank information
+- **Environment** – Data from various temperature, humidity, and air pressure sensors
+- **Settings** – Advanced fridge control options, temperature offsets, and alarm thresholds
+
+![Dashboard Tabs](doc/dashboard-3.png)
+![Overview Dashboard](doc/dashboard-4.png)
+![Overview Dashboard](doc/dashboard-5.png)
+![Energy Dashboard](doc/dashboard-6.png)
+![Environment Dashboard](doc/dashboard-7.png)
+![Settings Dashboard](doc/dashboard-8.png)
