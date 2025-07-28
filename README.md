@@ -231,14 +231,23 @@ For the Aventa aircon, only certain combinations of `aircon_operating_mode` and 
 ## Node-RED Dashboard
 
 The user interface is built using the **Node-RED Dashboard V2** add‑on by **@flowfuse**.
+
+Additionally, the Node-RED flow can send push notification via the WhatsApp CallMeBot API that requires the **node-red-contrib-whatsapp-cmb** add-on.
+
 To set up the dashboard after Node-RED is running, follow these steps:
 
 1. **Access the Node-RED editor** at `https://<ip_address>:1881`, replacing `<ip_address>` with your Raspberry Pi’s IP address.
    If Venus OS security settings require it, use `http://<ip_address>:1880` instead.
 
-2. Open the **menu** (☰ in the top‑right corner), select **Manage Palette**, and install the `@flowfuse/node-red-dashboard` add‑on.
+2. Open the **menu** (☰ in the top‑right corner), select **Manage Palette**, and install the `@flowfuse/node-red-dashboard` and `node-red-contrib-whatsapp-cmb` add‑ons.
 
 3. Go to **Import** in the menu and import the file `node-red/caravan-dashboard.json`.
+
+4. Select **Manage Palette** in te menu, click on **Environment** and ensure that the following environment variables have the correct values (leave default if not sure):
+   - `system-settings-file`: Absolute path to the system settings storage file
+   - `fridge-gpio-pin`: RPi GPIO pin for controlling the fridge D+ (ignition) signal
+   - `serial-device`: Absolute path of the serial device for sending commands to the fridge
+   - `serial-baud`: Serial connection baud rate
 
 4. Open the dashboard in a browser at `https://<ip_address>:1881/dashboard`.
    (If necessary, use `http://<ip_address>:1880/dashboard`.)
