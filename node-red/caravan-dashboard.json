@@ -1008,6 +1008,16 @@
                 "name": "fridge-gpio-pin",
                 "value": "26",
                 "type": "str"
+            },
+            {
+                "name": "serial-device",
+                "value": "/dev/rfcomm0",
+                "type": "str"
+            },
+            {
+                "name": "serial-baud",
+                "value": "9600",
+                "type": "str"
             }
         ]
     },
@@ -6771,7 +6781,7 @@
         "id": "2f50a3396f8d9a61",
         "type": "exec",
         "z": "fcffa944a0680a42",
-        "command": "/opt/nastia-server/bin/serial-command /dev/rfcomm0 9600",
+        "command": "/opt/nastia-server/bin/serial-command",
         "addpay": "payload",
         "append": "",
         "useSpawn": "false",
@@ -6779,8 +6789,8 @@
         "winHide": false,
         "oldrc": false,
         "name": "Write UART",
-        "x": 330,
-        "y": 540,
+        "x": 270,
+        "y": 680,
         "wires": [
             [
                 "cf563ccf97436424"
@@ -7162,7 +7172,7 @@
         "wires": [
             [
                 "c204bef87b041596",
-                "2f50a3396f8d9a61"
+                "7e05e1eaee6f9375"
             ],
             [
                 "e4cff028ee24380b"
@@ -7770,6 +7780,26 @@
         "y": 940,
         "wires": [
             []
+        ]
+    },
+    {
+        "id": "7e05e1eaee6f9375",
+        "type": "function",
+        "z": "fcffa944a0680a42",
+        "name": "Args",
+        "func": "\nlet device = env.get(\"serial-device\");\nlet baud   = env.get(\"serial-baud\");\n\nmsg.payload = `${device} ${baud} ${msg.payload}`;\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 250,
+        "y": 620,
+        "wires": [
+            [
+                "2f50a3396f8d9a61"
+            ]
         ]
     },
     {
