@@ -83,7 +83,7 @@ Follow these steps for installation:
 
 Before starting the inetbox2mqtt service, configure the following in Venus OS:
 
-1. Enable MQTT access via the Venus GUI under **Settings > Services**.
+1. Enable MQTT access via the Venus GUI at `http://<rpi_ip_address>` under **Settings > Services**.
 
 2. Enable Node-RED under **Settings > Venus OS Large features**. This will provide the web interface to control your Truma Combi.
 
@@ -158,7 +158,7 @@ Once the hardware is connected, you will need to pair the Truma CP Plus control 
     2025-04-29 20:57:50,949 [connect] INFO: MQTT connected
     ```
 
-6. Access the Node-RED dashboard at `https://<ip_address>:1881/dashboard` (or `http://<ip_address>:1880/dashboard`). It should display:
+6. Access the Node-RED dashboard at `https://<rpi_ip_address>:1881/dashboard` (or `http://<rpi_ip_address>:1880/dashboard`). It should display:
 
     - Current Truma Combi settings
     - Room and water temperature values
@@ -236,8 +236,8 @@ Additionally, the Node-RED flow can send push notification via the WhatsApp Call
 
 To set up the dashboard after Node-RED is running, follow these steps:
 
-1. **Access the Node-RED editor** at `https://<ip_address>:1881`, replacing `<ip_address>` with your Raspberry Pi’s IP address.
-   If Venus OS security settings require it, use `http://<ip_address>:1880` instead.
+1. **Access the Node-RED editor** at `https://<rpi_ip_address>:1881`, replacing `<rpi_ip_address>` with your Raspberry Pi’s IP address.
+   If Venus OS security settings require it, use `http://<rpi_ip_address>:1880` instead.
 
 2. Open the **menu** (☰ in the top‑right corner), select **Manage Palette**, and install the `@flowfuse/node-red-dashboard` and `node-red-contrib-whatsapp-cmb` add‑ons.
 
@@ -249,8 +249,8 @@ To set up the dashboard after Node-RED is running, follow these steps:
    - `serial-device`: Absolute path of the serial device for sending commands to the fridge
    - `serial-baud`: Serial connection baud rate
 
-4. Open the dashboard in a browser at `https://<ip_address>:1881/dashboard`.
-   (If necessary, use `http://<ip_address>:1880/dashboard`.)
+4. Open the dashboard in a browser at `https://<rpi_ip_address>:1881/dashboard`.
+   (If necessary, use `http://<rpi_ip_address>:1880/dashboard`.)
 
 > **Note:** The dashboard can also be accessed through the **VRM portal** under the *Venus OS Large* menu:
 > [https://vrm.victronenergy.com](https://vrm.victronenergy.com)
