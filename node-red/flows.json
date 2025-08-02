@@ -7834,7 +7834,7 @@
         "id": "31753511ce9beb11",
         "type": "function",
         "z": "23d77242da9abfeb",
-        "name": "PrintAlerts",
+        "name": "ReadAlerts",
         "func": "\nlet alerts = global.get(\"alerts\") || {};\n\nlet displayStr = Object.values(alerts).join(\"<br>\");\n\nmsg.payload = displayStr || \"✅ No active alerts\";\n\nlet notification = {show: false};\n\nif (displayStr) {\n    notification.payload = `<a href=\"alerts\">⚠️</a>`;\n    notification.show    = true;\n}\n\nreturn [msg, notification];",
         "outputs": 2,
         "timeout": 0,
@@ -7857,7 +7857,7 @@
         "id": "a35ed21ecc0884d7",
         "type": "inject",
         "z": "23d77242da9abfeb",
-        "name": "",
+        "name": "Trigger",
         "props": [
             {
                 "p": "payload"
@@ -7874,7 +7874,7 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 150,
+        "x": 140,
         "y": 180,
         "wires": [
             [
