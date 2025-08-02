@@ -553,11 +553,6 @@
         "type": "victron-client"
     },
     {
-        "id": "9fb9e907fe35fd83",
-        "type": "node-red-contrib-whatsapp-cmb-account",
-        "name": "Karim"
-    },
-    {
         "id": "93cf16ef6c7e509b",
         "type": "ui-base",
         "name": "Caravan",
@@ -1112,7 +1107,7 @@
         "group": "87a251b1b078a4c3",
         "name": "spacer",
         "tooltip": "",
-        "order": 24,
+        "order": 28,
         "width": "6",
         "height": "1",
         "className": ""
@@ -1372,32 +1367,12 @@
             "eb62a9a32e858911",
             "55ed9207847adf8d"
         ],
-        "x": 185,
-        "y": 300,
+        "x": 75,
+        "y": 320,
         "wires": [
             [
-                "fceb7b2903eca364"
+                "fffb53b6af8726fc"
             ]
-        ]
-    },
-    {
-        "id": "fceb7b2903eca364",
-        "type": "node-red-contrib-whatsapp-cmb-send-message",
-        "z": "37a752f35a68bbed",
-        "name": "",
-        "credtype": "account",
-        "account": "9fb9e907fe35fd83",
-        "text": "payload",
-        "phonenumbervalue": "",
-        "apikeyvalue": "",
-        "apikeyinputtypemessage": "msg",
-        "phonenumberinputtypemessage": "msg",
-        "inputtypemessage": "msg",
-        "rejectssl": false,
-        "x": 380,
-        "y": 300,
-        "wires": [
-            []
         ]
     },
     {
@@ -1473,7 +1448,31 @@
         ]
     },
     {
-        "id": "6e318bd0311cf522",
+        "id": "aeba591b07a3bdaf",
+        "type": "http request",
+        "z": "37a752f35a68bbed",
+        "name": "",
+        "method": "GET",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "{{{payload}}}",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 410,
+        "y": 320,
+        "wires": [
+            [
+                "158684bbc306fff9"
+            ]
+        ]
+    },
+    {
+        "id": "806a9890333148a6",
         "type": "inject",
         "z": "37a752f35a68bbed",
         "name": "",
@@ -1491,15 +1490,52 @@
         "once": false,
         "onceDelay": 0.1,
         "topic": "",
-        "payload": "Test message",
+        "payload": "⚠️ Test message",
         "payloadType": "str",
-        "x": 130,
-        "y": 360,
+        "x": 140,
+        "y": 400,
         "wires": [
             [
-                "fceb7b2903eca364"
+                "fffb53b6af8726fc"
             ]
         ]
+    },
+    {
+        "id": "fffb53b6af8726fc",
+        "type": "function",
+        "z": "37a752f35a68bbed",
+        "name": "CallMeBot",
+        "func": "\nlet phone  = global.get(\"cmbPhone\");\nlet apiKey = global.get(\"cmbApiKey\");\nlet text   = encodeURIComponent(msg.payload)\n\nmsg.payload = `https://api.callmebot.com/whatsapp.php?phone=${phone}&text=${text}&apikey=${apiKey}`\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 230,
+        "y": 320,
+        "wires": [
+            [
+                "aeba591b07a3bdaf"
+            ]
+        ]
+    },
+    {
+        "id": "158684bbc306fff9",
+        "type": "debug",
+        "z": "37a752f35a68bbed",
+        "name": "HTTP response",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 600,
+        "y": 320,
+        "wires": []
     },
     {
         "id": "4d22e4a2b451ad0b",
@@ -7881,8 +7917,8 @@
         "type": "function",
         "z": "fc670f602d442a02",
         "name": "DecodeJSON",
-        "func": "\nlet json = msg.payload;\nlet msgCount = 0\n\nfunction makeMessage(key, defaultValue) {\n    msgCount++;\n    flow.set(\"msgCount\", msgCount);\n    let value = (json[key] !== undefined) ? json[key] : defaultValue;\n    return {\n        topic: key,\n        payload: value\n    };\n}\n\n\nlet messages = [\n    makeMessage(\"fridgeFreezerInstalled\", false),\n    makeMessage(\"fridgeLowBattSoC\", 30),\n    makeMessage(\"fridgeBoostTemp\", 30),\n    makeMessage(\"fridgeBoostHyst\", 5),\n    makeMessage(\"fridgeDefrostMaxTemp\", 23),\n    makeMessage(\"fridgeDefrostTempDec\", 0.5),\n    makeMessage(\"fridgeOpenDoorTempRate\", 0.15),\n    makeMessage(\"fridgeOpenDoorTempInc\", 1),\n\n    makeMessage(\"alarmBattLow\", 20),\n    makeMessage(\"alarmPropaneLow\", 5),\n    makeMessage(\"alarmTempRoomLow\", 5),\n    makeMessage(\"alarmTempRoomHigh\", 35),\n    makeMessage(\"alarmTempFridgeLow\", 1),\n    makeMessage(\"alarmTempFridgeHigh\", 10),\n    makeMessage(\"alarmTempWaterLow\", 5),\n    makeMessage(\"alarmTempCpuHigh\", 70),\n    makeMessage(\"alarmTempBattLow\", 5),\n    makeMessage(\"alarmTempBattHigh\", 30),\n    makeMessage(\"alarmSensorBatt\", 2.7),\n\n    makeMessage(\"offsetTempRoom\", 0),\n    makeMessage(\"offsetTempOutdoor\", 0),\n    makeMessage(\"offsetTempFridge\", 0),\n\n    makeMessage(\"fridgeTargetTemp\", 4),\n    makeMessage(\"fridgeAbsorberMode\", 1),\n\n    {topic: \"apply\", payload: \"\"}\n];\n\nreturn messages;\n",
-        "outputs": 25,
+        "func": "\nlet json = msg.payload;\nlet msgCount = 0\n\nfunction makeMessage(key, defaultValue) {\n    msgCount++;\n    flow.set(\"msgCount\", msgCount);\n    let value = (json[key] !== undefined) ? json[key] : defaultValue;\n    return {\n        topic: key,\n        payload: value\n    };\n}\n\n\nlet messages = [\n    makeMessage(\"fridgeFreezerInstalled\", false),\n    makeMessage(\"fridgeLowBattSoC\", 30),\n    makeMessage(\"fridgeBoostTemp\", 30),\n    makeMessage(\"fridgeBoostHyst\", 5),\n    makeMessage(\"fridgeDefrostMaxTemp\", 23),\n    makeMessage(\"fridgeDefrostTempDec\", 0.5),\n    makeMessage(\"fridgeOpenDoorTempRate\", 0.15),\n    makeMessage(\"fridgeOpenDoorTempInc\", 1),\n\n    makeMessage(\"alarmBattLow\", 20),\n    makeMessage(\"alarmPropaneLow\", 5),\n    makeMessage(\"alarmTempRoomLow\", 5),\n    makeMessage(\"alarmTempRoomHigh\", 35),\n    makeMessage(\"alarmTempFridgeLow\", 1),\n    makeMessage(\"alarmTempFridgeHigh\", 10),\n    makeMessage(\"alarmTempWaterLow\", 5),\n    makeMessage(\"alarmTempCpuHigh\", 70),\n    makeMessage(\"alarmTempBattLow\", 5),\n    makeMessage(\"alarmTempBattHigh\", 30),\n    makeMessage(\"alarmSensorBatt\", 2.7),\n\n    makeMessage(\"offsetTempRoom\", 0),\n    makeMessage(\"offsetTempOutdoor\", 0),\n    makeMessage(\"offsetTempFridge\", 0),\n\n    makeMessage(\"fridgeTargetTemp\", 4),\n    makeMessage(\"fridgeAbsorberMode\", 1),\n    \n    makeMessage(\"cmbPhone\", \"\"),\n    makeMessage(\"cmbApiKey\", \"\"),\n\n    {topic: \"apply\", payload: \"\"}\n];\n\nreturn messages;\n",
+        "outputs": 27,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
@@ -7962,6 +7998,12 @@
             ],
             [
                 "5516c054e1990d91"
+            ],
+            [
+                "ba70f26d2016419f"
+            ],
+            [
+                "f4845adf9f058f3e"
             ],
             [
                 "a1a0a631bcda2bf9"
@@ -8593,7 +8635,7 @@
         "type": "ui-text",
         "z": "fc670f602d442a02",
         "group": "87a251b1b078a4c3",
-        "order": 1,
+        "order": 5,
         "width": "3",
         "height": "1",
         "name": "",
@@ -8618,7 +8660,7 @@
         "name": "Low battery",
         "label": "SoC",
         "tooltip": "",
-        "order": 2,
+        "order": 6,
         "width": 3,
         "height": "",
         "passthru": true,
@@ -8676,7 +8718,7 @@
         "type": "ui-text",
         "z": "fc670f602d442a02",
         "group": "87a251b1b078a4c3",
-        "order": 3,
+        "order": 7,
         "width": "3",
         "height": "1",
         "name": "",
@@ -8701,7 +8743,7 @@
         "name": "Low propane",
         "label": "Level",
         "tooltip": "",
-        "order": 4,
+        "order": 8,
         "width": 3,
         "height": "",
         "passthru": true,
@@ -8754,7 +8796,7 @@
         "type": "ui-text",
         "z": "fc670f602d442a02",
         "group": "87a251b1b078a4c3",
-        "order": 9,
+        "order": 13,
         "width": "3",
         "height": "1",
         "name": "",
@@ -8779,7 +8821,7 @@
         "name": "Low room temp",
         "label": "Temp",
         "tooltip": "",
-        "order": 10,
+        "order": 14,
         "width": 3,
         "height": "",
         "passthru": true,
@@ -8827,7 +8869,7 @@
         "type": "ui-text",
         "z": "fc670f602d442a02",
         "group": "87a251b1b078a4c3",
-        "order": 11,
+        "order": 15,
         "width": "3",
         "height": "1",
         "name": "",
@@ -8852,7 +8894,7 @@
         "name": "High room temp",
         "label": "Temp",
         "tooltip": "",
-        "order": 12,
+        "order": 16,
         "width": 3,
         "height": "",
         "passthru": true,
@@ -8900,7 +8942,7 @@
         "type": "ui-text",
         "z": "fc670f602d442a02",
         "group": "87a251b1b078a4c3",
-        "order": 13,
+        "order": 17,
         "width": "3",
         "height": "1",
         "name": "",
@@ -8922,7 +8964,7 @@
         "type": "ui-text",
         "z": "fc670f602d442a02",
         "group": "87a251b1b078a4c3",
-        "order": 15,
+        "order": 19,
         "width": "3",
         "height": "1",
         "name": "",
@@ -8947,7 +8989,7 @@
         "name": "Low fridge temp",
         "label": "Temp",
         "tooltip": "",
-        "order": 14,
+        "order": 18,
         "width": 3,
         "height": "",
         "passthru": true,
@@ -8998,7 +9040,7 @@
         "name": "High fridge temp",
         "label": "Temp",
         "tooltip": "",
-        "order": 16,
+        "order": 20,
         "width": 3,
         "height": "",
         "passthru": true,
@@ -9046,7 +9088,7 @@
         "type": "ui-text",
         "z": "fc670f602d442a02",
         "group": "87a251b1b078a4c3",
-        "order": 17,
+        "order": 21,
         "width": "3",
         "height": "1",
         "name": "",
@@ -9071,7 +9113,7 @@
         "name": "Low water temp",
         "label": "Temp",
         "tooltip": "",
-        "order": 18,
+        "order": 22,
         "width": 3,
         "height": "",
         "passthru": true,
@@ -9119,7 +9161,7 @@
         "type": "ui-text",
         "z": "fc670f602d442a02",
         "group": "87a251b1b078a4c3",
-        "order": 19,
+        "order": 23,
         "width": "3",
         "height": "1",
         "name": "",
@@ -9144,7 +9186,7 @@
         "name": "High CPU temp",
         "label": "Temp",
         "tooltip": "",
-        "order": 20,
+        "order": 24,
         "width": 3,
         "height": "",
         "passthru": true,
@@ -9192,7 +9234,7 @@
         "type": "ui-text",
         "z": "fc670f602d442a02",
         "group": "87a251b1b078a4c3",
-        "order": 5,
+        "order": 9,
         "width": "3",
         "height": "1",
         "name": "",
@@ -9214,7 +9256,7 @@
         "type": "ui-text",
         "z": "fc670f602d442a02",
         "group": "87a251b1b078a4c3",
-        "order": 7,
+        "order": 11,
         "width": "3",
         "height": "1",
         "name": "",
@@ -9239,7 +9281,7 @@
         "name": "High battery temp",
         "label": "Temp",
         "tooltip": "",
-        "order": 8,
+        "order": 12,
         "width": 3,
         "height": "",
         "passthru": true,
@@ -9290,7 +9332,7 @@
         "name": "Low battery temp",
         "label": "Temp",
         "tooltip": "",
-        "order": 6,
+        "order": 10,
         "width": 3,
         "height": "",
         "passthru": true,
@@ -9352,7 +9394,7 @@
         "wrapText": false,
         "className": "",
         "x": 90,
-        "y": 960,
+        "y": 1040,
         "wires": []
     },
     {
@@ -9434,7 +9476,7 @@
         "typeIsComboBox": false,
         "msgTrigger": "onChange",
         "x": 870,
-        "y": 960,
+        "y": 1040,
         "wires": [
             [
                 "08ebf0b647182af1"
@@ -9460,7 +9502,7 @@
         "wrapText": false,
         "className": "",
         "x": 100,
-        "y": 1000,
+        "y": 1080,
         "wires": []
     },
     {
@@ -9542,7 +9584,7 @@
         "typeIsComboBox": false,
         "msgTrigger": "onChange",
         "x": 880,
-        "y": 1000,
+        "y": 1080,
         "wires": [
             [
                 "08ebf0b647182af1"
@@ -9568,7 +9610,7 @@
         "wrapText": false,
         "className": "",
         "x": 90,
-        "y": 1040,
+        "y": 1120,
         "wires": []
     },
     {
@@ -9650,7 +9692,7 @@
         "typeIsComboBox": false,
         "msgTrigger": "onChange",
         "x": 870,
-        "y": 1040,
+        "y": 1120,
         "wires": [
             [
                 "08ebf0b647182af1"
@@ -9666,7 +9708,7 @@
             "236fdb56f87224ab"
         ],
         "x": 1025,
-        "y": 1180,
+        "y": 1260,
         "wires": [
             [
                 "c2daddd28170cbb5"
@@ -9683,7 +9725,7 @@
             "b8de84a1a12a151c"
         ],
         "x": 815,
-        "y": 1160,
+        "y": 1240,
         "wires": []
     },
     {
@@ -9696,7 +9738,7 @@
             "0ffbdf4fdf3d401d"
         ],
         "x": 815,
-        "y": 1200,
+        "y": 1280,
         "wires": []
     },
     {
@@ -9797,7 +9839,7 @@
         "pointerupPayload": "",
         "pointerupPayloadType": "str",
         "x": 880,
-        "y": 1100,
+        "y": 1180,
         "wires": [
             [
                 "08ebf0b647182af1"
@@ -9811,7 +9853,7 @@
         "group": "87a251b1b078a4c3",
         "name": "Apply 2",
         "label": "Apply",
-        "order": 23,
+        "order": 27,
         "width": 0,
         "height": 0,
         "emulateClick": false,
@@ -9836,7 +9878,7 @@
         "pointerupPayload": "",
         "pointerupPayloadType": "str",
         "x": 880,
-        "y": 900,
+        "y": 980,
         "wires": [
             [
                 "c5cd6710bd410a34"
@@ -10060,7 +10102,7 @@
         "z": "fc670f602d442a02",
         "name": "",
         "x": 1170,
-        "y": 940,
+        "y": 1020,
         "wires": [
             [
                 "c2daddd28170cbb5"
@@ -10082,7 +10124,7 @@
         "name": "Sensor battery",
         "label": "State",
         "tooltip": "",
-        "order": 22,
+        "order": 26,
         "width": 3,
         "height": "",
         "passthru": true,
@@ -10120,7 +10162,7 @@
         "type": "ui-text",
         "z": "fc670f602d442a02",
         "group": "87a251b1b078a4c3",
-        "order": 21,
+        "order": 25,
         "width": "3",
         "height": "1",
         "name": "",
@@ -10136,5 +10178,115 @@
         "x": 100,
         "y": 840,
         "wires": []
+    },
+    {
+        "id": "2bbfc1f6ae66a325",
+        "type": "ui-text",
+        "z": "fc670f602d442a02",
+        "group": "87a251b1b078a4c3",
+        "order": 1,
+        "width": "3",
+        "height": "1",
+        "name": "",
+        "label": "CallMeBot phone",
+        "format": "{{msg.payload}}",
+        "layout": "row-spread",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#717171",
+        "wrapText": false,
+        "className": "",
+        "x": 110,
+        "y": 880,
+        "wires": []
+    },
+    {
+        "id": "bbbb3a24103c12ed",
+        "type": "ui-text",
+        "z": "fc670f602d442a02",
+        "group": "87a251b1b078a4c3",
+        "order": 3,
+        "width": "3",
+        "height": "1",
+        "name": "",
+        "label": "CallMeBot API key",
+        "format": "{{msg.payload}}",
+        "layout": "row-spread",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#717171",
+        "wrapText": false,
+        "className": "",
+        "x": 110,
+        "y": 920,
+        "wires": []
+    },
+    {
+        "id": "ba70f26d2016419f",
+        "type": "ui-text-input",
+        "z": "fc670f602d442a02",
+        "group": "87a251b1b078a4c3",
+        "name": "CallMeBot phone",
+        "label": "Phone",
+        "order": 2,
+        "width": "3",
+        "height": "1",
+        "topic": "topic",
+        "topicType": "msg",
+        "mode": "number",
+        "tooltip": "",
+        "delay": 300,
+        "passthru": true,
+        "sendOnDelay": false,
+        "sendOnBlur": true,
+        "sendOnEnter": true,
+        "className": "",
+        "clearable": false,
+        "sendOnClear": false,
+        "icon": "",
+        "iconPosition": "left",
+        "iconInnerPosition": "inside",
+        "x": 890,
+        "y": 880,
+        "wires": [
+            [
+                "c5cd6710bd410a34"
+            ]
+        ]
+    },
+    {
+        "id": "f4845adf9f058f3e",
+        "type": "ui-text-input",
+        "z": "fc670f602d442a02",
+        "group": "87a251b1b078a4c3",
+        "name": "CallMeBot API key",
+        "label": "API key",
+        "order": 4,
+        "width": "3",
+        "height": "1",
+        "topic": "topic",
+        "topicType": "msg",
+        "mode": "number",
+        "tooltip": "",
+        "delay": 300,
+        "passthru": true,
+        "sendOnDelay": false,
+        "sendOnBlur": true,
+        "sendOnEnter": true,
+        "className": "",
+        "clearable": false,
+        "sendOnClear": false,
+        "icon": "",
+        "iconPosition": "left",
+        "iconInnerPosition": "inside",
+        "x": 890,
+        "y": 920,
+        "wires": [
+            [
+                "c5cd6710bd410a34"
+            ]
+        ]
     }
 ]

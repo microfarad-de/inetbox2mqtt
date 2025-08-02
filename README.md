@@ -232,14 +232,12 @@ For the Aventa aircon, only certain combinations of `aircon_operating_mode` and 
 
 The user interface is built using the **Node-RED Dashboard V2** add‑on by **@flowfuse**.
 
-Additionally, the Node-RED flow can send push notification via the WhatsApp CallMeBot API that requires the **node-red-contrib-whatsapp-cmb** add-on.
-
 To set up the dashboard after Node-RED is running, follow these steps:
 
 1. **Access the Node-RED editor** at `https://<rpi_ip_address>:1881`, replacing `<rpi_ip_address>` with your Raspberry Pi’s IP address.
    If Venus OS security settings require it, use `http://<rpi_ip_address>:1880` instead.
 
-2. Open the **menu** (☰ in the top‑right corner), select **Manage Palette**, and install the `@flowfuse/node-red-dashboard` and `node-red-contrib-whatsapp-cmb` add‑ons.
+2. Open the **menu** (☰ in the top‑right corner), select **Manage Palette**, and install the `@flowfuse/node-red-dashboard` add‑on.
 
 3. Go to **Import** in the menu and import the file `node-red/caravan-dashboard.json`.
 
