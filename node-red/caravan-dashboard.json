@@ -40,6 +40,14 @@
         "env": []
     },
     {
+        "id": "23d77242da9abfeb",
+        "type": "tab",
+        "label": "Alerts",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
         "id": "fc670f602d442a02",
         "type": "tab",
         "label": "Settings",
@@ -759,7 +767,7 @@
                 "cols": "12"
             }
         ],
-        "order": 7,
+        "order": 8,
         "className": "",
         "visible": false,
         "disabled": "false"
@@ -1051,7 +1059,7 @@
                 "cols": "6"
             }
         ],
-        "order": 6,
+        "order": 7,
         "className": "",
         "visible": "true",
         "disabled": "false"
@@ -1073,7 +1081,7 @@
     {
         "id": "87a251b1b078a4c3",
         "type": "ui-group",
-        "name": "Alarms",
+        "name": "Alerts",
         "page": "b54e758b3b69d202",
         "width": "6",
         "height": "1",
@@ -1110,11 +1118,57 @@
         "className": ""
     },
     {
+        "id": "ea8f96f0b15f8f26",
+        "type": "ui-page",
+        "name": "Alerts",
+        "ui": "93cf16ef6c7e509b",
+        "path": "/alerts",
+        "icon": "bell-alert",
+        "layout": "grid",
+        "theme": "7fbe7ff5e2bd848b",
+        "breakpoints": [
+            {
+                "name": "Default",
+                "px": "0",
+                "cols": "6"
+            }
+        ],
+        "order": 6,
+        "className": "",
+        "visible": true,
+        "disabled": false
+    },
+    {
+        "id": "959cc79e3a0c6c7d",
+        "type": "ui-group",
+        "name": "Messages",
+        "page": "ea8f96f0b15f8f26",
+        "width": "6",
+        "height": "1",
+        "order": 1,
+        "showTitle": true,
+        "className": "",
+        "visible": "true",
+        "disabled": "false",
+        "groupType": "default"
+    },
+    {
+        "id": "51090c9f384339f7",
+        "type": "ui-spacer",
+        "group": "959cc79e3a0c6c7d",
+        "name": "spacer",
+        "tooltip": "",
+        "order": 2,
+        "width": "6",
+        "height": "1",
+        "className": ""
+    },
+    {
         "id": "e7756b84d8b39dfb",
         "type": "function",
         "z": "26a48bdabf7607df",
         "name": "Alarm",
-        "func": "\nfunction resolveValue(input) {\n    // Check if the input is a number (int or float)\n    if (!isNaN(input) && String(input).trim() !== \"\") {\n        return Number(input);\n    } else {\n        // Otherwise, treat it as a global variable name\n        return global.get(input);\n    }\n}\n\n\nlet val = +msg.payload;  // Convert to an integer\n\nlet low     = resolveValue(env.get('low'));\nlet high    = resolveValue(env.get('high'));\nlet thr     = env.get('threshold');\nlet message = env.get('message');\nlet unit    = env.get('unit');\nlet style   = {\"ui_update\": {\"class\": \"\"}};\n\nlet lastAlarm = context.get('lastAlarm') || false;\nlet alarm = false;\n\n\nif (val < low) {\n    alarm = 'low';\n}\nelse if (val > high) {\n    alarm = 'high';\n}\nelse if (val > (low + thr) && val < (high - thr)) {\n    alarm = false;\n    context.set('lastAlarm', alarm);\n    return [null, style];\n}\n//node.warn(`val=${val}, low=${low}, high=${high}, thr=${thr}, alarm=${alarm}, lastAlarm=${lastAlarm}`);\n\nif (alarm && alarm != lastAlarm) {\n    context.set('lastAlarm', alarm);\n    style.ui_update.class = \"error\";\n    msg.payload = `⚠️ Caravan alert!\\n${message}: ${val} ${unit}`;\n    node.warn(`⚠️ ${message}: ${val} ${unit}`);\n    return [msg, style];\n}\nelse {\n    return null;\n}\n\n",
+        "func": "\nfunction resolveValue(input) {\n    // Check if the input is a number (int or float)\n    if (!isNaN(input) && String(input).trim() !== \"\") {\n        return Number(input);\n    } else {\n        // Otherwise, treat it as a global variable name\n        return global.get(input);\n    }\n}\n\n\nlet val = +msg.payload;  // Convert to an integer\n\nlet low     = resolveValue(env.get('low'));\nlet high    = resolveValue(env.get('high'));\nlet thr     = env.get('threshold');\nlet message = env.get('message');\nlet unit    = env.get('unit');\nlet style   = {\"ui_update\": {\"class\": \"\"}};\nlet alerts  = global.get(\"alerts\") || {};\n\nlet lastAlarm = context.get('lastAlarm') || false;\nlet alarm = false;\n\nif (val < low) {\n    alarm = 'low';\n}\nelse if (val > high) {\n    alarm = 'high';\n}\nelse if (val > (low + thr) && val < (high - thr)) {\n    alarm = false;\n    context.set('lastAlarm', alarm);\n    delete alerts[message];\n    global.set(\"alerts\", alerts);\n    return [null, style];\n}\n//node.warn(`val=${val}, low=${low}, high=${high}, thr=${thr}, alarm=${alarm}, lastAlarm=${lastAlarm}`);\n\nif (alarm && alarm != lastAlarm) {\n    context.set('lastAlarm', alarm);\n    style.ui_update.class = \"error\";\n    msg.payload = `⚠️ Caravan alert!\\n${message}: ${val} ${unit}`;\n    let text    = `⚠️ ${message}: ${val} ${unit}`\n    node.warn(text);\n    alerts[message] = text;\n    global.set(\"alerts\", alerts);\n    return [msg, style];\n}\nelse {\n    return null;\n}\n\n",
         "outputs": 2,
         "timeout": 0,
         "noerr": 0,
@@ -1282,7 +1336,7 @@
         "type": "function",
         "z": "1230e5122b3b7f25",
         "name": "Alarm",
-        "func": "\nlet val     = msg.payload;\nlet message = env.get('message');\n\nlet lastAlarm = context.get('lastAlarm') || false;\nlet alarm = false;\n\nif (val === 'OK') {\n    alarm = false;\n    context.set('lastAlarm', alarm);\n}\nelse {\n    alarm = val;\n}\n\n//node.warn(`val={val}, alarm={alarm}, lastAlarm={lastAlarm}`);\n\nif (alarm && alarm != lastAlarm) {\n    context.set('lastAlarm', alarm);\n    msg.payload = `⚠️ Caravan alert!\\n${message}:\\n${val}`;\n    node.warn(`⚠️ ${message}: ${val}`);\n    return msg;\n}\nelse {\n    return null;\n}\n\n",
+        "func": "\nlet val     = msg.payload;\nlet message = env.get('message');\n\nlet alerts    = global.get(\"alerts\") || {};\nlet lastAlarm = context.get('lastAlarm') || false;\nlet alarm = false;\n\nif (val === 'OK') {\n    alarm = false;\n    delete alerts[message];\n    global.set(\"alerts\", alerts);\n    context.set('lastAlarm', alarm);\n}\nelse {\n    alarm = val;\n}\n\n//node.warn(`val={val}, alarm={alarm}, lastAlarm={lastAlarm}`);\n\nif (alarm && alarm != lastAlarm) {\n    context.set('lastAlarm', alarm);\n    msg.payload = `⚠️ Caravan alert!\\n${message}:\\n${val}`;\n    text = `⚠️ ${message}: ${val}`;\n    node.warn(text);\n    alerts[message] = text;\n    global.set(\"alerts\", alerts);\n    return msg;\n}\nelse {\n    return null;\n}\n\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -2114,6 +2168,8 @@
         "name": "",
         "group": "a7be90ba6585cc59",
         "order": 2,
+        "value": "payload",
+        "valueType": "msg",
         "width": 3,
         "height": 3,
         "gtype": "gauge-34",
@@ -2724,6 +2780,8 @@
         "name": "",
         "group": "a7be90ba6585cc59",
         "order": 3,
+        "value": "payload",
+        "valueType": "msg",
         "width": 2,
         "height": 2,
         "gtype": "gauge-34",
@@ -2736,39 +2794,7 @@
         "segments": [
             {
                 "from": "-30",
-                "color": "#ca3838"
-            },
-            {
-                "from": "-12",
-                "color": "#d45f1f"
-            },
-            {
-                "from": "-8",
-                "color": "#da8c00"
-            },
-            {
-                "from": "-4",
-                "color": "#e0b900"
-            },
-            {
-                "from": "-1",
                 "color": "#e6e600"
-            },
-            {
-                "from": "1",
-                "color": "#b2a300"
-            },
-            {
-                "from": "4",
-                "color": "#77a900"
-            },
-            {
-                "from": "8",
-                "color": "#3baf00"
-            },
-            {
-                "from": "12",
-                "color": "#00b500"
             }
         ],
         "min": "-30",
@@ -2790,6 +2816,8 @@
         "name": "",
         "group": "a7be90ba6585cc59",
         "order": 4,
+        "value": "payload",
+        "valueType": "msg",
         "width": 2,
         "height": 2,
         "gtype": "gauge-34",
@@ -2802,38 +2830,6 @@
         "segments": [
             {
                 "from": "11",
-                "color": "#ca3838"
-            },
-            {
-                "from": "12",
-                "color": "#97572a"
-            },
-            {
-                "from": "12.6",
-                "color": "#65761c"
-            },
-            {
-                "from": "13.1",
-                "color": "#32950e"
-            },
-            {
-                "from": "13.2",
-                "color": "#00b500"
-            },
-            {
-                "from": "13.3",
-                "color": "#39c100"
-            },
-            {
-                "from": "13.4",
-                "color": "#73cd00"
-            },
-            {
-                "from": "13.6",
-                "color": "#acd900"
-            },
-            {
-                "from": "13.7",
                 "color": "#e6e600"
             }
         ],
@@ -3210,6 +3206,8 @@
         "name": "",
         "group": "a7be90ba6585cc59",
         "order": 5,
+        "value": "payload",
+        "valueType": "msg",
         "width": 2,
         "height": 2,
         "gtype": "gauge-34",
@@ -3223,22 +3221,6 @@
             {
                 "from": "0",
                 "color": "#e6e600"
-            },
-            {
-                "from": "1",
-                "color": "#b2a300"
-            },
-            {
-                "from": "4",
-                "color": "#77a900"
-            },
-            {
-                "from": "8",
-                "color": "#3baf00"
-            },
-            {
-                "from": "12",
-                "color": "#00b500"
             }
         ],
         "min": "0",
@@ -7794,6 +7776,104 @@
             [
                 "2f50a3396f8d9a61"
             ]
+        ]
+    },
+    {
+        "id": "31753511ce9beb11",
+        "type": "function",
+        "z": "23d77242da9abfeb",
+        "name": "PrintAlerts",
+        "func": "\nlet alerts = global.get(\"alerts\") || {};\n\nlet displayStr = Object.values(alerts).join(\"<br>\");\n\nmsg.payload = displayStr || \"✅ No active alerts\";\n\nlet notification = {show: false};\n\nif (displayStr) {\n    notification.payload = `<a href=\"alerts\">⚠️</a>`;\n    notification.show    = true;\n}\n\nreturn [msg, notification];",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 370,
+        "y": 180,
+        "wires": [
+            [
+                "e5603df2a4a5ed74"
+            ],
+            [
+                "cbf937b59a299ee6"
+            ]
+        ]
+    },
+    {
+        "id": "a35ed21ecc0884d7",
+        "type": "inject",
+        "z": "23d77242da9abfeb",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "2",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 150,
+        "y": 180,
+        "wires": [
+            [
+                "31753511ce9beb11"
+            ]
+        ]
+    },
+    {
+        "id": "e5603df2a4a5ed74",
+        "type": "ui-text",
+        "z": "23d77242da9abfeb",
+        "group": "959cc79e3a0c6c7d",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "name": "Alert messages",
+        "label": "",
+        "format": "{{msg.payload}}",
+        "layout": "row-left",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#717171",
+        "wrapText": true,
+        "className": "",
+        "x": 600,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "cbf937b59a299ee6",
+        "type": "ui-notification",
+        "z": "23d77242da9abfeb",
+        "ui": "93cf16ef6c7e509b",
+        "position": "top right",
+        "colorDefault": true,
+        "color": "#000000",
+        "displayTime": "0",
+        "showCountdown": false,
+        "outputs": 1,
+        "allowDismiss": false,
+        "dismissText": "Close",
+        "allowConfirm": false,
+        "confirmText": "",
+        "raw": true,
+        "className": "",
+        "name": "Alert notification",
+        "x": 600,
+        "y": 240,
+        "wires": [
+            []
         ]
     },
     {
