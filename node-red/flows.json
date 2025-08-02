@@ -1159,6 +1159,28 @@
         "className": ""
     },
     {
+        "id": "d9b8019b5fbf3836",
+        "type": "ui-spacer",
+        "group": "28b10b40908e96b0",
+        "name": "spacer",
+        "tooltip": "",
+        "order": 18,
+        "width": "6",
+        "height": "1",
+        "className": ""
+    },
+    {
+        "id": "5c159ac34f540df8",
+        "type": "ui-spacer",
+        "group": "7a52027f8ab130e8",
+        "name": "spacer",
+        "tooltip": "",
+        "order": 8,
+        "width": "6",
+        "height": "5",
+        "className": ""
+    },
+    {
         "id": "e7756b84d8b39dfb",
         "type": "function",
         "z": "26a48bdabf7607df",
@@ -7713,7 +7735,7 @@
         "type": "function",
         "z": "23d77242da9abfeb",
         "name": "ReadAlerts",
-        "func": "\nlet alerts = global.get(\"alerts\") || {};\n\nlet displayStr = Object.values(alerts).join(\"<br>\");\n\nmsg.payload = displayStr || \"✅ No active alerts\";\n\nlet notification = {show: false};\n\nif (displayStr) {\n    notification.payload = `<a href=\"alerts\">⚠️</a>`;\n    notification.show    = true;\n}\n\nreturn [msg, notification];",
+        "func": "\nlet alerts = global.get(\"alerts\") || {};\n\nlet displayStr = Object.values(alerts).join(\"<br><br>\");\n\nmsg.payload = displayStr || \"✅ No active alerts\";\n\nlet notification = {show: false};\n\nif (displayStr) {\n    notification.payload = `<a href=\"alerts\">⚠️</a>`;\n    notification.show    = true;\n}\n\nreturn [msg, notification];",
         "outputs": 2,
         "timeout": 0,
         "noerr": 0,
