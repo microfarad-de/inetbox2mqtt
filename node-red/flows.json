@@ -609,8 +609,8 @@
         ],
         "order": 3,
         "className": "",
-        "visible": true,
-        "disabled": false
+        "visible": "true",
+        "disabled": "false"
     },
     {
         "id": "2b74e6ea7cedf9dc",
@@ -672,8 +672,8 @@
         ],
         "order": 2,
         "className": "",
-        "visible": true,
-        "disabled": false
+        "visible": "true",
+        "disabled": "false"
     },
     {
         "id": "a7be90ba6585cc59",
@@ -1365,7 +1365,8 @@
             "c9f48f0fd15a2481",
             "30ec2d30d9a6c151",
             "eb62a9a32e858911",
-            "55ed9207847adf8d"
+            "55ed9207847adf8d",
+            "8173e63d25cadb86"
         ],
         "x": 75,
         "y": 320,
@@ -1505,7 +1506,7 @@
         "type": "function",
         "z": "37a752f35a68bbed",
         "name": "CallMeBot",
-        "func": "\nlet phone  = global.get(\"cmbPhone\");\nlet apiKey = global.get(\"cmbApiKey\");\nlet text   = encodeURIComponent(msg.payload)\n\nmsg.payload = `https://api.callmebot.com/whatsapp.php?phone=${phone}&text=${text}&apikey=${apiKey}`\n\nreturn msg;",
+        "func": "\nlet phone  = global.get(\"cmbPhone\");\nlet apiKey = global.get(\"cmbApiKey\");\nlet text   = encodeURIComponent(msg.payload);\n\nif (!phone || !apiKey) {\n    return null;\n}\n\nmsg.payload = `https://api.callmebot.com/whatsapp.php?phone=${phone}&text=${text}&apikey=${apiKey}`;\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -1525,7 +1526,7 @@
         "type": "debug",
         "z": "37a752f35a68bbed",
         "name": "HTTP response",
-        "active": true,
+        "active": false,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -7791,7 +7792,9 @@
         "x": 770,
         "y": 940,
         "wires": [
-            []
+            [
+                "8173e63d25cadb86"
+            ]
         ]
     },
     {
@@ -7813,6 +7816,19 @@
                 "2f50a3396f8d9a61"
             ]
         ]
+    },
+    {
+        "id": "8173e63d25cadb86",
+        "type": "link out",
+        "z": "fcffa944a0680a42",
+        "name": "Fridge alarm",
+        "mode": "link",
+        "links": [
+            "2f93affb367a865e"
+        ],
+        "x": 885,
+        "y": 940,
+        "wires": []
     },
     {
         "id": "31753511ce9beb11",
@@ -10210,7 +10226,7 @@
         "width": "3",
         "height": "1",
         "name": "",
-        "label": "CallMeBot API key",
+        "label": "CallMeBot key",
         "format": "{{msg.payload}}",
         "layout": "row-spread",
         "style": false,
@@ -10219,7 +10235,7 @@
         "color": "#717171",
         "wrapText": false,
         "className": "",
-        "x": 110,
+        "x": 100,
         "y": 920,
         "wires": []
     },

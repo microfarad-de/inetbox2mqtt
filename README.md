@@ -239,7 +239,7 @@ To set up the dashboard after Node-RED is running, follow these steps:
 
 2. Open the **menu** (☰ in the top‑right corner), select **Manage Palette**, and install the `@flowfuse/node-red-dashboard` add‑on.
 
-3. Go to **Import** in the menu and import the file `node-red/caravan-dashboard.json`.
+3. Go to **Import** in the menu and import the file `node-red/flows.json`.
 
 4. Select **Manage Palette** in te menu, click on **Environment** and ensure that the following environment variables have the correct values (leave default if not sure):
    - `system-settings-file`: Absolute path to the system settings storage file
