@@ -244,8 +244,8 @@ To set up the dashboard after Node-RED is running, follow these steps:
 4. Select **Manage Palette** in te menu, click on **Environment** and ensure that the following environment variables have the correct values (leave default if not sure):
    - `system-settings-file`: Absolute path to the system settings storage file
    - `fridge-gpio-pin`: RPi GPIO pin for controlling the fridge D+ (ignition) signal
-   - `serial-device`: Absolute path of the serial device for sending commands to the fridge
-   - `serial-baud`: Serial connection baud rate
+   - `fridge-serial-device`: Absolute path of the serial device for sending commands to the fridge
+   - `fridge-serial-baud`: Serial connection baud rate
 
 4. Open the dashboard in a browser at `https://<rpi_ip_address>:1881/dashboard`.
    (If necessary, use `http://<rpi_ip_address>:1880/dashboard`.)

@@ -1013,12 +1013,12 @@
                 "type": "str"
             },
             {
-                "name": "serial-device",
+                "name": "fridge-serial-device",
                 "value": "/dev/rfcomm0",
                 "type": "str"
             },
             {
-                "name": "serial-baud",
+                "name": "fridge-serial-baud",
                 "value": "9600",
                 "type": "str"
             }
@@ -1155,7 +1155,7 @@
         "tooltip": "",
         "order": 2,
         "width": "6",
-        "height": "1",
+        "height": "10",
         "className": ""
     },
     {
@@ -7802,7 +7802,7 @@
         "type": "function",
         "z": "fcffa944a0680a42",
         "name": "Args",
-        "func": "\nlet device = env.get(\"serial-device\");\nlet baud   = env.get(\"serial-baud\");\n\nmsg.payload = `${device} ${baud} ${msg.payload}`;\n\nreturn msg;",
+        "func": "\nlet device = env.get(\"fridge-serial-device\");\nlet baud   = env.get(\"fridge-serial-baud\");\n\nmsg.payload = `${device} ${baud} ${msg.payload}`;\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
