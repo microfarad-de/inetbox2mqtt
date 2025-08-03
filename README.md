@@ -280,6 +280,7 @@ Several other dashboards are available:
 - **Overview** – Key system parameters at a glance
 - **Energy** – Battery, solar charge controller, and propane tank information
 - **Environment** – Data from various temperature, humidity, and air pressure sensors
+- **Alerts** – Displays a list of active system alerts
 - **Settings** – Advanced fridge control options, temperature offsets, and alarm thresholds
 
 ![Dashboard Tabs](doc/dashboard-3.png)
@@ -287,4 +288,5 @@ Several other dashboards are available:
 ![Overview Dashboard](doc/dashboard-5.png)
 ![Energy Dashboard](doc/dashboard-6.png)
 ![Environment Dashboard](doc/dashboard-7.png)
-![Settings Dashboard](doc/dashboard-8.png)
+![Alerts Dashboard](doc/dashboard-8.png)
+![Settings Dashboard](doc/dashboard-9.png)
