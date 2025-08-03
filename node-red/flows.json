@@ -1119,7 +1119,7 @@
         "name": "Alerts",
         "ui": "93cf16ef6c7e509b",
         "path": "/alerts",
-        "icon": "bell-alert",
+        "icon": "alert-outline",
         "layout": "grid",
         "theme": "7fbe7ff5e2bd848b",
         "breakpoints": [
@@ -1491,7 +1491,7 @@
         "width": 0,
         "height": 0,
         "head": "",
-        "format": "<style>\n\n    .large-text span {\n        font-size: 26px !important;\n    }\n\n    .large-gauge-text span {\n        font-size: 26px !important;\n        padding-top: 15px !important;\n        padding-bottom: 5px !important;\n    }\n    \n    .small-gauge-text span {\n        font-size: 18px !important;\n        padding-bottom: 3px !important;\n    }\n  \n    .nrdb-ui-gauge-title {\n        font-size:16px;\n        font-weight: normal;\n    }\n    \n    .v-card-title {\n        font-size: 18px;\n        color: #4B9FF4;\n    }\n    \n    .v-btn__content {\n        font-size: 18px;\n        /*color: #4B9FF4;*/\n    }\n    \n    .v-list-item-title {\n        font-size: 18px !important;\n        padding-bottom: 6px !important;\n    }\n    \n    .grayout {\n        pointer-events: none;\n        filter: opacity(50%);\n        /*display: none;*/\n    }\n    \n    .error {\n        color: red;\n        font-weight: bold;\n    }\n    \n    .modified {\n        color: #94E3FE;\n    }\n}\n</style>",
+        "format": "<style>\n\n    .large-text span {\n        font-size: 26px !important;\n    }\n\n    .large-gauge-text span {\n        font-size: 26px !important;\n        padding-top: 15px !important;\n        padding-bottom: 5px !important;\n    }\n    \n    .small-gauge-text span {\n        font-size: 18px !important;\n        padding-bottom: 3px !important;\n    }\n  \n    .nrdb-ui-gauge-title {\n        font-size:16px;\n        font-weight: normal;\n    }\n    \n    .v-card-title {\n        font-size: 18px;\n        color: #4B9FF4;\n    }\n    \n    .v-btn__content {\n        font-size: 18px;\n    }\n    \n    .v-list-item-title {\n        font-size: 18px !important;\n        padding-top: 3px !important;\n        padding-bottom: 3px !important;\n    }\n    \n    .v-snackbar__content {\n        font-size: 16px;\n    }\n    \n    .grayout {\n        pointer-events: none;\n        filter: opacity(50%);\n        /*display: none;*/\n    }\n    \n    .error {\n        color: red;\n        font-weight: bold;\n    }\n    \n    .modified {\n        color: #94E3FE;\n    }\n    \n}\n</style>",
         "storeOutMessages": true,
         "passthru": true,
         "resendOnRefresh": true,
@@ -2161,7 +2161,9 @@
         "className": "large-gauge-text",
         "x": 920,
         "y": 100,
-        "wires": []
+        "wires": [
+            []
+        ]
     },
     {
         "id": "67f720f7c2ecfe9a",
@@ -2197,7 +2199,9 @@
         "className": "large-gauge-text",
         "x": 910,
         "y": 720,
-        "wires": []
+        "wires": [
+            []
+        ]
     },
     {
         "id": "e8180cd3ca37e6c5",
@@ -2231,7 +2235,9 @@
         "className": "large-gauge-text",
         "x": 910,
         "y": 1200,
-        "wires": []
+        "wires": [
+            []
+        ]
     },
     {
         "id": "5624583cb2d689af",
@@ -2265,7 +2271,9 @@
         "className": "large-gauge-text",
         "x": 910,
         "y": 1380,
-        "wires": []
+        "wires": [
+            []
+        ]
     },
     {
         "id": "316533554384989c",
@@ -2773,7 +2781,9 @@
         "className": "small-gauge-text",
         "x": 920,
         "y": 1100,
-        "wires": []
+        "wires": [
+            []
+        ]
     },
     {
         "id": "5680febb4a7e5edb",
@@ -2809,7 +2819,9 @@
         "className": "small-gauge-text",
         "x": 920,
         "y": 360,
-        "wires": []
+        "wires": [
+            []
+        ]
     },
     {
         "id": "6a190306423d3c00",
@@ -2845,7 +2857,9 @@
         "className": "small-gauge-text",
         "x": 920,
         "y": 260,
-        "wires": []
+        "wires": [
+            []
+        ]
     },
     {
         "id": "e08ca67adef7fb8c",
@@ -3235,7 +3249,9 @@
         "className": "small-gauge-text",
         "x": 920,
         "y": 1000,
-        "wires": []
+        "wires": [
+            []
+        ]
     },
     {
         "id": "a9b632a6e1f88b5e",
@@ -4120,7 +4136,9 @@
         "className": "large-gauge-text",
         "x": 850,
         "y": 80,
-        "wires": []
+        "wires": [
+            []
+        ]
     },
     {
         "id": "47fc4a27405d5b1a",
@@ -4594,7 +4612,9 @@
         "className": "large-gauge-text",
         "x": 860,
         "y": 580,
-        "wires": []
+        "wires": [
+            []
+        ]
     },
     {
         "id": "c02cc7af79521236",
@@ -4662,7 +4682,9 @@
         "className": "large-gauge-text",
         "x": 850,
         "y": 980,
-        "wires": []
+        "wires": [
+            []
+        ]
     },
     {
         "id": "4fcf371b5d4733f8",
@@ -4729,7 +4751,9 @@
         "className": "large-gauge-text",
         "x": 860,
         "y": 1640,
-        "wires": []
+        "wires": [
+            []
+        ]
     },
     {
         "id": "211d1220dbbb8e92",
@@ -4796,7 +4820,9 @@
         "className": "large-gauge-text",
         "x": 870,
         "y": 700,
-        "wires": []
+        "wires": [
+            []
+        ]
     },
     {
         "id": "7f2ebc86f161bdfa",
@@ -5142,7 +5168,9 @@
         "className": "large-gauge-text",
         "x": 850,
         "y": 1320,
-        "wires": []
+        "wires": [
+            []
+        ]
     },
     {
         "id": "ca728154b5b26204",
