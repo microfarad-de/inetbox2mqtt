@@ -838,8 +838,8 @@
         "name": "spacer",
         "tooltip": "",
         "order": 6,
-        "width": 6,
-        "height": 1,
+        "width": "0",
+        "height": "0",
         "className": ""
     },
     {
@@ -849,8 +849,8 @@
         "name": "spacer",
         "tooltip": "",
         "order": 4,
-        "width": "6",
-        "height": "2",
+        "width": "0",
+        "height": "0",
         "className": ""
     },
     {
@@ -860,8 +860,8 @@
         "name": "spacer",
         "tooltip": "",
         "order": 5,
-        "width": "6",
-        "height": "1",
+        "width": "0",
+        "height": "0",
         "className": ""
     },
     {
@@ -871,8 +871,8 @@
         "name": "spacer",
         "tooltip": "",
         "order": 7,
-        "width": "6",
-        "height": "1",
+        "width": "0",
+        "height": "0",
         "className": ""
     },
     {
@@ -893,8 +893,8 @@
         ],
         "order": 1,
         "className": "",
-        "visible": true,
-        "disabled": false
+        "visible": "true",
+        "disabled": "false"
     },
     {
         "id": "2e561758ea16e0b5",
@@ -994,8 +994,8 @@
         "name": "Spacer",
         "tooltip": "",
         "order": 7,
-        "width": "6",
-        "height": "1",
+        "width": "0",
+        "height": "0",
         "className": ""
     },
     {
@@ -1109,8 +1109,8 @@
         "name": "spacer",
         "tooltip": "",
         "order": 28,
-        "width": "6",
-        "height": "1",
+        "width": "0",
+        "height": "0",
         "className": ""
     },
     {
@@ -1131,8 +1131,8 @@
         ],
         "order": 6,
         "className": "",
-        "visible": true,
-        "disabled": false
+        "visible": "true",
+        "disabled": "false"
     },
     {
         "id": "959cc79e3a0c6c7d",
@@ -1155,8 +1155,8 @@
         "name": "spacer",
         "tooltip": "",
         "order": 18,
-        "width": "6",
-        "height": "1",
+        "width": "0",
+        "height": "0",
         "className": ""
     },
     {
@@ -1166,8 +1166,8 @@
         "name": "spacer",
         "tooltip": "",
         "order": 8,
-        "width": "6",
-        "height": "5",
+        "width": "0",
+        "height": "0",
         "className": ""
     },
     {
@@ -1177,8 +1177,8 @@
         "name": "spacer",
         "tooltip": "",
         "order": 2,
-        "width": "6",
-        "height": "10",
+        "width": "0",
+        "height": "0",
         "className": ""
     },
     {
