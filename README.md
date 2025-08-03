@@ -60,14 +60,14 @@ Follow these steps for installation:
 2. Create symbolic link for the service startup script:
 
     ```bash
-    ln -s /opt/inetbox2mqtt/service/inetbox2mqtt /opt/victronenergy/service/inetbox2mqtt
+    ln -s /opt/inetbox2mqtt/service/inetbox2mqtt /opt/victronenergy/service/
     ```
 
 3. Create symbolic link for the temperature reporting script -
    enables displaying the room and water temperatures in the Victron GUI V2 as well as VRM portal:
 
     ```bash
-    ln -s /opt/inetbox2mqtt/service/RpiTemperature /opt/victronenergy/service/RpiTemperature
+    ln -s /opt/inetbox2mqtt/service/RpiTemperature /opt/victronenergy/service/
     ```
 
 4. Edit the configuration parameters in `/etc/inetbox2mqtt`:
