@@ -74,17 +74,7 @@
         ],
         "out": [
             {
-                "x": 500,
-                "y": 100,
-                "wires": [
-                    {
-                        "id": "e7756b84d8b39dfb",
-                        "port": 0
-                    }
-                ]
-            },
-            {
-                "x": 500,
+                "x": 520,
                 "y": 160,
                 "wires": [
                     {
@@ -495,18 +485,7 @@
                 ]
             }
         ],
-        "out": [
-            {
-                "x": 520,
-                "y": 160,
-                "wires": [
-                    {
-                        "id": "726fadf09d45220a",
-                        "port": 0
-                    }
-                ]
-            }
-        ],
+        "out": [],
         "env": [
             {
                 "name": "message",
@@ -514,6 +493,28 @@
                 "value": "Truma"
             }
         ],
+        "meta": {},
+        "color": "#DDAA99"
+    },
+    {
+        "id": "26fb17b83422936f",
+        "type": "subflow",
+        "name": "CallMeBot",
+        "info": "",
+        "category": "",
+        "in": [
+            {
+                "x": 140,
+                "y": 80,
+                "wires": [
+                    {
+                        "id": "fffb53b6af8726fc"
+                    }
+                ]
+            }
+        ],
+        "out": [],
+        "env": [],
         "meta": {},
         "color": "#DDAA99"
     },
@@ -1148,17 +1149,6 @@
         "groupType": "default"
     },
     {
-        "id": "51090c9f384339f7",
-        "type": "ui-spacer",
-        "group": "959cc79e3a0c6c7d",
-        "name": "spacer",
-        "tooltip": "",
-        "order": 2,
-        "width": "6",
-        "height": "10",
-        "className": ""
-    },
-    {
         "id": "d9b8019b5fbf3836",
         "type": "ui-spacer",
         "group": "28b10b40908e96b0",
@@ -1181,6 +1171,17 @@
         "className": ""
     },
     {
+        "id": "8408ad647b45ad3f",
+        "type": "ui-spacer",
+        "group": "959cc79e3a0c6c7d",
+        "name": "spacer",
+        "tooltip": "",
+        "order": 2,
+        "width": "6",
+        "height": "10",
+        "className": ""
+    },
+    {
         "id": "e7756b84d8b39dfb",
         "type": "function",
         "z": "26a48bdabf7607df",
@@ -1195,9 +1196,20 @@
         "x": 350,
         "y": 120,
         "wires": [
-            [],
+            [
+                "1db657fedef769f0"
+            ],
             []
         ]
+    },
+    {
+        "id": "1db657fedef769f0",
+        "type": "subflow:26fb17b83422936f",
+        "z": "26a48bdabf7607df",
+        "name": "",
+        "x": 560,
+        "y": 80,
+        "wires": []
     },
     {
         "id": "19512b00b559aaaf",
@@ -1363,8 +1375,109 @@
         "x": 390,
         "y": 160,
         "wires": [
-            []
+            [
+                "b37691d3d3e7fad8"
+            ]
         ]
+    },
+    {
+        "id": "b37691d3d3e7fad8",
+        "type": "subflow:26fb17b83422936f",
+        "z": "1230e5122b3b7f25",
+        "name": "",
+        "x": 560,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "aeba591b07a3bdaf",
+        "type": "http request",
+        "z": "26fb17b83422936f",
+        "name": "",
+        "method": "GET",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "{{{payload}}}",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 630,
+        "y": 120,
+        "wires": [
+            [
+                "158684bbc306fff9"
+            ]
+        ]
+    },
+    {
+        "id": "806a9890333148a6",
+        "type": "inject",
+        "z": "26fb17b83422936f",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "⚠️ Test message",
+        "payloadType": "str",
+        "x": 200,
+        "y": 180,
+        "wires": [
+            [
+                "fffb53b6af8726fc"
+            ]
+        ]
+    },
+    {
+        "id": "fffb53b6af8726fc",
+        "type": "function",
+        "z": "26fb17b83422936f",
+        "name": "CallMeBot",
+        "func": "\nlet phone  = global.get(\"cmbPhone\");\nlet apiKey = global.get(\"cmbApiKey\");\nlet text   = encodeURIComponent(msg.payload);\n\nif (!phone || !apiKey) {\n    return null;\n}\n\nmsg.payload = `https://api.callmebot.com/whatsapp.php?phone=${phone}&text=${text}&apikey=${apiKey}`;\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 450,
+        "y": 120,
+        "wires": [
+            [
+                "aeba591b07a3bdaf"
+            ]
+        ]
+    },
+    {
+        "id": "158684bbc306fff9",
+        "type": "debug",
+        "z": "26fb17b83422936f",
+        "name": "HTTP response",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 820,
+        "y": 120,
+        "wires": []
     },
     {
         "id": "11fb85624a460b6f",
@@ -1760,19 +1873,6 @@
         ]
     },
     {
-        "id": "210d9c2dfb32db9e",
-        "type": "link out",
-        "z": "b22624498baaa896",
-        "name": "Battery level alarm",
-        "mode": "link",
-        "links": [
-            "2f93affb367a865e"
-        ],
-        "x": 655,
-        "y": 160,
-        "wires": []
-    },
-    {
         "id": "26f7cb849699ceef",
         "type": "subflow:26a48bdabf7607df",
         "z": "b22624498baaa896",
@@ -1794,12 +1894,9 @@
                 "type": "str"
             }
         ],
-        "x": 550,
+        "x": 770,
         "y": 180,
         "wires": [
-            [
-                "210d9c2dfb32db9e"
-            ],
             [
                 "55f16741df7ccb35"
             ]
@@ -1844,7 +1941,7 @@
                 "type": "num"
             }
         ],
-        "x": 500,
+        "x": 530,
         "y": 1200,
         "wires": [
             [
@@ -1871,7 +1968,7 @@
                 "type": "str"
             }
         ],
-        "x": 560,
+        "x": 530,
         "y": 1380,
         "wires": [
             [
@@ -1935,29 +2032,13 @@
                 "type": "str"
             }
         ],
-        "x": 570,
+        "x": 770,
         "y": 1280,
         "wires": [
-            [
-                "9141f247602e75b7"
-            ],
             [
                 "e558e37ec5e69804"
             ]
         ]
-    },
-    {
-        "id": "9141f247602e75b7",
-        "type": "link out",
-        "z": "b22624498baaa896",
-        "name": "Propane tank 1 alarm",
-        "mode": "link",
-        "links": [
-            "2f93affb367a865e"
-        ],
-        "x": 675,
-        "y": 1260,
-        "wires": []
     },
     {
         "id": "b2790ee93b81319a",
@@ -1986,29 +2067,13 @@
                 "type": "str"
             }
         ],
-        "x": 570,
+        "x": 770,
         "y": 1460,
         "wires": [
-            [
-                "14753609f7bc5747"
-            ],
             [
                 "2ae801359341660a"
             ]
         ]
-    },
-    {
-        "id": "14753609f7bc5747",
-        "type": "link out",
-        "z": "b22624498baaa896",
-        "name": "Propane tank 2 alarm",
-        "mode": "link",
-        "links": [
-            "2f93affb367a865e"
-        ],
-        "x": 675,
-        "y": 1440,
-        "wires": []
     },
     {
         "id": "bf85fd8b06bfa703",
@@ -2236,7 +2301,7 @@
                 "type": "str"
             }
         ],
-        "x": 790,
+        "x": 770,
         "y": 300,
         "wires": [
             [
@@ -2256,7 +2321,7 @@
                 "type": "str"
             }
         ],
-        "x": 790,
+        "x": 770,
         "y": 400,
         "wires": [
             [
@@ -2298,7 +2363,7 @@
                 "type": "str"
             }
         ],
-        "x": 790,
+        "x": 770,
         "y": 600,
         "wires": [
             [
@@ -2362,7 +2427,7 @@
                 "type": "str"
             }
         ],
-        "x": 790,
+        "x": 770,
         "y": 840,
         "wires": [
             [
@@ -2448,7 +2513,7 @@
                 "type": "str"
             }
         ],
-        "x": 790,
+        "x": 770,
         "y": 1040,
         "wires": [
             [
@@ -2490,7 +2555,7 @@
                 "type": "str"
             }
         ],
-        "x": 790,
+        "x": 770,
         "y": 1140,
         "wires": [
             [
@@ -2533,7 +2598,7 @@
                 "type": "str"
             }
         ],
-        "x": 790,
+        "x": 770,
         "y": 140,
         "wires": [
             [
@@ -2597,7 +2662,7 @@
                 "type": "str"
             }
         ],
-        "x": 790,
+        "x": 770,
         "y": 760,
         "wires": [
             [
@@ -2632,7 +2697,7 @@
         "type": "subflow:35877746e13a44de",
         "z": "b22624498baaa896",
         "name": "",
-        "x": 790,
+        "x": 770,
         "y": 1520,
         "wires": [
             [
@@ -2667,7 +2732,7 @@
         "type": "subflow:35877746e13a44de",
         "z": "b22624498baaa896",
         "name": "",
-        "x": 790,
+        "x": 770,
         "y": 1580,
         "wires": [
             [
@@ -2794,7 +2859,7 @@
                 "type": "str"
             }
         ],
-        "x": 790,
+        "x": 770,
         "y": 1240,
         "wires": [
             [
@@ -2858,7 +2923,7 @@
                 "type": "str"
             }
         ],
-        "x": 790,
+        "x": 770,
         "y": 1420,
         "wires": [
             [
@@ -3030,7 +3095,7 @@
                 "type": "str"
             }
         ],
-        "x": 790,
+        "x": 770,
         "y": 1800,
         "wires": [
             [
@@ -3073,7 +3138,7 @@
                 "type": "str"
             }
         ],
-        "x": 790,
+        "x": 770,
         "y": 1860,
         "wires": [
             [
@@ -3280,7 +3345,7 @@
                 "type": "str"
             }
         ],
-        "x": 790,
+        "x": 770,
         "y": 460,
         "wires": [
             [
@@ -3293,7 +3358,7 @@
         "type": "subflow:35877746e13a44de",
         "z": "b22624498baaa896",
         "name": "",
-        "x": 790,
+        "x": 770,
         "y": 520,
         "wires": [
             [
@@ -3466,58 +3531,6 @@
         ]
     },
     {
-        "id": "f59d101299f0716e",
-        "type": "link out",
-        "z": "2561d49b29c858c7",
-        "name": "Fridge temp alarm",
-        "mode": "link",
-        "links": [
-            "2f93affb367a865e"
-        ],
-        "x": 735,
-        "y": 1040,
-        "wires": []
-    },
-    {
-        "id": "08fe98afcefbc02c",
-        "type": "link out",
-        "z": "2561d49b29c858c7",
-        "name": "Battery temp alarm",
-        "mode": "link",
-        "links": [
-            "2f93affb367a865e"
-        ],
-        "x": 735,
-        "y": 1720,
-        "wires": []
-    },
-    {
-        "id": "dfc1f32cb802a02e",
-        "type": "link out",
-        "z": "2561d49b29c858c7",
-        "name": "CPU temp alarm",
-        "mode": "link",
-        "links": [
-            "2f93affb367a865e"
-        ],
-        "x": 735,
-        "y": 1540,
-        "wires": []
-    },
-    {
-        "id": "335af24ca01463cb",
-        "type": "link out",
-        "z": "2561d49b29c858c7",
-        "name": "Water temp alarm",
-        "mode": "link",
-        "links": [
-            "2f93affb367a865e"
-        ],
-        "x": 735,
-        "y": 1400,
-        "wires": []
-    },
-    {
         "id": "6296b4c566c5530e",
         "type": "mqtt in",
         "z": "2561d49b29c858c7",
@@ -3539,19 +3552,6 @@
         ]
     },
     {
-        "id": "e1dd06c5c761e4d9",
-        "type": "link out",
-        "z": "2561d49b29c858c7",
-        "name": "Room temp alarm",
-        "mode": "link",
-        "links": [
-            "2f93affb367a865e"
-        ],
-        "x": 745,
-        "y": 140,
-        "wires": []
-    },
-    {
         "id": "f8c13de4be546aa7",
         "type": "subflow:26a48bdabf7607df",
         "z": "2561d49b29c858c7",
@@ -3568,12 +3568,9 @@
                 "type": "str"
             }
         ],
-        "x": 650,
+        "x": 710,
         "y": 160,
         "wires": [
-            [
-                "e1dd06c5c761e4d9"
-            ],
             [
                 "47fc4a27405d5b1a"
             ]
@@ -3601,12 +3598,9 @@
                 "type": "str"
             }
         ],
-        "x": 650,
+        "x": 710,
         "y": 1060,
         "wires": [
-            [
-                "f59d101299f0716e"
-            ],
             [
                 "b39fbe0d42a248d4"
             ]
@@ -3634,12 +3628,9 @@
                 "type": "str"
             }
         ],
-        "x": 650,
-        "y": 1420,
+        "x": 710,
+        "y": 1400,
         "wires": [
-            [
-                "335af24ca01463cb"
-            ],
             [
                 "b58793209f5ee98a"
             ]
@@ -3672,12 +3663,9 @@
                 "type": "str"
             }
         ],
-        "x": 650,
-        "y": 1560,
+        "x": 710,
+        "y": 1540,
         "wires": [
-            [
-                "dfc1f32cb802a02e"
-            ],
             [
                 "dd6fe58b20a74178"
             ]
@@ -3705,12 +3693,9 @@
                 "type": "str"
             }
         ],
-        "x": 650,
-        "y": 1740,
+        "x": 710,
+        "y": 1720,
         "wires": [
-            [
-                "08fe98afcefbc02c"
-            ],
             [
                 "8e2cd2587cdc9e98"
             ]
@@ -4133,7 +4118,7 @@
         "styleRounded": true,
         "styleGlow": false,
         "className": "large-gauge-text",
-        "x": 950,
+        "x": 850,
         "y": 80,
         "wires": []
     },
@@ -4155,7 +4140,7 @@
         "color": "#717171",
         "wrapText": false,
         "className": "",
-        "x": 990,
+        "x": 890,
         "y": 120,
         "wires": []
     },
@@ -4177,7 +4162,7 @@
         "color": "#717171",
         "wrapText": false,
         "className": "",
-        "x": 990,
+        "x": 890,
         "y": 1020,
         "wires": []
     },
@@ -4186,7 +4171,7 @@
         "type": "subflow:35877746e13a44de",
         "z": "2561d49b29c858c7",
         "name": "",
-        "x": 810,
+        "x": 710,
         "y": 120,
         "wires": [
             [
@@ -4199,7 +4184,7 @@
         "type": "subflow:35877746e13a44de",
         "z": "2561d49b29c858c7",
         "name": "",
-        "x": 810,
+        "x": 710,
         "y": 1020,
         "wires": [
             [
@@ -4212,7 +4197,7 @@
         "type": "subflow:35877746e13a44de",
         "z": "2561d49b29c858c7",
         "name": "",
-        "x": 810,
+        "x": 710,
         "y": 260,
         "wires": [
             [
@@ -4225,7 +4210,7 @@
         "type": "subflow:35877746e13a44de",
         "z": "2561d49b29c858c7",
         "name": "",
-        "x": 810,
+        "x": 710,
         "y": 320,
         "wires": [
             [
@@ -4251,7 +4236,7 @@
         "color": "#717171",
         "wrapText": false,
         "className": "",
-        "x": 1010,
+        "x": 910,
         "y": 260,
         "wires": []
     },
@@ -4273,7 +4258,7 @@
         "color": "#717171",
         "wrapText": false,
         "className": "",
-        "x": 1010,
+        "x": 910,
         "y": 320,
         "wires": []
     },
@@ -4295,7 +4280,7 @@
         "color": "#717171",
         "wrapText": false,
         "className": "",
-        "x": 990,
+        "x": 890,
         "y": 620,
         "wires": []
     },
@@ -4304,7 +4289,7 @@
         "type": "subflow:35877746e13a44de",
         "z": "2561d49b29c858c7",
         "name": "",
-        "x": 810,
+        "x": 710,
         "y": 620,
         "wires": [
             [
@@ -4330,7 +4315,7 @@
         "color": "#717171",
         "wrapText": false,
         "className": "",
-        "x": 990,
+        "x": 890,
         "y": 740,
         "wires": []
     },
@@ -4346,7 +4331,7 @@
                 "type": "str"
             }
         ],
-        "x": 810,
+        "x": 710,
         "y": 740,
         "wires": [
             [
@@ -4372,7 +4357,7 @@
         "color": "#717171",
         "wrapText": false,
         "className": "",
-        "x": 1000,
+        "x": 900,
         "y": 800,
         "wires": []
     },
@@ -4388,7 +4373,7 @@
                 "type": "str"
             }
         ],
-        "x": 810,
+        "x": 710,
         "y": 800,
         "wires": [
             [
@@ -4414,7 +4399,7 @@
         "color": "#717171",
         "wrapText": false,
         "className": "",
-        "x": 980,
+        "x": 880,
         "y": 1120,
         "wires": []
     },
@@ -4430,7 +4415,7 @@
                 "type": "str"
             }
         ],
-        "x": 810,
+        "x": 710,
         "y": 1120,
         "wires": [
             [
@@ -4443,7 +4428,7 @@
         "type": "subflow:35877746e13a44de",
         "z": "2561d49b29c858c7",
         "name": "",
-        "x": 810,
+        "x": 710,
         "y": 1360,
         "wires": [
             [
@@ -4469,7 +4454,7 @@
         "color": "#717171",
         "wrapText": false,
         "className": "",
-        "x": 990,
+        "x": 890,
         "y": 1360,
         "wires": []
     },
@@ -4478,7 +4463,7 @@
         "type": "subflow:35877746e13a44de",
         "z": "2561d49b29c858c7",
         "name": "",
-        "x": 810,
+        "x": 710,
         "y": 1500,
         "wires": [
             [
@@ -4504,7 +4489,7 @@
         "color": "#717171",
         "wrapText": false,
         "className": "",
-        "x": 990,
+        "x": 890,
         "y": 1500,
         "wires": []
     },
@@ -4513,7 +4498,7 @@
         "type": "subflow:35877746e13a44de",
         "z": "2561d49b29c858c7",
         "name": "",
-        "x": 810,
+        "x": 710,
         "y": 1680,
         "wires": [
             [
@@ -4539,7 +4524,7 @@
         "color": "#717171",
         "wrapText": false,
         "className": "",
-        "x": 1000,
+        "x": 900,
         "y": 1680,
         "wires": []
     },
@@ -4607,7 +4592,7 @@
         "styleRounded": true,
         "styleGlow": false,
         "className": "large-gauge-text",
-        "x": 960,
+        "x": 860,
         "y": 580,
         "wires": []
     },
@@ -4675,7 +4660,7 @@
         "styleRounded": true,
         "styleGlow": false,
         "className": "large-gauge-text",
-        "x": 950,
+        "x": 850,
         "y": 980,
         "wires": []
     },
@@ -4742,7 +4727,7 @@
         "styleRounded": true,
         "styleGlow": false,
         "className": "large-gauge-text",
-        "x": 960,
+        "x": 860,
         "y": 1640,
         "wires": []
     },
@@ -4809,7 +4794,7 @@
         "styleRounded": true,
         "styleGlow": false,
         "className": "large-gauge-text",
-        "x": 970,
+        "x": 870,
         "y": 700,
         "wires": []
     },
@@ -4858,7 +4843,7 @@
         "color": "#717171",
         "wrapText": false,
         "className": "",
-        "x": 980,
+        "x": 880,
         "y": 1220,
         "wires": []
     },
@@ -4874,7 +4859,7 @@
                 "type": "str"
             }
         ],
-        "x": 810,
+        "x": 710,
         "y": 1220,
         "wires": [
             [
@@ -4927,7 +4912,7 @@
         "color": "#717171",
         "wrapText": false,
         "className": "",
-        "x": 980,
+        "x": 880,
         "y": 880,
         "wires": []
     },
@@ -4943,7 +4928,7 @@
                 "type": "str"
             }
         ],
-        "x": 810,
+        "x": 710,
         "y": 880,
         "wires": [
             [
@@ -5019,7 +5004,7 @@
                 "type": "str"
             }
         ],
-        "x": 810,
+        "x": 710,
         "y": 420,
         "wires": [
             [
@@ -5045,7 +5030,7 @@
         "color": "#717171",
         "wrapText": false,
         "className": "",
-        "x": 990,
+        "x": 890,
         "y": 420,
         "wires": []
     },
@@ -5061,7 +5046,7 @@
                 "type": "str"
             }
         ],
-        "x": 810,
+        "x": 710,
         "y": 500,
         "wires": [
             [
@@ -5087,7 +5072,7 @@
         "color": "#717171",
         "wrapText": false,
         "className": "",
-        "x": 990,
+        "x": 890,
         "y": 500,
         "wires": []
     },
@@ -5155,7 +5140,7 @@
         "styleRounded": true,
         "styleGlow": false,
         "className": "large-gauge-text",
-        "x": 950,
+        "x": 850,
         "y": 1320,
         "wires": []
     },
@@ -5169,7 +5154,7 @@
             "d892337cb1c8691c",
             "bd479a673f65a239"
         ],
-        "x": 705,
+        "x": 675,
         "y": 60,
         "wires": []
     },
@@ -5183,7 +5168,7 @@
             "ba5bc53644e7417d",
             "380565adfd0e025a"
         ],
-        "x": 705,
+        "x": 675,
         "y": 960,
         "wires": []
     },
@@ -5214,29 +5199,13 @@
                 "type": "str"
             }
         ],
-        "x": 650,
+        "x": 710,
         "y": 1260,
         "wires": [
-            [
-                "c9f48f0fd15a2481"
-            ],
             [
                 "e40cf8f912e64c7c"
             ]
         ]
-    },
-    {
-        "id": "c9f48f0fd15a2481",
-        "type": "link out",
-        "z": "2561d49b29c858c7",
-        "name": "Fridge sensor battery alarm",
-        "mode": "link",
-        "links": [
-            "2f93affb367a865e"
-        ],
-        "x": 735,
-        "y": 1240,
-        "wires": []
     },
     {
         "id": "d621075a310392c0",
@@ -5265,29 +5234,13 @@
                 "type": "str"
             }
         ],
-        "x": 650,
+        "x": 710,
         "y": 920,
         "wires": [
-            [
-                "30ec2d30d9a6c151"
-            ],
             [
                 "29a1859ee6666879"
             ]
         ]
-    },
-    {
-        "id": "30ec2d30d9a6c151",
-        "type": "link out",
-        "z": "2561d49b29c858c7",
-        "name": "Outdoor temp alarm",
-        "mode": "link",
-        "links": [
-            "2f93affb367a865e"
-        ],
-        "x": 735,
-        "y": 900,
-        "wires": []
     },
     {
         "id": "e58706be9dad540d",
@@ -5316,29 +5269,13 @@
                 "type": "str"
             }
         ],
-        "x": 630,
+        "x": 710,
         "y": 540,
         "wires": [
-            [
-                "eb62a9a32e858911"
-            ],
             [
                 "ae45e91d9bfb6e25"
             ]
         ]
-    },
-    {
-        "id": "eb62a9a32e858911",
-        "type": "link out",
-        "z": "2561d49b29c858c7",
-        "name": "Propane 2 battery alarm",
-        "mode": "link",
-        "links": [
-            "2f93affb367a865e"
-        ],
-        "x": 725,
-        "y": 520,
-        "wires": []
     },
     {
         "id": "c14086bf468a46fc",
@@ -5367,29 +5304,13 @@
                 "type": "str"
             }
         ],
-        "x": 630,
+        "x": 710,
         "y": 460,
         "wires": [
-            [
-                "55ed9207847adf8d"
-            ],
             [
                 "c02faeb59985c2fa"
             ]
         ]
-    },
-    {
-        "id": "55ed9207847adf8d",
-        "type": "link out",
-        "z": "2561d49b29c858c7",
-        "name": "Propane 1 battery alarm",
-        "mode": "link",
-        "links": [
-            "2f93affb367a865e"
-        ],
-        "x": 725,
-        "y": 440,
-        "wires": []
     },
     {
         "id": "e797340e231f7c0d",
@@ -5754,19 +5675,6 @@
                 "aeeecafd3aba5913"
             ]
         ]
-    },
-    {
-        "id": "60b4291ab1bc4195",
-        "type": "link out",
-        "z": "c74d4096e08fa272",
-        "name": "Truma alarm",
-        "mode": "link",
-        "links": [
-            "2f93affb367a865e"
-        ],
-        "x": 745,
-        "y": 1100,
-        "wires": []
     },
     {
         "id": "aeeecafd3aba5913",
@@ -6650,13 +6558,9 @@
         "type": "subflow:1230e5122b3b7f25",
         "z": "c74d4096e08fa272",
         "name": "",
-        "x": 630,
+        "x": 640,
         "y": 1100,
-        "wires": [
-            [
-                "60b4291ab1bc4195"
-            ]
-        ]
+        "wires": []
     },
     {
         "id": "d892337cb1c8691c",
@@ -7689,13 +7593,9 @@
                 "type": "str"
             }
         ],
-        "x": 770,
+        "x": 780,
         "y": 940,
-        "wires": [
-            [
-                "8173e63d25cadb86"
-            ]
-        ]
+        "wires": []
     },
     {
         "id": "7e05e1eaee6f9375",
@@ -7716,19 +7616,6 @@
                 "2f50a3396f8d9a61"
             ]
         ]
-    },
-    {
-        "id": "8173e63d25cadb86",
-        "type": "link out",
-        "z": "fcffa944a0680a42",
-        "name": "Fridge alarm",
-        "mode": "link",
-        "links": [
-            "2f93affb367a865e"
-        ],
-        "x": 885,
-        "y": 940,
-        "wires": []
     },
     {
         "id": "31753511ce9beb11",
@@ -7788,8 +7675,8 @@
         "z": "23d77242da9abfeb",
         "group": "959cc79e3a0c6c7d",
         "order": 1,
-        "width": 0,
-        "height": 0,
+        "width": "0",
+        "height": "0",
         "name": "Alert messages",
         "label": "",
         "format": "{{msg.payload}}",
@@ -7827,128 +7714,6 @@
         "wires": [
             []
         ]
-    },
-    {
-        "id": "2f93affb367a865e",
-        "type": "link in",
-        "z": "23d77242da9abfeb",
-        "name": "Send WhatsApp",
-        "links": [
-            "08fe98afcefbc02c",
-            "14753609f7bc5747",
-            "210d9c2dfb32db9e",
-            "335af24ca01463cb",
-            "60b4291ab1bc4195",
-            "713473bc2af8430d",
-            "9141f247602e75b7",
-            "dfc1f32cb802a02e",
-            "e1dd06c5c761e4d9",
-            "f2fa448128ce1972",
-            "f59d101299f0716e",
-            "f8b062643e6b87e5",
-            "c9f48f0fd15a2481",
-            "30ec2d30d9a6c151",
-            "eb62a9a32e858911",
-            "55ed9207847adf8d",
-            "8173e63d25cadb86"
-        ],
-        "x": 95,
-        "y": 360,
-        "wires": [
-            [
-                "fffb53b6af8726fc"
-            ]
-        ]
-    },
-    {
-        "id": "aeba591b07a3bdaf",
-        "type": "http request",
-        "z": "23d77242da9abfeb",
-        "name": "",
-        "method": "GET",
-        "ret": "txt",
-        "paytoqs": "ignore",
-        "url": "{{{payload}}}",
-        "tls": "",
-        "persist": false,
-        "proxy": "",
-        "insecureHTTPParser": false,
-        "authType": "",
-        "senderr": false,
-        "headers": [],
-        "x": 430,
-        "y": 360,
-        "wires": [
-            [
-                "158684bbc306fff9"
-            ]
-        ]
-    },
-    {
-        "id": "806a9890333148a6",
-        "type": "inject",
-        "z": "23d77242da9abfeb",
-        "name": "",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "",
-        "payload": "⚠️ Test message",
-        "payloadType": "str",
-        "x": 160,
-        "y": 440,
-        "wires": [
-            [
-                "fffb53b6af8726fc"
-            ]
-        ]
-    },
-    {
-        "id": "fffb53b6af8726fc",
-        "type": "function",
-        "z": "23d77242da9abfeb",
-        "name": "CallMeBot",
-        "func": "\nlet phone  = global.get(\"cmbPhone\");\nlet apiKey = global.get(\"cmbApiKey\");\nlet text   = encodeURIComponent(msg.payload);\n\nif (!phone || !apiKey) {\n    return null;\n}\n\nmsg.payload = `https://api.callmebot.com/whatsapp.php?phone=${phone}&text=${text}&apikey=${apiKey}`;\n\nreturn msg;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 250,
-        "y": 360,
-        "wires": [
-            [
-                "aeba591b07a3bdaf"
-            ]
-        ]
-    },
-    {
-        "id": "158684bbc306fff9",
-        "type": "debug",
-        "z": "23d77242da9abfeb",
-        "name": "HTTP response",
-        "active": false,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "payload",
-        "targetType": "msg",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 620,
-        "y": 360,
-        "wires": []
     },
     {
         "id": "506010c16d2924c9",
