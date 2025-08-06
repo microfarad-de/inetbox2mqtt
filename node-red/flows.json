@@ -491,6 +491,11 @@
                 "name": "message",
                 "type": "str",
                 "value": "Truma"
+            },
+            {
+                "name": "instance",
+                "type": "num",
+                "value": "1"
             }
         ],
         "meta": {},
@@ -1365,7 +1370,7 @@
         "type": "function",
         "z": "1230e5122b3b7f25",
         "name": "Alarm",
-        "func": "\nlet val     = msg.payload;\nlet message = env.get(\"message\");\n\nlet alerts    = global.get(\"alerts\") || {};\nlet lastAlarm = context.get(\"lastAlarm\") || false;\nlet alarm = false;\n\nif (val === \"OK\") {\n    alarm = false;\n    delete alerts[message];\n    global.set(\"alerts\", alerts);\n    context.set(\"lastAlarm\", alarm);\n}\nelse {\n    alarm = val;\n}\n\n//node.warn(`val={val}, alarm={alarm}, lastAlarm={lastAlarm}`);\n\nif (alarm && alarm !== lastAlarm) {\n    context.set(\"lastAlarm\", alarm);\n    msg.payload = `⚠️ Caravan alert!\\n${message}:\\n${val}`;\n    text = `⚠️ ${message}: ${val}`;\n    node.warn(text);\n    alerts[message] = text;\n    global.set(\"alerts\", alerts);\n    return msg;\n}\nelse {\n    return null;\n}\n\n",
+        "func": "\nlet val      = msg.payload;\nlet message  = env.get(\"message\");\nlet instance = env.get(\"instance\");\nlet index    = `${message} ${instance}`;\n\nlet alerts    = global.get(\"alerts\") || {};\nlet lastAlarm = context.get(\"lastAlarm\") || false;\nlet alarm = false;\n\nif (val === \"OK\") {\n    alarm = false;\n    delete alerts[index];\n    global.set(\"alerts\", alerts);\n    context.set(\"lastAlarm\", alarm);\n}\nelse {\n    alarm = val;\n}\n\n//node.warn(`val={val}, alarm={alarm}, lastAlarm={lastAlarm}`);\n\nif (alarm && alarm !== lastAlarm) {\n    context.set(\"lastAlarm\", alarm);\n    msg.payload = `⚠️ Caravan alert!\\n${message}:\\n${val}`;\n    text = `⚠️ ${message}: ${val}`;\n    node.warn(text);\n    alerts[index] = text;\n    global.set(\"alerts\", alerts);\n    return msg;\n}\nelse {\n    return null;\n}\n\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -1491,7 +1496,7 @@
         "width": 0,
         "height": 0,
         "head": "",
-        "format": "<style>\n\n    .large-text span {\n        font-size: 26px !important;\n    }\n\n    .large-gauge-text span {\n        font-size: 26px !important;\n        padding-top: 15px !important;\n        padding-bottom: 5px !important;\n    }\n    \n    .small-gauge-text span {\n        font-size: 18px !important;\n        padding-bottom: 3px !important;\n    }\n  \n    .nrdb-ui-gauge-title {\n        font-size:16px;\n        font-weight: normal;\n    }\n    \n    .v-card-title {\n        font-size: 18px;\n        color: #4B9FF4;\n    }\n    \n    .v-btn__content {\n        font-size: 18px;\n    }\n    \n    .v-list-item-title {\n        font-size: 18px !important;\n        padding-top: 3px !important;\n        padding-bottom: 3px !important;\n    }\n    \n    .v-snackbar__content {\n        font-size: 16px;\n    }\n    \n    .grayout {\n        pointer-events: none;\n        filter: opacity(50%);\n        /*display: none;*/\n    }\n    \n    .error {\n        color: red;\n        font-weight: bold;\n    }\n    \n    .modified {\n        color: #94E3FE;\n    }\n    \n}\n</style>",
+        "format": "<style>\n\n    .large-text span {\n        font-size: 26px !important;\n    }\n    \n    .environment-text span {\n        /*font-size: 26px !important;*/\n    }\n\n    .large-gauge-text span {\n        font-size: 26px !important;\n        padding-top: 15px !important;\n        padding-bottom: 5px !important;\n    }\n    \n    .small-gauge-text span {\n        font-size: 18px !important;\n        padding-bottom: 3px !important;\n    }\n  \n    .nrdb-ui-gauge-title {\n        font-size:16px;\n        font-weight: normal;\n    }\n    \n    .v-card-title {\n        font-size: 18px;\n        color: #4B9FF4;\n    }\n    \n    .v-btn__content {\n        font-size: 18px;\n    }\n    \n    .v-list-item-title {\n        font-size: 18px !important;\n        padding-top: 3px !important;\n        padding-bottom: 3px !important;\n    }\n    \n    .v-snackbar__content {\n        font-size: 16px;\n    }\n    \n    .grayout {\n        pointer-events: none;\n        filter: opacity(50%);\n        /*display: none;*/\n    }\n    \n    .error {\n        color: red;\n        font-weight: bold;\n    }\n    \n    .modified {\n        color: #94E3FE;\n    }\n    \n}\n</style>",
         "storeOutMessages": true,
         "passthru": true,
         "resendOnRefresh": true,
@@ -4157,7 +4162,7 @@
         "fontSize": 16,
         "color": "#717171",
         "wrapText": false,
-        "className": "",
+        "className": "environment-text",
         "x": 890,
         "y": 120,
         "wires": []
@@ -4179,7 +4184,7 @@
         "fontSize": 16,
         "color": "#717171",
         "wrapText": false,
-        "className": "",
+        "className": "environment-text",
         "x": 890,
         "y": 1020,
         "wires": []
@@ -4253,7 +4258,7 @@
         "fontSize": 16,
         "color": "#717171",
         "wrapText": false,
-        "className": "",
+        "className": "environment-text",
         "x": 910,
         "y": 260,
         "wires": []
@@ -4275,7 +4280,7 @@
         "fontSize": 16,
         "color": "#717171",
         "wrapText": false,
-        "className": "",
+        "className": "environment-text",
         "x": 910,
         "y": 320,
         "wires": []
@@ -4297,7 +4302,7 @@
         "fontSize": 16,
         "color": "#717171",
         "wrapText": false,
-        "className": "",
+        "className": "environment-text",
         "x": 890,
         "y": 620,
         "wires": []
@@ -4332,7 +4337,7 @@
         "fontSize": 16,
         "color": "#717171",
         "wrapText": false,
-        "className": "",
+        "className": "environment-text",
         "x": 890,
         "y": 740,
         "wires": []
@@ -4374,7 +4379,7 @@
         "fontSize": 16,
         "color": "#717171",
         "wrapText": false,
-        "className": "",
+        "className": "environment-text",
         "x": 900,
         "y": 800,
         "wires": []
@@ -4416,7 +4421,7 @@
         "fontSize": 16,
         "color": "#717171",
         "wrapText": false,
-        "className": "",
+        "className": "environment-text",
         "x": 880,
         "y": 1120,
         "wires": []
@@ -4471,7 +4476,7 @@
         "fontSize": 16,
         "color": "#717171",
         "wrapText": false,
-        "className": "",
+        "className": "environment-text",
         "x": 890,
         "y": 1360,
         "wires": []
@@ -4506,7 +4511,7 @@
         "fontSize": 16,
         "color": "#717171",
         "wrapText": false,
-        "className": "",
+        "className": "environment-text",
         "x": 890,
         "y": 1500,
         "wires": []
@@ -4541,7 +4546,7 @@
         "fontSize": 16,
         "color": "#717171",
         "wrapText": false,
-        "className": "",
+        "className": "environment-text",
         "x": 900,
         "y": 1680,
         "wires": []
@@ -4868,7 +4873,7 @@
         "fontSize": 16,
         "color": "#717171",
         "wrapText": false,
-        "className": "",
+        "className": "environment-text",
         "x": 880,
         "y": 1220,
         "wires": []
@@ -4937,7 +4942,7 @@
         "fontSize": 16,
         "color": "#717171",
         "wrapText": false,
-        "className": "",
+        "className": "environment-text",
         "x": 880,
         "y": 880,
         "wires": []
@@ -5055,7 +5060,7 @@
         "fontSize": 16,
         "color": "#717171",
         "wrapText": false,
-        "className": "",
+        "className": "environment-text",
         "x": 890,
         "y": 420,
         "wires": []
@@ -5097,7 +5102,7 @@
         "fontSize": 16,
         "color": "#717171",
         "wrapText": false,
-        "className": "",
+        "className": "environment-text",
         "x": 890,
         "y": 500,
         "wires": []
@@ -7198,15 +7203,15 @@
         "type": "function",
         "z": "fcffa944a0680a42",
         "name": "DecodeError",
-        "func": "\nlet json    = context.get(\"json\") || false;\nlet sensor  = context.get(\"sensor\") || false;\nlet battery = context.get(\"battery\") || false;\nlet boost   = context.get(\"boost\") || false;\nlet discCnt = context.get(\"discCnt\") || 0;\nlet status  = {\"ui_update\": {\"class\": \"\"}};\nlet alarm   = {};\n\n//node.warn(`topic=${msg.topic}, payload=${msg.payload}`);\n\nif (msg.topic === \"json\") {\n    if (msg.payload === false) {\n        discCnt++;\n    }\n    else {\n        discCnt = 0;\n    }\n    context.set(\"discCnt\", discCnt);\n    if (discCnt >= 3) {\n        json = false;\n    }\n    else {\n        json = true;\n    }\n    context.set(\"json\", json);\n}\nelse if (msg.topic === \"sensor\") {\n    context.set(\"sensor\", msg.payload);\n}\nelse if (msg.topic === \"battery\") {\n    context.set(\"battery\", msg.payload);\n}\nelse if (msg.topic === \"boost\") {\n    context.set(\"boost\", msg.payload);\n}\n\n//node.warn(`json=${json}, sensor=${sensor}`);\n\nif (!sensor) {\n    status.payload = \"Sensor error!\";\n    status.ui_update.class = \"error\";\n    alarm.payload = status.payload;\n}\nelse if (!json) {\n    status.payload = \"Connection lost!\";\n    status.ui_update.class = \"error\";\n    alarm.payload = status.payload;\n}\nelse if (!battery) {\n    status.payload = \"Low battery!\";\n    status.ui_update.class = \"error\";\n    alarm.payload = status.payload;\n}\nelse if (boost) {\n    status.payload = \"BOOST\";\n    alarm.payload  = \"OK\";\n}\nelse {\n    status.payload = \"OK\"; \n    alarm.payload  = \"OK\";\n}\nreturn [status, alarm];\n",
-        "outputs": 2,
+        "func": "\nlet json    = context.get(\"json\")    || false;\nlet sensor  = context.get(\"sensor\")  || false;\nlet battery = context.get(\"battery\") || false;\nlet boost   = context.get(\"boost\")   || false;\nlet discCnt = context.get(\"discCnt\") || 0;\n\nlet status  = {payload: \"OK\", ui_update: {class: \"\"}};\nlet alarm1  = {payload: \"OK\"};\nlet alarm2  = {payload: \"OK\"};\nlet alarm3  = {payload: \"OK\"};\n\n//node.warn(`topic=${msg.topic}, payload=${msg.payload}`);\n\nif (msg.topic === \"json\") {\n    if (msg.payload === false) {\n        discCnt++;\n    }\n    else {\n        discCnt = 0;\n    }\n    context.set(\"discCnt\", discCnt);\n    if (discCnt >= 3) {\n        json = false;\n    }\n    else {\n        json = true;\n    }\n    context.set(\"json\", json);\n}\nelse if (msg.topic === \"sensor\") {\n    context.set(\"sensor\", msg.payload);\n}\nelse if (msg.topic === \"battery\") {\n    context.set(\"battery\", msg.payload);\n}\nelse if (msg.topic === \"boost\") {\n    context.set(\"boost\", msg.payload);\n}\n\n//node.warn(`json=${json}, sensor=${sensor}`);\n\nif (boost) {\n    status.payload = \"BOOST\";\n}\n\nif (!battery) {\n    status.payload = \"Low battery!\";\n    status.ui_update.class = \"error\";\n    alarm1.payload = status.payload;\n}\n\nif (!json) {\n    status.payload = \"Connection lost!\";\n    status.ui_update.class = \"error\";\n    alarm2.payload = status.payload;\n}\n\nif (!sensor) {\n    status.payload = \"Sensor error!\";\n    status.ui_update.class = \"error\";\n    alarm3.payload = status.payload;\n}\n\nreturn [status, alarm1, alarm2, alarm3];\n",
+        "outputs": 4,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 570,
-        "y": 880,
+        "x": 550,
+        "y": 940,
         "wires": [
             [
                 "d5196d0babadee3e",
@@ -7214,6 +7219,12 @@
             ],
             [
                 "262c7576d0bcdc93"
+            ],
+            [
+                "7060d4b679af9306"
+            ],
+            [
+                "9e18f8186e9dd8e7"
             ]
         ]
     },
@@ -7650,6 +7661,48 @@
         ]
     },
     {
+        "id": "7060d4b679af9306",
+        "type": "subflow:1230e5122b3b7f25",
+        "z": "fcffa944a0680a42",
+        "name": "",
+        "env": [
+            {
+                "name": "message",
+                "value": "Fridge",
+                "type": "str"
+            },
+            {
+                "name": "instance",
+                "value": "2",
+                "type": "num"
+            }
+        ],
+        "x": 780,
+        "y": 980,
+        "wires": []
+    },
+    {
+        "id": "9e18f8186e9dd8e7",
+        "type": "subflow:1230e5122b3b7f25",
+        "z": "fcffa944a0680a42",
+        "name": "",
+        "env": [
+            {
+                "name": "message",
+                "value": "Fridge",
+                "type": "str"
+            },
+            {
+                "name": "instance",
+                "value": "3",
+                "type": "num"
+            }
+        ],
+        "x": 780,
+        "y": 1020,
+        "wires": []
+    },
+    {
         "id": "31753511ce9beb11",
         "type": "function",
         "z": "23d77242da9abfeb",
@@ -7689,7 +7742,7 @@
         "repeat": "2",
         "crontab": "",
         "once": true,
-        "onceDelay": 0.1,
+        "onceDelay": "0.5",
         "topic": "",
         "payload": "",
         "payloadType": "date",
