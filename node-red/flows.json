@@ -5218,7 +5218,7 @@
             },
             {
                 "name": "threshold",
-                "value": "0.2",
+                "value": "0.05",
                 "type": "num"
             },
             {
@@ -5253,7 +5253,7 @@
             },
             {
                 "name": "threshold",
-                "value": "0.2",
+                "value": "0.05",
                 "type": "num"
             },
             {
@@ -5288,7 +5288,7 @@
             },
             {
                 "name": "threshold",
-                "value": "0.2",
+                "value": "0.05",
                 "type": "num"
             },
             {
@@ -5323,7 +5323,7 @@
             },
             {
                 "name": "threshold",
-                "value": "0.2",
+                "value": "0.05",
                 "type": "num"
             },
             {
