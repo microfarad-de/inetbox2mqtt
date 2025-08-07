@@ -7804,7 +7804,7 @@
         "type": "function",
         "z": "fc670f602d442a02",
         "name": "DecodeJSON",
-        "func": "\nlet json = msg.payload;\nlet msgCount = 0\n\nfunction makeMessage(key, defaultValue) {\n    msgCount++;\n    flow.set(\"msgCount\", msgCount);\n    let value = (json[key] !== undefined) ? json[key] : defaultValue;\n    return {\n        topic: key,\n        payload: value\n    };\n}\n\n\nlet messages = [\n    makeMessage(\"fridgeFreezerInstalled\", false),\n    makeMessage(\"fridgeLowBattSoC\", 30),\n    makeMessage(\"fridgeBoostTemp\", 30),\n    makeMessage(\"fridgeBoostHyst\", 5),\n    makeMessage(\"fridgeDefrostMaxTemp\", 23),\n    makeMessage(\"fridgeDefrostTempDec\", 0.5),\n    makeMessage(\"fridgeOpenDoorTempRate\", 0.15),\n    makeMessage(\"fridgeOpenDoorTempInc\", 1),\n\n    makeMessage(\"alarmBattLow\", 20),\n    makeMessage(\"alarmPropaneLow\", 5),\n    makeMessage(\"alarmTempRoomLow\", 5),\n    makeMessage(\"alarmTempRoomHigh\", 35),\n    makeMessage(\"alarmTempFridgeLow\", 1),\n    makeMessage(\"alarmTempFridgeHigh\", 10),\n    makeMessage(\"alarmTempWaterLow\", 5),\n    makeMessage(\"alarmTempCpuHigh\", 70),\n    makeMessage(\"alarmTempBattLow\", 5),\n    makeMessage(\"alarmTempBattHigh\", 30),\n    makeMessage(\"alarmSensorBatt\", 2.7),\n\n    makeMessage(\"offsetTempRoom\", 0),\n    makeMessage(\"offsetTempOutdoor\", 0),\n    makeMessage(\"offsetTempFridge\", 0),\n\n    makeMessage(\"fridgeTargetTemp\", 4),\n    makeMessage(\"fridgeAbsorberMode\", 1),\n    \n    makeMessage(\"cmbPhone\", \"\"),\n    makeMessage(\"cmbApiKey\", \"\"),\n\n    {topic: \"apply\", payload: \"\"}\n];\n\nreturn messages;\n",
+        "func": "\nlet json = msg.payload;\nlet msgCount = 0\n\nfunction makeMessage(key, defaultValue) {\n    msgCount++;\n    flow.set(\"msgCount\", msgCount);\n    let value = (json[key] !== undefined) ? json[key] : defaultValue;\n    return {\n        topic: key,\n        payload: value\n    };\n}\n\n\nlet messages = [\n    makeMessage(\"fridgeFreezerInstalled\", false),\n    makeMessage(\"fridgeLowBattSoC\", 30),\n    makeMessage(\"fridgeBoostTemp\", 29),\n    makeMessage(\"fridgeBoostHyst\", 4),\n    makeMessage(\"fridgeDefrostMaxTemp\", 26),\n    makeMessage(\"fridgeDefrostTempDec\", 0.5),\n    makeMessage(\"fridgeOpenDoorTempRate\", 0.15),\n    makeMessage(\"fridgeOpenDoorTempInc\", 1),\n\n    makeMessage(\"alarmBattLow\", 20),\n    makeMessage(\"alarmPropaneLow\", 5),\n    makeMessage(\"alarmTempRoomLow\", 5),\n    makeMessage(\"alarmTempRoomHigh\", 35),\n    makeMessage(\"alarmTempFridgeLow\", 1),\n    makeMessage(\"alarmTempFridgeHigh\", 10),\n    makeMessage(\"alarmTempWaterLow\", 5),\n    makeMessage(\"alarmTempCpuHigh\", 70),\n    makeMessage(\"alarmTempBattLow\", 5),\n    makeMessage(\"alarmTempBattHigh\", 30),\n    makeMessage(\"alarmSensorBatt\", 2.7),\n\n    makeMessage(\"offsetTempRoom\", 0),\n    makeMessage(\"offsetTempOutdoor\", 0),\n    makeMessage(\"offsetTempFridge\", 0),\n\n    makeMessage(\"fridgeTargetTemp\", 4),\n    makeMessage(\"fridgeAbsorberMode\", 1),\n    \n    makeMessage(\"cmbPhone\", \"\"),\n    makeMessage(\"cmbApiKey\", \"\"),\n\n    {topic: \"apply\", payload: \"\"}\n];\n\nreturn messages;\n",
         "outputs": 27,
         "timeout": 0,
         "noerr": 0,
@@ -8281,6 +8281,31 @@
             {
                 "label": "25 °C",
                 "value": 25,
+                "type": "num"
+            },
+            {
+                "label": "26 °C",
+                "value": 26,
+                "type": "num"
+            },
+            {
+                "label": "27 °C",
+                "value": 27,
+                "type": "num"
+            },
+            {
+                "label": "28 °C",
+                "value": 28,
+                "type": "num"
+            },
+            {
+                "label": "29 °C",
+                "value": 29,
+                "type": "num"
+            },
+            {
+                "label": "30 °C",
+                "value": 30,
                 "type": "num"
             }
         ],
