@@ -6644,12 +6644,13 @@
         "y": 680,
         "wires": [
             [
-                "cf563ccf97436424"
+                "cf563ccf97436424",
+                "fb2e28811fcc6756"
             ],
             [],
             [
-                "86470d03d9a70f6b",
-                "9015a4834ff0024c"
+                "9015a4834ff0024c",
+                "86470d03d9a70f6b"
             ]
         ]
     },
@@ -7203,7 +7204,7 @@
         "type": "function",
         "z": "fcffa944a0680a42",
         "name": "DecodeError",
-        "func": "\nlet json    = context.get(\"json\")    || false;\nlet sensor  = context.get(\"sensor\")  || false;\nlet battery = context.get(\"battery\") || false;\nlet boost   = context.get(\"boost\")   || false;\nlet discCnt = context.get(\"discCnt\") || 0;\n\nlet status  = {payload: \"OK\", ui_update: {class: \"\"}};\nlet alarm1  = {payload: \"OK\"};\nlet alarm2  = {payload: \"OK\"};\nlet alarm3  = {payload: \"OK\"};\n\n//node.warn(`topic=${msg.topic}, payload=${msg.payload}`);\n\nif (msg.topic === \"json\") {\n    if (msg.payload === false) {\n        discCnt++;\n    }\n    else {\n        discCnt = 0;\n    }\n    context.set(\"discCnt\", discCnt);\n    if (discCnt >= 3) {\n        json = false;\n    }\n    else {\n        json = true;\n    }\n    context.set(\"json\", json);\n}\nelse if (msg.topic === \"sensor\") {\n    context.set(\"sensor\", msg.payload);\n}\nelse if (msg.topic === \"battery\") {\n    context.set(\"battery\", msg.payload);\n}\nelse if (msg.topic === \"boost\") {\n    context.set(\"boost\", msg.payload);\n}\n\n//node.warn(`json=${json}, sensor=${sensor}`);\n\nif (boost) {\n    status.payload = \"BOOST\";\n}\n\nif (!battery) {\n    status.payload = \"Low battery!\";\n    status.ui_update.class = \"error\";\n    alarm1.payload = status.payload;\n}\n\nif (!json) {\n    status.payload = \"Connection lost!\";\n    status.ui_update.class = \"error\";\n    alarm2.payload = status.payload;\n}\n\nif (!sensor) {\n    status.payload = \"Sensor error!\";\n    status.ui_update.class = \"error\";\n    alarm3.payload = status.payload;\n}\n\nreturn [status, alarm1, alarm2, alarm3];\n",
+        "func": "\nlet json    = context.get(\"json\")    || false;\nlet sensor  = context.get(\"sensor\")  || false;\nlet battery = context.get(\"battery\") || false;\nlet boost   = context.get(\"boost\")   || false;\nlet discCnt = context.get(\"discCnt\") || 0;\n\nlet status  = {payload: \"OK\", ui_update: {class: \"\"}};\nlet alarm1  = {payload: \"OK\"};\nlet alarm2  = {payload: \"OK\"};\nlet alarm3  = {payload: \"OK\"};\n\n//node.warn(`topic=${msg.topic}, payload=${msg.payload}`);\n\nif (msg.topic === \"return\") {\n\n    if (msg.payload.code !== 0) {\n        discCnt++;\n    }\n    else {\n        discCnt = 0;\n    }\n    context.set(\"discCnt\", discCnt);\n    if (discCnt >= 3) {\n        json = false;\n    }\n    else {\n        json = true;\n    }\n    context.set(\"json\", json);\n}\nelse if (msg.topic === \"sensor\") {\n    context.set(\"sensor\", msg.payload);\n}\nelse if (msg.topic === \"battery\") {\n    context.set(\"battery\", msg.payload);\n}\nelse if (msg.topic === \"boost\") {\n    context.set(\"boost\", msg.payload);\n}\n\n//node.warn(`json=${json}, sensor=${sensor}`);\n\nif (boost) {\n    status.payload = \"BOOST\";\n}\n\nif (!battery) {\n    status.payload = \"Low battery!\";\n    status.ui_update.class = \"error\";\n    alarm1.payload = status.payload;\n}\n\nif (!json) {\n    status.payload = \"Connection lost!\";\n    status.ui_update.class = \"error\";\n    alarm2.payload = status.payload;\n}\n\nif (!sensor) {\n    status.payload = \"Sensor error!\";\n    status.ui_update.class = \"error\";\n    alarm3.payload = status.payload;\n}\n\nreturn [status, alarm1, alarm2, alarm3];\n",
         "outputs": 4,
         "timeout": 0,
         "noerr": 0,
@@ -7302,17 +7303,14 @@
         "type": "subflow:c37eefbf57ce59ee",
         "z": "fcffa944a0680a42",
         "name": "",
-        "x": 330,
+        "x": 310,
         "y": 820,
         "wires": [
             [
                 "a8702dfa02f03390",
-                "8459ff2385d2a8b6",
-                "fb2e28811fcc6756"
+                "8459ff2385d2a8b6"
             ],
-            [
-                "e4cff028ee24380b"
-            ]
+            []
         ]
     },
     {
@@ -7600,7 +7598,8 @@
         "y": 440,
         "wires": [
             [
-                "a8702dfa02f03390"
+                "a8702dfa02f03390",
+                "e4cff028ee24380b"
             ]
         ]
     },
