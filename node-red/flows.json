@@ -509,8 +509,8 @@
         "category": "",
         "in": [
             {
-                "x": 140,
-                "y": 80,
+                "x": 260,
+                "y": 120,
                 "wires": [
                     {
                         "id": "fffb53b6af8726fc"
@@ -1419,35 +1419,6 @@
         ]
     },
     {
-        "id": "806a9890333148a6",
-        "type": "inject",
-        "z": "26fb17b83422936f",
-        "name": "",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "",
-        "payload": "⚠️ Test message",
-        "payloadType": "str",
-        "x": 200,
-        "y": 180,
-        "wires": [
-            [
-                "fffb53b6af8726fc"
-            ]
-        ]
-    },
-    {
         "id": "fffb53b6af8726fc",
         "type": "function",
         "z": "26fb17b83422936f",
@@ -1496,7 +1467,7 @@
         "width": 0,
         "height": 0,
         "head": "",
-        "format": "<style>\n\n    .large-text span {\n        font-size: 26px !important;\n    }\n    \n    .environment-text span {\n        /*font-size: 26px !important;*/\n    }\n\n    .large-gauge-text span {\n        font-size: 26px !important;\n        padding-top: 15px !important;\n        padding-bottom: 5px !important;\n    }\n    \n    .small-gauge-text span {\n        font-size: 18px !important;\n        padding-bottom: 3px !important;\n    }\n  \n    .nrdb-ui-gauge-title {\n        font-size:16px;\n        font-weight: normal;\n    }\n    \n    .v-card-title {\n        font-size: 18px;\n        color: #4B9FF4;\n    }\n    \n    .v-btn__content {\n        font-size: 18px;\n    }\n    \n    .v-list-item-title {\n        font-size: 18px !important;\n        padding-top: 3px !important;\n        padding-bottom: 3px !important;\n    }\n    \n    .v-snackbar__content {\n        font-size: 16px;\n    }\n    \n    .grayout {\n        pointer-events: none;\n        filter: opacity(50%);\n        /*display: none;*/\n    }\n    \n    .error {\n        color: red;\n        font-weight: bold;\n    }\n    \n    .modified {\n        color: #94E3FE;\n    }\n    \n}\n</style>",
+        "format": "<style>\n\n    .large-text span {\n        font-size: 26px !important;\n    }\n    \n    .environment-text span {\n        /*font-size: 26px !important;*/\n    }\n\n    .large-gauge-text span {\n        font-size: 26px !important;\n        padding-top: 15px !important;\n        padding-bottom: 5px !important;\n    }\n    \n    .small-gauge-text span {\n        font-size: 18px !important;\n        padding-bottom: 3px !important;\n    }\n  \n    .nrdb-ui-gauge-title {\n        font-size:16px;\n        font-weight: normal;\n    }\n    \n    .v-card-title {\n        font-size: 18px;\n        color: #4B9FF4;\n    }\n    \n    .v-btn__content {\n        font-size: 18px;\n    }\n    \n    .v-list-item-title {\n        font-size: 18px !important;\n        padding-top: 3px !important;\n        padding-bottom: 3px !important;\n    }\n    \n    /*.v-snackbar__content {*/\n    .alert {\n        font-size: 16px;\n    }\n    \n    .grayout {\n        pointer-events: none;\n        filter: opacity(50%);\n        /*display: none;*/\n    }\n    \n    .error {\n        color: red;\n        font-weight: bold;\n    }\n    \n    .modified {\n        color: #94E3FE;\n    }\n    \n}\n</style>",
         "storeOutMessages": true,
         "passthru": true,
         "resendOnRefresh": true,
@@ -1555,6 +1526,44 @@
         "wires": [
             []
         ]
+    },
+    {
+        "id": "806a9890333148a6",
+        "type": "inject",
+        "z": "37a752f35a68bbed",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "⚠️ Test message",
+        "payloadType": "str",
+        "x": 140,
+        "y": 340,
+        "wires": [
+            [
+                "5738002fc0271c55"
+            ]
+        ]
+    },
+    {
+        "id": "5738002fc0271c55",
+        "type": "subflow:26fb17b83422936f",
+        "z": "37a752f35a68bbed",
+        "name": "",
+        "x": 350,
+        "y": 340,
+        "wires": []
     },
     {
         "id": "4d22e4a2b451ad0b",
@@ -7815,7 +7824,7 @@
         "type": "function",
         "z": "23d77242da9abfeb",
         "name": "ReadAlerts",
-        "func": "\nlet alerts = global.get(\"alerts\") || {};\n\nlet displayStr = Object.values(alerts).join(\"<br><br>\");\n\nmsg.payload = displayStr || \"✅ No active alerts\";\n\nlet notification = {show: false};\n\nif (displayStr) {\n    notification.payload = `<a href=\"alerts\">⚠️</a>`;\n    notification.show    = true;\n}\n\nreturn [msg, notification];",
+        "func": "\nlet alerts = global.get(\"alerts\") || {};\n\nlet displayStr = Object.values(alerts).join(\"<br><br>\");\n\nmsg.payload = displayStr || \"✅ No active alerts\";\n\nlet notification = {show: false};\n\nif (displayStr) {\n    notification.payload = `<div class=\"alert\"><a href=\"alerts\">⚠️</a></div>`;\n    notification.show    = true;\n}\n\nreturn [msg, notification];",
         "outputs": 2,
         "timeout": 0,
         "noerr": 0,
