@@ -1350,7 +1350,7 @@
         "type": "function",
         "z": "521836fa35cf581b",
         "name": "Gate",
-        "func": "\n// Duration in milliseconds\nconst TIMEOUT = 20000; \n\nlet existingTimer = context.get(\"timer\");\nif (existingTimer) {\n    clearTimeout(existingTimer);\n}\n\n\nif (msg.topic === \"apply\") {\n    let output = {};\n    let keys = context.keys();\n    keys = keys.filter(k => k !== \"timer\");\n    for (let i = 0; i < keys.length; i++) {\n        output.topic   = keys[i];\n        output.payload = context.get(keys[i]);\n        context.set(keys[i], undefined);\n        node.send([output, null, {ui_update: {class: \"grayout\"}}]);\n    }\n}\nelse {\n    if (msg.ui_update === undefined) {\n        context.set(msg.topic, msg.payload);\n    }\n    node.send([null, null, {ui_update: {class: \"\"}}])\n    \n    let newTimer = setTimeout(() => {\n        node.send([null, { topic: \"reset\"}, null]);\n        context.set(\"timer\", null);\n    }, TIMEOUT);\n    context.set(\"timer\", newTimer);\n}\n\nreturn null;\n\n",
+        "func": "\n// Duration in milliseconds\nconst TIMEOUT = 20000; \n\nif (msg.ui_update !== undefined && msg.topic !== \"apply\") {\n    return null;\n}\n\nlet existingTimer = context.get(\"timer\");\nif (existingTimer) {\n    clearTimeout(existingTimer);\n}\n\n\nif (msg.topic === \"apply\") {\n    let output = {};\n    let keys = context.keys();\n    keys = keys.filter(k => k !== \"timer\");\n    for (let i = 0; i < keys.length; i++) {\n        output.topic   = keys[i];\n        output.payload = context.get(keys[i]);\n        context.set(keys[i], undefined);\n        node.send([output, null, {ui_update: {class: \"grayout\"}}]);\n    }\n}\nelse {\n    context.set(msg.topic, msg.payload);\n\n    node.send([null, null, {ui_update: {class: \"\"}}])\n    \n    let newTimer = setTimeout(() => {\n        node.send([null, { topic: \"reset\"}, null]);\n        context.set(\"timer\", null);\n    }, TIMEOUT);\n    context.set(\"timer\", newTimer);\n}\n\nreturn null;\n\n",
         "outputs": 3,
         "timeout": 0,
         "noerr": 0,
@@ -7103,7 +7103,7 @@
         "color": "#717171",
         "wrapText": false,
         "className": "",
-        "x": 1090,
+        "x": 1110,
         "y": 80,
         "wires": []
     },
@@ -7239,7 +7239,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 900,
+        "x": 940,
         "y": 80,
         "wires": [
             [
@@ -7393,7 +7393,7 @@
         "color": "#717171",
         "wrapText": false,
         "className": "",
-        "x": 1080,
+        "x": 1100,
         "y": 120,
         "wires": []
     },
@@ -7409,7 +7409,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 900,
+        "x": 940,
         "y": 120,
         "wires": [
             [
@@ -7485,7 +7485,7 @@
         "links": [
             "ef7f15d0f953b171"
         ],
-        "x": 905,
+        "x": 985,
         "y": 160,
         "wires": []
     },
@@ -7713,7 +7713,7 @@
                 "type": "str"
             }
         ],
-        "x": 910,
+        "x": 890,
         "y": 280,
         "wires": [
             [
