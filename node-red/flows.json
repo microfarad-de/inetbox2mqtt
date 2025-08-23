@@ -109,6 +109,11 @@
                 "name": "unit",
                 "type": "str",
                 "value": "°C"
+            },
+            {
+                "name": "repetitions",
+                "type": "num",
+                "value": "1"
             }
         ],
         "meta": {},
@@ -1191,7 +1196,7 @@
         "type": "function",
         "z": "26a48bdabf7607df",
         "name": "Alarm",
-        "func": "\nfunction resolveValue(input) {\n    // Check if the input is a number (int or float)\n    if (!isNaN(input) && String(input).trim() !== \"\") {\n        return Number(input);\n    } else {\n        // Otherwise, treat it as a global variable name\n        return global.get(input);\n    }\n}\n\n\nlet val = +msg.payload;  // Convert to an integer\n\nlet low     = resolveValue(env.get(\"low\"));\nlet high    = resolveValue(env.get(\"high\"));\nlet thr     = env.get(\"threshold\");\nlet message = env.get(\"message\");\nlet unit    = env.get(\"unit\");\nlet style   = {ui_update: {class: \"\"}};\nlet alerts  = global.get(\"alerts\") || {};\n\nlet lastAlarm = context.get(\"lastAlarm\") || false;\nlet alarm = false;\n\nif (val < low) {\n    alarm = \"low\";\n}\nelse if (val > high) {\n    alarm = \"high\";\n}\nelse if (val > (low + thr) && val < (high - thr)) {\n    alarm = false;\n    context.set(\"lastAlarm\", alarm);\n    delete alerts[message];\n    global.set(\"alerts\", alerts);\n    return [null, style];\n}\n//node.warn(`val=${val}, low=${low}, high=${high}, thr=${thr}, alarm=${alarm}, lastAlarm=${lastAlarm}`);\n\nif (alarm && alarm !== lastAlarm) {\n    context.set(\"lastAlarm\", alarm);\n    style.ui_update.class = \"error\";\n    msg.payload = `⚠️ Caravan alert!\\n${message}: ${val} ${unit}`;\n    let text    = `⚠️ ${message}: ${val} ${unit}`\n    node.warn(text);\n    alerts[message] = text;\n    global.set(\"alerts\", alerts);\n    return [msg, style];\n}\nelse {\n    return null;\n}\n\n",
+        "func": "\nfunction resolveValue(input) {\n    // Check if the input is a number (int or float)\n    if (!isNaN(input) && String(input).trim() !== \"\") {\n        return Number(input);\n    } else {\n        // Otherwise, treat it as a global variable name\n        return global.get(input);\n    }\n}\n\n\nlet val = +msg.payload;  // Convert to an integer\n\nlet low     = resolveValue(env.get(\"low\"));\nlet high    = resolveValue(env.get(\"high\"));\nlet thr     = env.get(\"threshold\");\nlet message = env.get(\"message\");\nlet unit    = env.get(\"unit\");\nlet repeat  = env.get(\"repetitions\");\nlet style   = {ui_update: {class: \"\"}};\nlet alerts  = global.get(\"alerts\") || {};\nlet count   = context.get(\"count\") || 0;\n\nlet lastAlarm = context.get(\"lastAlarm\") || false;\nlet alarm = false;\n\nif (val < low) {\n    count--;\n    context.set(\"count\", count);\n}\nelse if (val > high) {\n    count++;\n    context.set(\"count\", count);\n}\nelse if (val > (low + thr) && val < (high - thr)) {\n    count = 0\n    context.set(\"count\", count);\n    alarm = false;\n    context.set(\"lastAlarm\", alarm);\n    delete alerts[message];\n    global.set(\"alerts\", alerts);\n    return [null, style];\n}\n//node.warn(`val=${val}, low=${low}, high=${high}, thr=${thr}, alarm=${alarm}, lastAlarm=${lastAlarm}`);\n\nif (count <= -repeat) {\n    alarm = \"low\";\n}\nelse if (count >= repeat) {\n    alarm = \"high\";\n}\n\nif (alarm && alarm !== lastAlarm) {\n    context.set(\"lastAlarm\", alarm);\n    style.ui_update.class = \"error\";\n    msg.payload = `⚠️ Caravan alert!\\n${message}: ${val} ${unit}`;\n    let text    = `⚠️ ${message}: ${val} ${unit}`\n    node.warn(text);\n    alerts[message] = text;\n    global.set(\"alerts\", alerts);\n    return [msg, style];\n}\nelse {\n    return null;\n}\n\n",
         "outputs": 2,
         "timeout": 0,
         "noerr": 0,
@@ -5239,6 +5244,11 @@
                 "name": "unit",
                 "value": "V",
                 "type": "str"
+            },
+            {
+                "name": "repetitions",
+                "value": "3",
+                "type": "num"
             }
         ],
         "x": 710,
@@ -5274,6 +5284,11 @@
                 "name": "unit",
                 "value": "V",
                 "type": "str"
+            },
+            {
+                "name": "repetitions",
+                "value": "3",
+                "type": "num"
             }
         ],
         "x": 710,
@@ -5309,6 +5324,11 @@
                 "name": "unit",
                 "value": "V",
                 "type": "str"
+            },
+            {
+                "name": "repetitions",
+                "value": "3",
+                "type": "num"
             }
         ],
         "x": 710,
@@ -5344,6 +5364,11 @@
                 "name": "unit",
                 "value": "V",
                 "type": "str"
+            },
+            {
+                "name": "repetitions",
+                "value": "3",
+                "type": "num"
             }
         ],
         "x": 710,
