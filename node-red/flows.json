@@ -4308,7 +4308,7 @@
         "width": 0,
         "height": 0,
         "name": "",
-        "label": "Center temperature",
+        "label": "Outdoor temperature",
         "format": "{{msg.payload}}",
         "layout": "row-spread",
         "style": false,
@@ -4317,7 +4317,7 @@
         "color": "#717171",
         "wrapText": false,
         "className": "environment-text",
-        "x": 890,
+        "x": 900,
         "y": 620,
         "wires": []
     },
