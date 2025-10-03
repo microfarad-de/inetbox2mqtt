@@ -1186,7 +1186,7 @@
         "group": "959cc79e3a0c6c7d",
         "name": "spacer",
         "tooltip": "",
-        "order": 2,
+        "order": 3,
         "width": "0",
         "height": "0",
         "className": ""
@@ -1196,7 +1196,7 @@
         "type": "function",
         "z": "26a48bdabf7607df",
         "name": "Alarm",
-        "func": "\nfunction resolveValue(input) {\n    // Check if the input is a number (int or float)\n    if (!isNaN(input) && String(input).trim() !== \"\") {\n        return Number(input);\n    } else {\n        // Otherwise, treat it as a global variable name\n        return global.get(input);\n    }\n}\n\n\nlet val = +msg.payload;  // Convert to an integer\n\nlet low     = resolveValue(env.get(\"low\"));\nlet high    = resolveValue(env.get(\"high\"));\nlet thr     = env.get(\"threshold\");\nlet message = env.get(\"message\");\nlet unit    = env.get(\"unit\");\nlet repeat  = env.get(\"repetitions\");\nlet style   = {ui_update: {class: \"\"}};\nlet alerts  = global.get(\"alerts\") || {};\nlet count   = context.get(\"count\") || 0;\n\nlet lastAlarm = context.get(\"lastAlarm\") || false;\nlet alarm = false;\n\nif (val < low) {\n    count--;\n    context.set(\"count\", count);\n}\nelse if (val > high) {\n    count++;\n    context.set(\"count\", count);\n}\nelse if (val > (low + thr) && val < (high - thr)) {\n    count = 0\n    context.set(\"count\", count);\n    alarm = false;\n    context.set(\"lastAlarm\", alarm);\n    delete alerts[message];\n    global.set(\"alerts\", alerts);\n    return [null, style];\n}\n//node.warn(`val=${val}, low=${low}, high=${high}, thr=${thr}, alarm=${alarm}, lastAlarm=${lastAlarm}`);\n\nif (count <= -repeat) {\n    alarm = \"low\";\n}\nelse if (count >= repeat) {\n    alarm = \"high\";\n}\n\nif (alarm && alarm !== lastAlarm) {\n    context.set(\"lastAlarm\", alarm);\n    style.ui_update.class = \"error\";\n    msg.payload = `⚠️ Caravan alert!\\n${message}: ${val} ${unit}`;\n    let text    = `⚠️ ${message}: ${val} ${unit}`\n    node.warn(text);\n    alerts[message] = text;\n    global.set(\"alerts\", alerts);\n    return [msg, style];\n}\nelse {\n    return null;\n}\n\n",
+        "func": "\nfunction resolveValue(input) {\n    // Check if the input is a number (int or float)\n    if (!isNaN(input) && String(input).trim() !== \"\") {\n        return Number(input);\n    } else {\n        // Otherwise, treat it as a global variable name\n        return global.get(input);\n    }\n}\n\n\nlet val = +msg.payload;  // Convert to an integer\n\nlet low     = resolveValue(env.get(\"low\"));\nlet high    = resolveValue(env.get(\"high\"));\nlet thr     = env.get(\"threshold\");\nlet message = env.get(\"message\");\nlet unit    = env.get(\"unit\");\nlet repeat  = env.get(\"repetitions\");\nlet style   = {ui_update: {class: \"\"}};\nlet alerts  = global.get(\"alerts\") || {};\nlet count   = context.get(\"count\") || 0;\n\nlet lastAlarm = context.get(\"lastAlarm\") || false;\nlet alarm = false;\n\nif (val < low) {\n    count--;\n    context.set(\"count\", count);\n}\nelse if (val > high) {\n    count++;\n    context.set(\"count\", count);\n}\nelse if (val > (low + thr) && val < (high - thr)) {\n    count = 0\n    context.set(\"count\", count);\n    alarm = false;\n    context.set(\"lastAlarm\", alarm);\n    delete alerts[message];\n    global.set(\"alerts\", alerts);\n    return [null, style];\n}\n\n\nif (count <= -repeat) {\n    alarm = \"low\";\n}\nelse if (count >= repeat) {\n    alarm = \"high\";\n}\n\nif (alarm && alarm !== lastAlarm) {\n    context.set(\"lastAlarm\", alarm);\n    style.ui_update.class = \"error\";\n    msg.payload = `⚠️ Caravan alert!\\n${message}: ${val} ${unit}`;\n    let text    = `⚠️ ${message}: ${val} ${unit}`\n    node.warn(text);\n    alerts[message] = text;\n    global.set(\"alerts\", alerts);\n    return [msg, style];\n}\nelse if (!alerts[message]) {\n    count = 0\n    context.set(\"count\", count);\n    alarm = false;\n    context.set(\"lastAlarm\", alarm);\n    return [null, style];\n}\nelse {\n    return null;\n}\n\n",
         "outputs": 2,
         "timeout": 0,
         "noerr": 0,
@@ -1217,7 +1217,7 @@
         "type": "subflow:26fb17b83422936f",
         "z": "26a48bdabf7607df",
         "name": "",
-        "x": 560,
+        "x": 570,
         "y": 80,
         "wires": []
     },
@@ -1375,7 +1375,7 @@
         "type": "function",
         "z": "1230e5122b3b7f25",
         "name": "Alarm",
-        "func": "\nlet val      = msg.payload;\nlet message  = env.get(\"message\");\nlet instance = env.get(\"instance\");\nlet index    = `${message} ${instance}`;\n\nlet alerts    = global.get(\"alerts\") || {};\nlet lastAlarm = context.get(\"lastAlarm\") || false;\nlet alarm = false;\n\nif (val === \"OK\") {\n    alarm = false;\n    delete alerts[index];\n    global.set(\"alerts\", alerts);\n    context.set(\"lastAlarm\", alarm);\n}\nelse {\n    alarm = val;\n}\n\n//node.warn(`val={val}, alarm={alarm}, lastAlarm={lastAlarm}`);\n\nif (alarm && alarm !== lastAlarm) {\n    context.set(\"lastAlarm\", alarm);\n    msg.payload = `⚠️ Caravan alert!\\n${message}:\\n${val}`;\n    text = `⚠️ ${message}: ${val}`;\n    node.warn(text);\n    alerts[index] = text;\n    global.set(\"alerts\", alerts);\n    return msg;\n}\nelse {\n    return null;\n}\n\n",
+        "func": "\nlet val      = msg.payload;\nlet message  = env.get(\"message\");\nlet instance = env.get(\"instance\");\nlet index    = `${message} ${instance}`;\n\nlet alerts    = global.get(\"alerts\") || {};\nlet lastAlarm = context.get(\"lastAlarm\") || false;\nlet alarm = false;\n\nif (val === \"OK\") {\n    alarm = false;\n    delete alerts[index];\n    global.set(\"alerts\", alerts);\n    context.set(\"lastAlarm\", alarm);\n}\nelse {\n    alarm = val;\n}\n\n\nif (alarm && alarm !== lastAlarm) {\n    context.set(\"lastAlarm\", alarm);\n    msg.payload = `⚠️ Caravan alert!\\n${message}:\\n${val}`;\n    text = `⚠️ ${message}: ${val}`;\n    node.warn(text);\n    alerts[index] = text;\n    global.set(\"alerts\", alerts);\n    return msg;\n}\nelse if (!alerts[message]) {\n    alarm = false;\n    context.set(\"lastAlarm\", alarm);\n}\nelse {\n    return null;\n}\n\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -3600,6 +3600,11 @@
             {
                 "name": "high",
                 "value": "alarmTempRoomHigh",
+                "type": "str"
+            },
+            {
+                "name": "message",
+                "value": "Room temperature",
                 "type": "str"
             }
         ],
@@ -7849,8 +7854,8 @@
         "type": "function",
         "z": "23d77242da9abfeb",
         "name": "ReadAlerts",
-        "func": "\nlet alerts = global.get(\"alerts\") || {};\n\nlet displayStr = Object.values(alerts).join(\"<br><br>\");\n\nmsg.payload = displayStr || \"✅ No active alerts\";\n\nlet notification = {show: false};\n\nif (displayStr) {\n    notification.payload = `<div class=\"alert\"><a href=\"alerts\">⚠️</a></div>`;\n    notification.show    = true;\n}\n\nreturn [msg, notification];",
-        "outputs": 2,
+        "func": "\nlet alerts = global.get(\"alerts\") || {};\n\nlet displayStr = Object.values(alerts).join(\"<br><br>\");\n\nmsg.payload = displayStr || \"✅ No active alerts\";\n\nlet notification = {show: false};\n\nif (displayStr) {\n    notification.payload = `<div class=\"alert\"><a href=\"alerts\">⚠️</a></div>`;\n    notification.show    = true;\n    node.send([null, null, {ui_update: {class: \"\"}}]);\n}\nelse {\n    node.send([null, null, {ui_update: {class: \"grayout\"}}]);\n}\n\nreturn [msg, notification, null];",
+        "outputs": 3,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
@@ -7864,6 +7869,9 @@
             ],
             [
                 "cbf937b59a299ee6"
+            ],
+            [
+                "d7949280fec9a1b0"
             ]
         ]
     },
@@ -7940,6 +7948,65 @@
         "y": 240,
         "wires": [
             []
+        ]
+    },
+    {
+        "id": "d7949280fec9a1b0",
+        "type": "ui-button",
+        "z": "23d77242da9abfeb",
+        "group": "959cc79e3a0c6c7d",
+        "name": "",
+        "label": "Clear",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "emulateClick": false,
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "",
+        "iconPosition": "left",
+        "payload": "",
+        "payloadType": "str",
+        "topic": "topic",
+        "topicType": "msg",
+        "buttonColor": "",
+        "textColor": "",
+        "iconColor": "",
+        "enableClick": true,
+        "enablePointerdown": false,
+        "pointerdownPayload": "",
+        "pointerdownPayloadType": "str",
+        "enablePointerup": false,
+        "pointerupPayload": "",
+        "pointerupPayloadType": "str",
+        "x": 130,
+        "y": 360,
+        "wires": [
+            [
+                "b09c7dfd26d71002"
+            ]
+        ]
+    },
+    {
+        "id": "b09c7dfd26d71002",
+        "type": "function",
+        "z": "23d77242da9abfeb",
+        "name": "ClearAlerts",
+        "func": "let alerts = {};\n\nglobal.set(\"alerts\", alerts);\n\nreturn null;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 370,
+        "y": 360,
+        "wires": [
+            [
+                "31753511ce9beb11"
+            ]
         ]
     },
     {
@@ -8881,8 +8948,18 @@
                 "type": "num"
             },
             {
+                "label": "2 °C",
+                "value": 2,
+                "type": "num"
+            },
+            {
                 "label": "3 °C",
                 "value": 3,
+                "type": "num"
+            },
+            {
+                "label": "4 °C",
+                "value": 4,
                 "type": "num"
             },
             {
@@ -9056,6 +9133,11 @@
             {
                 "label": "2 °C",
                 "value": 2,
+                "type": "num"
+            },
+            {
+                "label": "3 °C",
+                "value": 3,
                 "type": "num"
             }
         ],
