@@ -1192,6 +1192,17 @@
         "className": ""
     },
     {
+        "id": "8e71b921d5400bc5",
+        "type": "ui-spacer",
+        "group": "fc3c351e5707cb90",
+        "name": "spacer",
+        "tooltip": "",
+        "order": 5,
+        "width": 1,
+        "height": 1,
+        "className": ""
+    },
+    {
         "id": "e7756b84d8b39dfb",
         "type": "function",
         "z": "26a48bdabf7607df",
@@ -1375,7 +1386,7 @@
         "type": "function",
         "z": "1230e5122b3b7f25",
         "name": "Alarm",
-        "func": "\nlet val      = msg.payload;\nlet message  = env.get(\"message\");\nlet instance = env.get(\"instance\");\nlet index    = `${message} ${instance}`;\n\nlet alerts    = global.get(\"alerts\") || {};\nlet lastAlarm = context.get(\"lastAlarm\") || false;\nlet alarm = false;\n\nif (val === \"OK\") {\n    alarm = false;\n    delete alerts[index];\n    global.set(\"alerts\", alerts);\n    context.set(\"lastAlarm\", alarm);\n}\nelse {\n    alarm = val;\n}\n\n\nif (alarm && alarm !== lastAlarm) {\n    context.set(\"lastAlarm\", alarm);\n    msg.payload = `⚠️ Caravan alert!\\n${message}:\\n${val}`;\n    text = `⚠️ ${message}: ${val}`;\n    node.warn(text);\n    alerts[index] = text;\n    global.set(\"alerts\", alerts);\n    return msg;\n}\nelse if (!alerts[message]) {\n    alarm = false;\n    context.set(\"lastAlarm\", alarm);\n}\nelse {\n    return null;\n}\n\n",
+        "func": "\nlet val      = msg.payload;\nlet message  = env.get(\"message\");\nlet instance = env.get(\"instance\");\nlet index    = `${message} ${instance}`;\n\nlet alerts    = global.get(\"alerts\") || {};\nlet lastAlarm = context.get(\"lastAlarm\") || false;\nlet alarm = false;\n\nif (val === \"OK\") {\n    alarm = false;\n    delete alerts[index];\n    global.set(\"alerts\", alerts);\n    context.set(\"lastAlarm\", alarm);\n}\nelse {\n    alarm = val;\n}\n\n\nif (alarm && alarm !== lastAlarm) {\n    context.set(\"lastAlarm\", alarm);\n    msg.payload = `⚠️ Caravan alert!\\n${message}:\\n${val}`;\n    text = `⚠️ ${message}: ${val}`;\n    node.warn(text);\n    alerts[index] = text;\n    global.set(\"alerts\", alerts);\n    return msg;\n}\nelse if (!alerts[index]) {\n    alarm = false;\n    context.set(\"lastAlarm\", alarm);\n}\nelse {\n    return null;\n}\n\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -1428,7 +1439,7 @@
         "type": "function",
         "z": "26fb17b83422936f",
         "name": "CallMeBot",
-        "func": "\nlet phone  = global.get(\"cmbPhone\");\nlet apiKey = global.get(\"cmbApiKey\");\nlet text   = encodeURIComponent(msg.payload);\n\nif (!phone || !apiKey) {\n    return null;\n}\n\nmsg.payload = `https://api.callmebot.com/whatsapp.php?phone=${phone}&text=${text}&apikey=${apiKey}`;\n\nreturn msg;",
+        "func": "\nlet startupComplete = global.get(\"startupComplete\") || false;\n\nif (!startupComplete) {\n    return null;\n}\n\nlet phone  = global.get(\"cmbPhone\");\nlet apiKey = global.get(\"cmbApiKey\");\nlet text   = encodeURIComponent(msg.payload);\n\nif (!phone || !apiKey) {\n    return null;\n}\n\nmsg.payload = `https://api.callmebot.com/whatsapp.php?phone=${phone}&text=${text}&apikey=${apiKey}`;\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -1554,7 +1565,7 @@
         "payload": "⚠️ Test message",
         "payloadType": "str",
         "x": 140,
-        "y": 340,
+        "y": 360,
         "wires": [
             [
                 "5738002fc0271c55"
@@ -1567,8 +1578,82 @@
         "z": "37a752f35a68bbed",
         "name": "",
         "x": 350,
-        "y": 340,
+        "y": 360,
         "wires": []
+    },
+    {
+        "id": "3106cc74916e4556",
+        "type": "inject",
+        "z": "37a752f35a68bbed",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "60",
+        "topic": "",
+        "payload": "true",
+        "payloadType": "bool",
+        "x": 110,
+        "y": 300,
+        "wires": [
+            [
+                "9e7b5043b59b0531"
+            ]
+        ]
+    },
+    {
+        "id": "9e7b5043b59b0531",
+        "type": "function",
+        "z": "37a752f35a68bbed",
+        "name": "SetStartupComplete",
+        "func": "\nglobal.set(\"startupComplete\", msg.payload);\n",
+        "outputs": 0,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 380,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "d2ff52ac8aa2d56a",
+        "type": "inject",
+        "z": "37a752f35a68bbed",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "0",
+        "topic": "",
+        "payload": "false",
+        "payloadType": "bool",
+        "x": 110,
+        "y": 260,
+        "wires": [
+            [
+                "9e7b5043b59b0531"
+            ]
+        ]
     },
     {
         "id": "4d22e4a2b451ad0b",
@@ -7945,7 +8030,7 @@
         "className": "",
         "name": "Alert notification",
         "x": 600,
-        "y": 240,
+        "y": 200,
         "wires": [
             []
         ]
@@ -7994,7 +8079,7 @@
         "type": "function",
         "z": "23d77242da9abfeb",
         "name": "ClearAlerts",
-        "func": "let alerts = {};\n\nglobal.set(\"alerts\", alerts);\n\nreturn null;\n",
+        "func": "let alerts = {};\n\nglobal.set(\"alerts\", alerts);\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
