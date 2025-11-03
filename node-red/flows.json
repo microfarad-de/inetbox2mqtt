@@ -588,17 +588,17 @@
         "type": "ui-theme",
         "name": "Dark theme",
         "colors": {
-            "surface": "#0470ba",
-            "primary": "#0094ce",
-            "bgPage": "#595959",
-            "groupBg": "#303030",
-            "groupOutline": "#000000"
+            "surface": "#3a82c5",
+            "primary": "#8fc7ff",
+            "bgPage": "#6193c0",
+            "groupBg": "#3275b0",
+            "groupOutline": "#5496d3"
         },
         "sizes": {
             "density": "comfortable",
-            "pagePadding": "1px",
-            "groupGap": "1px",
-            "groupBorderRadius": "3px",
+            "pagePadding": "0px",
+            "groupGap": "0px",
+            "groupBorderRadius": "0px",
             "widgetGap": "16px"
         }
     },
@@ -1483,7 +1483,7 @@
         "width": 0,
         "height": 0,
         "head": "",
-        "format": "<style>\n\n    .large-text span {\n        font-size: 26px !important;\n    }\n    \n    .environment-text span {\n        /*font-size: 26px !important;*/\n    }\n\n    .large-gauge-text span {\n        font-size: 26px !important;\n        padding-top: 15px !important;\n        padding-bottom: 5px !important;\n    }\n    \n    .small-gauge-text span {\n        font-size: 18px !important;\n        padding-bottom: 3px !important;\n    }\n  \n    .nrdb-ui-gauge-title {\n        font-size:16px;\n        font-weight: normal;\n    }\n    \n    .v-card-title {\n        font-size: 18px;\n        color: #4B9FF4;\n    }\n    \n    .v-btn__content {\n        font-size: 18px;\n    }\n    \n    .v-list-item-title {\n        font-size: 18px !important;\n        padding-top: 3px !important;\n        padding-bottom: 3px !important;\n    }\n    \n    /*.v-snackbar__content {*/\n    .alert {\n        font-size: 16px;\n    }\n    \n    .grayout {\n        pointer-events: none;\n        filter: opacity(50%);\n        /*display: none;*/\n    }\n    \n    .error {\n        color: red;\n        font-weight: bold;\n    }\n    \n    .modified {\n        color: #94E3FE;\n    }\n    \n}\n</style>",
+        "format": "<style>\n\n    .large-text span {\n        font-size: 26px !important;\n    }\n    \n    .environment-text span {\n        /*font-size: 26px !important;*/\n    }\n\n    .large-gauge-text span {\n        font-size: 26px !important;\n        padding-top: 15px !important;\n        padding-bottom: 5px !important;\n    }\n    \n    .small-gauge-text span {\n        font-size: 18px !important;\n        padding-bottom: 3px !important;\n    }\n  \n    .nrdb-ui-gauge-title {\n        font-size:16px;\n        font-weight: normal;\n    }\n    \n    .v-card-title {\n        font-size: 14px;\n        color: #8FC7FF;\n    }\n    \n    .v-btn__content {\n        font-size: 18px;\n    }\n    \n    .v-list-item-title {\n        font-size: 18px !important;\n        padding-top: 3px !important;\n        padding-bottom: 3px !important;\n    }\n    \n    /*.v-snackbar__content {*/\n    .alert {\n        font-size: 16px;\n    }\n    \n    .grayout {\n        pointer-events: none;\n        filter: opacity(50%);\n        /*display: none;*/\n    }\n    \n    .error {\n        color: #FFD61A;\n        font-weight: bold;\n    }\n    \n    .modified {\n        color: #94E3FE;\n    }\n    \n}\n</style>",
         "storeOutMessages": true,
         "passthru": true,
         "resendOnRefresh": true,
@@ -2252,7 +2252,7 @@
         "segments": [
             {
                 "from": "0",
-                "color": "#e6e600"
+                "color": "#ffcc00"
             }
         ],
         "min": "0",
@@ -2290,7 +2290,7 @@
         "segments": [
             {
                 "from": "0",
-                "color": "#e6e600"
+                "color": "#ffcc00"
             }
         ],
         "min": "0",
@@ -2872,7 +2872,7 @@
         "segments": [
             {
                 "from": "0",
-                "color": "#e6e600"
+                "color": "#ffcc00"
             }
         ],
         "min": "0",
@@ -2910,7 +2910,7 @@
         "segments": [
             {
                 "from": "-30",
-                "color": "#e6e600"
+                "color": "#ffcc00"
             }
         ],
         "min": "-30",
@@ -2948,7 +2948,7 @@
         "segments": [
             {
                 "from": "11",
-                "color": "#e6e600"
+                "color": "#ffcc00"
             }
         ],
         "min": "11",
@@ -3340,7 +3340,7 @@
         "segments": [
             {
                 "from": "0",
-                "color": "#e6e600"
+                "color": "#ffcc00"
             }
         ],
         "min": "0",
@@ -4193,6 +4193,7 @@
         "gtype": "gauge-34",
         "gstyle": "rounded",
         "title": "Indoor",
+        "alwaysShowTitle": false,
         "units": "°C",
         "icon": "thermometer",
         "prefix": "",
@@ -4200,39 +4201,39 @@
         "segments": [
             {
                 "from": "-10",
-                "color": "#00b500"
+                "color": "#00ff00"
             },
             {
                 "from": "-2.5",
-                "color": "#3baf00"
+                "color": "#33cc00"
             },
             {
                 "from": "2.5",
-                "color": "#77a900"
+                "color": "#99cc00"
             },
             {
                 "from": "7.5",
-                "color": "#b2a300"
+                "color": "#ffff00"
             },
             {
                 "from": "12.5",
-                "color": "#e6e600"
+                "color": "#ffcc00"
             },
             {
                 "from": "17.5",
-                "color": "#e0b900"
+                "color": "#ff9900"
             },
             {
                 "from": "22.5",
-                "color": "#da8c00"
+                "color": "#ff6600"
             },
             {
                 "from": "27.5",
-                "color": "#d45f1f"
+                "color": "#ff3300"
             },
             {
                 "from": "32.5",
-                "color": "#ca3838"
+                "color": "#ff0000"
             }
         ],
         "min": "-10",
@@ -4676,39 +4677,39 @@
         "segments": [
             {
                 "from": "-10",
-                "color": "#00b500"
+                "color": "#00ff00"
             },
             {
                 "from": "-7.5",
-                "color": "#19a507"
+                "color": "#33cc00"
             },
             {
                 "from": "2.5",
-                "color": "#32950e"
+                "color": "#99cc00"
             },
             {
                 "from": "7.5",
-                "color": "#b2a300"
+                "color": "#ffff00"
             },
             {
                 "from": "12.5",
-                "color": "#e6e600"
+                "color": "#ffcc00"
             },
             {
                 "from": "17.5",
-                "color": "#e0b900"
+                "color": "#ff9900"
             },
             {
                 "from": "22.5",
-                "color": "#da8c00"
+                "color": "#ff6600"
             },
             {
                 "from": "27.5",
-                "color": "#d45f1f"
+                "color": "#ff3300"
             },
             {
                 "from": "32.5",
-                "color": "#ca3838"
+                "color": "#ff0000"
             }
         ],
         "min": "-10",
@@ -4746,39 +4747,39 @@
         "segments": [
             {
                 "from": "-10",
-                "color": "#00b500"
+                "color": "#00ff00"
             },
             {
                 "from": "-7.5",
-                "color": "#19a507"
+                "color": "#33cc00"
             },
             {
                 "from": "2.5",
-                "color": "#32950e"
+                "color": "#99cc00"
             },
             {
                 "from": "7.5",
-                "color": "#b2a300"
+                "color": "#ffff00"
             },
             {
                 "from": "12.5",
-                "color": "#e6e600"
+                "color": "#ffcc00"
             },
             {
                 "from": "17.5",
-                "color": "#e0b900"
+                "color": "#ff9900"
             },
             {
                 "from": "22.5",
-                "color": "#da8c00"
+                "color": "#ff6600"
             },
             {
                 "from": "27.5",
-                "color": "#d45f1f"
+                "color": "#ff3300"
             },
             {
                 "from": "32.5",
-                "color": "#ca3838"
+                "color": "#ff0000"
             }
         ],
         "min": "-10",
@@ -4815,39 +4816,39 @@
         "segments": [
             {
                 "from": "-10",
-                "color": "#00b500"
+                "color": "#00ff00"
             },
             {
                 "from": "-7.5",
-                "color": "#19a507"
+                "color": "#33cc00"
             },
             {
                 "from": "2.5",
-                "color": "#32950e"
+                "color": "#99cc00"
             },
             {
                 "from": "7.5",
-                "color": "#b2a300"
+                "color": "#ffff00"
             },
             {
                 "from": "12.5",
-                "color": "#e6e600"
+                "color": "#ffcc00"
             },
             {
                 "from": "17.5",
-                "color": "#e0b900"
+                "color": "#ff9900"
             },
             {
                 "from": "22.5",
-                "color": "#da8c00"
+                "color": "#ff6600"
             },
             {
                 "from": "27.5",
-                "color": "#d45f1f"
+                "color": "#ff3300"
             },
             {
                 "from": "32.5",
-                "color": "#ca3838"
+                "color": "#ff0000"
             }
         ],
         "min": "-10",
@@ -4884,39 +4885,39 @@
         "segments": [
             {
                 "from": "0",
-                "color": "#00b500"
+                "color": "#00ff00"
             },
             {
                 "from": "15",
-                "color": "#19a507"
+                "color": "#33cc00"
             },
             {
                 "from": "25",
-                "color": "#32950e"
+                "color": "#99cc00"
             },
             {
                 "from": "35",
-                "color": "#b2a300"
+                "color": "#ffff00"
             },
             {
                 "from": "45",
-                "color": "#e6e600"
+                "color": "#ffcc00"
             },
             {
                 "from": "55",
-                "color": "#e0b900"
+                "color": "#ff9900"
             },
             {
                 "from": "65",
-                "color": "#da8c00"
+                "color": "#ff6600"
             },
             {
                 "from": "75",
-                "color": "#d45f1f"
+                "color": "#ff3300"
             },
             {
                 "from": "85",
-                "color": "#ca3838"
+                "color": "#ff0000"
             }
         ],
         "min": "0",
@@ -5232,39 +5233,39 @@
         "segments": [
             {
                 "from": "-10",
-                "color": "#00b500"
+                "color": "#00ff00"
             },
             {
                 "from": "-7.5",
-                "color": "#19a507"
+                "color": "#33cc00"
             },
             {
                 "from": "2.5",
-                "color": "#32950e"
+                "color": "#99cc00"
             },
             {
                 "from": "7.5",
-                "color": "#b2a300"
+                "color": "#ffff00"
             },
             {
                 "from": "12.5",
-                "color": "#e6e600"
+                "color": "#ffcc00"
             },
             {
                 "from": "17.5",
-                "color": "#e0b900"
+                "color": "#ff9900"
             },
             {
                 "from": "22.5",
-                "color": "#da8c00"
+                "color": "#ff6600"
             },
             {
                 "from": "27.5",
-                "color": "#d45f1f"
+                "color": "#ff3300"
             },
             {
                 "from": "32.5",
-                "color": "#ca3838"
+                "color": "#ff0000"
             }
         ],
         "min": "-10",
