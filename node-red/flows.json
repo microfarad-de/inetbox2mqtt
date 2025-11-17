@@ -588,11 +588,11 @@
         "type": "ui-theme",
         "name": "Dark theme",
         "colors": {
-            "surface": "#3a82c5",
-            "primary": "#8fc7ff",
-            "bgPage": "#6193c0",
+            "surface": "#397dc6",
+            "primary": "#c1d2e4",
+            "bgPage": "#4d8acb",
             "groupBg": "#3275b0",
-            "groupOutline": "#5496d3"
+            "groupOutline": "#397dc6"
         },
         "sizes": {
             "density": "comfortable",
@@ -1483,7 +1483,7 @@
         "width": 0,
         "height": 0,
         "head": "",
-        "format": "<style>\n\n    .large-text span {\n        font-size: 26px !important;\n    }\n    \n    .medium-text span {\n        font-size: 20px !important;\n    }\n    \n    .environment-text span {\n        /*font-size: 26px !important;*/\n    }\n\n    .large-gauge-text span {\n        font-size: 26px !important;\n        padding-top: 15px !important;\n        padding-bottom: 5px !important;\n    }\n    \n    .small-gauge-text span {\n        font-size: 18px !important;\n        padding-bottom: 3px !important;\n    }\n  \n    .nrdb-ui-gauge-title {\n        font-size:16px;\n        font-weight: normal;\n    }\n    \n    .v-card-title {\n        font-size: 14px;\n        color: #8FC7FF;\n    }\n    \n    .v-btn__content {\n        font-size: 18px;\n    }\n    \n    .v-list-item-title {\n        font-size: 18px !important;\n        padding-top: 3px !important;\n        padding-bottom: 3px !important;\n    }\n    \n    /*.v-snackbar__content {*/\n    .alert {\n        font-size: 16px;\n    }\n    \n    .grayout {\n        pointer-events: none;\n        filter: opacity(50%);\n        /*display: none;*/\n    }\n    \n    .error {\n        color: #FFD61A;\n        /*font-weight: bold;*/\n    }\n    \n    .modified {\n        color: #94E3FE;\n    }\n    \n}\n</style>",
+        "format": "<style>\n\n    .large-text span {\n        font-size: 26px !important;\n    }\n    \n    .medium-text span {\n        font-size: 20px !important;\n    }\n    \n    .environment-text span {\n        /*font-size: 26px !important;*/\n    }\n\n    .large-gauge-text span {\n        font-size: 26px !important;\n        padding-top: 15px !important;\n        padding-bottom: 5px !important;\n    }\n    \n    .small-gauge-text span {\n        font-size: 18px !important;\n        padding-bottom: 3px !important;\n    }\n  \n    .nrdb-ui-gauge-title {\n        font-size:16px;\n        font-weight: normal;\n    }\n    \n    .v-card-title {\n        font-size: 14px;\n        color: #C1D2E4;\n    }\n    \n    .v-btn__content {\n        font-size: 18px;\n    }\n    \n    .v-list-item-title {\n        font-size: 18px !important;\n        padding-top: 3px !important;\n        padding-bottom: 3px !important;\n    }\n    \n    /*.v-snackbar__content {*/\n    .alert {\n        font-size: 16px;\n    }\n    \n    .grayout {\n        pointer-events: none;\n        filter: opacity(50%);\n        /*display: none;*/\n    }\n    \n    .error {\n        color: #FFD61A;\n        /*font-weight: bold;*/\n    }\n    \n    .modified {\n        color: #FFD61A;\n    }\n    \n}\n</style>",
         "storeOutMessages": true,
         "passthru": true,
         "resendOnRefresh": true,
