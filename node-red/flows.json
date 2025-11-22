@@ -1505,7 +1505,7 @@
         "width": 0,
         "height": 0,
         "head": "",
-        "format": "<link rel=\"stylesheet\" href=\"https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap\">\n\n<style>\n    .v-application, .v-application * {\n        font-family: \"Roboto\" !important;\n        font-weight: normal !important;\n    }\n    \n    .nrdb-ui-gauge-title {\n        font-size:16px;\n        color: #C1D2E4;\n        font-weight: normal;\n    }\n    \n    .nrdb-ui-text-label {\n        color: #C1D2E4;\n    }\n    \n    .nrdb-ui-text-value {\n        font-weight: normal !important;\n    }\n    \n    .v-card-title {\n        font-size: 12px;\n        color: #C1D2E4;\n    }\n    \n    .v-btn__content {\n        font-size: 18px;\n    }\n    \n    .v-list-item-title {\n        font-size: 18px !important;\n        padding-top: 3px !important;\n        padding-bottom: 3px !important;\n    }\n\n    .large-text span {\n        font-size: 34px;\n    }\n    \n    .medium-text span {\n        font-size: 24px;\n    }\n    \n    .large-gauge-text span {\n        font-size: 26px !important;\n        padding-top: 15px !important;\n        padding-bottom: 5px !important;\n    }\n    \n    .small-gauge-text span {\n        font-size: 18px !important;\n        padding-bottom: 3px !important;\n    }\n    \n    .alert {\n        font-size: 16px;\n    }\n    \n    .grayout {\n        pointer-events: none;\n        filter: opacity(50%);\n        /*display: none;*/\n    }\n    \n    .error {\n        color: #FFD61A;\n        /*font-weight: bold;*/\n    }\n    \n    .modified {\n        color: #FFD61A;\n    }\n    \n}\n</style>",
+        "format": "<link rel=\"stylesheet\" href=\"https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap\">\n\n<style>\n    .v-application, .v-application * {\n        font-family: \"Roboto\" !important;\n        font-weight: normal !important;\n    }\n    \n    .nrdb-ui-gauge-title {\n        font-size:16px;\n        color: #C1D2E4;\n        font-weight: normal;\n    }\n    \n    .nrdb-ui-text-label {\n        color: #C1D2E4;\n    }\n    \n    .nrdb-ui-text-value {\n        font-weight: normal !important;\n    }\n    \n    .v-card-title {\n        font-size: 12px;\n        color: #C1D2E4;\n    }\n    \n    .v-btn__content {\n        font-size: 18px;\n    }\n    \n    .v-list-item-title {\n        font-size: 18px !important;\n        padding-top: 3px !important;\n        padding-bottom: 3px !important;\n    }\n\n    .large-text span {\n        font-size: 34px;\n    }\n    \n    .medium-text span {\n        font-size: 24px;\n    }\n    \n    .large-gauge-text span {\n        font-size: 34px !important;\n        padding-top: 30px !important;\n        padding-bottom: 15px !important;\n    }\n    \n    .small-gauge-text span {\n        font-size: 20px !important;\n        padding-bottom: 5px !important;\n    }\n    \n    .alert {\n        font-size: 16px;\n    }\n    \n    .grayout {\n        pointer-events: none;\n        filter: opacity(50%);\n        /*display: none;*/\n    }\n    \n    .error {\n        color: #FFD61A;\n        /*font-weight: bold;*/\n    }\n    \n    .modified {\n        color: #FFD61A;\n    }\n    \n}\n</style>",
         "storeOutMessages": true,
         "passthru": true,
         "resendOnRefresh": true,
@@ -2267,6 +2267,7 @@
         "gtype": "gauge-34",
         "gstyle": "rounded",
         "title": "Battery",
+        "alwaysShowTitle": false,
         "units": "%",
         "icon": "car-battery",
         "prefix": "",
@@ -2274,12 +2275,14 @@
         "segments": [
             {
                 "from": "0",
-                "color": "#ffcc00"
+                "color": "#ffcc00",
+                "text": "",
+                "textType": "label"
             }
         ],
         "min": "0",
         "max": "100",
-        "sizeThickness": "12",
+        "sizeThickness": "6",
         "sizeGap": "0",
         "sizeKeyThickness": "0",
         "styleRounded": true,
@@ -2305,19 +2308,22 @@
         "gtype": "gauge-34",
         "gstyle": "rounded",
         "title": "Solar",
+        "alwaysShowTitle": false,
         "units": "W",
-        "icon": "",
+        "icon": "solar-power",
         "prefix": "",
         "suffix": "",
         "segments": [
             {
                 "from": "0",
-                "color": "#ffcc00"
+                "color": "#ffcc00",
+                "text": "",
+                "textType": "label"
             }
         ],
         "min": "0",
         "max": "240",
-        "sizeThickness": "12",
+        "sizeThickness": "6",
         "sizeGap": "0",
         "sizeKeyThickness": "0",
         "styleRounded": true,
@@ -2336,11 +2342,14 @@
         "name": "",
         "group": "25319c4b021b78d9",
         "order": 1,
+        "value": "payload",
+        "valueType": "msg",
         "width": 3,
         "height": 3,
         "gtype": "gauge-34",
         "gstyle": "rounded",
         "title": "Left",
+        "alwaysShowTitle": false,
         "units": "%",
         "icon": "",
         "prefix": "",
@@ -2348,12 +2357,14 @@
         "segments": [
             {
                 "from": "0",
-                "color": "#00c7fc"
+                "color": "#00c7fc",
+                "text": "",
+                "textType": "label"
             }
         ],
         "min": "0",
         "max": "100",
-        "sizeThickness": "12",
+        "sizeThickness": "6",
         "sizeGap": "0",
         "sizeKeyThickness": "0",
         "styleRounded": true,
@@ -2372,11 +2383,14 @@
         "name": "",
         "group": "25319c4b021b78d9",
         "order": 2,
+        "value": "payload",
+        "valueType": "msg",
         "width": 3,
         "height": 3,
         "gtype": "gauge-34",
         "gstyle": "rounded",
         "title": "Right",
+        "alwaysShowTitle": false,
         "units": "%",
         "icon": "",
         "prefix": "",
@@ -2384,12 +2398,14 @@
         "segments": [
             {
                 "from": "0",
-                "color": "#00c7fc"
+                "color": "#00c7fc",
+                "text": "",
+                "textType": "label"
             }
         ],
         "min": "0",
         "max": "100",
-        "sizeThickness": "12",
+        "sizeThickness": "6",
         "sizeGap": "0",
         "sizeKeyThickness": "0",
         "styleRounded": true,
@@ -2718,7 +2734,7 @@
         "type": "function",
         "z": "b22624498baaa896",
         "name": "TextValue",
-        "func": "\nmsg.payload = msg.textvalue;\n\nlet msg2 = {};\n\nmsg2.ui_update = {};\nmsg2.ui_update.units = \"[\" + msg.payload + \"] W\";\n\nreturn [msg2, msg];",
+        "func": "\nmsg.payload = msg.textvalue;\n\nlet msg2 = {};\n\nmsg2.ui_update = {};\nmsg2.ui_update.units = \"[\" + msg.payload.slice(0, 3) + \"] W\";\n\nreturn [msg2, msg];",
         "outputs": 2,
         "timeout": 0,
         "noerr": 0,
@@ -2904,11 +2920,14 @@
         "name": "",
         "group": "1769e3f51bb550db",
         "order": 1,
+        "value": "payload",
+        "valueType": "msg",
         "width": 2,
         "height": 2,
         "gtype": "gauge-34",
         "gstyle": "rounded",
         "title": "",
+        "alwaysShowTitle": false,
         "units": "kWh",
         "icon": "",
         "prefix": "",
@@ -2916,12 +2935,14 @@
         "segments": [
             {
                 "from": "0",
-                "color": "#ffcc00"
+                "color": "#ffcc00",
+                "text": "",
+                "textType": "label"
             }
         ],
         "min": "0",
         "max": "1.5",
-        "sizeThickness": "6",
+        "sizeThickness": "4",
         "sizeGap": "0",
         "sizeKeyThickness": "0",
         "styleRounded": true,
@@ -2947,6 +2968,7 @@
         "gtype": "gauge-34",
         "gstyle": "rounded",
         "title": "",
+        "alwaysShowTitle": false,
         "units": "A",
         "icon": "car-battery",
         "prefix": "",
@@ -2954,12 +2976,14 @@
         "segments": [
             {
                 "from": "-30",
-                "color": "#ffcc00"
+                "color": "#ffcc00",
+                "text": "",
+                "textType": "label"
             }
         ],
         "min": "-30",
         "max": "30",
-        "sizeThickness": "6",
+        "sizeThickness": "4",
         "sizeGap": "0",
         "sizeKeyThickness": "0",
         "styleRounded": true,
@@ -2985,6 +3009,7 @@
         "gtype": "gauge-34",
         "gstyle": "rounded",
         "title": "",
+        "alwaysShowTitle": false,
         "units": "V",
         "icon": "car-battery",
         "prefix": "",
@@ -2992,12 +3017,14 @@
         "segments": [
             {
                 "from": "11",
-                "color": "#ffcc00"
+                "color": "#ffcc00",
+                "text": "",
+                "textType": "label"
             }
         ],
         "min": "11",
         "max": "15",
-        "sizeThickness": "6",
+        "sizeThickness": "4",
         "sizeGap": "0",
         "sizeKeyThickness": "0",
         "styleRounded": true,
@@ -3387,6 +3414,7 @@
         "gtype": "gauge-34",
         "gstyle": "rounded",
         "title": "",
+        "alwaysShowTitle": false,
         "units": "A",
         "icon": "solar-power",
         "prefix": "",
@@ -3394,12 +3422,14 @@
         "segments": [
             {
                 "from": "0",
-                "color": "#ffcc00"
+                "color": "#ffcc00",
+                "text": "",
+                "textType": "label"
             }
         ],
         "min": "0",
         "max": "20",
-        "sizeThickness": "6",
+        "sizeThickness": "4",
         "sizeGap": "0",
         "sizeKeyThickness": "0",
         "styleRounded": true,
@@ -3983,8 +4013,7 @@
         "wires": [
             [
                 "746dd63504103d04",
-                "b31b2e7127ee128e",
-                "4fcf371b5d4733f8"
+                "b31b2e7127ee128e"
             ]
         ]
     },
@@ -4140,8 +4169,7 @@
         "y": 720,
         "wires": [
             [
-                "8b3cbd29fad5b5e5",
-                "211d1220dbbb8e92"
+                "8b3cbd29fad5b5e5"
             ]
         ]
     },
@@ -4259,44 +4287,62 @@
         "segments": [
             {
                 "from": "-10",
-                "color": "#00ff00"
+                "color": "#00ff00",
+                "text": "",
+                "textType": "label"
             },
             {
                 "from": "-2.5",
-                "color": "#33cc00"
+                "color": "#33cc00",
+                "text": "",
+                "textType": "label"
             },
             {
                 "from": "2.5",
-                "color": "#99cc00"
+                "color": "#99cc00",
+                "text": "",
+                "textType": "label"
             },
             {
                 "from": "7.5",
-                "color": "#ffff00"
+                "color": "#ffff00",
+                "text": "",
+                "textType": "label"
             },
             {
                 "from": "12.5",
-                "color": "#ffcc00"
+                "color": "#ffcc00",
+                "text": "",
+                "textType": "label"
             },
             {
                 "from": "17.5",
-                "color": "#ff9900"
+                "color": "#ff9900",
+                "text": "",
+                "textType": "label"
             },
             {
                 "from": "22.5",
-                "color": "#ff6600"
+                "color": "#ff6600",
+                "text": "",
+                "textType": "label"
             },
             {
                 "from": "27.5",
-                "color": "#ff3300"
+                "color": "#ff3300",
+                "text": "",
+                "textType": "label"
             },
             {
                 "from": "32.5",
-                "color": "#ff0000"
+                "color": "#ff0000",
+                "text": "",
+                "textType": "label"
             }
         ],
         "min": "-10",
         "max": "40",
-        "sizeThickness": "12",
+        "sizeThickness": "6",
         "sizeGap": "0",
         "sizeKeyThickness": "0",
         "styleRounded": true,
@@ -4750,6 +4796,7 @@
         "gtype": "gauge-34",
         "gstyle": "rounded",
         "title": "Outdoor",
+        "alwaysShowTitle": false,
         "units": "°C",
         "icon": "thermometer",
         "prefix": "",
@@ -4757,44 +4804,62 @@
         "segments": [
             {
                 "from": "-10",
-                "color": "#00ff00"
+                "color": "#00ff00",
+                "text": "",
+                "textType": "label"
             },
             {
                 "from": "-7.5",
-                "color": "#33cc00"
+                "color": "#33cc00",
+                "text": "",
+                "textType": "label"
             },
             {
                 "from": "2.5",
-                "color": "#99cc00"
+                "color": "#99cc00",
+                "text": "",
+                "textType": "label"
             },
             {
                 "from": "7.5",
-                "color": "#ffff00"
+                "color": "#ffff00",
+                "text": "",
+                "textType": "label"
             },
             {
                 "from": "12.5",
-                "color": "#ffcc00"
+                "color": "#ffcc00",
+                "text": "",
+                "textType": "label"
             },
             {
                 "from": "17.5",
-                "color": "#ff9900"
+                "color": "#ff9900",
+                "text": "",
+                "textType": "label"
             },
             {
                 "from": "22.5",
-                "color": "#ff6600"
+                "color": "#ff6600",
+                "text": "",
+                "textType": "label"
             },
             {
                 "from": "27.5",
-                "color": "#ff3300"
+                "color": "#ff3300",
+                "text": "",
+                "textType": "label"
             },
             {
                 "from": "32.5",
-                "color": "#ff0000"
+                "color": "#ff0000",
+                "text": "",
+                "textType": "label"
             }
         ],
         "min": "-10",
         "max": "40",
-        "sizeThickness": "12",
+        "sizeThickness": "6",
         "sizeGap": "0",
         "sizeKeyThickness": "0",
         "styleRounded": true,
@@ -4820,6 +4885,7 @@
         "gtype": "gauge-34",
         "gstyle": "rounded",
         "title": "Fridge",
+        "alwaysShowTitle": false,
         "units": "°C",
         "icon": "thermometer",
         "prefix": "",
@@ -4827,44 +4893,62 @@
         "segments": [
             {
                 "from": "-10",
-                "color": "#00ff00"
+                "color": "#00ff00",
+                "text": "",
+                "textType": "label"
             },
             {
                 "from": "-7.5",
-                "color": "#33cc00"
+                "color": "#33cc00",
+                "text": "",
+                "textType": "label"
             },
             {
                 "from": "2.5",
-                "color": "#99cc00"
+                "color": "#99cc00",
+                "text": "",
+                "textType": "label"
             },
             {
                 "from": "7.5",
-                "color": "#ffff00"
+                "color": "#ffff00",
+                "text": "",
+                "textType": "label"
             },
             {
                 "from": "12.5",
-                "color": "#ffcc00"
+                "color": "#ffcc00",
+                "text": "",
+                "textType": "label"
             },
             {
                 "from": "17.5",
-                "color": "#ff9900"
+                "color": "#ff9900",
+                "text": "",
+                "textType": "label"
             },
             {
                 "from": "22.5",
-                "color": "#ff6600"
+                "color": "#ff6600",
+                "text": "",
+                "textType": "label"
             },
             {
                 "from": "27.5",
-                "color": "#ff3300"
+                "color": "#ff3300",
+                "text": "",
+                "textType": "label"
             },
             {
                 "from": "32.5",
-                "color": "#ff0000"
+                "color": "#ff0000",
+                "text": "",
+                "textType": "label"
             }
         ],
         "min": "-10",
         "max": "40",
-        "sizeThickness": "12",
+        "sizeThickness": "6",
         "sizeGap": "0",
         "sizeKeyThickness": "0",
         "styleRounded": true,
@@ -4872,144 +4956,6 @@
         "className": "large-gauge-text",
         "x": 850,
         "y": 980,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "4fcf371b5d4733f8",
-        "type": "ui-gauge",
-        "z": "2561d49b29c858c7",
-        "d": true,
-        "name": "",
-        "group": "1769e3f51bb550db",
-        "order": 4,
-        "width": 3,
-        "height": 3,
-        "gtype": "gauge-34",
-        "gstyle": "rounded",
-        "title": "Battery",
-        "units": "°C",
-        "icon": "",
-        "prefix": "",
-        "suffix": "",
-        "segments": [
-            {
-                "from": "-10",
-                "color": "#00ff00"
-            },
-            {
-                "from": "-7.5",
-                "color": "#33cc00"
-            },
-            {
-                "from": "2.5",
-                "color": "#99cc00"
-            },
-            {
-                "from": "7.5",
-                "color": "#ffff00"
-            },
-            {
-                "from": "12.5",
-                "color": "#ffcc00"
-            },
-            {
-                "from": "17.5",
-                "color": "#ff9900"
-            },
-            {
-                "from": "22.5",
-                "color": "#ff6600"
-            },
-            {
-                "from": "27.5",
-                "color": "#ff3300"
-            },
-            {
-                "from": "32.5",
-                "color": "#ff0000"
-            }
-        ],
-        "min": "-10",
-        "max": "40",
-        "sizeThickness": "12",
-        "sizeGap": "0",
-        "sizeKeyThickness": "0",
-        "styleRounded": true,
-        "styleGlow": false,
-        "className": "large-gauge-text",
-        "x": 860,
-        "y": 1640,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "211d1220dbbb8e92",
-        "type": "ui-gauge",
-        "z": "2561d49b29c858c7",
-        "d": true,
-        "name": "",
-        "group": "1769e3f51bb550db",
-        "order": 6,
-        "width": 3,
-        "height": 3,
-        "gtype": "gauge-34",
-        "gstyle": "rounded",
-        "title": "Outdoor RH",
-        "units": "%",
-        "icon": "",
-        "prefix": "",
-        "suffix": "",
-        "segments": [
-            {
-                "from": "0",
-                "color": "#00ff00"
-            },
-            {
-                "from": "15",
-                "color": "#33cc00"
-            },
-            {
-                "from": "25",
-                "color": "#99cc00"
-            },
-            {
-                "from": "35",
-                "color": "#ffff00"
-            },
-            {
-                "from": "45",
-                "color": "#ffcc00"
-            },
-            {
-                "from": "55",
-                "color": "#ff9900"
-            },
-            {
-                "from": "65",
-                "color": "#ff6600"
-            },
-            {
-                "from": "75",
-                "color": "#ff3300"
-            },
-            {
-                "from": "85",
-                "color": "#ff0000"
-            }
-        ],
-        "min": "0",
-        "max": "100",
-        "sizeThickness": "12",
-        "sizeGap": "0",
-        "sizeKeyThickness": "0",
-        "styleRounded": true,
-        "styleGlow": false,
-        "className": "large-gauge-text",
-        "x": 870,
-        "y": 700,
         "wires": [
             []
         ]
@@ -5314,6 +5260,7 @@
         "gtype": "gauge-34",
         "gstyle": "rounded",
         "title": "Water",
+        "alwaysShowTitle": false,
         "units": "°C",
         "icon": "thermometer",
         "prefix": "",
@@ -5321,44 +5268,62 @@
         "segments": [
             {
                 "from": "-10",
-                "color": "#00ff00"
+                "color": "#00ff00",
+                "text": "",
+                "textType": "label"
             },
             {
                 "from": "-7.5",
-                "color": "#33cc00"
+                "color": "#33cc00",
+                "text": "",
+                "textType": "label"
             },
             {
                 "from": "2.5",
-                "color": "#99cc00"
+                "color": "#99cc00",
+                "text": "",
+                "textType": "label"
             },
             {
                 "from": "7.5",
-                "color": "#ffff00"
+                "color": "#ffff00",
+                "text": "",
+                "textType": "label"
             },
             {
                 "from": "12.5",
-                "color": "#ffcc00"
+                "color": "#ffcc00",
+                "text": "",
+                "textType": "label"
             },
             {
                 "from": "17.5",
-                "color": "#ff9900"
+                "color": "#ff9900",
+                "text": "",
+                "textType": "label"
             },
             {
                 "from": "22.5",
-                "color": "#ff6600"
+                "color": "#ff6600",
+                "text": "",
+                "textType": "label"
             },
             {
                 "from": "27.5",
-                "color": "#ff3300"
+                "color": "#ff3300",
+                "text": "",
+                "textType": "label"
             },
             {
                 "from": "32.5",
-                "color": "#ff0000"
+                "color": "#ff0000",
+                "text": "",
+                "textType": "label"
             }
         ],
         "min": "-10",
         "max": "60",
-        "sizeThickness": "12",
+        "sizeThickness": "6",
         "sizeGap": "0",
         "sizeKeyThickness": "0",
         "styleRounded": true,
@@ -7404,7 +7369,7 @@
         "z": "fcffa944a0680a42",
         "d": true,
         "group": "1769e3f51bb550db",
-        "order": 5,
+        "order": 4,
         "width": 3,
         "height": "",
         "name": "",
