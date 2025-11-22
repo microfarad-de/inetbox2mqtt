@@ -848,8 +848,8 @@
         "name": "spacer",
         "tooltip": "",
         "order": 6,
-        "width": "0",
-        "height": "0",
+        "width": "6",
+        "height": "1",
         "className": ""
     },
     {
@@ -859,8 +859,8 @@
         "name": "spacer",
         "tooltip": "",
         "order": 4,
-        "width": "0",
-        "height": "0",
+        "width": "6",
+        "height": "1",
         "className": ""
     },
     {
@@ -870,8 +870,8 @@
         "name": "spacer",
         "tooltip": "",
         "order": 5,
-        "width": "0",
-        "height": "0",
+        "width": "6",
+        "height": "1",
         "className": ""
     },
     {
@@ -881,8 +881,8 @@
         "name": "spacer",
         "tooltip": "",
         "order": 7,
-        "width": "0",
-        "height": "0",
+        "width": "6",
+        "height": "1",
         "className": ""
     },
     {
@@ -1004,8 +1004,8 @@
         "name": "Spacer",
         "tooltip": "",
         "order": 7,
-        "width": "0",
-        "height": "0",
+        "width": "6",
+        "height": "1",
         "className": ""
     },
     {
@@ -1119,8 +1119,8 @@
         "name": "spacer",
         "tooltip": "",
         "order": 28,
-        "width": "0",
-        "height": "0",
+        "width": "6",
+        "height": "1",
         "className": ""
     },
     {
@@ -1165,19 +1165,8 @@
         "name": "spacer",
         "tooltip": "",
         "order": 18,
-        "width": "0",
-        "height": "0",
-        "className": ""
-    },
-    {
-        "id": "5c159ac34f540df8",
-        "type": "ui-spacer",
-        "group": "7a52027f8ab130e8",
-        "name": "spacer",
-        "tooltip": "",
-        "order": 8,
-        "width": "0",
-        "height": "0",
+        "width": "6",
+        "height": "1",
         "className": ""
     },
     {
@@ -1187,7 +1176,7 @@
         "name": "spacer",
         "tooltip": "",
         "order": 5,
-        "width": 1,
+        "width": 6,
         "height": 1,
         "className": ""
     },
@@ -1198,7 +1187,40 @@
         "name": "spacer",
         "tooltip": "",
         "order": 3,
-        "width": 1,
+        "width": 6,
+        "height": 1,
+        "className": ""
+    },
+    {
+        "id": "3dbe34b4984bd7a1",
+        "type": "ui-spacer",
+        "group": "7a52027f8ab130e8",
+        "name": "spacer",
+        "tooltip": "",
+        "order": 7,
+        "width": 6,
+        "height": 4,
+        "className": ""
+    },
+    {
+        "id": "0a883614300a4b8f",
+        "type": "ui-spacer",
+        "group": "7a52027f8ab130e8",
+        "name": "spacer",
+        "tooltip": "",
+        "order": 9,
+        "width": 6,
+        "height": 1,
+        "className": ""
+    },
+    {
+        "id": "125bbe9732890a6d",
+        "type": "ui-spacer",
+        "group": "fc3c351e5707cb90",
+        "name": "spacer",
+        "tooltip": "",
+        "order": 6,
+        "width": 6,
         "height": 1,
         "className": ""
     },
@@ -10007,7 +10029,7 @@
         "group": "7a52027f8ab130e8",
         "name": "Apply 3",
         "label": "Apply",
-        "order": 7,
+        "order": 8,
         "width": 0,
         "height": 0,
         "emulateClick": false,
