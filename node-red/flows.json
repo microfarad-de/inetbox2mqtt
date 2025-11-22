@@ -1207,7 +1207,7 @@
         "type": "function",
         "z": "26a48bdabf7607df",
         "name": "Alarm",
-        "func": "\nfunction resolveValue(input) {\n    // Check if the input is a number (int or float)\n    if (!isNaN(input) && String(input).trim() !== \"\") {\n        return Number(input);\n    } else {\n        // Otherwise, treat it as a global variable name\n        return global.get(input);\n    }\n}\n\n\nlet val = +msg.payload;  // Convert to an integer\n\nlet low     = resolveValue(env.get(\"low\"));\nlet high    = resolveValue(env.get(\"high\"));\nlet thr     = env.get(\"threshold\");\nlet message = env.get(\"message\");\nlet unit    = env.get(\"unit\");\nlet repeat  = env.get(\"repetitions\");\nlet style   = {ui_update: {class: \"\"}};\nlet alerts  = global.get(\"alerts\") || {};\nlet count   = context.get(\"count\") || 0;\n\nlet lastAlarm = context.get(\"lastAlarm\") || false;\nlet alarm = false;\n\nif (val < low) {\n    count--;\n    context.set(\"count\", count);\n}\nelse if (val > high) {\n    count++;\n    context.set(\"count\", count);\n}\nelse if (val > (low + thr) && val < (high - thr)) {\n    count = 0\n    context.set(\"count\", count);\n    alarm = false;\n    context.set(\"lastAlarm\", alarm);\n    delete alerts[message];\n    global.set(\"alerts\", alerts);\n    return [null, style];\n}\n\n\nif (count <= -repeat) {\n    alarm = \"low\";\n}\nelse if (count >= repeat) {\n    alarm = \"high\";\n}\n\nif (alarm && alarm !== lastAlarm) {\n    context.set(\"lastAlarm\", alarm);\n    style.ui_update.class = \"error\";\n    msg.payload = `⚠️ Caravan alert!\\n${message}: ${val} ${unit}`;\n    let text    = `⚠️ ${message}: ${val} ${unit}`\n    node.warn(text);\n    alerts[message] = text;\n    global.set(\"alerts\", alerts);\n    return [msg, style];\n}\nelse if (!alerts[message]) {\n    count = 0\n    context.set(\"count\", count);\n    alarm = false;\n    context.set(\"lastAlarm\", alarm);\n    return [null, style];\n}\nelse {\n    return null;\n}\n\n",
+        "func": "\nfunction resolveValue(input) {\n    // Check if the input is a number (int or float)\n    if (!isNaN(input) && String(input).trim() !== \"\") {\n        return Number(input);\n    } else {\n        // Otherwise, treat it as a global variable name\n        return global.get(input);\n    }\n}\n\n\nlet val = +msg.payload;  // Convert to an integer\n\nlet low     = resolveValue(env.get(\"low\"));\nlet high    = resolveValue(env.get(\"high\"));\nlet thr     = env.get(\"threshold\");\nlet message = env.get(\"message\");\nlet unit    = env.get(\"unit\");\nlet repeat  = env.get(\"repetitions\");\nlet style   = {ui_update: {class: \"\"}};\nlet alerts  = global.get(\"alerts\") || {};\nlet count   = context.get(\"count\") || 0;\n\nlet lastAlarm = context.get(\"lastAlarm\") || false;\nlet alarm = false;\n\nif (val < low) {\n    count--;\n    context.set(\"count\", count);\n}\nelse if (val > high) {\n    count++;\n    context.set(\"count\", count);\n}\nelse if (val > (low + thr) && val < (high - thr)) {\n    count = 0\n    context.set(\"count\", count);\n    alarm = false;\n    context.set(\"lastAlarm\", alarm);\n    delete alerts[message];\n    global.set(\"alerts\", alerts);\n    return [null, style];\n}\n\n\nif (count <= -repeat) {\n    alarm = \"low\";\n}\nelse if (count >= repeat) {\n    alarm = \"high\";\n}\n\nif (alarm && alarm !== lastAlarm) {\n    context.set(\"lastAlarm\", alarm);\n    style.ui_update.class = \"error\";\n    msg.payload = `⚠️ Caravan alert!\\n${message}: ${val}${unit}`;\n    let text    = `⚠️ ${message}: ${val}${unit}`\n    node.warn(text);\n    alerts[message] = text;\n    global.set(\"alerts\", alerts);\n    return [msg, style];\n}\nelse if (!alerts[message]) {\n    count = 0\n    context.set(\"count\", count);\n    alarm = false;\n    context.set(\"lastAlarm\", alarm);\n    return [null, style];\n}\nelse {\n    return null;\n}\n\n",
         "outputs": 2,
         "timeout": 0,
         "noerr": 0,
@@ -1292,7 +1292,7 @@
         "type": "function",
         "z": "35877746e13a44de",
         "name": "AppendUnit",
-        "func": "\nlet unit = env.get('unit');\n\nmsg.payload = msg.payload + ' ' + unit;\n\nreturn msg;",
+        "func": "\nlet unit = env.get('unit');\n\nmsg.payload = msg.payload + unit;\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -1888,7 +1888,7 @@
         "type": "function",
         "z": "b22624498baaa896",
         "name": "Sec. to d/h",
-        "func": "let totalSeconds = msg.payload;\n\nlet days = Math.floor(totalSeconds / 86400); // 86400 seconds in a day\nlet hours = Math.floor((totalSeconds % 86400) / 3600); // Remaining hours\n\nif (totalSeconds === null ) {\n    msg.payload = `--`;\n}\nelse {\n    msg.payload = `${days} d &nbsp;${hours} h`;\n}\n\nreturn msg;",
+        "func": "let totalSeconds = msg.payload;\n\nlet days = Math.floor(totalSeconds / 86400); // 86400 seconds in a day\nlet hours = Math.floor((totalSeconds % 86400) / 3600); // Remaining hours\n\nif (totalSeconds === null ) {\n    msg.payload = `--`;\n}\nelse {\n    msg.payload = `${days}d ${hours}h`;\n}\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -6055,132 +6055,132 @@
                 "type": "num"
             },
             {
-                "label": "5 °C",
+                "label": "5°C",
                 "value": 5,
                 "type": "num"
             },
             {
-                "label": "6 °C",
+                "label": "6°C",
                 "value": 6,
                 "type": "num"
             },
             {
-                "label": "7 °C",
+                "label": "7°C",
                 "value": 7,
                 "type": "num"
             },
             {
-                "label": "8 °C",
+                "label": "8°C",
                 "value": 8,
                 "type": "num"
             },
             {
-                "label": "9 °C",
+                "label": "9°C",
                 "value": 9,
                 "type": "num"
             },
             {
-                "label": "10 °C",
+                "label": "10°C",
                 "value": 10,
                 "type": "num"
             },
             {
-                "label": "11 °C",
+                "label": "11°C",
                 "value": 11,
                 "type": "num"
             },
             {
-                "label": "12 °C",
+                "label": "12°C",
                 "value": 12,
                 "type": "num"
             },
             {
-                "label": "13 °C",
+                "label": "13°C",
                 "value": 13,
                 "type": "num"
             },
             {
-                "label": "14 °C",
+                "label": "14°C",
                 "value": 14,
                 "type": "num"
             },
             {
-                "label": "15 °C",
+                "label": "15°C",
                 "value": 15,
                 "type": "num"
             },
             {
-                "label": "16 °C",
+                "label": "16°C",
                 "value": 16,
                 "type": "num"
             },
             {
-                "label": "17 °C",
+                "label": "17°C",
                 "value": 17,
                 "type": "num"
             },
             {
-                "label": "18 °C",
+                "label": "18°C",
                 "value": 18,
                 "type": "num"
             },
             {
-                "label": "19 °C",
+                "label": "19°C",
                 "value": 19,
                 "type": "num"
             },
             {
-                "label": "20 °C",
+                "label": "20°C",
                 "value": 20,
                 "type": "num"
             },
             {
-                "label": "21 °C",
+                "label": "21°C",
                 "value": 21,
                 "type": "num"
             },
             {
-                "label": "22 °C",
+                "label": "22°C",
                 "value": 22,
                 "type": "num"
             },
             {
-                "label": "23 °C",
+                "label": "23°C",
                 "value": 23,
                 "type": "num"
             },
             {
-                "label": "24 °C",
+                "label": "24°C",
                 "value": 24,
                 "type": "num"
             },
             {
-                "label": "25 °C",
+                "label": "25°C",
                 "value": 25,
                 "type": "num"
             },
             {
-                "label": "26 °C",
+                "label": "26°C",
                 "value": 26,
                 "type": "num"
             },
             {
-                "label": "27 °C",
+                "label": "27°C",
                 "value": 27,
                 "type": "num"
             },
             {
-                "label": "28 °C",
+                "label": "28°C",
                 "value": 28,
                 "type": "num"
             },
             {
-                "label": "29 °C",
+                "label": "29°C",
                 "value": 29,
                 "type": "num"
             },
             {
-                "label": "30 °C",
+                "label": "30°C",
                 "value": 30,
                 "type": "num"
             }
@@ -6699,7 +6699,7 @@
         "type": "function",
         "z": "c74d4096e08fa272",
         "name": "Decode",
-        "func": "if (msg.payload === undefined) {\n    return null;\n}\n\nswitch (msg.payload) {\n    case 0:\n        msg.payload = 'OFF';\n        break;\n    \n    default:\n        msg.payload = msg.payload + ' °C';\n        break;\n}\n\n\nreturn msg;",
+        "func": "if (msg.payload === undefined) {\n    return null;\n}\n\nswitch (msg.payload) {\n    case 0:\n        msg.payload = 'OFF';\n        break;\n    \n    default:\n        msg.payload = msg.payload + '°C';\n        break;\n}\n\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -6922,57 +6922,57 @@
                 "type": "num"
             },
             {
-                "label": "1 °C",
+                "label": "1°C",
                 "value": 1,
                 "type": "num"
             },
             {
-                "label": "1.5 °C",
+                "label": "1.5°C",
                 "value": "1.5",
                 "type": "str"
             },
             {
-                "label": "2 °C",
+                "label": "2°C",
                 "value": 2,
                 "type": "num"
             },
             {
-                "label": "2.5 °C",
+                "label": "2.5°C",
                 "value": 2.5,
                 "type": "num"
             },
             {
-                "label": "3 °C",
+                "label": "3°C",
                 "value": 3,
                 "type": "num"
             },
             {
-                "label": "3.5 °C",
+                "label": "3.5°C",
                 "value": 3.5,
                 "type": "num"
             },
             {
-                "label": "4 °C",
+                "label": "4°C",
                 "value": 4,
                 "type": "num"
             },
             {
-                "label": "4.5 °C",
+                "label": "4.5°C",
                 "value": 4.5,
                 "type": "num"
             },
             {
-                "label": "5 °C",
+                "label": "5°C",
                 "value": 5,
                 "type": "num"
             },
             {
-                "label": "5.5 °C",
+                "label": "5.5°C",
                 "value": 5.5,
                 "type": "num"
             },
             {
-                "label": "6 °C",
+                "label": "6°C",
                 "value": 6,
                 "type": "num"
             }
@@ -7461,7 +7461,7 @@
         "type": "function",
         "z": "fcffa944a0680a42",
         "name": "Decode",
-        "func": "if (msg.payload === undefined) {\n    return null;\n}\n\nswitch (msg.payload) {\n    case 0:\n        msg.payload = 'OFF';\n        break;\n    \n    default:\n        msg.payload = msg.payload + ' °C';\n        break;\n}\n\n\nreturn msg;",
+        "func": "if (msg.payload === undefined) {\n    return null;\n}\n\nswitch (msg.payload) {\n    case 0:\n        msg.payload = 'OFF';\n        break;\n    \n    default:\n        msg.payload = msg.payload + '°C';\n        break;\n}\n\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -7562,7 +7562,7 @@
                 "type": "num"
             },
             {
-                "label": "12 V",
+                "label": "12V",
                 "value": 1,
                 "type": "num"
             }
@@ -7633,7 +7633,7 @@
         "type": "function",
         "z": "fcffa944a0680a42",
         "name": "Decode",
-        "func": "if (msg.payload === undefined) {\n    return null;\n}\n\nswitch (msg.payload) {\n    case 0:\n        msg.payload = \"Gas\";\n        break;\n    \n    case 1:\n        msg.payload = \"12 V\";\n        break;\n}\n\n\nreturn msg;",
+        "func": "if (msg.payload === undefined) {\n    return null;\n}\n\nswitch (msg.payload) {\n    case 0:\n        msg.payload = \"Gas\";\n        break;\n    \n    case 1:\n        msg.payload = \"12V\";\n        break;\n}\n\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -8421,37 +8421,37 @@
                 "type": "num"
             },
             {
-                "label": "10 %",
+                "label": "10%",
                 "value": 10,
                 "type": "num"
             },
             {
-                "label": "15 %",
+                "label": "15%",
                 "value": 15,
                 "type": "num"
             },
             {
-                "label": "20 %",
+                "label": "20%",
                 "value": 20,
                 "type": "num"
             },
             {
-                "label": "25 %",
+                "label": "25%",
                 "value": 25,
                 "type": "num"
             },
             {
-                "label": "30 %",
+                "label": "30%",
                 "value": 30,
                 "type": "num"
             },
             {
-                "label": "35 %",
+                "label": "35%",
                 "value": 35,
                 "type": "num"
             },
             {
-                "label": "40 %",
+                "label": "40%",
                 "value": 40,
                 "type": "num"
             }
@@ -8553,32 +8553,32 @@
                 "type": "num"
             },
             {
-                "label": "95 %",
+                "label": "95%",
                 "value": 95,
                 "type": "num"
             },
             {
-                "label": "90 %",
+                "label": "90%",
                 "value": 90,
                 "type": "num"
             },
             {
-                "label": "85 %",
+                "label": "85%",
                 "value": 85,
                 "type": "num"
             },
             {
-                "label": "80 %",
+                "label": "80%",
                 "value": 80,
                 "type": "num"
             },
             {
-                "label": "75 %",
+                "label": "75%",
                 "value": 75,
                 "type": "num"
             },
             {
-                "label": "70 %",
+                "label": "70%",
                 "value": 70,
                 "type": "num"
             }
@@ -8642,57 +8642,57 @@
                 "type": "num"
             },
             {
-                "label": "20 °C",
+                "label": "20°C",
                 "value": 20,
                 "type": "num"
             },
             {
-                "label": "21 °C",
+                "label": "21°C",
                 "value": 21,
                 "type": "num"
             },
             {
-                "label": "22 °C",
+                "label": "22°C",
                 "value": 22,
                 "type": "num"
             },
             {
-                "label": "23 °C",
+                "label": "23°C",
                 "value": 23,
                 "type": "num"
             },
             {
-                "label": "24 °C",
+                "label": "24°C",
                 "value": 24,
                 "type": "num"
             },
             {
-                "label": "25 °C",
+                "label": "25°C",
                 "value": 25,
                 "type": "num"
             },
             {
-                "label": "26 °C",
+                "label": "26°C",
                 "value": 26,
                 "type": "num"
             },
             {
-                "label": "27 °C",
+                "label": "27°C",
                 "value": 27,
                 "type": "num"
             },
             {
-                "label": "28 °C",
+                "label": "28°C",
                 "value": 28,
                 "type": "num"
             },
             {
-                "label": "29 °C",
+                "label": "29°C",
                 "value": 29,
                 "type": "num"
             },
             {
-                "label": "30 °C",
+                "label": "30°C",
                 "value": 30,
                 "type": "num"
             }
@@ -8755,17 +8755,17 @@
                 "type": "num"
             },
             {
-                "label": "-0.5 °C",
+                "label": "-0.5°C",
                 "value": 0.5,
                 "type": "num"
             },
             {
-                "label": "-0.8 °C",
+                "label": "-0.8°C",
                 "value": 0.8,
                 "type": "num"
             },
             {
-                "label": "-1 °C",
+                "label": "-1°C",
                 "value": 1,
                 "type": "num"
             }
@@ -8901,17 +8901,17 @@
                 "type": "num"
             },
             {
-                "label": "+1 °C",
+                "label": "+1°C",
                 "value": 1,
                 "type": "num"
             },
             {
-                "label": "+1.5 °C",
+                "label": "+1.5°C",
                 "value": 1.5,
                 "type": "num"
             },
             {
-                "label": "+2 °C",
+                "label": "+2°C",
                 "value": 2,
                 "type": "num"
             }
@@ -8974,27 +8974,27 @@
                 "type": "num"
             },
             {
-                "label": "10 %",
+                "label": "10%",
                 "value": 10,
                 "type": "num"
             },
             {
-                "label": "15 %",
+                "label": "15%",
                 "value": 15,
                 "type": "num"
             },
             {
-                "label": "20 %",
+                "label": "20%",
                 "value": 20,
                 "type": "num"
             },
             {
-                "label": "25 %",
+                "label": "25%",
                 "value": 25,
                 "type": "num"
             },
             {
-                "label": "30 %",
+                "label": "30%",
                 "value": 30,
                 "type": "num"
             }
@@ -9057,22 +9057,22 @@
                 "type": "num"
             },
             {
-                "label": "5 %",
+                "label": "5%",
                 "value": 5,
                 "type": "num"
             },
             {
-                "label": "10 %",
+                "label": "10%",
                 "value": 10,
                 "type": "num"
             },
             {
-                "label": "15 %",
+                "label": "15%",
                 "value": 15,
                 "type": "num"
             },
             {
-                "label": "20 %",
+                "label": "20%",
                 "value": 20,
                 "type": "num"
             }
@@ -9135,27 +9135,27 @@
                 "type": "num"
             },
             {
-                "label": "1 °C",
+                "label": "1°C",
                 "value": 1,
                 "type": "num"
             },
             {
-                "label": "2 °C",
+                "label": "2°C",
                 "value": 2,
                 "type": "num"
             },
             {
-                "label": "3 °C",
+                "label": "3°C",
                 "value": 3,
                 "type": "num"
             },
             {
-                "label": "4 °C",
+                "label": "4°C",
                 "value": 4,
                 "type": "num"
             },
             {
-                "label": "5 °C",
+                "label": "5°C",
                 "value": 5,
                 "type": "num"
             }
@@ -9218,17 +9218,17 @@
                 "type": "num"
             },
             {
-                "label": "30 °C",
+                "label": "30°C",
                 "value": 30,
                 "type": "num"
             },
             {
-                "label": "35 °C",
+                "label": "35°C",
                 "value": 35,
                 "type": "num"
             },
             {
-                "label": "40 °C",
+                "label": "40°C",
                 "value": 40,
                 "type": "num"
             }
@@ -9313,22 +9313,22 @@
                 "type": "num"
             },
             {
-                "label": "0 °C",
+                "label": "0°C",
                 "value": 0,
                 "type": "num"
             },
             {
-                "label": "1 °C",
+                "label": "1°C",
                 "value": 1,
                 "type": "num"
             },
             {
-                "label": "2 °C",
+                "label": "2°C",
                 "value": 2,
                 "type": "num"
             },
             {
-                "label": "3 °C",
+                "label": "3°C",
                 "value": 3,
                 "type": "num"
             }
@@ -9369,17 +9369,17 @@
                 "type": "num"
             },
             {
-                "label": "6 °C",
+                "label": "6°C",
                 "value": 6,
                 "type": "num"
             },
             {
-                "label": "8 °C",
+                "label": "8°C",
                 "value": 8,
                 "type": "num"
             },
             {
-                "label": "10 °C",
+                "label": "10°C",
                 "value": 10,
                 "type": "num"
             }
@@ -9442,17 +9442,17 @@
                 "type": "num"
             },
             {
-                "label": "1 °C",
+                "label": "1°C",
                 "value": 1,
                 "type": "num"
             },
             {
-                "label": "3 °C",
+                "label": "3°C",
                 "value": 3,
                 "type": "num"
             },
             {
-                "label": "5 °C",
+                "label": "5°C",
                 "value": 5,
                 "type": "num"
             }
@@ -9515,17 +9515,17 @@
                 "type": "num"
             },
             {
-                "label": "70 °C",
+                "label": "70°C",
                 "value": 70,
                 "type": "num"
             },
             {
-                "label": "75 °C",
+                "label": "75°C",
                 "value": 75,
                 "type": "num"
             },
             {
-                "label": "80 °C",
+                "label": "80°C",
                 "value": 80,
                 "type": "num"
             }
@@ -9610,17 +9610,17 @@
                 "type": "num"
             },
             {
-                "label": "30 °C",
+                "label": "30°C",
                 "value": 30,
                 "type": "num"
             },
             {
-                "label": "35 °C",
+                "label": "35°C",
                 "value": 35,
                 "type": "num"
             },
             {
-                "label": "40 °C",
+                "label": "40°C",
                 "value": 40,
                 "type": "num"
             }
@@ -9661,17 +9661,17 @@
                 "type": "num"
             },
             {
-                "label": "1 °C",
+                "label": "1°C",
                 "value": 1,
                 "type": "num"
             },
             {
-                "label": "3 °C",
+                "label": "3°C",
                 "value": 3,
                 "type": "num"
             },
             {
-                "label": "5 °C",
+                "label": "5°C",
                 "value": 5,
                 "type": "num"
             }
@@ -9729,107 +9729,107 @@
         "clearable": false,
         "options": [
             {
-                "label": "-1 °C",
+                "label": "-1°C",
                 "value": -1,
                 "type": "num"
             },
             {
-                "label": "-0.9 °C",
+                "label": "-0.9°C",
                 "value": -0.9,
                 "type": "num"
             },
             {
-                "label": "-0.8 °C",
+                "label": "-0.8°C",
                 "value": -0.8,
                 "type": "num"
             },
             {
-                "label": "-0.7 °C",
+                "label": "-0.7°C",
                 "value": -0.7,
                 "type": "num"
             },
             {
-                "label": "-0.6 °C",
+                "label": "-0.6°C",
                 "value": -0.6,
                 "type": "num"
             },
             {
-                "label": "-0.5 °C",
+                "label": "-0.5°C",
                 "value": -0.5,
                 "type": "num"
             },
             {
-                "label": "-0.4 °C",
+                "label": "-0.4°C",
                 "value": -0.4,
                 "type": "num"
             },
             {
-                "label": "-0.3 °C",
+                "label": "-0.3°C",
                 "value": -0.3,
                 "type": "num"
             },
             {
-                "label": "-0.2 °C",
+                "label": "-0.2°C",
                 "value": -0.2,
                 "type": "num"
             },
             {
-                "label": "-0.1 °C",
+                "label": "-0.1°C",
                 "value": -0.1,
                 "type": "num"
             },
             {
-                "label": "0 °C",
+                "label": "0°C",
                 "value": 0,
                 "type": "num"
             },
             {
-                "label": "+0.1 °C",
+                "label": "+0.1°C",
                 "value": 0.1,
                 "type": "num"
             },
             {
-                "label": "+0.2 °C",
+                "label": "+0.2°C",
                 "value": 0.2,
                 "type": "num"
             },
             {
-                "label": "+0.3 °C",
+                "label": "+0.3°C",
                 "value": 0.3,
                 "type": "num"
             },
             {
-                "label": "+0.4 °C",
+                "label": "+0.4°C",
                 "value": 0.4,
                 "type": "num"
             },
             {
-                "label": "+0.5 °C",
+                "label": "+0.5°C",
                 "value": 0.5,
                 "type": "num"
             },
             {
-                "label": "+0.6 °C",
+                "label": "+0.6°C",
                 "value": 0.6,
                 "type": "num"
             },
             {
-                "label": "+0.7 °C",
+                "label": "+0.7°C",
                 "value": 0.7,
                 "type": "num"
             },
             {
-                "label": "+0.8 °C",
+                "label": "+0.8°C",
                 "value": 0.8,
                 "type": "num"
             },
             {
-                "label": "+0.9 °C",
+                "label": "+0.9°C",
                 "value": 0.9,
                 "type": "num"
             },
             {
-                "label": "+1 °C",
+                "label": "+1°C",
                 "value": 1,
                 "type": "num"
             }
@@ -10095,27 +10095,27 @@
         "clearable": false,
         "options": [
             {
-                "label": "-10 %",
+                "label": "-10%",
                 "value": 10,
                 "type": "num"
             },
             {
-                "label": "-20 %",
+                "label": "-20%",
                 "value": 20,
                 "type": "num"
             },
             {
-                "label": "-30 %",
+                "label": "-30%",
                 "value": 30,
                 "type": "num"
             },
             {
-                "label": "-40 %",
+                "label": "-40%",
                 "value": 40,
                 "type": "num"
             },
             {
-                "label": "-50 %",
+                "label": "-50%",
                 "value": 50,
                 "type": "num"
             }
@@ -10302,7 +10302,7 @@
                 "type": "num"
             },
             {
-                "label": "2.7 V",
+                "label": "2.7V",
                 "value": 2.7,
                 "type": "num"
             }
@@ -10470,107 +10470,107 @@
         "clearable": false,
         "options": [
             {
-                "label": "-1 °C",
+                "label": "-1°C",
                 "value": -1,
                 "type": "num"
             },
             {
-                "label": "-0.9 °C",
+                "label": "-0.9°C",
                 "value": -0.9,
                 "type": "num"
             },
             {
-                "label": "-0.8 °C",
+                "label": "-0.8°C",
                 "value": -0.8,
                 "type": "num"
             },
             {
-                "label": "-0.7 °C",
+                "label": "-0.7°C",
                 "value": -0.7,
                 "type": "num"
             },
             {
-                "label": "-0.6 °C",
+                "label": "-0.6°C",
                 "value": -0.6,
                 "type": "num"
             },
             {
-                "label": "-0.5 °C",
+                "label": "-0.5°C",
                 "value": -0.5,
                 "type": "num"
             },
             {
-                "label": "-0.4 °C",
+                "label": "-0.4°C",
                 "value": -0.4,
                 "type": "num"
             },
             {
-                "label": "-0.3 °C",
+                "label": "-0.3°C",
                 "value": -0.3,
                 "type": "num"
             },
             {
-                "label": "-0.2 °C",
+                "label": "-0.2°C",
                 "value": -0.2,
                 "type": "num"
             },
             {
-                "label": "-0.1 °C",
+                "label": "-0.1°C",
                 "value": -0.1,
                 "type": "num"
             },
             {
-                "label": "0 °C",
+                "label": "0°C",
                 "value": 0,
                 "type": "num"
             },
             {
-                "label": "+0.1 °C",
+                "label": "+0.1°C",
                 "value": 0.1,
                 "type": "num"
             },
             {
-                "label": "+0.2 °C",
+                "label": "+0.2°C",
                 "value": 0.2,
                 "type": "num"
             },
             {
-                "label": "+0.3 °C",
+                "label": "+0.3°C",
                 "value": 0.3,
                 "type": "num"
             },
             {
-                "label": "+0.4 °C",
+                "label": "+0.4°C",
                 "value": 0.4,
                 "type": "num"
             },
             {
-                "label": "+0.5 °C",
+                "label": "+0.5°C",
                 "value": 0.5,
                 "type": "num"
             },
             {
-                "label": "+0.6 °C",
+                "label": "+0.6°C",
                 "value": 0.6,
                 "type": "num"
             },
             {
-                "label": "+0.7 °C",
+                "label": "+0.7°C",
                 "value": 0.7,
                 "type": "num"
             },
             {
-                "label": "+0.8 °C",
+                "label": "+0.8°C",
                 "value": 0.8,
                 "type": "num"
             },
             {
-                "label": "+0.9 °C",
+                "label": "+0.9°C",
                 "value": 0.9,
                 "type": "num"
             },
             {
-                "label": "+1 °C",
+                "label": "+1°C",
                 "value": 1,
                 "type": "num"
             }
@@ -10606,107 +10606,107 @@
         "clearable": false,
         "options": [
             {
-                "label": "-1 °C",
+                "label": "-1°C",
                 "value": -1,
                 "type": "num"
             },
             {
-                "label": "-0.9 °C",
+                "label": "-0.9°C",
                 "value": -0.9,
                 "type": "num"
             },
             {
-                "label": "-0.8 °C",
+                "label": "-0.8°C",
                 "value": -0.8,
                 "type": "num"
             },
             {
-                "label": "-0.7 °C",
+                "label": "-0.7°C",
                 "value": -0.7,
                 "type": "num"
             },
             {
-                "label": "-0.6 °C",
+                "label": "-0.6°C",
                 "value": -0.6,
                 "type": "num"
             },
             {
-                "label": "-0.5 °C",
+                "label": "-0.5°C",
                 "value": -0.5,
                 "type": "num"
             },
             {
-                "label": "-0.4 °C",
+                "label": "-0.4°C",
                 "value": -0.4,
                 "type": "num"
             },
             {
-                "label": "-0.3 °C",
+                "label": "-0.3°C",
                 "value": -0.3,
                 "type": "num"
             },
             {
-                "label": "-0.2 °C",
+                "label": "-0.2°C",
                 "value": -0.2,
                 "type": "num"
             },
             {
-                "label": "-0.1 °C",
+                "label": "-0.1°C",
                 "value": -0.1,
                 "type": "num"
             },
             {
-                "label": "0 °C",
+                "label": "0°C",
                 "value": 0,
                 "type": "num"
             },
             {
-                "label": "+0.1 °C",
+                "label": "+0.1°C",
                 "value": 0.1,
                 "type": "num"
             },
             {
-                "label": "+0.2 °C",
+                "label": "+0.2°C",
                 "value": 0.2,
                 "type": "num"
             },
             {
-                "label": "+0.3 °C",
+                "label": "+0.3°C",
                 "value": 0.3,
                 "type": "num"
             },
             {
-                "label": "+0.4 °C",
+                "label": "+0.4°C",
                 "value": 0.4,
                 "type": "num"
             },
             {
-                "label": "+0.5 °C",
+                "label": "+0.5°C",
                 "value": 0.5,
                 "type": "num"
             },
             {
-                "label": "+0.6 °C",
+                "label": "+0.6°C",
                 "value": 0.6,
                 "type": "num"
             },
             {
-                "label": "+0.7 °C",
+                "label": "+0.7°C",
                 "value": 0.7,
                 "type": "num"
             },
             {
-                "label": "+0.8 °C",
+                "label": "+0.8°C",
                 "value": 0.8,
                 "type": "num"
             },
             {
-                "label": "+0.9 °C",
+                "label": "+0.9°C",
                 "value": 0.9,
                 "type": "num"
             },
             {
-                "label": "+1 °C",
+                "label": "+1°C",
                 "value": 1,
                 "type": "num"
             }
