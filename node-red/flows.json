@@ -586,13 +586,13 @@
     {
         "id": "7fbe7ff5e2bd848b",
         "type": "ui-theme",
-        "name": "Dark theme",
+        "name": "Victron theme",
         "colors": {
-            "surface": "#397dc6",
+            "surface": "#4b7cc1",
             "primary": "#c1d2e4",
-            "bgPage": "#4d8acb",
-            "groupBg": "#3275b0",
-            "groupOutline": "#397dc6"
+            "bgPage": "#6285b1",
+            "groupBg": "#3e679f",
+            "groupOutline": "#6285b1"
         },
         "sizes": {
             "density": "comfortable",
@@ -1216,6 +1216,7 @@
     {
         "id": "125bbe9732890a6d",
         "type": "ui-spacer",
+        "d": true,
         "group": "fc3c351e5707cb90",
         "name": "spacer",
         "tooltip": "",
@@ -1505,7 +1506,7 @@
         "width": 0,
         "height": 0,
         "head": "",
-        "format": "<link rel=\"stylesheet\" href=\"https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap\">\n\n<style>\n\n    .v-application, .v-application *,\n    .v-overlay-container, .v-overlay-container * {\n        font-family: \"Roboto\", sans-serif !important;\n        font-weight: normal !important;\n    }\n    \n    .nrdb-ui-gauge-title {\n        font-size:16px;\n        color: #C1D2E4;\n        font-weight: normal;\n    }\n    \n    .nrdb-ui-text-label {\n        color: #C1D2E4;\n    }\n    \n    .nrdb-ui-text-value {\n        font-weight: normal !important;\n    }\n    \n    .v-card-title {\n        font-size: 12px;\n        color: #C1D2E4;\n    }\n    \n    .v-btn__content {\n        font-size: 18px;\n    }\n    \n    .v-list-item-title {\n        font-size: 18px !important;\n        padding-top: 3px !important;\n        padding-bottom: 3px !important;\n    }\n\n    .large-text span {\n        font-size: 34px;\n    }\n    \n    .medium-text span {\n        font-size: 24px;\n    }\n    \n    .large-gauge-text span {\n        font-size: 34px !important;\n        padding-top: 30px !important;\n        padding-bottom: 15px !important;\n    }\n    \n    .small-gauge-text span {\n        font-size: 20px !important;\n        padding-bottom: 5px !important;\n    }\n    \n    .alert {\n        font-size: 16px;\n    }\n    \n    .grayout {\n        pointer-events: none;\n        filter: opacity(50%);\n        /*display: none;*/\n    }\n    \n    .error {\n        color: #FFD61A;\n        /*font-weight: bold;*/\n    }\n    \n    .modified {\n        color: #FFD61A;\n    }\n    \n    .alert-list {\n        line-height: 3 !important;\n    }\n    \n}\n</style>",
+        "format": "<link rel=\"stylesheet\" href=\"https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap\">\n\n<style>\n\n    /* Overall application */\n    .v-application, .v-application *,\n    .v-overlay-container, .v-overlay-container * {\n        font-family: \"Roboto\", sans-serif !important;\n        letter-spacing: 0em !important;\n    }\n    \n    /* Top title */\n    .v-toolbar-title__placeholder {\n        font-weight: 500;\n    }\n    \n    /* Section title */\n    .v-card-title {\n        \n        font-size: 12px;\n        color: #C1D2E4;\n    }\n    \n    /* Tab title */\n    .v-tab .v-btn__content {\n        font-size: 14px;\n        font-weight: 500;\n        letter-spacing: 0em;\n    }\n    \n    /* Hamburger menu item */\n    .v-list-item-title {\n        font-size: 18px !important;\n        font-weight: 500 !important;\n        padding-top: 3px !important;\n        padding-bottom: 3px !important;\n    }\n    \n    /* Gauge title */\n    .nrdb-ui-gauge-title {\n        font-size:16px;\n        color: #C1D2E4;\n        font-weight: normal;\n    }\n    \n    /* Text field label */\n    .nrdb-ui-text-label {\n        color: #C1D2E4;\n    }\n    \n    /* Text field value */\n    .nrdb-ui-text-value {\n        font-weight: normal !important;\n    }\n    \n    /* Dropdown selection text */\n    .v-select__selection-text {\n        font-size: 18px;\n    }\n    \n    /* Text field values - large */\n    .large-text span {\n        font-size: 34px;\n    }\n    \n    /* Text field values - medium */\n    .medium-text span {\n        font-size: 24px;\n    }\n    \n    /* Gauge values - large */\n    .large-gauge-text span {\n        font-size: 34px !important;\n        padding-top: 30px !important;\n        padding-bottom: 15px !important;\n    }\n    \n    /* Gauge values - small */\n    .small-gauge-text span {\n        font-size: 20px !important;\n        padding-bottom: 5px !important;\n    }\n    \n    /* Alert hover pane */\n    .alert {\n        font-size: 16px;\n    }\n    \n    /* Grayed out items */\n    .grayout {\n        pointer-events: none;\n        filter: opacity(50%);\n        /*display: none;*/\n    }\n    \n    /* Text field values that need attention */\n    .error {\n        color: #FFD61A;\n    }\n    \n    /* Modified dropdown items */\n    .modified {\n        color: #FFD61A;\n    }\n    \n    /* Alert overview list */\n    .alert-list {\n        line-height: 3 !important;\n    }\n    \n}\n</style>",
         "storeOutMessages": true,
         "passthru": true,
         "resendOnRefresh": true,
@@ -5892,7 +5893,7 @@
         "type": "function",
         "z": "c74d4096e08fa272",
         "name": "DecodeError",
-        "func": "\nlet status = { payload: '', ui_update: {class: ''} };\n\nif (msg.topic.includes('alive')) {\n    if (msg.payload !== 'ON') {\n        status.payload = 'Connection lost!';\n        status.ui_update.class = 'error';\n    }\n    else {\n        lastStatus = context.get('lastStatus');\n        if (lastStatus === undefined) {\n            status.payload = 'OK';\n        }\n        else {\n            status = lastStatus;\n        }\n    }\n    \n    return status;\n}\n\nelse {\n    \n    switch (+msg.payload) {\n        \n        case 0:\n            status.payload = 'OK';\n            break;\n            \n        case 7:\n            status.payload = '230 V disconnect!';\n            status.ui_update.class = 'error';\n            break;\n        \n        case 8:\n            status.payload = 'Gas interrupted!';  // In mix mode\n            status.ui_update.class = 'error';\n            break;\n        \n        case 17:\n            status.payload = 'Gas interrupted!';\n            status.ui_update.class = 'error';\n            break;\n            \n        default:\n            status.payload = 'Error code: ' + msg.payload;\n            status.ui_update.class = 'error';\n            break;\n    }\n\n    context.set('lastStatus', status);\n    \n    return status;\n}\n",
+        "func": "\nlet status = { payload: '', ui_update: {class: ''} };\n\nif (msg.topic.includes('alive')) {\n    if (msg.payload !== 'ON') {\n        status.payload = 'Connection lost!';\n        status.ui_update.class = 'error';\n    }\n    else {\n        lastStatus = context.get('lastStatus');\n        if (lastStatus === undefined) {\n            status.payload = 'OK';\n        }\n        else {\n            status = lastStatus;\n        }\n    }\n    \n    return status;\n}\n\nelse {\n    \n    switch (+msg.payload) {\n        \n        case 0:\n            status.payload = 'OK';\n            break;\n            \n        case 7:\n            status.payload = '230V disconnect!';\n            status.ui_update.class = 'error';\n            break;\n        \n        case 8:\n            status.payload = 'Gas interrupted!';  // In mix mode\n            status.ui_update.class = 'error';\n            break;\n        \n        case 17:\n            status.payload = 'Gas interrupted!';\n            status.ui_update.class = 'error';\n            break;\n            \n        default:\n            status.payload = 'Error code: ' + msg.payload;\n            status.ui_update.class = 'error';\n            break;\n    }\n\n    context.set('lastStatus', status);\n    \n    return status;\n}\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
