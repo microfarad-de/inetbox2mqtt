@@ -1118,7 +1118,7 @@
         "group": "87a251b1b078a4c3",
         "name": "spacer",
         "tooltip": "",
-        "order": 28,
+        "order": 30,
         "width": "6",
         "height": "1",
         "className": ""
@@ -1506,7 +1506,7 @@
         "width": 0,
         "height": 0,
         "head": "",
-        "format": "<link rel=\"stylesheet\" href=\"https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap\">\n\n<style>\n\n    /* Overall application */\n    .v-application, .v-application *,\n    .v-overlay-container, .v-overlay-container * {\n        font-family: \"Roboto\", sans-serif !important;\n        letter-spacing: 0em !important;\n    }\n    \n    /* Top title */\n    .v-toolbar-title__placeholder {\n        font-weight: 500;\n    }\n    \n    /* Section title */\n    .v-card-title {\n        \n        font-size: 12px;\n        color: #C1D2E4;\n    }\n    \n    /* Tab title */\n    .v-tab .v-btn__content {\n        font-size: 14px;\n        font-weight: 500;\n        letter-spacing: 0em;\n    }\n    \n    /* Hamburger menu item */\n    .v-list-item-title {\n        font-size: 18px !important;\n        font-weight: normal !important;\n        padding-top: 3px !important;\n        padding-bottom: 3px !important;\n    }\n    \n    /* Gauge title */\n    .nrdb-ui-gauge-title {\n        font-size:16px;\n        color: #C1D2E4;\n        font-weight: normal;\n    }\n    \n    /* Gauge units label */\n    .nrdb-ui-gauge-value label {\n        font-size: 16px;\n    }\n    \n    /* Text field label */\n    .nrdb-ui-text-label {\n        color: #C1D2E4;\n    }\n    \n    /* Text field value */\n    .nrdb-ui-text-value {\n        font-weight: normal !important;\n    }\n    \n    /* Dropdown selection text */\n    .v-select__selection-text {\n        font-size: 18px;\n    }\n    \n    /* Text input field */\n    .v-field__input {\n        font-size: 18px;\n    }\n    \n    /* Text field values - large */\n    .large-text span {\n        font-size: 34px;\n    }\n    \n    /* Text field values - medium */\n    .medium-text span {\n        font-size: 24px;\n    }\n    \n    /* Gauge values - large */\n    .large-gauge-text span {\n        font-size: 34px !important;\n        font-weight: normal !important;\n        padding-top: 30px !important;\n        padding-bottom: 15px !important;\n    }\n    \n    /* Gauge values - small */\n    .small-gauge-text span {\n        font-size: 20px !important;\n        font-weight: normal !important;\n        padding-bottom: 5px !important;\n    }\n    \n    /* Alert hover pane */\n    .alert {\n        font-size: 16px;\n    }\n    \n    /* Grayed out items */\n    .grayout {\n        pointer-events: none;\n        filter: opacity(50%);\n        /*display: none;*/\n    }\n    \n    /* Text field values that need attention */\n    .error {\n        color: #FFD61A;\n    }\n    \n    /* Modified dropdown items */\n    .modified {\n        color: #FFD61A;\n    }\n    \n    /* Alert overview list */\n    .alert-list {\n        line-height: 3 !important;\n    }\n    \n}\n</style>",
+        "format": "<link rel=\"stylesheet\" href=\"https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap\">\n\n<style>\n\n    /* Overall application */\n    .v-application, .v-application *,\n    .v-overlay-container, .v-overlay-container * {\n        font-family: \"Roboto\", sans-serif !important;\n        letter-spacing: 0em !important;\n    }\n    \n    /* Top title */\n    .v-toolbar-title__placeholder {\n        font-weight: 500;\n    }\n    \n    /* Section title */\n    .v-card-title {\n        \n        font-size: 12px;\n        color: #C1D2E4;\n    }\n    \n    /* Tab */\n    .v-tab {\n        font-size: 14px;\n        font-weight: 500;\n        letter-spacing: 0em;\n    }\n    \n    /* Selected tab */\n    .v-tab--selected {\n        background: rgba(255, 255, 255, 0.1);\n    }\n    \n    /* Button */\n    .v-btn--variant-flat {\n        font-size: 16px\n    }\n    \n    /* Hamburger menu item */\n    .v-list-item-title {\n        font-size: 18px !important;\n        font-weight: normal !important;\n        padding-top: 3px !important;\n        padding-bottom: 3px !important;\n    }\n    \n    /* Gauge title */\n    .nrdb-ui-gauge-title {\n        font-size:16px;\n        color: #C1D2E4;\n        font-weight: normal;\n    }\n    \n    /* Gauge units label */\n    .nrdb-ui-gauge-value label {\n        font-size: 16px;\n    }\n    \n    /* Text field label */\n    .nrdb-ui-text-label {\n        color: #C1D2E4;\n    }\n    \n    /* Text field value */\n    .nrdb-ui-text-value {\n        font-weight: normal !important;\n    }\n    \n    /* Dropdown selection text */\n    .v-select__selection-text {\n        font-size: 18px;\n    }\n    \n    /* Text input field */\n    .v-field__input {\n        font-size: 18px;\n    }\n    \n    /* Text field values - large */\n    .large-text span {\n        font-size: 34px;\n    }\n    \n    /* Text field values - medium */\n    .medium-text span {\n        font-size: 24px;\n    }\n    \n    /* Gauge values - large */\n    .large-gauge-text span {\n        font-size: 34px !important;\n        font-weight: normal !important;\n        padding-top: 30px !important;\n        padding-bottom: 15px !important;\n    }\n    \n    /* Gauge values - small */\n    .small-gauge-text span {\n        font-size: 20px !important;\n        font-weight: normal !important;\n        padding-bottom: 5px !important;\n    }\n    \n    /* Alert hover pane */\n    .alert {\n        font-size: 16px;\n    }\n    \n    /* Grayed out items */\n    .grayout {\n        pointer-events: none;\n        filter: opacity(50%);\n        /*display: none;*/\n    }\n    \n    /* Text field values that need attention */\n    .error {\n        color: #FFD61A;\n    }\n    \n    /* Modified dropdown items */\n    .modified {\n        color: #FFD61A;\n    }\n    \n    /* Alert overview list */\n    .alert-list {\n        line-height: 3 !important;\n    }\n    \n}\n</style>",
         "storeOutMessages": true,
         "passthru": true,
         "resendOnRefresh": true,
@@ -1675,6 +1675,42 @@
         "wires": [
             [
                 "9e7b5043b59b0531"
+            ]
+        ]
+    },
+    {
+        "id": "90a912813c68e24c",
+        "type": "function",
+        "z": "37a752f35a68bbed",
+        "name": "TestMessage",
+        "func": "\nmsg.payload =\"⚠️ Test message\"\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 170,
+        "y": 420,
+        "wires": [
+            [
+                "5738002fc0271c55"
+            ]
+        ]
+    },
+    {
+        "id": "67078aee4f30ebb8",
+        "type": "link in",
+        "z": "37a752f35a68bbed",
+        "name": "Test message",
+        "links": [
+            "c2a1fb732fab3de5"
+        ],
+        "x": 55,
+        "y": 420,
+        "wires": [
+            [
+                "90a912813c68e24c"
             ]
         ]
     },
@@ -9005,7 +9041,7 @@
         "type": "ui-text",
         "z": "fc670f602d442a02",
         "group": "87a251b1b078a4c3",
-        "order": 5,
+        "order": 7,
         "width": "3",
         "height": "1",
         "name": "",
@@ -9030,7 +9066,7 @@
         "name": "Low battery",
         "label": "State of charge",
         "tooltip": "",
-        "order": 6,
+        "order": 8,
         "width": 3,
         "height": "",
         "passthru": true,
@@ -9088,7 +9124,7 @@
         "type": "ui-text",
         "z": "fc670f602d442a02",
         "group": "87a251b1b078a4c3",
-        "order": 7,
+        "order": 9,
         "width": "3",
         "height": "1",
         "name": "",
@@ -9113,7 +9149,7 @@
         "name": "Low propane",
         "label": "Level",
         "tooltip": "",
-        "order": 8,
+        "order": 10,
         "width": 3,
         "height": "",
         "passthru": true,
@@ -9166,7 +9202,7 @@
         "type": "ui-text",
         "z": "fc670f602d442a02",
         "group": "87a251b1b078a4c3",
-        "order": 13,
+        "order": 15,
         "width": "3",
         "height": "1",
         "name": "",
@@ -9191,7 +9227,7 @@
         "name": "Low room temp",
         "label": "Temperature",
         "tooltip": "",
-        "order": 14,
+        "order": 16,
         "width": 3,
         "height": "",
         "passthru": true,
@@ -9249,7 +9285,7 @@
         "type": "ui-text",
         "z": "fc670f602d442a02",
         "group": "87a251b1b078a4c3",
-        "order": 15,
+        "order": 17,
         "width": "3",
         "height": "1",
         "name": "",
@@ -9274,7 +9310,7 @@
         "name": "High room temp",
         "label": "Temperature",
         "tooltip": "",
-        "order": 16,
+        "order": 18,
         "width": 3,
         "height": "",
         "passthru": true,
@@ -9322,7 +9358,7 @@
         "type": "ui-text",
         "z": "fc670f602d442a02",
         "group": "87a251b1b078a4c3",
-        "order": 17,
+        "order": 19,
         "width": "3",
         "height": "1",
         "name": "",
@@ -9344,7 +9380,7 @@
         "type": "ui-text",
         "z": "fc670f602d442a02",
         "group": "87a251b1b078a4c3",
-        "order": 19,
+        "order": 21,
         "width": "3",
         "height": "1",
         "name": "",
@@ -9369,7 +9405,7 @@
         "name": "Low fridge temp",
         "label": "Temperature",
         "tooltip": "",
-        "order": 18,
+        "order": 20,
         "width": 3,
         "height": "",
         "passthru": true,
@@ -9425,7 +9461,7 @@
         "name": "High fridge temp",
         "label": "Temperature",
         "tooltip": "",
-        "order": 20,
+        "order": 22,
         "width": 3,
         "height": "",
         "passthru": true,
@@ -9473,7 +9509,7 @@
         "type": "ui-text",
         "z": "fc670f602d442a02",
         "group": "87a251b1b078a4c3",
-        "order": 21,
+        "order": 23,
         "width": "3",
         "height": "1",
         "name": "",
@@ -9498,7 +9534,7 @@
         "name": "Low water temp",
         "label": "Temperature",
         "tooltip": "",
-        "order": 22,
+        "order": 24,
         "width": 3,
         "height": "",
         "passthru": true,
@@ -9546,7 +9582,7 @@
         "type": "ui-text",
         "z": "fc670f602d442a02",
         "group": "87a251b1b078a4c3",
-        "order": 23,
+        "order": 25,
         "width": "3",
         "height": "1",
         "name": "",
@@ -9571,7 +9607,7 @@
         "name": "High CPU temp",
         "label": "Temperature",
         "tooltip": "",
-        "order": 24,
+        "order": 26,
         "width": 3,
         "height": "",
         "passthru": true,
@@ -9619,7 +9655,7 @@
         "type": "ui-text",
         "z": "fc670f602d442a02",
         "group": "87a251b1b078a4c3",
-        "order": 9,
+        "order": 11,
         "width": "3",
         "height": "1",
         "name": "",
@@ -9641,7 +9677,7 @@
         "type": "ui-text",
         "z": "fc670f602d442a02",
         "group": "87a251b1b078a4c3",
-        "order": 11,
+        "order": 13,
         "width": "3",
         "height": "1",
         "name": "",
@@ -9666,7 +9702,7 @@
         "name": "High battery temp",
         "label": "Temperature",
         "tooltip": "",
-        "order": 12,
+        "order": 14,
         "width": 3,
         "height": "",
         "passthru": true,
@@ -9717,7 +9753,7 @@
         "name": "Low battery temp",
         "label": "Temperature",
         "tooltip": "",
-        "order": 10,
+        "order": 12,
         "width": 3,
         "height": "",
         "passthru": true,
@@ -9779,7 +9815,7 @@
         "wrapText": false,
         "className": "",
         "x": 90,
-        "y": 1040,
+        "y": 1100,
         "wires": []
     },
     {
@@ -9911,7 +9947,7 @@
         "typeIsComboBox": false,
         "msgTrigger": "onChange",
         "x": 870,
-        "y": 1040,
+        "y": 1100,
         "wires": [
             [
                 "08ebf0b647182af1"
@@ -9937,7 +9973,7 @@
         "wrapText": false,
         "className": "",
         "x": 100,
-        "y": 1080,
+        "y": 1140,
         "wires": []
     },
     {
@@ -9959,7 +9995,7 @@
         "wrapText": false,
         "className": "",
         "x": 90,
-        "y": 1120,
+        "y": 1180,
         "wires": []
     },
     {
@@ -9971,7 +10007,7 @@
             "236fdb56f87224ab"
         ],
         "x": 1025,
-        "y": 1260,
+        "y": 1320,
         "wires": [
             [
                 "c2daddd28170cbb5"
@@ -9988,7 +10024,7 @@
             "b8de84a1a12a151c"
         ],
         "x": 815,
-        "y": 1240,
+        "y": 1300,
         "wires": []
     },
     {
@@ -10001,7 +10037,7 @@
             "0ffbdf4fdf3d401d"
         ],
         "x": 815,
-        "y": 1280,
+        "y": 1340,
         "wires": []
     },
     {
@@ -10102,7 +10138,7 @@
         "pointerupPayload": "",
         "pointerupPayloadType": "str",
         "x": 880,
-        "y": 1180,
+        "y": 1240,
         "wires": [
             [
                 "08ebf0b647182af1"
@@ -10116,7 +10152,7 @@
         "group": "87a251b1b078a4c3",
         "name": "Apply 2",
         "label": "Apply",
-        "order": 27,
+        "order": 29,
         "width": 6,
         "height": 1,
         "emulateClick": false,
@@ -10141,7 +10177,7 @@
         "pointerupPayload": "",
         "pointerupPayloadType": "str",
         "x": 880,
-        "y": 980,
+        "y": 1020,
         "wires": [
             [
                 "c5cd6710bd410a34"
@@ -10336,7 +10372,7 @@
         "z": "fc670f602d442a02",
         "name": "",
         "x": 1170,
-        "y": 1020,
+        "y": 1080,
         "wires": [
             [
                 "c2daddd28170cbb5"
@@ -10358,7 +10394,7 @@
         "name": "Sensor battery",
         "label": "Votage",
         "tooltip": "",
-        "order": 26,
+        "order": 28,
         "width": 3,
         "height": "",
         "passthru": true,
@@ -10396,7 +10432,7 @@
         "type": "ui-text",
         "z": "fc670f602d442a02",
         "group": "87a251b1b078a4c3",
-        "order": 25,
+        "order": 27,
         "width": "3",
         "height": "1",
         "name": "",
@@ -10652,7 +10688,7 @@
         "typeIsComboBox": false,
         "msgTrigger": "onChange",
         "x": 880,
-        "y": 1080,
+        "y": 1140,
         "wires": [
             [
                 "08ebf0b647182af1"
@@ -10788,7 +10824,7 @@
         "typeIsComboBox": false,
         "msgTrigger": "onChange",
         "x": 870,
-        "y": 1120,
+        "y": 1180,
         "wires": [
             [
                 "08ebf0b647182af1"
@@ -10835,5 +10871,81 @@
                 "1f01216242ce5d9e"
             ]
         ]
+    },
+    {
+        "id": "5412fc3463cf4a1b",
+        "type": "ui-text",
+        "z": "fc670f602d442a02",
+        "group": "87a251b1b078a4c3",
+        "order": 5,
+        "width": "3",
+        "height": "1",
+        "name": "",
+        "label": "CallMeBot test",
+        "format": "{{msg.payload}}",
+        "layout": "row-spread",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#717171",
+        "wrapText": false,
+        "className": "",
+        "value": "payload",
+        "valueType": "msg",
+        "x": 100,
+        "y": 960,
+        "wires": []
+    },
+    {
+        "id": "11247ed8ee3c3389",
+        "type": "ui-button",
+        "z": "fc670f602d442a02",
+        "group": "87a251b1b078a4c3",
+        "name": "",
+        "label": "Test message",
+        "order": 6,
+        "width": "3",
+        "height": 1,
+        "emulateClick": false,
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "",
+        "iconPosition": "left",
+        "payload": "",
+        "payloadType": "str",
+        "topic": "test",
+        "topicType": "str",
+        "buttonColor": "",
+        "textColor": "",
+        "iconColor": "",
+        "enableClick": true,
+        "enablePointerdown": false,
+        "pointerdownPayload": "",
+        "pointerdownPayloadType": "str",
+        "enablePointerup": false,
+        "pointerupPayload": "",
+        "pointerupPayloadType": "str",
+        "x": 900,
+        "y": 960,
+        "wires": [
+            [
+                "c2a1fb732fab3de5"
+            ]
+        ]
+    },
+    {
+        "id": "c2a1fb732fab3de5",
+        "type": "link out",
+        "z": "fc670f602d442a02",
+        "name": "Test message",
+        "mode": "link",
+        "links": [
+            "67078aee4f30ebb8"
+        ],
+        "x": 1055,
+        "y": 960,
+        "wires": []
     }
 ]
