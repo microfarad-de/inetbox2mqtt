@@ -7010,7 +7010,7 @@
         "z": "fcffa944a0680a42",
         "group": "0a055cab4c53c810",
         "name": "",
-        "label": "Temperature",
+        "label": "Target temp",
         "tooltip": "",
         "order": 2,
         "width": 3,
@@ -7178,7 +7178,7 @@
         "width": 0,
         "height": 0,
         "name": "",
-        "label": "Compressor speed",
+        "label": "Compressor rpm",
         "format": "{{msg.payload}}",
         "layout": "row-spread",
         "style": false,
@@ -7225,7 +7225,7 @@
         "env": [
             {
                 "name": "unit",
-                "value": "RPM",
+                "value": "↻",
                 "type": "str"
             }
         ],
@@ -7465,7 +7465,7 @@
         "width": 3,
         "height": "",
         "name": "",
-        "label": "Speed",
+        "label": "Comp rpm",
         "format": "{{msg.payload}}",
         "layout": "col-center",
         "style": false,
@@ -7476,7 +7476,7 @@
         "className": "medium-text",
         "value": "payload",
         "valueType": "msg",
-        "x": 1150,
+        "x": 1170,
         "y": 800,
         "wires": []
     },
