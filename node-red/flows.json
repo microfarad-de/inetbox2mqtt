@@ -7178,7 +7178,7 @@
         "width": 0,
         "height": 0,
         "name": "",
-        "label": "Compressor rpm",
+        "label": "Compressor speed",
         "format": "{{msg.payload}}",
         "layout": "row-spread",
         "style": false,
@@ -7225,7 +7225,7 @@
         "env": [
             {
                 "name": "unit",
-                "value": "↻",
+                "value": "rpm",
                 "type": "str"
             }
         ],
@@ -7465,7 +7465,7 @@
         "width": 3,
         "height": "",
         "name": "",
-        "label": "Comp rpm",
+        "label": "Speed",
         "format": "{{msg.payload}}",
         "layout": "col-center",
         "style": false,
@@ -7476,7 +7476,7 @@
         "className": "medium-text",
         "value": "payload",
         "valueType": "msg",
-        "x": 1170,
+        "x": 1150,
         "y": 800,
         "wires": []
     },
