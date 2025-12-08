@@ -2069,22 +2069,22 @@
         "id": "53d71d6f0ddc2d86",
         "type": "victron-input-custom",
         "z": "b22624498baaa896",
-        "service": "com.victronenergy.tank/21",
+        "service": "com.victronenergy.tank/20",
         "path": "/RawValue",
         "serviceObj": {
-            "service": "com.victronenergy.tank/21",
-            "name": "Propane Tank 1 (21)"
+            "service": "com.victronenergy.tank/20",
+            "name": "Left Propane Tank (20)"
         },
         "pathObj": {
             "path": "/RawValue",
             "name": "/RawValue",
             "type": "number",
-            "value": 37.219444274902344
+            "value": 34.72415542602539
         },
         "name": "",
         "onlyChanges": false,
         "roundValues": "1",
-        "x": 170,
+        "x": 180,
         "y": 1200,
         "wires": [
             [
@@ -2132,7 +2132,7 @@
             }
         ],
         "x": 530,
-        "y": 1380,
+        "y": 1360,
         "wires": [
             [
                 "b2790ee93b81319a",
@@ -2145,23 +2145,23 @@
         "id": "2abf196677a68301",
         "type": "victron-input-custom",
         "z": "b22624498baaa896",
-        "service": "com.victronenergy.tank/20",
+        "service": "com.victronenergy.tank/21",
         "path": "/RawValue",
         "serviceObj": {
-            "service": "com.victronenergy.tank/20",
-            "name": "Propane Tank 2 (20)"
+            "service": "com.victronenergy.tank/21",
+            "name": "Right Propane Tank (21)"
         },
         "pathObj": {
             "path": "/RawValue",
             "name": "/RawValue",
             "type": "number",
-            "value": 4.3295793533325195
+            "value": 33.24742889404297
         },
         "name": "",
         "onlyChanges": false,
         "roundValues": "1",
-        "x": 170,
-        "y": 1380,
+        "x": 180,
+        "y": 1360,
         "wires": [
             [
                 "bcbcc2ea62ba3ecd"
@@ -2241,7 +2241,7 @@
             }
         ],
         "x": 770,
-        "y": 1460,
+        "y": 1440,
         "wires": [
             [
                 "2ae801359341660a"
@@ -2252,11 +2252,11 @@
         "id": "bf85fd8b06bfa703",
         "type": "victron-input-temperature",
         "z": "b22624498baaa896",
-        "service": "com.victronenergy.tank/21",
+        "service": "com.victronenergy.tank/20",
         "path": "/Temperature",
         "serviceObj": {
-            "service": "com.victronenergy.tank/21",
-            "name": "Propane Tank 1"
+            "service": "com.victronenergy.tank/20",
+            "name": "Left Propane Tank"
         },
         "pathObj": {
             "path": "/Temperature",
@@ -2278,11 +2278,11 @@
         "id": "41d09f2e4416a18c",
         "type": "victron-input-temperature",
         "z": "b22624498baaa896",
-        "service": "com.victronenergy.tank/20",
+        "service": "com.victronenergy.tank/21",
         "path": "/Temperature",
         "serviceObj": {
-            "service": "com.victronenergy.tank/20",
-            "name": "Propane Tank 2"
+            "service": "com.victronenergy.tank/21",
+            "name": "Right Propane Tank"
         },
         "pathObj": {
             "path": "/Temperature",
@@ -2292,7 +2292,7 @@
         "name": "",
         "onlyChanges": false,
         "roundValues": "1",
-        "x": 180,
+        "x": 190,
         "y": 1580,
         "wires": [
             [
@@ -2459,7 +2459,7 @@
         "styleGlow": false,
         "className": "large-gauge-text",
         "x": 910,
-        "y": 1380,
+        "y": 1360,
         "wires": [
             []
         ]
@@ -3153,7 +3153,7 @@
         "wrapText": false,
         "className": "large-text",
         "x": 910,
-        "y": 1420,
+        "y": 1400,
         "wires": []
     },
     {
@@ -3169,7 +3169,7 @@
             }
         ],
         "x": 770,
-        "y": 1420,
+        "y": 1400,
         "wires": [
             [
                 "2ae801359341660a"
@@ -3180,11 +3180,11 @@
         "id": "96c0d34b5039f94a",
         "type": "victron-input-custom",
         "z": "b22624498baaa896",
-        "service": "com.victronenergy.tank/21",
+        "service": "com.victronenergy.tank/20",
         "path": "/Quality",
         "serviceObj": {
-            "service": "com.victronenergy.tank/21",
-            "name": "Propane Tank 1 (21)"
+            "service": "com.victronenergy.tank/20",
+            "name": "Left Propane Tank (20)"
         },
         "pathObj": {
             "path": "/Quality",
@@ -3195,7 +3195,7 @@
         "name": "",
         "onlyChanges": false,
         "roundValues": "2",
-        "x": 160,
+        "x": 170,
         "y": 1660,
         "wires": [
             [
@@ -3207,11 +3207,11 @@
         "id": "4b08dd01887b5c29",
         "type": "victron-input-custom",
         "z": "b22624498baaa896",
-        "service": "com.victronenergy.tank/20",
+        "service": "com.victronenergy.tank/21",
         "path": "/Quality",
         "serviceObj": {
-            "service": "com.victronenergy.tank/20",
-            "name": "Propane Tank 2 (20)"
+            "service": "com.victronenergy.tank/21",
+            "name": "Right Propane Tank (21)"
         },
         "pathObj": {
             "path": "/Quality",
@@ -3222,7 +3222,7 @@
         "name": "",
         "onlyChanges": false,
         "roundValues": "2",
-        "x": 160,
+        "x": 170,
         "y": 1720,
         "wires": [
             [
@@ -3282,17 +3282,17 @@
         "id": "9ba732088185b979",
         "type": "victron-input-custom",
         "z": "b22624498baaa896",
-        "service": "com.victronenergy.tank/21",
+        "service": "com.victronenergy.tank/20",
         "path": "/BatteryVoltage",
         "serviceObj": {
-            "service": "com.victronenergy.tank/21",
-            "name": "Propane Tank 1 (21)"
+            "service": "com.victronenergy.tank/20",
+            "name": "Left Propane Tank (20)"
         },
         "pathObj": {
             "path": "/BatteryVoltage",
             "name": "/BatteryVoltage",
             "type": "number",
-            "value": 2.96875
+            "value": 2.90625
         },
         "name": "",
         "onlyChanges": false,
@@ -3309,22 +3309,22 @@
         "id": "40c7e00220faa9b0",
         "type": "victron-input-custom",
         "z": "b22624498baaa896",
-        "service": "com.victronenergy.tank/20",
+        "service": "com.victronenergy.tank/21",
         "path": "/BatteryVoltage",
         "serviceObj": {
-            "service": "com.victronenergy.tank/20",
-            "name": "Propane Tank 2 (20)"
+            "service": "com.victronenergy.tank/21",
+            "name": "Right Propane Tank (21)"
         },
         "pathObj": {
             "path": "/BatteryVoltage",
             "name": "/BatteryVoltage",
             "type": "number",
-            "value": 3
+            "value": 2.9375
         },
         "name": "",
         "onlyChanges": false,
         "roundValues": "2",
-        "x": 190,
+        "x": 200,
         "y": 1860,
         "wires": [
             [
