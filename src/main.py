@@ -115,7 +115,7 @@ async def main():
     i = 0
     wd = False
     while True:
-        await asyncio.sleep(10)     # Set the update interval (seconds)
+        await asyncio.sleep(5)     # Set the update interval (seconds)
         s = lin.app.get_all(True)
 
         for key in s.keys():
