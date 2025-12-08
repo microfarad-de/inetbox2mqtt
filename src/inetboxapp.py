@@ -287,7 +287,7 @@ class InetboxApp:
     upload_buffer = 0
     upload02_buffer = 0
     upload_wait = 1
-    reflect = True
+    reflect = False
 
     display_status = {}
 
