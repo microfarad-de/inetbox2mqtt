@@ -2069,6 +2069,7 @@
         "id": "53d71d6f0ddc2d86",
         "type": "victron-input-custom",
         "z": "b22624498baaa896",
+        "d": true,
         "service": "com.victronenergy.tank/20",
         "path": "/RawValue",
         "serviceObj": {
@@ -2079,7 +2080,7 @@
             "path": "/RawValue",
             "name": "/RawValue",
             "type": "number",
-            "value": 34.72415542602539
+            "value": 34.71602249145508
         },
         "name": "",
         "onlyChanges": false,
@@ -2096,11 +2097,17 @@
         "id": "a4fe06dad0e33752",
         "type": "subflow:c515380878a4716f",
         "z": "b22624498baaa896",
+        "d": true,
         "name": "",
         "env": [
             {
                 "name": "empty",
                 "value": "3.8",
+                "type": "num"
+            },
+            {
+                "name": "full",
+                "value": "35.4",
                 "type": "num"
             }
         ],
@@ -2118,6 +2125,7 @@
         "id": "bcbcc2ea62ba3ecd",
         "type": "subflow:c515380878a4716f",
         "z": "b22624498baaa896",
+        "d": true,
         "name": "",
         "env": [
             {
@@ -2127,7 +2135,7 @@
             },
             {
                 "name": "full",
-                "value": "36.5",
+                "value": "35.4",
                 "type": "str"
             }
         ],
@@ -2145,6 +2153,7 @@
         "id": "2abf196677a68301",
         "type": "victron-input-custom",
         "z": "b22624498baaa896",
+        "d": true,
         "service": "com.victronenergy.tank/21",
         "path": "/RawValue",
         "serviceObj": {
@@ -2155,7 +2164,7 @@
             "path": "/RawValue",
             "name": "/RawValue",
             "type": "number",
-            "value": 33.24742889404297
+            "value": 33.3436393737793
         },
         "name": "",
         "onlyChanges": false,
@@ -3713,6 +3722,60 @@
         "x": 920,
         "y": 1000,
         "wires": []
+    },
+    {
+        "id": "53cb57e42c4f00ad",
+        "type": "victron-input-tank",
+        "z": "b22624498baaa896",
+        "service": "com.victronenergy.tank/20",
+        "path": "/Level",
+        "serviceObj": {
+            "service": "com.victronenergy.tank/20",
+            "name": "Left Propane Tank"
+        },
+        "pathObj": {
+            "path": "/Level",
+            "type": "float",
+            "name": "Tank level (%)"
+        },
+        "name": "",
+        "onlyChanges": false,
+        "x": 180,
+        "y": 1240,
+        "wires": [
+            [
+                "e8180cd3ca37e6c5",
+                "e08ca67adef7fb8c",
+                "56bfe721ed8b5675"
+            ]
+        ]
+    },
+    {
+        "id": "51bebe98b478ade6",
+        "type": "victron-input-tank",
+        "z": "b22624498baaa896",
+        "service": "com.victronenergy.tank/21",
+        "path": "/Level",
+        "serviceObj": {
+            "service": "com.victronenergy.tank/21",
+            "name": "Right Propane Tank"
+        },
+        "pathObj": {
+            "path": "/Level",
+            "type": "float",
+            "name": "Tank level (%)"
+        },
+        "name": "",
+        "onlyChanges": false,
+        "x": 180,
+        "y": 1400,
+        "wires": [
+            [
+                "5624583cb2d689af",
+                "5e36b6ecf4020bc5",
+                "b2790ee93b81319a"
+            ]
+        ]
     },
     {
         "id": "0d95bf949c201846",
