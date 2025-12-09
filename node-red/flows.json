@@ -702,20 +702,6 @@
         "groupType": "default"
     },
     {
-        "id": "25319c4b021b78d9",
-        "type": "ui-group",
-        "name": "Propane",
-        "page": "c4300ca17ae61646",
-        "width": "6",
-        "height": "1",
-        "order": 3,
-        "showTitle": true,
-        "className": "",
-        "visible": "true",
-        "disabled": "false",
-        "groupType": "default"
-    },
-    {
         "id": "16349d9c5c0afd34",
         "type": "ui-group",
         "name": "Battery",
@@ -1244,6 +1230,20 @@
             "groupBorderRadius": "0px",
             "widgetGap": "16px"
         }
+    },
+    {
+        "id": "b4b782239fd512fd",
+        "type": "ui-group",
+        "name": "Propane",
+        "page": "c4300ca17ae61646",
+        "width": "6",
+        "height": "1",
+        "order": 3,
+        "showTitle": true,
+        "className": "",
+        "visible": "true",
+        "disabled": "false",
+        "groupType": "default"
     },
     {
         "id": "e7756b84d8b39dfb",
@@ -2416,7 +2416,7 @@
         "type": "ui-gauge",
         "z": "b22624498baaa896",
         "name": "",
-        "group": "25319c4b021b78d9",
+        "group": "b4b782239fd512fd",
         "order": 1,
         "value": "payload",
         "valueType": "msg",
@@ -2433,7 +2433,7 @@
         "segments": [
             {
                 "from": "0",
-                "color": "#00c7fc",
+                "color": "#387dc5",
                 "text": "",
                 "textType": "label"
             }
@@ -2457,7 +2457,7 @@
         "type": "ui-gauge",
         "z": "b22624498baaa896",
         "name": "",
-        "group": "25319c4b021b78d9",
+        "group": "b4b782239fd512fd",
         "order": 2,
         "value": "payload",
         "valueType": "msg",
@@ -2474,7 +2474,7 @@
         "segments": [
             {
                 "from": "0",
-                "color": "#00c7fc",
+                "color": "#387dc5",
                 "text": "",
                 "textType": "label"
             }
