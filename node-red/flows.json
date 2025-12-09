@@ -586,6 +586,7 @@
     {
         "id": "7fbe7ff5e2bd848b",
         "type": "ui-theme",
+        "d": true,
         "name": "Victron theme",
         "colors": {
             "surface": "#4b7cc1",
@@ -673,7 +674,7 @@
         "path": "/energy",
         "icon": "lightning-bolt",
         "layout": "grid",
-        "theme": "7fbe7ff5e2bd848b",
+        "theme": "e8ab4c00842ec964",
         "breakpoints": [
             {
                 "name": "Default",
@@ -750,7 +751,7 @@
         "path": "/disabled",
         "icon": "home",
         "layout": "grid",
-        "theme": "7fbe7ff5e2bd848b",
+        "theme": "e8ab4c00842ec964",
         "breakpoints": [
             {
                 "name": "Default",
@@ -775,7 +776,7 @@
         ],
         "order": 8,
         "className": "",
-        "visible": false,
+        "visible": "false",
         "disabled": "false"
     },
     {
@@ -800,7 +801,7 @@
         "path": "/climate-control",
         "icon": "fire",
         "layout": "grid",
-        "theme": "7fbe7ff5e2bd848b",
+        "theme": "e8ab4c00842ec964",
         "breakpoints": [
             {
                 "name": "Default",
@@ -893,7 +894,7 @@
         "path": "/overview",
         "icon": "home",
         "layout": "grid",
-        "theme": "7fbe7ff5e2bd848b",
+        "theme": "e8ab4c00842ec964",
         "breakpoints": [
             {
                 "name": "Default",
@@ -956,7 +957,7 @@
         "path": "/fridge",
         "icon": "snowflake",
         "layout": "grid",
-        "theme": "7fbe7ff5e2bd848b",
+        "theme": "e8ab4c00842ec964",
         "breakpoints": [
             {
                 "name": "Default",
@@ -966,8 +967,8 @@
         ],
         "order": 5,
         "className": "",
-        "visible": true,
-        "disabled": false
+        "visible": "true",
+        "disabled": "false"
     },
     {
         "id": "0a055cab4c53c810",
@@ -1057,7 +1058,7 @@
         "path": "/settings",
         "icon": "cog",
         "layout": "tabs",
-        "theme": "7fbe7ff5e2bd848b",
+        "theme": "e8ab4c00842ec964",
         "breakpoints": [
             {
                 "name": "Default",
@@ -1131,7 +1132,7 @@
         "path": "/alerts",
         "icon": "alert-outline",
         "layout": "grid",
-        "theme": "7fbe7ff5e2bd848b",
+        "theme": "e8ab4c00842ec964",
         "breakpoints": [
             {
                 "name": "Default",
@@ -1224,6 +1225,25 @@
         "width": 6,
         "height": 1,
         "className": ""
+    },
+    {
+        "id": "e8ab4c00842ec964",
+        "type": "ui-theme",
+        "name": "Dark theme",
+        "colors": {
+            "surface": "#11263b",
+            "primary": "#969591",
+            "bgPage": "#11263b",
+            "groupBg": "#000000",
+            "groupOutline": "#111111"
+        },
+        "sizes": {
+            "density": "comfortable",
+            "pagePadding": "0px",
+            "groupGap": "0px",
+            "groupBorderRadius": "0px",
+            "widgetGap": "16px"
+        }
     },
     {
         "id": "e7756b84d8b39dfb",
@@ -1506,7 +1526,7 @@
         "width": 0,
         "height": 0,
         "head": "",
-        "format": "<link rel=\"stylesheet\" href=\"https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap\">\n\n<style>\n\n    /* Overall application */\n    .v-application, .v-application *,\n    .v-overlay-container, .v-overlay-container * {\n        font-family: \"Roboto\", sans-serif !important;\n        letter-spacing: 0em !important;\n    }\n    \n    /* Top title */\n    .v-toolbar-title__placeholder {\n        font-weight: 500;\n    }\n    \n    /* Section title */\n    .v-card-title {\n        \n        font-size: 12px;\n        color: #C1D2E4;\n    }\n    \n    /* Tab */\n    .v-tab {\n        font-size: 14px;\n        font-weight: 500;\n        letter-spacing: 0em;\n    }\n    \n    /* Selected tab */\n    .v-tab--selected {\n        background: rgba(255, 255, 255, 0.1);\n    }\n    \n    /* Button */\n    .v-btn--variant-flat {\n        font-size: 16px\n    }\n    \n    /* Hamburger menu item */\n    .v-list-item-title {\n        font-size: 18px !important;\n        font-weight: normal !important;\n        padding-top: 3px !important;\n        padding-bottom: 3px !important;\n    }\n    \n    /* Gauge title */\n    .nrdb-ui-gauge-title {\n        font-size:16px;\n        color: #C1D2E4;\n        font-weight: normal;\n    }\n    \n    /* Gauge units label */\n    .nrdb-ui-gauge-value label {\n        font-size: 16px;\n    }\n    \n    /* Text field label */\n    .nrdb-ui-text-label {\n        color: #C1D2E4;\n    }\n    \n    /* Text field value */\n    .nrdb-ui-text-value {\n        font-weight: normal !important;\n    }\n    \n    /* Dropdown selection text */\n    .v-select__selection-text {\n        font-size: 18px;\n    }\n    \n    /* Text input field */\n    .v-field__input {\n        font-size: 18px;\n    }\n    \n    /* Text field values - large */\n    .large-text span {\n        font-size: 34px;\n    }\n    \n    /* Text field values - medium */\n    .medium-text span {\n        font-size: 24px;\n    }\n    \n    /* Gauge values - large */\n    .large-gauge-text span {\n        font-size: 34px !important;\n        font-weight: normal !important;\n        padding-top: 30px !important;\n        padding-bottom: 15px !important;\n    }\n    \n    /* Gauge values - small */\n    .small-gauge-text span {\n        font-size: 20px !important;\n        font-weight: normal !important;\n        padding-bottom: 5px !important;\n    }\n    \n    /* Alert hover pane */\n    .alert {\n        font-size: 16px;\n    }\n    \n    /* Grayed out items */\n    .grayout {\n        pointer-events: none;\n        filter: opacity(50%);\n        /*display: none;*/\n    }\n    \n    /* Text field values that need attention */\n    .error {\n        color: #FFD61A;\n    }\n    \n    /* Modified dropdown items */\n    .modified {\n        color: #FFD61A;\n    }\n    \n    /* Alert overview list */\n    .alert-list {\n        line-height: 3 !important;\n    }\n    \n}\n</style>",
+        "format": "<link rel=\"stylesheet\" href=\"https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap\">\n\n<style>\n\n    /* Overall application */\n    .v-application, .v-application *,\n    .v-overlay-container, .v-overlay-container * {\n        font-family: \"Roboto\", sans-serif !important;\n        letter-spacing: 0em !important;\n    }\n    \n    /* Top title */\n    .v-toolbar-title__placeholder {\n        font-weight: 500;\n    }\n    \n    /* Section title */\n    .v-card-title {\n        \n        font-size: 12px;\n        color: #969591 /*#C1D2E4*/;\n    }\n    \n    /* Tab */\n    .v-tab {\n        font-size: 14px;\n        font-weight: 500;\n        letter-spacing: 0em;\n    }\n    \n    /* Selected tab */\n    .v-tab--selected {\n        background: rgba(255, 255, 255, 0.1);\n    }\n    \n    /* Button */\n    .v-btn--variant-flat {\n        font-size: 16px\n    }\n    \n    /* Hamburger menu item */\n    .v-list-item-title {\n        font-size: 18px !important;\n        font-weight: normal !important;\n        padding-top: 3px !important;\n        padding-bottom: 3px !important;\n    }\n    \n    /* Gauge title */\n    .nrdb-ui-gauge-title {\n        font-size:16px;\n        color: #969591 /*#C1D2E4*/;\n        font-weight: normal;\n    }\n    \n    /* Gauge units label */\n    .nrdb-ui-gauge-value label {\n        font-size: 16px;\n    }\n    \n    /* Text field label */\n    .nrdb-ui-text-label {\n        color: #969591 /*#C1D2E4*/;\n    }\n    \n    /* Text field value */\n    .nrdb-ui-text-value {\n        font-weight: normal !important;\n    }\n    \n    /* Dropdown selection text */\n    .v-select__selection-text {\n        font-size: 18px;\n    }\n    \n    /* Text input field */\n    .v-field__input {\n        font-size: 18px;\n    }\n    \n    /* Text field values - large */\n    .large-text span {\n        font-size: 34px;\n    }\n    \n    /* Text field values - medium */\n    .medium-text span {\n        font-size: 24px;\n    }\n    \n    /* Gauge values - large */\n    .large-gauge-text span {\n        font-size: 34px !important;\n        font-weight: normal !important;\n        padding-top: 30px !important;\n        padding-bottom: 15px !important;\n    }\n    \n    /* Gauge values - small */\n    .small-gauge-text span {\n        font-size: 20px !important;\n        font-weight: normal !important;\n        padding-bottom: 5px !important;\n    }\n    \n    /* Alert hover pane */\n    .alert {\n        font-size: 16px;\n    }\n    \n    /* Grayed out items */\n    .grayout {\n        pointer-events: none;\n        filter: opacity(50%);\n        /*display: none;*/\n    }\n    \n    /* Text field values that need attention */\n    .error {\n        color: #FFD61A;\n    }\n    \n    /* Modified dropdown items */\n    .modified {\n        color: #FFD61A;\n    }\n    \n    /* Alert overview list */\n    .alert-list {\n        line-height: 3 !important;\n    }\n    \n}\n</style>",
         "storeOutMessages": true,
         "passthru": true,
         "resendOnRefresh": true,
