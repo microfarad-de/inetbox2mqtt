@@ -568,7 +568,7 @@
         "type": "ui-base",
         "name": "Caravan",
         "path": "/dashboard",
-        "appIcon": "https://www.microfarad.de/wp-content/uploads/caravan-icon.png",
+        "appIcon": "https://raw.githubusercontent.com/microfarad-de/inetbox2mqtt/refs/heads/main/node-red/caravan-icon-2.png",
         "includeClientData": true,
         "acceptsClientConfig": [
             "ui-notification",
@@ -586,7 +586,6 @@
     {
         "id": "7fbe7ff5e2bd848b",
         "type": "ui-theme",
-        "d": true,
         "name": "Victron theme",
         "colors": {
             "surface": "#4b7cc1",
@@ -611,7 +610,7 @@
         "path": "/environment",
         "icon": "thermometer",
         "layout": "grid",
-        "theme": "7fbe7ff5e2bd848b",
+        "theme": "e8ab4c00842ec964",
         "breakpoints": [
             {
                 "name": "Default",
@@ -732,6 +731,7 @@
     {
         "id": "17754129e662c9a6",
         "type": "ui-page",
+        "d": true,
         "name": "Disabled",
         "ui": "93cf16ef6c7e509b",
         "path": "/disabled",
@@ -768,6 +768,7 @@
     {
         "id": "1769e3f51bb550db",
         "type": "ui-group",
+        "d": true,
         "name": "Disabled",
         "page": "17754129e662c9a6",
         "width": "6",
@@ -775,7 +776,7 @@
         "order": 1,
         "showTitle": true,
         "className": "",
-        "visible": "true",
+        "visible": false,
         "disabled": "false",
         "groupType": "default"
     },
@@ -1732,6 +1733,45 @@
             [
                 "90a912813c68e24c"
             ]
+        ]
+    },
+    {
+        "id": "39cbcb126c97504c",
+        "type": "ui-template",
+        "z": "37a752f35a68bbed",
+        "group": "",
+        "page": "",
+        "ui": "93cf16ef6c7e509b",
+        "name": "Swipe",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "head": "",
+        "format": "<template>\n  <!-- No visible UI needed -->\n  <div></div>\n</template>\n\n<script>\n  // ---- Swipe configuration ----\n  const MIN_DISTANCE = 40;   // px horizontal distance\n  const MAX_OFF_AXIS = 20;   // px vertical tolerance\n  const MAX_TIME = 600;      // ms\n\n  let touchStartX = 0;\n  let touchStartY = 0;\n  let touchStartTime = 0;\n\n  const onTouchStart = (e) => {\n    const t = e.changedTouches[0];\n    touchStartX = t.screenX;\n    touchStartY = t.screenY;\n    touchStartTime = Date.now();\n  };\n\n  const onTouchEnd = (e) => {\n    const t = e.changedTouches[0];\n    const dx = t.screenX - touchStartX;\n    const dy = t.screenY - touchStartY;\n    const dt = Date.now() - touchStartTime;\n\n    // Basic swipe detection\n    if (dt > MAX_TIME) return;\n    if (Math.abs(dx) < MIN_DISTANCE) return;\n    if (Math.abs(dy) > MAX_OFF_AXIS) return;\n\n    const direction = dx < 0 ? \"left\" : \"right\";\n    const payload = direction === \"left\" ? \"+1\" : \"-1\";\n\n    // Send swipe event into Node-RED\n    this.send({\n      topic: \"swipe\",\n      direction,\n      payload\n    });\n  };\n\n  // Avoid double-registering listeners if this widget exists multiple times\n  if (!window.__nr_swipe_nav_init) {\n    window.__nr_swipe_nav_init = true;\n\n    document.addEventListener(\"touchstart\", onTouchStart, { passive: true });\n    document.addEventListener(\"touchend\", onTouchEnd, { passive: true });\n\n    // Debug: prove the widget ran\n    this.send({ payload: \"Swipe navigation initialised\" });\n  }\n</script>\n\n<style>\n/* No styles required for global swipe */\n</style>\n",
+        "storeOutMessages": true,
+        "passthru": true,
+        "resendOnRefresh": true,
+        "templateScope": "widget:ui",
+        "className": "",
+        "x": 90,
+        "y": 480,
+        "wires": [
+            [
+                "a8945beefd947fbc"
+            ]
+        ]
+    },
+    {
+        "id": "a8945beefd947fbc",
+        "type": "ui-control",
+        "z": "37a752f35a68bbed",
+        "name": "",
+        "ui": "93cf16ef6c7e509b",
+        "events": "all",
+        "x": 240,
+        "y": 480,
+        "wires": [
+            []
         ]
     },
     {
