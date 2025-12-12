@@ -55,19 +55,19 @@ Further details are provided in the [original inetbox2mqtt electrics guide](doc/
 
 Follow these steps for installation:
 
-1. Clone this repository to `/opt/inetbox2mqtt`.
+1. Clone this repository to `/data/inetbox2mqtt`.
 
 2. Create symbolic link for the service startup script:
 
     ```bash
-    ln -s /opt/inetbox2mqtt/service/inetbox2mqtt /opt/victronenergy/service/
+    ln -s /data/inetbox2mqtt/service/inetbox2mqtt /opt/victronenergy/service/
     ```
 
 3. Create symbolic link for the temperature reporting script -
    enables displaying the room and water temperatures in the Victron GUI V2 as well as VRM portal:
 
     ```bash
-    ln -s /opt/inetbox2mqtt/service/RpiTemperature /opt/victronenergy/service/
+    ln -s /data/inetbox2mqtt/service/RpiTemperature /opt/victronenergy/service/
     ```
 
 4. Edit the configuration parameters in `/etc/inetbox2mqtt`:
