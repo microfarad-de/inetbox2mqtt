@@ -30,7 +30,7 @@ class Lin:
     update_request = False
     cpp_buffer = {}
     cmd_buf = {}
-    cnt_rows = 1
+    #cnt_rows = 1
     stop_async = False
     cnt_in = 0
     # Same approach for the raw PID 0xD8. This corresponds to a PID 0x18
@@ -45,7 +45,7 @@ class Lin:
     # otherwise it would set "OFF"
     CNT_IN_MAX = 9000
 
-    DISPLAY_STATUS_PIDS = [bytes([0x20]), bytes([0x61]), bytes([0xE2])]
+    #DISPLAY_STATUS_PIDS = [bytes([0x20]), bytes([0x61]), bytes([0xE2])]
 
 
     # the correct (full) preamble starts in the first frame, but we see only one type of
@@ -267,14 +267,15 @@ class Lin:
         #    return
 
         raw_pid = line[2]
-        if raw_pid in self.DISPLAY_STATUS_PIDS: print(f"status-message found with {raw_pid:x}")#0x20 0x61 0xe2
+
+        #if raw_pid in self.DISPLAY_STATUS_PIDS: log.debug(f"status-message found with {raw_pid:x}") #0x20 0x61 0xe2
 
 # Same approach for the raw PID 0xD8. This corresponds to a PID 0x18
         if raw_pid == 0xd8:
             self.d8_alive = True
             self.app.status["alive"] = ["ON", True, False]
             self.pin_map.set_led("lin_led", True)
-            log.debug(f"in < {line.hex(' ')}")
+            log.debug(f"in1 < {line.hex(' ')}")
             s = False
             if not(self.app.upload_wait): s = (self.app.upload_buffer or self.app.upload02_buffer)
             if s:
@@ -291,7 +292,7 @@ class Lin:
 # send requested answer to 0x3d -> 0x7d with parity) but only, if I have the need to answer
         if raw_pid == 0x7d:
             if self.response_waiting():
-                log.debug(f"in < {line.hex(' ')}")
+                log.debug(f"in2 < {line.hex(' ')}")
                 self._answer_tl_request()
                 return
             else: return
@@ -299,22 +300,25 @@ class Lin:
         while self.serial.in_waiting < 9:
             pass
         #print("Debug:ici")
+
         line += self.serial.read(9)
-        deb=""
-        for b in line:
-            deb=deb+f"{b:02x} "
-        if(len(line)>2):
-            log.debug("%s, %d, 0x%x"%(deb,len(line),line[2]))
-        else:
-            log.debug("%s, %d"%(deb,len(line)))
+
+        #deb=""
+        #for b in line:
+        #    deb=deb+f"{b:02x} "
+        #if(len(line)>2):
+        #    log.debug("%s, %d, 0x%x"%(deb,len(line),line[2]))
+        #else:
+        #    log.debug("%s, %d"%(deb,len(line)))
+
         # the idea is to trigger events from the loop-timing
         # seeing completed rows at this point (rows means LIN-frames)
         # but we don't use this functionality at the moment
-        self.cnt_rows += 1
-        self.cnt_rows = self.cnt_rows % self.CNT_ROWS_MAX
-        if not(self.cnt_rows): self.display_status()
+        #self.cnt_rows += 1
+        #self.cnt_rows = self.cnt_rows % self.CNT_ROWS_MAX
+        #if not(self.cnt_rows): self.display_status()
 
-        log.debug(f"in < {line.hex(' ')}")
+        log.debug(f"in3 < {line.hex(' ')}")
 #        if len(line) != 12:
 #            return              # exit, length isn't correct
 #

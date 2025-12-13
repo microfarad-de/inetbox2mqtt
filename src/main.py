@@ -187,6 +187,7 @@ def run(w, lin_debug=False, inet_debug=False, mqtt_debug=False):
     log.info(f"HW-Check {w.platform_name}")
 
     port = connect.config["serial"]["device"]
+    log.info(f"device = {port}")
 
     if port == "dummy":
         serial = pyserial.serial_for_url('loop://', baudrate=9600)
