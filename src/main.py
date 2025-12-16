@@ -53,6 +53,7 @@ log = logging.getLogger(__name__)
 # Global objects
 connect = None
 lin     = None
+lock    = None
 
 
 # Release number
@@ -69,6 +70,7 @@ STA_PREFIX = 'service/' + TOPIC_ROOT + '/control_status/'
 # Universal callback function for all subscriptions
 async def callback(topic, msg, retained, qos):
     global connect
+    global lock
 
     log.debug(f"received: {topic}: {msg}")
     topic = str(topic)
@@ -80,10 +82,11 @@ async def callback(topic, msg, retained, qos):
         topic = topic[len(SET_PREFIX):]
         if topic in lin.app.status.keys():
             log.info("inet-key:"+str(topic)+" value:"+str(msg))
-            try:
-                lin.app.set_status(topic, msg)
-            except Exception as e:
-                log.debug(Exception(e))
+            async with lock:
+                try:
+                    lin.app.set_status(topic, msg)
+                except Exception as e:
+                    log.debug(Exception(e))
         else:
             log.debug("key is unknown")
 
@@ -109,14 +112,17 @@ def write_to_file(key, value):
 # main publisher-loop
 async def main():
     global connect
+    global lock
 
     log.debug("main-loop is running")
 
     i = 0
     wd = False
     while True:
-        await asyncio.sleep(5)     # Set the update interval (seconds)
-        s = lin.app.get_all(True)
+        await asyncio.sleep(8)      # Set the update interval (seconds)
+        async with lock:
+            await asyncio.sleep(2)  # Wait to ensure the status buffer has been updated
+            s = lin.app.get_all(True)
 
         for key in s.keys():
             log.debug(f'publish {key}:{s[key]}')
@@ -153,6 +159,9 @@ async def lin_loop():
 
 
 async def ctrl_loop():
+    global lock
+    lock = asyncio.Lock()
+
     a=asyncio.create_task(main())
     b=asyncio.create_task(lin_loop())
 
