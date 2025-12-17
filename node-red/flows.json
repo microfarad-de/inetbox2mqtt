@@ -620,8 +620,8 @@
         ],
         "order": 3,
         "className": "",
-        "visible": "true",
-        "disabled": "false"
+        "visible": true,
+        "disabled": false
     },
     {
         "id": "2b74e6ea7cedf9dc",
@@ -631,7 +631,7 @@
         "width": "6",
         "height": "1",
         "order": 2,
-        "showTitle": true,
+        "showTitle": false,
         "className": "",
         "visible": "true",
         "disabled": "false",
@@ -683,8 +683,8 @@
         ],
         "order": 2,
         "className": "",
-        "visible": "true",
-        "disabled": "false"
+        "visible": true,
+        "disabled": false
     },
     {
         "id": "a7be90ba6585cc59",
@@ -694,7 +694,7 @@
         "width": "6",
         "height": "1",
         "order": 1,
-        "showTitle": true,
+        "showTitle": false,
         "className": "",
         "visible": "true",
         "disabled": "false",
@@ -785,7 +785,7 @@
         "type": "ui-page",
         "name": "Heating",
         "ui": "93cf16ef6c7e509b",
-        "path": "/climate-control",
+        "path": "/heating",
         "icon": "fire",
         "layout": "grid",
         "theme": "e8ab4c00842ec964",
@@ -798,8 +798,8 @@
         ],
         "order": 4,
         "className": "",
-        "visible": "true",
-        "disabled": "false"
+        "visible": true,
+        "disabled": false
     },
     {
         "id": "df7a1670ae765f1d",
@@ -876,10 +876,10 @@
     {
         "id": "c4300ca17ae61646",
         "type": "ui-page",
-        "name": "Overview",
+        "name": "Dashboard",
         "ui": "93cf16ef6c7e509b",
-        "path": "/overview",
-        "icon": "home",
+        "path": "/dashboard",
+        "icon": "gauge",
         "layout": "grid",
         "theme": "e8ab4c00842ec964",
         "breakpoints": [
@@ -954,8 +954,8 @@
         ],
         "order": 5,
         "className": "",
-        "visible": "true",
-        "disabled": "false"
+        "visible": true,
+        "disabled": false
     },
     {
         "id": "0a055cab4c53c810",
@@ -1240,7 +1240,7 @@
         "width": "6",
         "height": "1",
         "order": 3,
-        "showTitle": true,
+        "showTitle": false,
         "className": "",
         "visible": "true",
         "disabled": "false",
@@ -1527,7 +1527,7 @@
         "width": 0,
         "height": 0,
         "head": "",
-        "format": "<link rel=\"stylesheet\" href=\"https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap\">\n\n\n<style>\n    /* iOS overscroll shows html/body, so force them dark */\n    html, body {\n      background: #000 !important;\n      height: 100%;\n      color-scheme: dark; /* helps Safari keep “dark” rendering */\n    }\n    /* also force common Vuetify/Dashboard wrappers */\n    .v-application {\n      background: #000 !important;\n    }\n\n    /* Overall application */\n    .v-application, .v-application *,\n    .v-overlay-container, .v-overlay-container * {\n        font-family: \"Roboto\", sans-serif !important;\n        letter-spacing: 0em !important;\n    }\n    \n    /* Top title */\n    .v-toolbar-title__placeholder {\n        font-weight: 500;\n    }\n    \n    /* Section title */\n    .v-card-title {\n        \n        font-size: 12px;\n        color: #969591 /*#C1D2E4*/;\n    }\n    \n    /* Tab */\n    .v-tab {\n        font-size: 14px;\n        font-weight: 500;\n        letter-spacing: 0em;\n    }\n    \n    /* Selected tab */\n    .v-tab--selected {\n        background: rgba(255, 255, 255, 0.1);\n    }\n    \n    /* Button */\n    .v-btn--variant-flat {\n        font-size: 16px\n    }\n    \n    /* Hamburger menu item */\n    .v-list-item-title {\n        font-size: 18px !important;\n        font-weight: normal !important;\n        padding-top: 3px !important;\n        padding-bottom: 3px !important;\n    }\n    \n    /* Gauge title */\n    .nrdb-ui-gauge-title {\n        font-size:16px;\n        color: #969591 /*#C1D2E4*/;\n        font-weight: normal;\n    }\n    \n    /* Gauge units label */\n    .nrdb-ui-gauge-value label {\n        font-size: 16px;\n    }\n    \n    /* Text field label */\n    .nrdb-ui-text-label {\n        color: #969591 /*#C1D2E4*/;\n    }\n    \n    /* Text field value */\n    .nrdb-ui-text-value {\n        font-weight: normal !important;\n    }\n    \n    /* Dropdown selection text */\n    .v-select__selection-text {\n        font-size: 18px;\n    }\n    \n    /* Text input field */\n    .v-field__input {\n        font-size: 18px;\n    }\n    \n    /* Text field values - large */\n    .large-text span {\n        font-size: 34px;\n    }\n    \n    /* Text field values - medium */\n    .medium-text span {\n        font-size: 24px;\n    }\n    \n    /* Gauge values - large */\n    .large-gauge-text span {\n        font-size: 34px !important;\n        font-weight: normal !important;\n        padding-top: 30px !important;\n        padding-bottom: 15px !important;\n    }\n    \n    /* Gauge values - small */\n    .small-gauge-text span {\n        font-size: 20px !important;\n        font-weight: normal !important;\n        padding-bottom: 5px !important;\n    }\n    \n    /* Alert hover pane */\n    .alert {\n        font-size: 16px;\n    }\n    \n    /* Grayed out items */\n    .grayout {\n        pointer-events: none;\n        filter: opacity(50%);\n        /*display: none;*/\n    }\n    \n    /* Text field values that need attention */\n    .error {\n        color: #FFD61A;\n    }\n    \n    /* Modified dropdown items */\n    .modified {\n        color: #FFD61A;\n    }\n    \n    /* Alert overview list */\n    .alert-list {\n        line-height: 3 !important;\n    }\n    \n}\n</style>",
+        "format": "<link rel=\"stylesheet\" href=\"https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap\">\n\n\n<style>\n    /* iOS overscroll shows html/body, so force them dark */\n    html, body {\n      background: #000 !important;\n      height: 100%;\n      color-scheme: dark; /* helps Safari keep “dark” rendering */\n    }\n    /* also force common Vuetify/Dashboard wrappers */\n    .v-application {\n      background: #000 !important;\n    }\n\n    /* Overall application */\n    .v-application, .v-application *,\n    .v-overlay-container, .v-overlay-container * {\n        font-family: \"Roboto\", sans-serif !important;\n        letter-spacing: 0em !important;\n    }\n    \n    /* Top title */\n    .v-toolbar-title__placeholder {\n        font-weight: 500;\n    }\n    \n    /* Top title bar height adjustment */\n    .v-toolbar__content {\n        height: 48px !important;\n    }\n    .v-main {\n        --v-layout-top: 48px !important;\n    }\n    .v-navigation-drawer {\n        height: calc(100% - 48px) !important; \n        top: 48px !important;\n    }\n    \n    /* Section title */\n    .v-card-title {\n        \n        font-size: 12px;\n        color: #969591 /*#C1D2E4*/;\n    }\n    \n    /* Tab */\n    .v-tab {\n        font-size: 14px;\n        font-weight: 500;\n        letter-spacing: 0em;\n    }\n    \n    /* Selected tab */\n    .v-tab--selected {\n        background: rgba(255, 255, 255, 0.1);\n    }\n    \n    /* Button */\n    .v-btn--variant-flat {\n        font-size: 16px\n    }\n    \n    /* Hamburger menu item */\n    .v-list-item-title {\n        font-size: 18px !important;\n        font-weight: normal !important;\n        padding-top: 3px !important;\n        padding-bottom: 3px !important;\n    }\n    \n    /* Gauge title */\n    .nrdb-ui-gauge-title {\n        font-size:16px;\n        color: #969591 /*#C1D2E4*/;\n        font-weight: normal;\n    }\n    \n    /* Gauge units label */\n    .nrdb-ui-gauge-value label {\n        font-size: 16px;\n    }\n    \n    /* Text field label */\n    .nrdb-ui-text-label {\n        color: #969591 /*#C1D2E4*/;\n    }\n    \n    /* Text field value */\n    .nrdb-ui-text-value {\n        font-weight: normal !important;\n    }\n    \n    /* Dropdown selection text */\n    .v-select__selection-text {\n        font-size: 18px;\n    }\n    \n    /* Text input field */\n    .v-field__input {\n        font-size: 18px;\n    }\n    \n    /* Text field values - large */\n    .large-text span {\n        font-size: 34px;\n    }\n    \n    /* Text field values - medium */\n    .medium-text span {\n        font-size: 24px;\n    }\n    \n    /* Gauge values - large */\n    .large-gauge-text span {\n        font-size: 34px !important;\n        font-weight: normal !important;\n        padding-top: 30px !important;\n        padding-bottom: 15px !important;\n    }\n    \n    /* Gauge values - small */\n    .small-gauge-text span {\n        font-size: 20px !important;\n        font-weight: normal !important;\n        padding-bottom: 5px !important;\n    }\n    \n    /* Alert hover pane */\n    .alert {\n        font-size: 16px;\n    }\n    \n    /* Grayed out items */\n    .grayout {\n        pointer-events: none;\n        filter: opacity(50%);\n        /*display: none;*/\n    }\n    \n    /* Text field values that need attention */\n    .error {\n        color: #FFD61A;\n    }\n    \n    /* Modified dropdown items */\n    .modified {\n        color: #FFD61A;\n    }\n    \n    /* Alert overview list */\n    .alert-list {\n        line-height: 3 !important;\n    }\n    \n}\n</style>",
         "storeOutMessages": true,
         "passthru": true,
         "resendOnRefresh": true,
@@ -1739,6 +1739,7 @@
         "id": "39cbcb126c97504c",
         "type": "ui-template",
         "z": "37a752f35a68bbed",
+        "d": true,
         "group": "",
         "page": "",
         "ui": "93cf16ef6c7e509b",
@@ -1765,10 +1766,11 @@
         "id": "a8945beefd947fbc",
         "type": "ui-control",
         "z": "37a752f35a68bbed",
+        "d": true,
         "name": "",
         "ui": "93cf16ef6c7e509b",
         "events": "all",
-        "x": 240,
+        "x": 260,
         "y": 480,
         "wires": [
             []
@@ -2464,7 +2466,7 @@
         "height": 3,
         "gtype": "gauge-34",
         "gstyle": "rounded",
-        "title": "Left",
+        "title": "Propane L",
         "alwaysShowTitle": false,
         "units": "%",
         "icon": "",
@@ -2505,7 +2507,7 @@
         "height": 3,
         "gtype": "gauge-34",
         "gstyle": "rounded",
-        "title": "Right",
+        "title": "Propane R",
         "alwaysShowTitle": false,
         "units": "%",
         "icon": "",
