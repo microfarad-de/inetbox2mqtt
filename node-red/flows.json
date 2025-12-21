@@ -6502,12 +6502,12 @@
                 "type": "num"
             },
             {
-                "label": "ECO",
+                "label": "Eco",
                 "value": 40,
                 "type": "num"
             },
             {
-                "label": "HOT",
+                "label": "Hot",
                 "value": 60,
                 "type": "num"
             }
@@ -6978,7 +6978,7 @@
         "type": "function",
         "z": "c74d4096e08fa272",
         "name": "Decode",
-        "func": "if (msg.payload === undefined) {\n    return null;\n}\n\n\nswitch (msg.payload) {\n    case 0:\n        msg.payload = 'OFF';\n        break;\n        \n    case 40:\n        msg.payload = 'ECO';\n        break;\n        \n    case 60:\n        msg.payload = 'HOT';\n        break;\n}\n\nreturn msg;",
+        "func": "if (msg.payload === undefined) {\n    return null;\n}\n\n\nswitch (msg.payload) {\n    case 0:\n        msg.payload = 'OFF';\n        break;\n        \n    case 40:\n        msg.payload = 'Eco';\n        break;\n        \n    case 60:\n        msg.payload = 'Hot';\n        break;\n}\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
