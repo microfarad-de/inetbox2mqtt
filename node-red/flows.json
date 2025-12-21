@@ -6455,12 +6455,12 @@
         "clearable": false,
         "options": [
             {
-                "label": "ECO",
+                "label": "Eco",
                 "value": "eco",
                 "type": "str"
             },
             {
-                "label": "HIGH",
+                "label": "High",
                 "value": "high",
                 "type": "str"
             }
@@ -6958,7 +6958,7 @@
         "type": "function",
         "z": "c74d4096e08fa272",
         "name": "Decode",
-        "func": "if (msg.payload === undefined) {\n    return null;\n}\n\nmsg.payload = msg.payload.toUpperCase();\n\nreturn msg;",
+        "func": "if (msg.payload === undefined) {\n    return null;\n}\n\nmsg.payload = msg.payload[0].toUpperCase() + msg.payload.slice(1);\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
