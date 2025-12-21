@@ -2855,7 +2855,7 @@
         "type": "function",
         "z": "b22624498baaa896",
         "name": "TextValue",
-        "func": "\nmsg.payload = msg.textvalue;\n\nlet msg2 = {};\n\nmsg2.ui_update = {};\nmsg2.ui_update.units = \"[\" + msg.payload.slice(0, 3) + \"] W\";\n\nreturn [msg2, msg];",
+        "func": "\nmsg.payload = msg.textvalue;\n\nif (msg.payload == \"Off\") {\n    msg.payload = \"OFF\";\n}\n\nlet msg2 = {};\n\nmsg2.ui_update = {};\nmsg2.ui_update.units = \"[\" + msg.payload.slice(0, 4) + \"] W\";\n\nreturn [msg2, msg];",
         "outputs": 2,
         "timeout": 0,
         "noerr": 0,
