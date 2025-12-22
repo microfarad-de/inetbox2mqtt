@@ -2855,7 +2855,7 @@
         "type": "function",
         "z": "b22624498baaa896",
         "name": "TextValue",
-        "func": "\nmsg.payload = msg.textvalue;\n\nif (msg.payload == \"Off\") {\n    msg.payload = \"OFF\";\n}\n\nlet msg2 = {};\n\nmsg2.ui_update = {};\nmsg2.ui_update.units = \"[\" + msg.payload.slice(0, 4) + \"] W\";\n\nreturn [msg2, msg];",
+        "func": "\nmsg.payload = msg.textvalue;\n\nlet msg2 = {};\n\nmsg2.ui_update = {};\nmsg2.ui_update.units = \"[\" + msg.payload.slice(0, 4) + \"] W\";\n\nreturn [msg2, msg];",
         "outputs": 2,
         "timeout": 0,
         "noerr": 0,
@@ -6289,7 +6289,7 @@
         "clearable": false,
         "options": [
             {
-                "label": "OFF",
+                "label": "Off",
                 "value": 0,
                 "type": "num"
             },
@@ -6497,7 +6497,7 @@
         "clearable": false,
         "options": [
             {
-                "label": "OFF",
+                "label": "Off",
                 "value": 0,
                 "type": "num"
             },
@@ -6938,7 +6938,7 @@
         "type": "function",
         "z": "c74d4096e08fa272",
         "name": "Decode",
-        "func": "if (msg.payload === undefined) {\n    return null;\n}\n\nswitch (msg.payload) {\n    case 0:\n        msg.payload = 'OFF';\n        break;\n    \n    default:\n        msg.payload = msg.payload + '°C';\n        break;\n}\n\n\nreturn msg;",
+        "func": "if (msg.payload === undefined) {\n    return null;\n}\n\nswitch (msg.payload) {\n    case 0:\n        msg.payload = 'Off';\n        break;\n    \n    default:\n        msg.payload = msg.payload + '°C';\n        break;\n}\n\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -6978,7 +6978,7 @@
         "type": "function",
         "z": "c74d4096e08fa272",
         "name": "Decode",
-        "func": "if (msg.payload === undefined) {\n    return null;\n}\n\n\nswitch (msg.payload) {\n    case 0:\n        msg.payload = 'OFF';\n        break;\n        \n    case 40:\n        msg.payload = 'Eco';\n        break;\n        \n    case 60:\n        msg.payload = 'Hot';\n        break;\n}\n\nreturn msg;",
+        "func": "if (msg.payload === undefined) {\n    return null;\n}\n\n\nswitch (msg.payload) {\n    case 0:\n        msg.payload = 'Off';\n        break;\n        \n    case 40:\n        msg.payload = 'Eco';\n        break;\n        \n    case 60:\n        msg.payload = 'Hot';\n        break;\n}\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -7156,7 +7156,7 @@
         "clearable": false,
         "options": [
             {
-                "label": "OFF",
+                "label": "Off",
                 "value": 0,
                 "type": "num"
             },
@@ -7282,7 +7282,7 @@
         "type": "function",
         "z": "fcffa944a0680a42",
         "name": "DecodeJSON",
-        "func": "\nlet json = msg.payload;\n\nlet msg1 = {};\nlet msg2 = {};\nlet msg3 = {};\n\nlet minPwm = 190;\nlet maxPwm = 75;\nlet minRpm = 2000;\nlet maxRpm = 3000\n\nif (json.ok !== 30) return;\n\nfunction map (value, inMin, inMax, outMin, outMax) {\n    return (value - inMin) * (outMax - outMin) / (inMax - inMin) + outMin\n}\n\nmsg1.payload = json.dutyCycle;\n\nmsg2.payload = json.outputPwm;\n\npwm = json.outputPwm;\nif (pwm > 0) {\n    speed = map(pwm, minPwm, maxPwm, minRpm, maxRpm);\n    msg2.payload = +(+speed).toFixed(0);\n}\nelse {\n   msg2.payload = 0 ;\n}\n\n// Workaround to hide the \"WAIT\" state\nif (flow.get(\"defrostDisable\")) {\n    json.defrost = 0;\n}\n\nswitch (json.defrost) {\n    case 0:\n    case -1:\n        msg3.payload = \"OFF\";\n        break;\n    case 1:\n        msg3.payload = \"ON\";\n        break;\n    case 2:\n        msg3.payload = \"WAIT\";\n        break;\n}\n\nreturn [msg1, msg2, msg3];\n",
+        "func": "\nlet json = msg.payload;\n\nlet msg1 = {};\nlet msg2 = {};\nlet msg3 = {};\n\nlet minPwm = 190;\nlet maxPwm = 75;\nlet minRpm = 2000;\nlet maxRpm = 3000\n\nif (json.ok !== 30) return;\n\nfunction map (value, inMin, inMax, outMin, outMax) {\n    return (value - inMin) * (outMax - outMin) / (inMax - inMin) + outMin\n}\n\nmsg1.payload = json.dutyCycle;\n\nmsg2.payload = json.outputPwm;\n\npwm = json.outputPwm;\nif (pwm > 0) {\n    speed = map(pwm, minPwm, maxPwm, minRpm, maxRpm);\n    msg2.payload = +(+speed).toFixed(0);\n}\nelse {\n   msg2.payload = 0 ;\n}\n\n// Workaround to hide the \"WAIT\" state\nif (flow.get(\"defrostDisable\")) {\n    json.defrost = 0;\n}\n\nswitch (json.defrost) {\n    case 0:\n    case -1:\n        msg3.payload = \"Off\";\n        break;\n    case 1:\n        msg3.payload = \"On\";\n        break;\n    case 2:\n        msg3.payload = \"Wait\";\n        break;\n}\n\nreturn [msg1, msg2, msg3];\n",
         "outputs": 3,
         "timeout": 0,
         "noerr": 0,
@@ -7700,7 +7700,7 @@
         "type": "function",
         "z": "fcffa944a0680a42",
         "name": "Decode",
-        "func": "if (msg.payload === undefined) {\n    return null;\n}\n\nswitch (msg.payload) {\n    case 0:\n        msg.payload = 'OFF';\n        break;\n    \n    default:\n        msg.payload = msg.payload + '°C';\n        break;\n}\n\n\nreturn msg;",
+        "func": "if (msg.payload === undefined) {\n    return null;\n}\n\nswitch (msg.payload) {\n    case 0:\n        msg.payload = 'Off';\n        break;\n    \n    default:\n        msg.payload = msg.payload + '°C';\n        break;\n}\n\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -8657,7 +8657,7 @@
         "clearable": false,
         "options": [
             {
-                "label": "OFF",
+                "label": "Off",
                 "value": -100,
                 "type": "num"
             },
@@ -8789,7 +8789,7 @@
         "clearable": false,
         "options": [
             {
-                "label": "OFF",
+                "label": "Off",
                 "value": 110,
                 "type": "num"
             },
@@ -8878,7 +8878,7 @@
         "clearable": false,
         "options": [
             {
-                "label": "OFF",
+                "label": "Off",
                 "value": 100,
                 "type": "num"
             },
@@ -8991,7 +8991,7 @@
         "clearable": false,
         "options": [
             {
-                "label": "OFF",
+                "label": "Off",
                 "value": 0,
                 "type": "num"
             },
@@ -9064,7 +9064,7 @@
         "clearable": false,
         "options": [
             {
-                "label": "OFF",
+                "label": "Off",
                 "value": 100,
                 "type": "num"
             },
@@ -9137,7 +9137,7 @@
         "clearable": false,
         "options": [
             {
-                "label": "OFF",
+                "label": "Off",
                 "value": 100,
                 "type": "num"
             },
@@ -9210,7 +9210,7 @@
         "clearable": false,
         "options": [
             {
-                "label": "OFF",
+                "label": "Off",
                 "value": -100,
                 "type": "num"
             },
@@ -9293,7 +9293,7 @@
         "clearable": false,
         "options": [
             {
-                "label": "OFF",
+                "label": "Off",
                 "value": -1,
                 "type": "num"
             },
@@ -9371,7 +9371,7 @@
         "clearable": false,
         "options": [
             {
-                "label": "OFF",
+                "label": "Off",
                 "value": -100,
                 "type": "num"
             },
@@ -9454,7 +9454,7 @@
         "clearable": false,
         "options": [
             {
-                "label": "OFF",
+                "label": "Off",
                 "value": 100,
                 "type": "num"
             },
@@ -9549,7 +9549,7 @@
         "clearable": false,
         "options": [
             {
-                "label": "OFF",
+                "label": "Off",
                 "value": -100,
                 "type": "num"
             },
@@ -9605,7 +9605,7 @@
         "clearable": false,
         "options": [
             {
-                "label": "OFF",
+                "label": "Off",
                 "value": 100,
                 "type": "num"
             },
@@ -9678,7 +9678,7 @@
         "clearable": false,
         "options": [
             {
-                "label": "OFF",
+                "label": "Off",
                 "value": -100,
                 "type": "num"
             },
@@ -9751,7 +9751,7 @@
         "clearable": false,
         "options": [
             {
-                "label": "OFF",
+                "label": "Off",
                 "value": 200,
                 "type": "num"
             },
@@ -9846,7 +9846,7 @@
         "clearable": false,
         "options": [
             {
-                "label": "OFF",
+                "label": "Off",
                 "value": 100,
                 "type": "num"
             },
@@ -9897,7 +9897,7 @@
         "clearable": false,
         "options": [
             {
-                "label": "OFF",
+                "label": "Off",
                 "value": -100,
                 "type": "num"
             },
@@ -10538,7 +10538,7 @@
         "clearable": false,
         "options": [
             {
-                "label": "OFF",
+                "label": "Off",
                 "value": 0,
                 "type": "num"
             },
