@@ -4273,10 +4273,10 @@
         "id": "fbb485a57854c7ce",
         "type": "victron-input-temperature",
         "z": "2561d49b29c858c7",
-        "service": "com.victronenergy.tank/21",
+        "service": "com.victronenergy.tank/20",
         "path": "/Temperature",
         "serviceObj": {
-            "service": "com.victronenergy.tank/21",
+            "service": "com.victronenergy.tank/20",
             "name": "Left Propane Tank"
         },
         "pathObj": {
@@ -4299,10 +4299,10 @@
         "id": "6a1439c4cd40cd39",
         "type": "victron-input-temperature",
         "z": "2561d49b29c858c7",
-        "service": "com.victronenergy.tank/20",
+        "service": "com.victronenergy.tank/21",
         "path": "/Temperature",
         "serviceObj": {
-            "service": "com.victronenergy.tank/20",
+            "service": "com.victronenergy.tank/21",
             "name": "Right Propane Tank"
         },
         "pathObj": {
@@ -5358,17 +5358,17 @@
         "id": "47dc45ca632d40ff",
         "type": "victron-input-custom",
         "z": "2561d49b29c858c7",
-        "service": "com.victronenergy.tank/21",
+        "service": "com.victronenergy.tank/20",
         "path": "/BatteryVoltage",
         "serviceObj": {
-            "service": "com.victronenergy.tank/21",
-            "name": "Propane Tank 1 (21)"
+            "service": "com.victronenergy.tank/20",
+            "name": "Left Propane Tank (20)"
         },
         "pathObj": {
             "path": "/BatteryVoltage",
             "name": "/BatteryVoltage",
             "type": "number",
-            "value": 2.96875
+            "value": 2.84375
         },
         "name": "",
         "onlyChanges": false,
@@ -5386,22 +5386,22 @@
         "id": "99f27aacc1a80525",
         "type": "victron-input-custom",
         "z": "2561d49b29c858c7",
-        "service": "com.victronenergy.tank/20",
+        "service": "com.victronenergy.tank/21",
         "path": "/BatteryVoltage",
         "serviceObj": {
-            "service": "com.victronenergy.tank/20",
-            "name": "Propane Tank 2 (20)"
+            "service": "com.victronenergy.tank/21",
+            "name": "Right Propane Tank (21)"
         },
         "pathObj": {
             "path": "/BatteryVoltage",
             "name": "/BatteryVoltage",
             "type": "number",
-            "value": 3
+            "value": 2.875
         },
         "name": "",
         "onlyChanges": false,
         "roundValues": "2",
-        "x": 190,
+        "x": 200,
         "y": 500,
         "wires": [
             [
