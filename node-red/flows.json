@@ -569,7 +569,7 @@
         "name": "Caravan",
         "path": "/dashboard",
         "appIcon": "https://raw.githubusercontent.com/microfarad-de/inetbox2mqtt/refs/heads/main/node-red/caravan-icon-2.png",
-        "includeClientData": true,
+        "includeClientData": false,
         "acceptsClientConfig": [
             "ui-notification",
             "ui-control"
@@ -1772,6 +1772,30 @@
         "events": "all",
         "x": 260,
         "y": 480,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "0a42dd8d09e7a8bf",
+        "type": "ui-template",
+        "z": "37a752f35a68bbed",
+        "group": "",
+        "page": "",
+        "ui": "93cf16ef6c7e509b",
+        "name": "iOS disappearing clock and battery icon fix",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "head": "",
+        "format": "<script>\n(function () {\n  // Ensure a viewport meta exists and set it VRM-style\n  let vp = document.querySelector('meta[name=\"viewport\"]');\n  if (!vp) {\n    vp = document.createElement('meta');\n    vp.name = \"viewport\";\n    document.head.appendChild(vp);\n  }\n\n  vp.setAttribute(\n    \"content\",\n    \"width=device-width,initial-scale=1,minimum-scale=1,user-scalable=no,height=device-height\"\n  );\n\n  // Add iOS status bar style hint\n  let sb = document.querySelector('meta[name=\"apple-mobile-web-app-status-bar-style\"]');\n  if (!sb) {\n    sb = document.createElement('meta');\n    sb.name = \"apple-mobile-web-app-status-bar-style\";\n    document.head.appendChild(sb);\n  }\n  sb.setAttribute(\"content\", \"black-translucent\");\n\n  // (Optional) add 'capable' too — harmless if ignored\n  let cap = document.querySelector('meta[name=\"apple-mobile-web-app-capable\"]');\n  if (!cap) {\n    cap = document.createElement('meta');\n    cap.name = \"apple-mobile-web-app-capable\";\n    document.head.appendChild(cap);\n  }\n  cap.setAttribute(\"content\", \"yes\");\n})();\n</script>\n",
+        "storeOutMessages": true,
+        "passthru": true,
+        "resendOnRefresh": true,
+        "templateScope": "widget:ui",
+        "className": "",
+        "x": 570,
+        "y": 80,
         "wires": [
             []
         ]
