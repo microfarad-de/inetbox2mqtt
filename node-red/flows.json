@@ -298,7 +298,7 @@
     {
         "id": "1bca7697946c1d3f",
         "type": "subflow",
-        "name": "Stars",
+        "name": "Quality",
         "info": "",
         "category": "",
         "in": [
@@ -1336,7 +1336,7 @@
         "type": "function",
         "z": "35877746e13a44de",
         "name": "AppendUnit",
-        "func": "\nlet unit = env.get('unit');\n\nmsg.payload = msg.payload + unit;\n\nreturn msg;",
+        "func": "\nlet unit = env.get('unit');\n\n// Only append unit to numerical values\nif (!Number.isNaN(Number(msg.payload)) && msg.payload !== \"\") {\n    msg.payload = msg.payload + unit;\n}\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -1353,15 +1353,15 @@
         "id": "a3d2410121093268",
         "type": "function",
         "z": "1bca7697946c1d3f",
-        "name": "Stars",
-        "func": "\nswitch (msg.payload) {\n    case 1:\n        msg.payload = \"★\";\n        break;\n    case 2:\n        msg.payload = \"★★\";\n        break;\n    case 3:\n        msg.payload = \"★★★\";\n        break;\n    default:\n        msg.payload = \"--\";\n        break;\n}\n\nlet msg2 = {};\nmsg2.ui_update = {};\nmsg2.ui_update.units = msg.payload + \" %\";\n\nreturn [msg2, msg];",
+        "name": "Quality",
+        "func": "if (msg.topic.includes(\"level\")) {\n    context.set(\"level\", msg.payload);\n    return;\n}\n\nlet levelMsg   = {};\nlet qualityMsg = {}\n\nlet level = context.get(\"level\") || 0;\n\nlevelMsg.payload = level;\n\nswitch (msg.payload) {\n    case 1:\n        qualityMsg.payload = \"★\";\n        break;\n    case 2:\n        qualityMsg.payload = \"★★\";\n        break;\n    case 3:\n        qualityMsg.payload = \"★★★\";\n        break;\n    default:\n        qualityMsg.payload = \"--\";\n        levelMsg.payload = 0;\n        break;\n}\n\nlevelMsg.ui_update = {};\nlevelMsg.ui_update.units = qualityMsg.payload + \" %\";\n\nreturn [levelMsg, qualityMsg];\n",
         "outputs": 2,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 390,
+        "x": 400,
         "y": 160,
         "wires": [
             [],
@@ -2152,118 +2152,6 @@
         ]
     },
     {
-        "id": "53d71d6f0ddc2d86",
-        "type": "victron-input-custom",
-        "z": "b22624498baaa896",
-        "d": true,
-        "service": "com.victronenergy.tank/20",
-        "path": "/RawValue",
-        "serviceObj": {
-            "service": "com.victronenergy.tank/20",
-            "name": "Left Propane Tank (20)"
-        },
-        "pathObj": {
-            "path": "/RawValue",
-            "name": "/RawValue",
-            "type": "number",
-            "value": 34.71602249145508
-        },
-        "name": "",
-        "onlyChanges": false,
-        "roundValues": "1",
-        "x": 180,
-        "y": 1200,
-        "wires": [
-            [
-                "a4fe06dad0e33752"
-            ]
-        ]
-    },
-    {
-        "id": "a4fe06dad0e33752",
-        "type": "subflow:c515380878a4716f",
-        "z": "b22624498baaa896",
-        "d": true,
-        "name": "",
-        "env": [
-            {
-                "name": "empty",
-                "value": "3.8",
-                "type": "num"
-            },
-            {
-                "name": "full",
-                "value": "35.4",
-                "type": "num"
-            }
-        ],
-        "x": 530,
-        "y": 1200,
-        "wires": [
-            [
-                "56bfe721ed8b5675",
-                "e8180cd3ca37e6c5",
-                "e08ca67adef7fb8c"
-            ]
-        ]
-    },
-    {
-        "id": "bcbcc2ea62ba3ecd",
-        "type": "subflow:c515380878a4716f",
-        "z": "b22624498baaa896",
-        "d": true,
-        "name": "",
-        "env": [
-            {
-                "name": "empty",
-                "value": "3.8",
-                "type": "str"
-            },
-            {
-                "name": "full",
-                "value": "35.4",
-                "type": "str"
-            }
-        ],
-        "x": 530,
-        "y": 1360,
-        "wires": [
-            [
-                "b2790ee93b81319a",
-                "5624583cb2d689af",
-                "5e36b6ecf4020bc5"
-            ]
-        ]
-    },
-    {
-        "id": "2abf196677a68301",
-        "type": "victron-input-custom",
-        "z": "b22624498baaa896",
-        "d": true,
-        "service": "com.victronenergy.tank/21",
-        "path": "/RawValue",
-        "serviceObj": {
-            "service": "com.victronenergy.tank/21",
-            "name": "Right Propane Tank (21)"
-        },
-        "pathObj": {
-            "path": "/RawValue",
-            "name": "/RawValue",
-            "type": "number",
-            "value": 33.3436393737793
-        },
-        "name": "",
-        "onlyChanges": false,
-        "roundValues": "1",
-        "x": 180,
-        "y": 1360,
-        "wires": [
-            [
-                "bcbcc2ea62ba3ecd"
-            ]
-        ]
-    },
-    {
         "id": "56bfe721ed8b5675",
         "type": "subflow:26a48bdabf7607df",
         "z": "b22624498baaa896",
@@ -2296,7 +2184,7 @@
             }
         ],
         "x": 770,
-        "y": 1280,
+        "y": 1320,
         "wires": [
             [
                 "e558e37ec5e69804"
@@ -2336,7 +2224,7 @@
             }
         ],
         "x": 770,
-        "y": 1440,
+        "y": 1540,
         "wires": [
             [
                 "2ae801359341660a"
@@ -2362,7 +2250,7 @@
         "onlyChanges": false,
         "roundValues": "1",
         "x": 180,
-        "y": 1520,
+        "y": 1360,
         "wires": [
             [
                 "f253ceb24e2d43f6"
@@ -2512,8 +2400,8 @@
         "styleRounded": true,
         "styleGlow": false,
         "className": "large-gauge-text",
-        "x": 910,
-        "y": 1200,
+        "x": 930,
+        "y": 1220,
         "wires": [
             []
         ]
@@ -2553,8 +2441,8 @@
         "styleRounded": true,
         "styleGlow": false,
         "className": "large-gauge-text",
-        "x": 910,
-        "y": 1360,
+        "x": 930,
+        "y": 1440,
         "wires": [
             []
         ]
@@ -3006,7 +2894,7 @@
         "value": "payload",
         "valueType": "msg",
         "x": 930,
-        "y": 1520,
+        "y": 1360,
         "wires": []
     },
     {
@@ -3015,7 +2903,7 @@
         "z": "b22624498baaa896",
         "name": "",
         "x": 770,
-        "y": 1520,
+        "y": 1360,
         "wires": [
             [
                 "25cea28771461383"
@@ -3198,7 +3086,7 @@
             }
         ],
         "x": 770,
-        "y": 1240,
+        "y": 1280,
         "wires": [
             [
                 "e558e37ec5e69804"
@@ -3226,7 +3114,7 @@
         "value": "payload",
         "valueType": "msg",
         "x": 910,
-        "y": 1240,
+        "y": 1300,
         "wires": []
     },
     {
@@ -3248,7 +3136,7 @@
         "wrapText": false,
         "className": "large-text",
         "x": 910,
-        "y": 1400,
+        "y": 1520,
         "wires": []
     },
     {
@@ -3264,7 +3152,7 @@
             }
         ],
         "x": 770,
-        "y": 1400,
+        "y": 1500,
         "wires": [
             [
                 "2ae801359341660a"
@@ -3291,7 +3179,7 @@
         "onlyChanges": false,
         "roundValues": "2",
         "x": 170,
-        "y": 1660,
+        "y": 1240,
         "wires": [
             [
                 "9833133c96b19773"
@@ -3318,7 +3206,7 @@
         "onlyChanges": false,
         "roundValues": "2",
         "x": 170,
-        "y": 1720,
+        "y": 1460,
         "wires": [
             [
                 "ee1ddc99836d7c5f"
@@ -3346,7 +3234,7 @@
         "value": "payload",
         "valueType": "msg",
         "x": 920,
-        "y": 1660,
+        "y": 1260,
         "wires": []
     },
     {
@@ -3370,7 +3258,7 @@
         "value": "payload",
         "valueType": "msg",
         "x": 920,
-        "y": 1720,
+        "y": 1480,
         "wires": []
     },
     {
@@ -3522,11 +3410,12 @@
         "type": "subflow:1bca7697946c1d3f",
         "z": "b22624498baaa896",
         "name": "",
-        "x": 570,
-        "y": 1660,
+        "x": 560,
+        "y": 1240,
         "wires": [
             [
-                "e8180cd3ca37e6c5"
+                "e8180cd3ca37e6c5",
+                "e08ca67adef7fb8c"
             ],
             [
                 "e4faba6018cf1503"
@@ -3538,11 +3427,12 @@
         "type": "subflow:1bca7697946c1d3f",
         "z": "b22624498baaa896",
         "name": "",
-        "x": 570,
-        "y": 1720,
+        "x": 560,
+        "y": 1460,
         "wires": [
             [
-                "5624583cb2d689af"
+                "5624583cb2d689af",
+                "5e36b6ecf4020bc5"
             ],
             [
                 "090879cfa55fb504"
@@ -3827,12 +3717,11 @@
         "name": "",
         "onlyChanges": false,
         "x": 180,
-        "y": 1240,
+        "y": 1280,
         "wires": [
             [
-                "e8180cd3ca37e6c5",
-                "e08ca67adef7fb8c",
-                "56bfe721ed8b5675"
+                "56bfe721ed8b5675",
+                "9833133c96b19773"
             ]
         ]
     },
@@ -3854,12 +3743,11 @@
         "name": "",
         "onlyChanges": false,
         "x": 180,
-        "y": 1400,
+        "y": 1500,
         "wires": [
             [
-                "5624583cb2d689af",
-                "5e36b6ecf4020bc5",
-                "b2790ee93b81319a"
+                "b2790ee93b81319a",
+                "ee1ddc99836d7c5f"
             ]
         ]
     },
