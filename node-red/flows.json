@@ -10455,9 +10455,14 @@
                 "type": "num"
             },
             {
-                "label": "2.7V",
-                "value": 2.7,
+                "label": "2.6V",
+                "value": 2.6,
                 "type": "num"
+            },
+            {
+                "label": "2.7V",
+                "value": "2.7",
+                "type": "str"
             }
         ],
         "payload": "",
