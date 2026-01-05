@@ -77,13 +77,18 @@ Follow these steps for installation:
     ln -s /data/inetbox2mqtt/etc/udev/rules.d/zz-serial-starter-override.rules /etc/udev/rules.d/
     ```
 
+5. Create symbolic link to the inetbox2mqtt configuration file:
 
-5. Edit the configuration parameters in `/etc/inetbox2mqtt`:
+    ```bash
+    ln -s /data/inetbox2mqtt/etc/inetbox2mqtt /etc/
+    ```
+
+6. Edit the configuration parameters in `/etc/inetbox2mqtt`:
     - Use `localhost` and port `1883` for connecting to the local MQTT server provided by Venus OS.
     - Set the serial device path to your FTDI-compatible adapter, e.g.:
       `/dev/serial/by-id/usb-FTDI_FT232R_USB_UART_00000000-if00-port0`
 
-6. Additional services—such as **bt-daemon** (for enabling RFCOMM Bluetooth devices) and **gpio-daemon** (for allowing GPIO control by non‑root users)—are available at https://github.com/microfarad-de/nastia-server/tree/venus-os.
+7. Additional services—such as **bt-daemon** (for enabling RFCOMM Bluetooth devices) and **gpio-daemon** (for allowing GPIO control by non‑root users)—are available at https://github.com/microfarad-de/nastia-server/tree/venus-os.
    These scripts are required for the fridge controller Node‑RED flow described at https://github.com/microfarad-de/fridge-controller.
 
 
