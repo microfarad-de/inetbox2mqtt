@@ -70,12 +70,20 @@ Follow these steps for installation:
     ln -s /data/inetbox2mqtt/service/RpiTemperature /opt/victronenergy/service/
     ```
 
-4. Edit the configuration parameters in `/etc/inetbox2mqtt`:
+4. Create symbolic link to the udev rules file for ignoring FT232R_USB_UART devices. This prevents
+   Venus OS from automatically using the LIN bus serial port:
+
+    ```bash
+    ln -s /data/inetbox2mqtt/etc/udev/rules.d/zz-serial-starter-override.rules /etc/udev/rules.d/
+    ```
+
+
+5. Edit the configuration parameters in `/etc/inetbox2mqtt`:
     - Use `localhost` and port `1883` for connecting to the local MQTT server provided by Venus OS.
     - Set the serial device path to your FTDI-compatible adapter, e.g.:
       `/dev/serial/by-id/usb-FTDI_FT232R_USB_UART_00000000-if00-port0`
 
-5. Additional services—such as **bt-daemon** (for enabling RFCOMM Bluetooth devices) and **gpio-daemon** (for allowing GPIO control by non‑root users)—are available at https://github.com/microfarad-de/nastia-server/tree/venus-os.
+6. Additional services—such as **bt-daemon** (for enabling RFCOMM Bluetooth devices) and **gpio-daemon** (for allowing GPIO control by non‑root users)—are available at https://github.com/microfarad-de/nastia-server/tree/venus-os.
    These scripts are required for the fridge controller Node‑RED flow described at https://github.com/microfarad-de/fridge-controller.
 
 
@@ -87,23 +95,7 @@ Before starting the inetbox2mqtt service, configure the following in Venus OS:
 
 2. Enable Node-RED under **Settings > Venus OS Large features**. This will provide the web interface to control your Truma Combi.
 
-3. Prevent Venus OS from automatically using the serial port by adding the following line to `/etc/udev/rules.d/serial-starter.rules`:
-
-    ```text
-    ACTION=="add", ENV{ID_BUS}=="usb", ENV{ID_MODEL}=="FT232R_USB_UART", ENV{VE_SERVICE}="ignore"
-    ```
-
-    Retrieve the correct `ID_MODEL` value by running:
-
-    ```bash
-    udevadm info /dev/serial/by-id/usb-FTDI_FT232R_USB_UART_00000000-if00-port0
-    ```
-
-    Replace the device name with the appropriate identifier for your USB-to-serial converter.
-
-    Also, comment out any other lines in that file referring to the same serial device `ID_MODEL`.
-
-4. To enable classic Bluetooth for RFCOMM communication (optional, but required for the fridge controller at [https://github.com/microfarad-de/fridge-controller](https://github.com/microfarad-de/fridge-controller)), update `/etc/bluetooth/ble.conf` by changing the value of `ControllerMode` from `le` to `dual`:
+3. To enable classic Bluetooth for RFCOMM communication (optional, but required for the fridge controller at [https://github.com/microfarad-de/fridge-controller](https://github.com/microfarad-de/fridge-controller)), update `/etc/bluetooth/ble.conf` by changing the value of `ControllerMode` from `le` to `dual`:
 
     ```text
     ControllerMode = dual

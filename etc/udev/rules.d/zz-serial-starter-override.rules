@@ -1,0 +1,5 @@
+# KHr: 
+# Enusres that FT232R_USB_UART devices get ignored by Venus OS
+# This a symlink to this file must be added to /etc/udev/rules.d/
+
+ACTION=="add", ENV{ID_BUS}=="usb", ENV{ID_MODEL}=="FT232R_USB_UART", ENV{VE_SERVICE}:="ignore"
