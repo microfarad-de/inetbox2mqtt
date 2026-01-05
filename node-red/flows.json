@@ -1336,7 +1336,7 @@
         "type": "function",
         "z": "35877746e13a44de",
         "name": "AppendUnit",
-        "func": "\nlet unit = env.get('unit');\n\n// Only append unit to numerical values\nif (!Number.isNaN(Number(msg.payload)) && msg.payload !== \"\") {\n    msg.payload = msg.payload + unit;\n}\n\nreturn msg;",
+        "func": "\nlet unit = env.get('unit');\n\nmsg.payload = msg.payload + unit;\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
