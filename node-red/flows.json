@@ -4071,7 +4071,7 @@
             }
         ],
         "x": 710,
-        "y": 1720,
+        "y": 1700,
         "wires": [
             [
                 "8e2cd2587cdc9e98"
@@ -4234,27 +4234,6 @@
         ]
     },
     {
-        "id": "db7e61c450302526",
-        "type": "function",
-        "z": "2561d49b29c858c7",
-        "d": true,
-        "name": "Max",
-        "func": "\n// Get the stored array or initialize if it doesn't exist\nlet values = context.get('values') || [];\n\n// Add the new payload\nvalues.push(msg.payload);\n\n// Keep only the last 10 values\nif (values.length > 5) {\n    values.shift(); // Remove the oldest value\n}\n\n// Store the updated array back to context\ncontext.set('values', values);\n\n// Find the maximum value\nlet max = Math.max(...values);\n\n// Send the maximum value\nmsg.payload = max;\nreturn msg;\n",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 550,
-        "y": 300,
-        "wires": [
-            [
-                "1ac7db4665ba096a"
-            ]
-        ]
-    },
-    {
         "id": "ed0b389fe13487c0",
         "type": "subflow:43e263465d4c8532",
         "z": "2561d49b29c858c7",
@@ -4270,7 +4249,6 @@
         "y": 260,
         "wires": [
             [
-                "db7e61c450302526",
                 "243002ab269a2a1c"
             ]
         ]
@@ -4291,7 +4269,6 @@
         "y": 320,
         "wires": [
             [
-                "db7e61c450302526",
                 "7e00fb2cc97bd822"
             ]
         ]
@@ -4724,7 +4701,7 @@
         "value": "payload",
         "valueType": "msg",
         "x": 890,
-        "y": 740,
+        "y": 720,
         "wires": []
     },
     {
@@ -4740,7 +4717,7 @@
             }
         ],
         "x": 710,
-        "y": 740,
+        "y": 720,
         "wires": [
             [
                 "291c20af2a14a174"
@@ -4915,7 +4892,7 @@
         "z": "2561d49b29c858c7",
         "name": "",
         "x": 710,
-        "y": 1680,
+        "y": 1660,
         "wires": [
             [
                 "8e2cd2587cdc9e98"
@@ -4943,7 +4920,7 @@
         "value": "payload",
         "valueType": "msg",
         "x": 900,
-        "y": 1680,
+        "y": 1660,
         "wires": []
     },
     {
@@ -5555,7 +5532,7 @@
             },
             {
                 "name": "repetitions",
-                "value": "3",
+                "value": "30",
                 "type": "num"
             }
         ],
@@ -5595,7 +5572,7 @@
             },
             {
                 "name": "repetitions",
-                "value": "3",
+                "value": "30",
                 "type": "num"
             }
         ],
@@ -5635,7 +5612,7 @@
             },
             {
                 "name": "repetitions",
-                "value": "3",
+                "value": "30",
                 "type": "num"
             }
         ],
@@ -5675,7 +5652,7 @@
             },
             {
                 "name": "repetitions",
-                "value": "3",
+                "value": "30",
                 "type": "num"
             }
         ],
