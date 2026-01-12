@@ -100,11 +100,42 @@ Before starting the inetbox2mqtt service, configure the following in Venus OS:
 
 2. Enable Node-RED under **Settings > Venus OS Large features**. This will provide the web interface to control your Truma Combi.
 
-3. To enable classic Bluetooth for RFCOMM communication (optional, but required for the fridge controller at [https://github.com/microfarad-de/fridge-controller](https://github.com/microfarad-de/fridge-controller)), update `/etc/bluetooth/ble.conf` by changing the value of `ControllerMode` from `le` to `dual`:
+3. Enable classic Bluetooth for RFCOMM communication (optional, but required for the fridge controller at 
+   [https://github.com/microfarad-de/fridge-controller](https://github.com/microfarad-de/fridge-controller)), 
+   update `/etc/bluetooth/ble.conf` by changing the value of `ControllerMode` from `le` to `dual`:
 
     ```text
     ControllerMode = dual
     ```
+
+4. Redirect vesmart-server logging to tmpfs in order to avoid excessive SD card wear, update 
+   `/opt/victronenergy/service-templates/vesmart-server/log/run` by changing the log path from 
+   `/var/log/vesmart-server` to `/var/volatile/log/vesmart-server`:
+
+
+   ```text
+   exec multilog t s25000 n4 /var/volatile/log/vesmart-server
+   ```
+
+## Automatic Installation Script
+
+All the required Venus OS changes described in the previous sections can be applied automatically by calling
+the automated installation script bundled in this repository:
+
+```bash
+./install.sh
+```
+
+This script will perform the following actions:
+
+1. Create all of the required symbolic links for both inetbox2mqtt. 
+
+2. Create additional symbolic links for the nastia-server automation toolbox
+   ([https://github.com/microfarad-de/nastia-server](https://github.com/microfarad-de/nastia-server)).
+ 
+3. Apply any required Venus OS system file patches. 
+
+This script has been tested with Venus OS version 3.67.
 
 ## Bring-Up
 
