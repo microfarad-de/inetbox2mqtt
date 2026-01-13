@@ -100,16 +100,16 @@ Before starting the inetbox2mqtt service, configure the following in Venus OS:
 
 2. Enable Node-RED under **Settings > Venus OS Large features**. This will provide the web interface to control your Truma Combi.
 
-3. Enable classic Bluetooth for RFCOMM communication (optional, but required for the fridge controller at 
-   [https://github.com/microfarad-de/fridge-controller](https://github.com/microfarad-de/fridge-controller)), 
+3. Enable classic Bluetooth for RFCOMM communication (optional, but required for the fridge controller at
+   [https://github.com/microfarad-de/fridge-controller](https://github.com/microfarad-de/fridge-controller)),
    update `/etc/bluetooth/ble.conf` by changing the value of `ControllerMode` from `le` to `dual`:
 
     ```text
     ControllerMode = dual
     ```
 
-4. Redirect vesmart-server logging to tmpfs in order to avoid excessive SD card wear, update 
-   `/opt/victronenergy/service-templates/vesmart-server/log/run` by changing the log path from 
+4. Redirect vesmart-server logging to tmpfs in order to avoid excessive SD card wear, update
+   `/opt/victronenergy/service-templates/vesmart-server/log/run` by changing the log path from
    `/var/log/vesmart-server` to `/var/volatile/log/vesmart-server`:
 
 
@@ -128,12 +128,12 @@ the automated installation script bundled in this repository:
 
 This script will perform the following actions:
 
-1. Create all of the required symbolic links for both inetbox2mqtt. 
+1. Create all of the required symbolic links for both inetbox2mqtt.
 
 2. Create additional symbolic links for the nastia-server automation toolbox
    ([https://github.com/microfarad-de/nastia-server](https://github.com/microfarad-de/nastia-server)).
- 
-3. Apply any required Venus OS system file patches. 
+
+3. Apply any required Venus OS system file patches.
 
 This script has been tested with Venus OS version 3.67.
 
@@ -305,7 +305,7 @@ The **Fridge** tab provides controls for the **Fridge Controller Arduino project
 
 Several other dashboards are available:
 
-- **Overview** – Key system parameters at a glance
+- **Dashboard** – Key system parameters at a glance
 - **Energy** – Battery, solar charge controller, and propane tank information
 - **Environment** – Data from various temperature, humidity, and air pressure sensors
 - **Alerts** – Displays a list of active system alerts
