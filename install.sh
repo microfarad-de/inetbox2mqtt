@@ -7,10 +7,6 @@
 # Enable classic Bluetooth
 sed -i 's|^[[:space:]]*ControllerMode[[:space:]]*=[[:space:]]*le[[:space:]]*$|ControllerMode = dual|' /etc/bluetooth/ble.conf
 
-# Redirect vesmart-server log to tmpfs
-sed -i 's|^\(exec[[:space:]]\+multilog[[:space:]].*[[:space:]]\)/var/log/vesmart-server$|\1/var/volatile/log/vesmart-server|' \
-/opt/victronenergy/service-templates/vesmart-server/log/run
-
 
 # Create symbolic links for inetbox2mqtt components
 ln -s /data/inetbox2mqtt/service/* /opt/victronenergy/service/

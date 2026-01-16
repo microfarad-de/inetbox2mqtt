@@ -6996,7 +6996,9 @@
                 "cf563ccf97436424",
                 "fb2e28811fcc6756"
             ],
-            [],
+            [
+                "601ffed37c22b2a6"
+            ],
             [
                 "9015a4834ff0024c",
                 "86470d03d9a70f6b"
@@ -7618,7 +7620,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 850,
-        "y": 540,
+        "y": 560,
         "wires": []
     },
     {
@@ -7846,7 +7848,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 860,
-        "y": 460,
+        "y": 440,
         "wires": []
     },
     {
@@ -7971,7 +7973,7 @@
         "type": "function",
         "z": "fcffa944a0680a42",
         "name": "Args",
-        "func": "\nlet device = env.get(\"fridge-serial-device\");\nlet baud   = env.get(\"fridge-serial-baud\");\n\nmsg.payload = `${device} ${baud} ${msg.payload}`;\n\nreturn msg;",
+        "func": "\nlet device = env.get(\"fridge-serial-device\");\nlet baud   = env.get(\"fridge-serial-baud\");\n\nmsg.payload = `${device} ${baud} ${msg.payload}`;\n//msg.payload = `${device} ${msg.payload}`;\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -8213,6 +8215,23 @@
         ],
         "x": 780,
         "y": 1100,
+        "wires": []
+    },
+    {
+        "id": "601ffed37c22b2a6",
+        "type": "debug",
+        "z": "fcffa944a0680a42",
+        "name": "stderr",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 850,
+        "y": 500,
         "wires": []
     },
     {

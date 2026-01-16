@@ -108,15 +108,6 @@ Before starting the inetbox2mqtt service, configure the following in Venus OS:
     ControllerMode = dual
     ```
 
-4. Redirect vesmart-server logging to tmpfs in order to avoid excessive SD card wear, update
-   `/opt/victronenergy/service-templates/vesmart-server/log/run` by changing the log path from
-   `/var/log/vesmart-server` to `/var/volatile/log/vesmart-server`:
-
-
-   ```text
-   exec multilog t s25000 n4 /var/volatile/log/vesmart-server
-   ```
-
 ## Automatic Installation Script
 
 All the required Venus OS changes described in the previous sections can be applied automatically by calling
