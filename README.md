@@ -107,6 +107,12 @@ Before starting the inetbox2mqtt service, configure the following in Venus OS:
     ```text
     ControllerMode = dual
     ```
+4. Disable vesmart-server service, which isn't essential and interferes with RFCOMM communication, by calling the following 
+   command then rebooting:
+
+    ```bash
+    touch /opt/victronenergy/service-templates/vesmart-server/down
+    ```
 
 ## Automatic Installation Script
 

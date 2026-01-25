@@ -7,6 +7,8 @@
 # Enable classic Bluetooth
 sed -i 's|^[[:space:]]*ControllerMode[[:space:]]*=[[:space:]]*le[[:space:]]*$|ControllerMode = dual|' /etc/bluetooth/ble.conf
 
+# Disable the vesmart-server service
+touch /opt/victronenergy/service-templates/vesmart-server/down
 
 # Create symbolic links for inetbox2mqtt components
 ln -s /data/inetbox2mqtt/service/* /opt/victronenergy/service/
