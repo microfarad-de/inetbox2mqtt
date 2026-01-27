@@ -113,6 +113,12 @@ Before starting the inetbox2mqtt service, configure the following in Venus OS:
     ```bash
     touch /opt/victronenergy/service-templates/vesmart-server/down
     ```
+5. Enable Node-RED access via plain HTTP by setting `uiHost: "::"` in the user settings. This is required for avoiding periodic 
+   connectivity loss when running the Node-Red dashboard as a home screen app:
+
+    ```bash
+    ln -s /data/inetbox2mqtt/node-red/settings-user.js /data/home/nodered/.node-red/
+    ```
 
 ## Automatic Installation Script
 
@@ -259,12 +265,18 @@ The user interface is built using the **Node-RED Dashboard V2** add‑on by **@f
 
 To set up the dashboard after Node-RED is running, follow these steps:
 
-1. **Access the Node-RED editor** at `https://<rpi_ip_address>:1881`, replacing `<rpi_ip_address>` with your Raspberry Pi’s IP address.
-   If Venus OS security settings require it, use `http://<rpi_ip_address>:1880` instead.
+1. **Access the Node-RED editor** at `https://<rpi_ip_address>:1881` (or `http://<rpi_ip_address>:1880`), 
+   replacing `<rpi_ip_address>` with your Raspberry Pi’s IP address.
 
 2. Open the **menu** (☰ in the top‑right corner), select **Manage Palette**, and install the `@flowfuse/node-red-dashboard` add‑on.
 
 3. Go to **Import** in the menu and import the file `node-red/flows.json`.
+   Alternatively copy this file to `/data/home/nodered/.node-red` then restart the Node-RED service:
+
+    ```bash
+    cp /data/inetbox2mqtt/node-red/flows.json /data/home/nodered/.node-red/
+    svc -t /service/node-red-venus/
+    ```
 
 4. Select **Manage Palette** in te menu, click on **Environment** and ensure that the following environment variables have the correct values (leave default if not sure):
    - `system-settings-file`: Absolute path to the system settings storage file
@@ -272,10 +284,10 @@ To set up the dashboard after Node-RED is running, follow these steps:
    - `fridge-serial-device`: Absolute path of the serial device for sending commands to the fridge
    - `fridge-serial-baud`: Serial connection baud rate
 
-4. Open the dashboard in a browser at `https://<rpi_ip_address>:1881/dashboard`.
-   (If necessary, use `http://<rpi_ip_address>:1880/dashboard`.)
+4. Open the dashboard in a browser at `https://<rpi_ip_address>:1881/dashboard`
+   (or `http://<rpi_ip_address>:1880/dashboard`).
 
-> **Note:** The dashboard can also be accessed through the **VRM portal** under the *Venus OS Large* menu:
+> **Note:** The dashboard can also be accessed through the **VRM portal** under the **Venus OS Large** menu:
 > [https://vrm.victronenergy.com](https://vrm.victronenergy.com)
 
 > **Tip:** On iOS devices, you can add the dashboard URL to your home screen.

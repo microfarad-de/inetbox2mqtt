@@ -14,7 +14,7 @@ touch /opt/victronenergy/service-templates/vesmart-server/down
 ln -s /data/inetbox2mqtt/service/* /opt/victronenergy/service/
 ln -s /data/inetbox2mqtt/etc/udev/rules.d/zz-serial-starter-override.rules /etc/udev/rules.d/
 ln -s /data/inetbox2mqtt/etc/inetbox2mqtt /etc/
-
+ln -s /data/inetbox2mqtt/node-red/settings-user.js /data/home/nodered/.node-red/
 
 # Create symbolic links for nastia-server components
 ln -s /data/nastia-server/opt/logrotate-3.21.0/logrotate /usr/sbin/
