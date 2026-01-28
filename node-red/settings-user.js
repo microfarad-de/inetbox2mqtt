@@ -10,7 +10,7 @@ module.exports = {
      */
     // KHr: allow plain HTTP access 
     //uiHost: "127.0.0.1",
-    uiHost: "::"
+    uiHost: "0.0.0.0"
 
 
 }

@@ -113,7 +113,7 @@ Before starting the inetbox2mqtt service, configure the following in Venus OS:
     ```bash
     touch /opt/victronenergy/service-templates/vesmart-server/down
     ```
-5. Enable Node-RED access via plain HTTP by setting `uiHost: "::"` in the user settings. This is required for avoiding periodic 
+5. Enable Node-RED access via plain HTTP by setting `uiHost: "0.0.0.0"` in the user settings. This is required for avoiding periodic 
    connectivity loss when running the Node-Red dashboard as a home screen app:
 
     ```bash
