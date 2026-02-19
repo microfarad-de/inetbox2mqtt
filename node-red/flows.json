@@ -6059,6 +6059,7 @@
         "wires": [
             [
                 "3764559c61d5efd8",
+                "975147e68669abdf",
                 "2cb60131ed577e2e"
             ]
         ]
@@ -6074,8 +6075,7 @@
             [
                 "1ffa61af8057c317",
                 "89f945b670c00a5d",
-                "813ff97549cc920b",
-                "e033423baa05de63"
+                "813ff97549cc920b"
             ],
             [
                 "102150e9c523f055"
@@ -6123,8 +6123,7 @@
         "wires": [
             [
                 "b016a634d4ca03b4",
-                "824ddf9f659fc93b",
-                "cd410bd95b62785b"
+                "824ddf9f659fc93b"
             ],
             [
                 "2c6234848be3af9e"
@@ -6172,8 +6171,7 @@
         "wires": [
             [
                 "b95d223c430a2047",
-                "2bb0230acd2f9d87",
-                "84e1480c0683a81c"
+                "2bb0230acd2f9d87"
             ]
         ]
     },
@@ -6182,7 +6180,7 @@
         "type": "ui-dropdown",
         "z": "c74d4096e08fa272",
         "group": "df7a1670ae765f1d",
-        "name": "Temp",
+        "name": "",
         "label": "Temperature",
         "tooltip": "",
         "order": 2,
@@ -6335,7 +6333,7 @@
         "className": "temp-target",
         "typeIsComboBox": false,
         "msgTrigger": "onChange",
-        "x": 650,
+        "x": 670,
         "y": 220,
         "wires": [
             [
@@ -6348,8 +6346,8 @@
         "type": "ui-dropdown",
         "z": "c74d4096e08fa272",
         "group": "df7a1670ae765f1d",
-        "name": "Fan",
-        "label": "Fan setting",
+        "name": "",
+        "label": "Fan",
         "tooltip": "",
         "order": 4,
         "width": 3,
@@ -6390,8 +6388,8 @@
         "type": "ui-dropdown",
         "z": "c74d4096e08fa272",
         "group": "df7a1670ae765f1d",
-        "name": "Water",
-        "label": "Water temp",
+        "name": "",
+        "label": "Water",
         "tooltip": "",
         "order": 6,
         "width": 3,
@@ -6437,8 +6435,8 @@
         "type": "ui-dropdown",
         "z": "c74d4096e08fa272",
         "group": "df7a1670ae765f1d",
-        "name": "Energy",
-        "label": "Energy mix",
+        "name": "",
+        "label": "Energy",
         "tooltip": "",
         "order": 8,
         "width": 3,
@@ -6480,7 +6478,7 @@
         "className": "mix-target",
         "typeIsComboBox": false,
         "msgTrigger": "onChange",
-        "x": 660,
+        "x": 650,
         "y": 680,
         "wires": [
             [
@@ -6504,12 +6502,10 @@
         "y": 60,
         "wires": [
             [
-                "2bb0230acd2f9d87",
-                "84e1480c0683a81c"
+                "2bb0230acd2f9d87"
             ],
             [
-                "b95c020a30b25ac7",
-                "73087bf629198ad7"
+                "b95c020a30b25ac7"
             ]
         ]
     },
@@ -6627,8 +6623,7 @@
         "y": 680,
         "wires": [
             [
-                "b95c020a30b25ac7",
-                "73087bf629198ad7"
+                "b95c020a30b25ac7"
             ]
         ]
     },
@@ -6724,7 +6719,6 @@
         "id": "122d78cd25de6ab7",
         "type": "ui-text",
         "z": "c74d4096e08fa272",
-        "d": true,
         "group": "bc614f1d5f7543e9",
         "order": 1,
         "width": 3,
@@ -6749,7 +6743,6 @@
         "id": "1051011b6e1ad9a5",
         "type": "ui-text",
         "z": "c74d4096e08fa272",
-        "d": true,
         "group": "bc614f1d5f7543e9",
         "order": 3,
         "width": 3,
@@ -6774,7 +6767,6 @@
         "id": "f2d33c43bccfd098",
         "type": "ui-text",
         "z": "c74d4096e08fa272",
-        "d": true,
         "group": "bc614f1d5f7543e9",
         "order": 2,
         "width": 3,
@@ -6799,7 +6791,6 @@
         "id": "65bbd489473ffc87",
         "type": "ui-text",
         "z": "c74d4096e08fa272",
-        "d": true,
         "group": "bc614f1d5f7543e9",
         "order": 4,
         "width": 3,
@@ -6818,6 +6809,31 @@
         "valueType": "msg",
         "x": 1110,
         "y": 660,
+        "wires": []
+    },
+    {
+        "id": "975147e68669abdf",
+        "type": "ui-text",
+        "z": "c74d4096e08fa272",
+        "d": true,
+        "group": "bc614f1d5f7543e9",
+        "order": 5,
+        "width": "",
+        "height": 0,
+        "name": "",
+        "label": "Status",
+        "format": "{{msg.payload}}",
+        "layout": "col-center",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#717171",
+        "wrapText": false,
+        "className": "medium-text",
+        "value": "payload",
+        "valueType": "msg",
+        "x": 750,
+        "y": 1060,
         "wires": []
     },
     {
@@ -6928,317 +6944,6 @@
         "x": 640,
         "y": 1100,
         "wires": []
-    },
-    {
-        "id": "e033423baa05de63",
-        "type": "ui-dropdown",
-        "z": "c74d4096e08fa272",
-        "group": "bc614f1d5f7543e9",
-        "name": "Temp",
-        "label": "Temperature",
-        "tooltip": "",
-        "order": 5,
-        "width": 3,
-        "height": 0,
-        "passthru": false,
-        "multiple": false,
-        "chips": false,
-        "clearable": false,
-        "options": [
-            {
-                "label": "Off",
-                "value": 0,
-                "type": "num"
-            },
-            {
-                "label": "5°C",
-                "value": 5,
-                "type": "num"
-            },
-            {
-                "label": "6°C",
-                "value": 6,
-                "type": "num"
-            },
-            {
-                "label": "7°C",
-                "value": 7,
-                "type": "num"
-            },
-            {
-                "label": "8°C",
-                "value": 8,
-                "type": "num"
-            },
-            {
-                "label": "9°C",
-                "value": 9,
-                "type": "num"
-            },
-            {
-                "label": "10°C",
-                "value": 10,
-                "type": "num"
-            },
-            {
-                "label": "11°C",
-                "value": 11,
-                "type": "num"
-            },
-            {
-                "label": "12°C",
-                "value": 12,
-                "type": "num"
-            },
-            {
-                "label": "13°C",
-                "value": 13,
-                "type": "num"
-            },
-            {
-                "label": "14°C",
-                "value": 14,
-                "type": "num"
-            },
-            {
-                "label": "15°C",
-                "value": 15,
-                "type": "num"
-            },
-            {
-                "label": "16°C",
-                "value": 16,
-                "type": "num"
-            },
-            {
-                "label": "17°C",
-                "value": 17,
-                "type": "num"
-            },
-            {
-                "label": "18°C",
-                "value": 18,
-                "type": "num"
-            },
-            {
-                "label": "19°C",
-                "value": 19,
-                "type": "num"
-            },
-            {
-                "label": "20°C",
-                "value": 20,
-                "type": "num"
-            },
-            {
-                "label": "21°C",
-                "value": 21,
-                "type": "num"
-            },
-            {
-                "label": "22°C",
-                "value": 22,
-                "type": "num"
-            },
-            {
-                "label": "23°C",
-                "value": 23,
-                "type": "num"
-            },
-            {
-                "label": "24°C",
-                "value": 24,
-                "type": "num"
-            },
-            {
-                "label": "25°C",
-                "value": 25,
-                "type": "num"
-            },
-            {
-                "label": "26°C",
-                "value": 26,
-                "type": "num"
-            },
-            {
-                "label": "27°C",
-                "value": 27,
-                "type": "num"
-            },
-            {
-                "label": "28°C",
-                "value": 28,
-                "type": "num"
-            },
-            {
-                "label": "29°C",
-                "value": 29,
-                "type": "num"
-            },
-            {
-                "label": "30°C",
-                "value": 30,
-                "type": "num"
-            }
-        ],
-        "payload": "",
-        "topic": "temp",
-        "topicType": "str",
-        "className": "temp-target",
-        "typeIsComboBox": false,
-        "msgTrigger": "onChange",
-        "x": 650,
-        "y": 200,
-        "wires": [
-            [
-                "4ec59e63f4ab1d7d"
-            ]
-        ]
-    },
-    {
-        "id": "84e1480c0683a81c",
-        "type": "ui-dropdown",
-        "z": "c74d4096e08fa272",
-        "group": "bc614f1d5f7543e9",
-        "name": "Fan",
-        "label": "Fan setting",
-        "tooltip": "",
-        "order": 7,
-        "width": 3,
-        "height": 0,
-        "passthru": false,
-        "multiple": false,
-        "chips": false,
-        "clearable": false,
-        "options": [
-            {
-                "label": "Eco",
-                "value": "eco",
-                "type": "str"
-            },
-            {
-                "label": "High",
-                "value": "high",
-                "type": "str"
-            }
-        ],
-        "payload": "",
-        "topic": "fan",
-        "topicType": "str",
-        "className": "fan-target",
-        "typeIsComboBox": false,
-        "msgTrigger": "onChange",
-        "x": 650,
-        "y": 340,
-        "wires": [
-            [
-                "b95d223c430a2047",
-                "5b3b355a63ca805e"
-            ]
-        ]
-    },
-    {
-        "id": "cd410bd95b62785b",
-        "type": "ui-dropdown",
-        "z": "c74d4096e08fa272",
-        "group": "bc614f1d5f7543e9",
-        "name": "Water",
-        "label": "Water temp",
-        "tooltip": "",
-        "order": 6,
-        "width": 3,
-        "height": 0,
-        "passthru": false,
-        "multiple": false,
-        "chips": false,
-        "clearable": false,
-        "options": [
-            {
-                "label": "Off",
-                "value": 0,
-                "type": "num"
-            },
-            {
-                "label": "Eco",
-                "value": 40,
-                "type": "num"
-            },
-            {
-                "label": "Hot",
-                "value": 60,
-                "type": "num"
-            }
-        ],
-        "payload": "",
-        "topic": "water",
-        "topicType": "str",
-        "className": "water-target",
-        "typeIsComboBox": false,
-        "msgTrigger": "onChange",
-        "x": 650,
-        "y": 500,
-        "wires": [
-            [
-                "375b24ad920e78fd",
-                "e0a363c704a9509a"
-            ]
-        ]
-    },
-    {
-        "id": "73087bf629198ad7",
-        "type": "ui-dropdown",
-        "z": "c74d4096e08fa272",
-        "group": "bc614f1d5f7543e9",
-        "name": "Energy",
-        "label": "Energy mix",
-        "tooltip": "",
-        "order": 8,
-        "width": 3,
-        "height": 0,
-        "passthru": false,
-        "multiple": false,
-        "chips": false,
-        "clearable": false,
-        "options": [
-            {
-                "label": "Gas",
-                "value": "gas",
-                "type": "str"
-            },
-            {
-                "label": "Elec 1",
-                "value": "electric1",
-                "type": "str"
-            },
-            {
-                "label": "Elec 2",
-                "value": "electric2",
-                "type": "str"
-            },
-            {
-                "label": "Mix 1",
-                "value": "mix1",
-                "type": "str"
-            },
-            {
-                "label": "Mix 2",
-                "value": "mix2",
-                "type": "str"
-            }
-        ],
-        "payload": "",
-        "topic": "mix",
-        "topicType": "str",
-        "className": "mix-target",
-        "typeIsComboBox": false,
-        "msgTrigger": "onChange",
-        "x": 660,
-        "y": 660,
-        "wires": [
-            [
-                "ef835c0120eecc9d"
-            ]
-        ]
     },
     {
         "id": "d892337cb1c8691c",
