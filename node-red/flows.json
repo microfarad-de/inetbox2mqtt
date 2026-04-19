@@ -7157,30 +7157,9 @@
         "className": "medium-text",
         "value": "payload",
         "valueType": "msg",
-        "x": 950,
+        "x": 1190,
         "y": 760,
         "wires": []
-    },
-    {
-        "id": "23c3aa52142db6ea",
-        "type": "subflow:35877746e13a44de",
-        "z": "fcffa944a0680a42",
-        "name": "",
-        "env": [
-            {
-                "name": "unit",
-                "value": "%",
-                "type": "str"
-            }
-        ],
-        "x": 770,
-        "y": 760,
-        "wires": [
-            [
-                "649c370c245facc1",
-                "3492fefa9a608e51"
-            ]
-        ]
     },
     {
         "id": "8459ff2385d2a8b6",
@@ -7198,7 +7177,7 @@
         "y": 800,
         "wires": [
             [
-                "23c3aa52142db6ea"
+                "931aacf73d0cec6d"
             ],
             [
                 "e0575167fd853f01"
@@ -7491,8 +7470,8 @@
         "className": "medium-text",
         "value": "payload",
         "valueType": "msg",
-        "x": 1170,
-        "y": 760,
+        "x": 1150,
+        "y": 720,
         "wires": []
     },
     {
@@ -7515,7 +7494,7 @@
         "className": "medium-text",
         "value": "payload",
         "valueType": "msg",
-        "x": 1150,
+        "x": 1130,
         "y": 800,
         "wires": []
     },
@@ -8233,6 +8212,47 @@
         "x": 850,
         "y": 500,
         "wires": []
+    },
+    {
+        "id": "931aacf73d0cec6d",
+        "type": "function",
+        "z": "fcffa944a0680a42",
+        "name": "Average",
+        "func": "const HOURS = 3;              // target rolling average window\nconst UPDATE_SECONDS = 20;    // function runs every 20 s\nconst INPUT_WINDOW_HOURS = 1; // msg.payload is already a true 1-hour average\n\nconst current = Number(msg.payload);\n\nif (!Number.isFinite(current)) {\n    node.error(\"msg.payload must be a number\");\n    return null;\n}\n\n// Number of updates per hour\nconst samplesPerHour = Math.round(\n    (3600 * INPUT_WINDOW_HOURS) / UPDATE_SECONDS\n);\n\n// Need history for (HOURS - 1) past hours\nconst bufferSize = Math.max(1, samplesPerHour * (HOURS - 1));\n\n// Persistent state\nlet buffer = context.get(\"buffer\");\nlet index = context.get(\"index\");\nlet count = context.get(\"count\");\n\nif (!Array.isArray(buffer) || buffer.length !== bufferSize) {\n    buffer = new Array(bufferSize).fill(0);\n    index = 0;\n    count = 0;\n}\n\n// Always include current value\nlet values = [current];\n\n// Add values from 1h ago, 2h ago, ... if available\nfor (let h = 1; h < HOURS; h++) {\n    const offset = h * samplesPerHour;\n\n    if (count < offset) {\n        break;\n    }\n\n    let pos = index - offset;\n    while (pos < 0) {\n        pos += bufferSize;\n    }\n\n    values.push(buffer[pos]);\n}\n\n// Store current value into circular buffer\nbuffer[index] = current;\nindex = (index + 1) % bufferSize;\n\nif (count < bufferSize) {\n    count++;\n}\n\n// Save persistent state\ncontext.set(\"buffer\", buffer);\ncontext.set(\"index\", index);\ncontext.set(\"count\", count);\n\n// Average all available hour blocks\nconst sum = values.reduce((a, b) => a + b, 0);\nlet avg = sum / values.length;\n\nmsg.payload = +(+avg).toFixed(1);\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 780,
+        "y": 760,
+        "wires": [
+            [
+                "23c3aa52142db6ea"
+            ]
+        ]
+    },
+    {
+        "id": "23c3aa52142db6ea",
+        "type": "subflow:35877746e13a44de",
+        "z": "fcffa944a0680a42",
+        "name": "",
+        "env": [
+            {
+                "name": "unit",
+                "value": "%",
+                "type": "str"
+            }
+        ],
+        "x": 910,
+        "y": 760,
+        "wires": [
+            [
+                "3492fefa9a608e51",
+                "649c370c245facc1"
+            ]
+        ]
     },
     {
         "id": "31753511ce9beb11",
