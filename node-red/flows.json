@@ -8975,6 +8975,11 @@
                 "type": "num"
             },
             {
+                "label": "-0.2°C",
+                "value": 0.2,
+                "type": "num"
+            },
+            {
                 "label": "-0.5°C",
                 "value": 0.5,
                 "type": "num"
@@ -9133,6 +9138,16 @@
             {
                 "label": "+2°C",
                 "value": 2,
+                "type": "num"
+            },
+            {
+                "label": "+2.5°C",
+                "value": 2.5,
+                "type": "num"
+            },
+            {
+                "label": "+3°C",
+                "value": 3,
                 "type": "num"
             }
         ],
