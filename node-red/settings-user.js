@@ -17,13 +17,18 @@ module.exports = {
       * provided here will enable file-based context that flushes to disk every 30 seconds.
       * Refer to the documentation for further options: https://nodered.org/docs/api/context/
       */
+
     contextStorage: {
-        default: {
+
+        default: "memory",
+        memory: {
+            module: "memory"
+        },
+        file: {
             module: "localfilesystem",
             config: {
                 dir: "/tmp",
-                base: "node-red-context",
-                flushInterval: 10
+                base: "node-red-context"
             }
         }
     }
