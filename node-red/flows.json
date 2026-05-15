@@ -1297,7 +1297,7 @@
         "type": "function",
         "z": "2b1e3a255c9f7549",
         "name": "Retransmit",
-        "func": "\n// Resend the message if setting has not been applied\n\ntopic = env.get('topic');\nstate = context.get('state');\n\nif (msg.topic === topic) {\n   \n    node.log(`Sent: ${topic}=${msg.payload}`);\n    context.set('state', msg.payload);\n    \n    let msg1 = {};\n    msg1.topic     = topic;\n    msg1.ui_update = {};\n    msg1.ui_update.class = 'modified';\n    \n    return [msg1, msg];\n}\nelse {\n    \n    if (state !== undefined) {\n    \n        if (msg.payload === state) {\n            node.log(`Confirmed: ${topic}=${msg.payload}`);\n            context.set('state', undefined);\n            \n            msg.ui_update = {};\n            msg.ui_update.class = '';\n            \n            return [msg, null];\n        }\n        else {\n            msg.payload = state;\n            node.log(`Resent: ${topic}=${msg.payload}`);\n            return [null, msg];\n        }\n        \n    }\n    else {\n        return [msg, null];\n    }\n    \n}\n\n",
+        "func": "\n// Resend the message if setting has not been applied\n\ntopic = env.get('topic');\nstate = context.get('state');\n\nif (msg.topic === topic) {\n   \n    node.log(`Sent: ${topic}=${msg.payload}`);\n    context.set('state', msg.payload);\n    \n    let msg1       = {};\n    msg1.topic     = topic;\n    msg1.ui_update = {};\n    msg1.ui_update.class = 'modified';\n    \n    return [msg1, msg];\n}\nelse {\n    \n    if (state !== undefined) {\n    \n        if (msg.payload === state) {\n            node.log(`Confirmed: ${topic}=${msg.payload}`);\n            context.set('state', undefined);\n            \n            msg.ui_update       = {};\n            msg.ui_update.class = '';\n            \n            return [msg, null];\n        }\n        else {\n            msg.payload = state;\n            node.log(`Resent: ${topic}=${msg.payload}`);\n            return [null, msg];\n        }\n        \n    }\n    else {\n        return [msg, null];\n    }\n    \n}\n\n",
         "outputs": 2,
         "timeout": 0,
         "noerr": 0,
@@ -5722,11 +5722,11 @@
         "type": "function",
         "z": "c74d4096e08fa272",
         "name": "HeatingTrigger",
-        "func": "\nif (msg.payload === undefined) {\n    return null;\n}\n\nlet temp = msg.payload;\n\nif (temp !== 0) {\n    \n    let fan      = flow.get('fan') || 'eco';\n    let lastTemp = context.get('last_temp') || 0;\n    \n    context.set('last_temp', temp);\n\n    // Prepare two different messages\n    let msg1 = { payload: temp, topic: 'temp' };\n    let msg2 = { payload: fan,  topic: 'fan' };\n    \n    if (lastTemp === 0) {\n        return [msg1, msg2];\n    }\n    else {\n        return [msg1, null];\n    }\n\n}\nelse {\n    context.set('last_temp', 0);\n    \n    let msg1 = { payload: 0,     topic: 'temp' }\n    let msg2 = { payload: 'off', topic: 'fan' };\n    return [msg1, msg2];\n}\n    \n",
+        "func": "\nif (msg.payload === undefined) {\n    return null;\n}\n\nlet temp = msg.payload;\n\nif (temp !== 0) {\n    \n    let fan      = flow.get('fan') || 'eco';\n    let lastTemp = flow.get('lastTemp') || 0;\n    \n\n    // Prepare two different messages\n    let msg1 = { payload: temp, topic: 'temp' };\n    let msg2 = { payload: fan,  topic: 'fan' };\n    \n    if (lastTemp === 0) {\n        return [msg1, msg2];\n    }\n    else {\n        return [msg1, null];\n    }\n\n}\nelse {\n    context.set('last_temp', 0);\n    \n    let msg1 = { payload: 0,     topic: 'temp' }\n    let msg2 = { payload: 'off', topic: 'fan' };\n    return [msg1, msg2];\n}\n    \n",
         "outputs": 2,
         "timeout": 0,
         "noerr": 0,
-        "initialize": "// Code added here will be run once\n// whenever the node is started.\ncontext.set('last_temp', undefined);\n",
+        "initialize": "",
         "finalize": "",
         "libs": [],
         "x": 420,
@@ -6073,7 +6073,8 @@
             [
                 "1ffa61af8057c317",
                 "89f945b670c00a5d",
-                "813ff97549cc920b"
+                "813ff97549cc920b",
+                "84e148800665df5c"
             ],
             [
                 "102150e9c523f055"
@@ -6157,7 +6158,7 @@
         "type": "function",
         "z": "c74d4096e08fa272",
         "name": "Filter",
-        "func": "\nif (msg.payload === 'off') {\n    msg.payload = flow.get('fan');\n}\n\nlet grayout = flow.get('grayout1') || false;\n\nif (msg.ui_update !== undefined && grayout) {\n    return null;\n} \n\nreturn msg;\n\n",
+        "func": "\nif (msg.payload === 'off') {\n    msg.payload = flow.get('fan') || 'eco';\n}\n\nlet grayout = flow.get('grayout1') || false;\n\nif (msg.ui_update !== undefined && grayout) {\n    return null;\n} \n\nreturn msg;\n\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -6839,7 +6840,7 @@
         "type": "function",
         "z": "c74d4096e08fa272",
         "name": "Decode",
-        "func": "if (msg.payload === undefined) {\n    return null;\n}\n\nswitch (msg.payload) {\n    case 0:\n        msg.payload = 'Off';\n        break;\n    \n    default:\n        msg.payload = msg.payload + '°C';\n        break;\n}\n\n\nreturn msg;",
+        "func": "if (msg.payload === undefined) {\n    return null;\n}\n\nswitch (msg.payload) {\n    case 0:\n        msg.payload = 'Off';\n        break;\n    \n    default:\n        msg.payload = msg.payload + '°C';\n        break;\n}\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -6926,8 +6927,8 @@
                 "type": "str"
             }
         ],
-        "x": 870,
-        "y": 260,
+        "x": 890,
+        "y": 180,
         "wires": [
             [
                 "e0a363c704a9509a"
@@ -6941,6 +6942,22 @@
         "name": "",
         "x": 640,
         "y": 1100,
+        "wires": []
+    },
+    {
+        "id": "84e148800665df5c",
+        "type": "function",
+        "z": "c74d4096e08fa272",
+        "name": "SetLastTemp",
+        "func": "if (msg.payload === undefined) {\n    return;\n}\n\nflow.set('lastTemp', msg.payload);\n",
+        "outputs": 0,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "// Code added here will be run once\n// whenever the node is started.\nflow.set('lastTemp', undefined);\n",
+        "finalize": "",
+        "libs": [],
+        "x": 890,
+        "y": 260,
         "wires": []
     },
     {
