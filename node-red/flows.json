@@ -1183,9 +1183,9 @@
         "group": "7a52027f8ab130e8",
         "name": "spacer",
         "tooltip": "",
-        "order": 7,
+        "order": 9,
         "width": 6,
-        "height": 4,
+        "height": 3,
         "className": ""
     },
     {
@@ -1194,7 +1194,7 @@
         "group": "7a52027f8ab130e8",
         "name": "spacer",
         "tooltip": "",
-        "order": 9,
+        "order": 11,
         "width": 6,
         "height": 1,
         "className": ""
@@ -2994,7 +2994,7 @@
         "d": true,
         "name": "",
         "group": "1769e3f51bb550db",
-        "order": 5,
+        "order": 4,
         "value": "payload",
         "valueType": "msg",
         "width": 2,
@@ -3036,7 +3036,7 @@
         "d": true,
         "name": "",
         "group": "1769e3f51bb550db",
-        "order": 7,
+        "order": 5,
         "value": "payload",
         "valueType": "msg",
         "width": 2,
@@ -3444,7 +3444,7 @@
         "d": true,
         "name": "",
         "group": "1769e3f51bb550db",
-        "order": 8,
+        "order": 6,
         "value": "payload",
         "valueType": "msg",
         "width": 2,
@@ -3849,7 +3849,7 @@
         "y": 1000,
         "wires": [
             [
-                "3c84ac16a56e8271"
+                "2800cb844c48d105"
             ]
         ]
     },
@@ -4095,7 +4095,8 @@
                 "f8c13de4be546aa7",
                 "6dbdd0e9fbc3fcaa",
                 "3e20c20608b3e828",
-                "ca728154b5b26204"
+                "ca728154b5b26204",
+                "2800cb844c48d105"
             ]
         ]
     },
@@ -4111,7 +4112,7 @@
                 "type": "str"
             }
         ],
-        "x": 510,
+        "x": 550,
         "y": 1000,
         "wires": [
             [
@@ -5675,6 +5676,26 @@
         "x": 675,
         "y": 660,
         "wires": []
+    },
+    {
+        "id": "2800cb844c48d105",
+        "type": "function",
+        "z": "2561d49b29c858c7",
+        "name": "Derate",
+        "func": "\nconst DIVIDER = 25;\n\nif (msg.topic.toLowerCase().includes(\"room\")) {\n    context.set(\"room\", msg.payload);\n    return null;\n}\n\nif (msg.topic.toLowerCase().includes(\"fridge\")) {\n    let room   = context.get(\"room\");\n    let fridge = msg.payload;\n    let derate = global.get(\"fridgeTempDerate\") || 0;\n\n    if (room !== undefined && fridge !== undefined && derate > 0) {\n        if (room > fridge) {\n            msg.payload -= (room - fridge) / derate;\n        }\n    }\n\n}\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "// Code added here will be run once\n// whenever the node is started.\n\n// Don't reset \"room\" context variable - keep it persistent\n",
+        "finalize": "",
+        "libs": [],
+        "x": 430,
+        "y": 1000,
+        "wires": [
+            [
+                "3c84ac16a56e8271"
+            ]
+        ]
     },
     {
         "id": "e797340e231f7c0d",
@@ -8436,8 +8457,8 @@
         "type": "function",
         "z": "fc670f602d442a02",
         "name": "DecodeJSON",
-        "func": "\nlet json = msg.payload;\nlet msgCount = 0\n\nfunction makeMessage(key, defaultValue) {\n    msgCount++;\n    flow.set(\"msgCount\", msgCount);\n    let value = (json[key] !== undefined) ? json[key] : defaultValue;\n    return {\n        topic: key,\n        payload: value\n    };\n}\n\n\nlet messages = [\n    makeMessage(\"fridgeFreezerInstalled\", false),\n    makeMessage(\"fridgeLowBattSoC\", 30),\n    makeMessage(\"fridgeBoostDC\", 90),\n    makeMessage(\"fridgeBoostHyst\", 20),\n    makeMessage(\"fridgeDefrostTempDec\", 0.5),\n    makeMessage(\"fridgeOpenDoorTempRate\", 0.15),\n    makeMessage(\"fridgeOpenDoorTempInc\", 1),\n    makeMessage(\"fridgeMinOutdoorTemp\", -100),\n    makeMessage(\"fridgePlaceholdeSetting\", 0), // Reserved for future use\n\n    makeMessage(\"alarmBattLow\", 20),\n    makeMessage(\"alarmPropaneLow\", 5),\n    makeMessage(\"alarmTempRoomLow\", 5),\n    makeMessage(\"alarmTempRoomHigh\", 35),\n    makeMessage(\"alarmTempFridgeLow\", 1),\n    makeMessage(\"alarmTempFridgeHigh\", 10),\n    makeMessage(\"alarmTempWaterLow\", 5),\n    makeMessage(\"alarmTempCpuHigh\", 70),\n    makeMessage(\"alarmTempBattLow\", 5),\n    makeMessage(\"alarmTempBattHigh\", 30),\n    makeMessage(\"alarmSensorBatt\", 2.7),\n\n    makeMessage(\"offsetTempRoom\", 0),\n    makeMessage(\"offsetTempOutdoor\", 0),\n    makeMessage(\"offsetTempFridge\", 0),\n\n    makeMessage(\"fridgeTargetTemp\", 4),\n    makeMessage(\"fridgeAbsorberMode\", 1),\n    \n    makeMessage(\"cmbPhone\", \"\"),\n    makeMessage(\"cmbApiKey\", \"\"),\n\n    {topic: \"apply\", payload: \"\"}\n];\n\nreturn messages;\n",
-        "outputs": 28,
+        "func": "\nlet json = msg.payload;\nlet msgCount = 0\n\nfunction makeMessage(key, defaultValue) {\n    msgCount++;\n    flow.set(\"msgCount\", msgCount);\n    let value = (json[key] !== undefined) ? json[key] : defaultValue;\n    return {\n        topic: key,\n        payload: value\n    };\n}\n\n\nlet messages = [\n    makeMessage(\"fridgeFreezerInstalled\", false),\n    makeMessage(\"fridgeLowBattSoC\", 30),\n    makeMessage(\"fridgeBoostDC\", 90),\n    makeMessage(\"fridgeBoostHyst\", 20),\n    makeMessage(\"fridgeDefrostTempDec\", 0.5),\n    makeMessage(\"fridgeOpenDoorTempRate\", 0.15),\n    makeMessage(\"fridgeOpenDoorTempInc\", 1),\n    makeMessage(\"fridgeMinOutdoorTemp\", -100),\n    makeMessage(\"fridgePlaceholdeSetting\", 0), // Reserved for future use\n\n    makeMessage(\"alarmBattLow\", 20),\n    makeMessage(\"alarmPropaneLow\", 5),\n    makeMessage(\"alarmTempRoomLow\", 5),\n    makeMessage(\"alarmTempRoomHigh\", 35),\n    makeMessage(\"alarmTempFridgeLow\", 1),\n    makeMessage(\"alarmTempFridgeHigh\", 10),\n    makeMessage(\"alarmTempWaterLow\", 5),\n    makeMessage(\"alarmTempCpuHigh\", 70),\n    makeMessage(\"alarmTempBattLow\", 5),\n    makeMessage(\"alarmTempBattHigh\", 30),\n    makeMessage(\"alarmSensorBatt\", 2.7),\n\n    makeMessage(\"offsetTempRoom\", 0),\n    makeMessage(\"offsetTempOutdoor\", 0),\n    makeMessage(\"offsetTempFridge\", 0),\n\n    makeMessage(\"fridgeTargetTemp\", 4),\n    makeMessage(\"fridgeAbsorberMode\", 1),\n    \n    makeMessage(\"cmbPhone\", \"\"),\n    makeMessage(\"cmbApiKey\", \"\"),\n    \n    makeMessage(\"fridgeTempDerate\", 20),\n\n    {topic: \"apply\", payload: \"\"}\n];\n\nreturn messages;\n",
+        "outputs": 29,
         "timeout": 0,
         "noerr": 0,
         "initialize": "// Code added here will be run once\n// whenever the node is started.\nflow.set(\"msgCount\", undefined);\n",
@@ -8524,6 +8545,9 @@
             ],
             [
                 "f4845adf9f058f3e"
+            ],
+            [
+                "2da5483c1e90c1f3"
             ],
             [
                 "a1a0a631bcda2bf9"
@@ -10041,7 +10065,7 @@
             "236fdb56f87224ab"
         ],
         "x": 1025,
-        "y": 1400,
+        "y": 1440,
         "wires": [
             [
                 "c2daddd28170cbb5"
@@ -10058,7 +10082,7 @@
             "b8de84a1a12a151c"
         ],
         "x": 815,
-        "y": 1380,
+        "y": 1420,
         "wires": []
     },
     {
@@ -10071,7 +10095,7 @@
             "0ffbdf4fdf3d401d"
         ],
         "x": 815,
-        "y": 1420,
+        "y": 1460,
         "wires": []
     },
     {
@@ -10147,7 +10171,7 @@
         "group": "7a52027f8ab130e8",
         "name": "Apply 3",
         "label": "Apply",
-        "order": 8,
+        "order": 10,
         "width": 6,
         "height": 1,
         "emulateClick": false,
@@ -10172,7 +10196,7 @@
         "pointerupPayload": "",
         "pointerupPayloadType": "str",
         "x": 880,
-        "y": 1320,
+        "y": 1360,
         "wires": [
             [
                 "08ebf0b647182af1"
@@ -11064,6 +11088,91 @@
         "valueType": "msg",
         "x": 110,
         "y": 360,
+        "wires": []
+    },
+    {
+        "id": "2da5483c1e90c1f3",
+        "type": "ui-dropdown",
+        "z": "fc670f602d442a02",
+        "group": "7a52027f8ab130e8",
+        "name": "Fridge temp derate",
+        "label": "Rel to room temp",
+        "tooltip": "",
+        "order": 8,
+        "width": 3,
+        "height": "",
+        "passthru": true,
+        "multiple": false,
+        "chips": false,
+        "clearable": false,
+        "options": [
+            {
+                "label": "Off",
+                "value": 0,
+                "type": "num"
+            },
+            {
+                "label": "-1/10°C",
+                "value": 10,
+                "type": "num"
+            },
+            {
+                "label": "-1/15°C",
+                "value": 15,
+                "type": "num"
+            },
+            {
+                "label": "-1/20°C",
+                "value": 20,
+                "type": "num"
+            },
+            {
+                "label": "-1/25°C",
+                "value": 25,
+                "type": "num"
+            },
+            {
+                "label": "-1/30°C",
+                "value": 30,
+                "type": "num"
+            }
+        ],
+        "payload": "",
+        "topic": "topic",
+        "topicType": "msg",
+        "className": "",
+        "typeIsComboBox": false,
+        "msgTrigger": "onChange",
+        "x": 890,
+        "y": 1300,
+        "wires": [
+            [
+                "08ebf0b647182af1"
+            ]
+        ]
+    },
+    {
+        "id": "5ee29c9394411f78",
+        "type": "ui-text",
+        "z": "fc670f602d442a02",
+        "group": "7a52027f8ab130e8",
+        "order": 7,
+        "width": "3",
+        "height": "1",
+        "name": "",
+        "label": "Fridge temp derate",
+        "format": "{{msg.payload}}",
+        "layout": "row-spread",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#717171",
+        "wrapText": false,
+        "className": "",
+        "value": "payload",
+        "valueType": "msg",
+        "x": 110,
+        "y": 1300,
         "wires": []
     }
 ]
