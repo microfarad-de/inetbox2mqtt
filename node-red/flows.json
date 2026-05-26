@@ -11117,8 +11117,23 @@
                 "type": "num"
             },
             {
-                "label": "-1/15°C",
-                "value": 15,
+                "label": "-1/12°C",
+                "value": 12,
+                "type": "num"
+            },
+            {
+                "label": "-1/14°C",
+                "value": 14,
+                "type": "num"
+            },
+            {
+                "label": "-1/16°C",
+                "value": 16,
+                "type": "num"
+            },
+            {
+                "label": "-1/18°C",
+                "value": 18,
                 "type": "num"
             },
             {
@@ -11127,8 +11142,23 @@
                 "type": "num"
             },
             {
-                "label": "-1/25°C",
-                "value": 25,
+                "label": "-1/22°C",
+                "value": 22,
+                "type": "num"
+            },
+            {
+                "label": "-1/24°C",
+                "value": 24,
+                "type": "num"
+            },
+            {
+                "label": "-1/26°C",
+                "value": 26,
+                "type": "num"
+            },
+            {
+                "label": "-1/28°C",
+                "value": 28,
                 "type": "num"
             },
             {
