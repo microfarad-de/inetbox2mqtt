@@ -11190,7 +11190,7 @@
         "width": "3",
         "height": "1",
         "name": "",
-        "label": "Fridge temp derate",
+        "label": "Fridge temp derating",
         "format": "{{msg.payload}}",
         "layout": "row-spread",
         "style": false,
@@ -11201,7 +11201,7 @@
         "className": "",
         "value": "payload",
         "valueType": "msg",
-        "x": 110,
+        "x": 120,
         "y": 1300,
         "wires": []
     }
