@@ -1334,7 +1334,7 @@
         "type": "function",
         "z": "35877746e13a44de",
         "name": "AppendUnit",
-        "func": "\nlet unit = env.get('unit');\n\nmsg.payload = msg.payload + unit;\n\nreturn msg;",
+        "func": "\nif (msg.payload === \"--\") {\n    return msg;\n}\n\nlet unit = env.get('unit');\n\nmsg.payload = msg.payload + unit;\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -1352,11 +1352,11 @@
         "type": "function",
         "z": "1bca7697946c1d3f",
         "name": "Quality",
-        "func": "if (msg.topic.includes(\"level\")) {\n    context.set(\"level\", msg.payload);\n    return;\n}\n\nlet levelMsg   = {};\nlet qualityMsg = {}\n\nlet level = context.get(\"level\") || 0;\n\nlevelMsg.payload = level;\n\nswitch (msg.payload) {\n    case 1:\n        qualityMsg.payload = \"★\";\n        break;\n    case 2:\n        qualityMsg.payload = \"★★\";\n        break;\n    case 3:\n        qualityMsg.payload = \"★★★\";\n        break;\n    default:\n        qualityMsg.payload = \"--\";\n        levelMsg.payload = 0;\n        break;\n}\n\nlevelMsg.ui_update = {};\nlevelMsg.ui_update.units = qualityMsg.payload + \" %\";\n\nreturn [levelMsg, qualityMsg];\n",
+        "func": "\n\nif (msg.topic.toLowerCase().includes(\"quality\")) {\n    context.set(\"quality\", msg.payload);\n    return;\n}\n\n\nlet quality = context.get(\"quality\") || 0;\nlet qualityMsg = {}\n\nswitch (quality) {\n    case 1:\n        qualityMsg.payload = \"★\";\n        break;\n    case 2:\n        qualityMsg.payload = \"★★\";\n        break;\n    case 3:\n        qualityMsg.payload = \"★★★\";\n        break;\n    default:\n        qualityMsg.payload = \"--\";\n        msg.payload = \"--\";\n        break;\n}\n\nmsg.ui_update = {};\nmsg.ui_update.units = qualityMsg.payload + \" %\";\n\nreturn [msg, qualityMsg];\n",
         "outputs": 2,
         "timeout": 0,
         "noerr": 0,
-        "initialize": "// Code added here will be run once\n// whenever the node is started.\ncontext.set(\"level\", undefined);\n",
+        "initialize": "// Code added here will be run once\n// whenever the node is started.\ncontext.set(\"quality\", undefined);\n",
         "finalize": "",
         "libs": [],
         "x": 400,
@@ -3413,7 +3413,8 @@
         "wires": [
             [
                 "e8180cd3ca37e6c5",
-                "e08ca67adef7fb8c"
+                "e08ca67adef7fb8c",
+                "56bfe721ed8b5675"
             ],
             [
                 "e4faba6018cf1503"
@@ -3430,7 +3431,8 @@
         "wires": [
             [
                 "5624583cb2d689af",
-                "5e36b6ecf4020bc5"
+                "5e36b6ecf4020bc5",
+                "b2790ee93b81319a"
             ],
             [
                 "090879cfa55fb504"
@@ -3718,7 +3720,6 @@
         "y": 1280,
         "wires": [
             [
-                "56bfe721ed8b5675",
                 "9833133c96b19773"
             ]
         ]
@@ -3744,7 +3745,6 @@
         "y": 1500,
         "wires": [
             [
-                "b2790ee93b81319a",
                 "ee1ddc99836d7c5f"
             ]
         ]
@@ -3797,7 +3797,8 @@
         "y": 620,
         "wires": [
             [
-                "a852c58b3b285f49"
+                "a852c58b3b285f49",
+                "2800cb844c48d105"
             ]
         ]
     },
@@ -4095,8 +4096,7 @@
                 "f8c13de4be546aa7",
                 "6dbdd0e9fbc3fcaa",
                 "3e20c20608b3e828",
-                "ca728154b5b26204",
-                "2800cb844c48d105"
+                "ca728154b5b26204"
             ]
         ]
     },
@@ -5682,11 +5682,11 @@
         "type": "function",
         "z": "2561d49b29c858c7",
         "name": "Derate",
-        "func": "\nconst DIVIDER = 25;\n\nif (msg.topic.toLowerCase().includes(\"room\")) {\n    context.set(\"room\", msg.payload);\n    return null;\n}\n\nif (msg.topic.toLowerCase().includes(\"fridge\")) {\n    let room   = context.get(\"room\");\n    let fridge = msg.payload;\n    let derate = global.get(\"fridgeTempDerate\") || 0;\n\n    if (room !== undefined && fridge !== undefined && derate > 0) {\n        if (room > fridge) {\n            msg.payload -= (room - fridge) / derate;\n        }\n    }\n\n}\n\nreturn msg;",
+        "func": "\nconst DIVIDER = 25;\n\nif (msg.topic.toLowerCase().includes(\"outdoor\")) {\n    context.set(\"ref\", msg.payload);\n    return null;\n}\n\nif (msg.topic.toLowerCase().includes(\"fridge\")) {\n    let ref    = context.get(\"ref\");\n    let fridge = msg.payload;\n    let derate = global.get(\"fridgeTempDerate\") || 0;\n\n    if (ref !== undefined && fridge !== undefined && derate > 0) {\n        if (ref > fridge) {\n            msg.payload -= (ref - fridge) / derate;\n        }\n    }\n\n}\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
-        "initialize": "// Code added here will be run once\n// whenever the node is started.\n\n// Don't reset \"room\" context variable - keep it persistent\n",
+        "initialize": "// Code added here will be run once\n// whenever the node is started.\n\n// Don't reset \"ref\" context variable - keep it persistent\n",
         "finalize": "",
         "libs": [],
         "x": 430,
@@ -11095,8 +11095,8 @@
         "type": "ui-dropdown",
         "z": "fc670f602d442a02",
         "group": "7a52027f8ab130e8",
-        "name": "Fridge temp derate",
-        "label": "Rel to room temp",
+        "name": "Fridge temp derating",
+        "label": "Relative to outdoor",
         "tooltip": "",
         "order": 8,
         "width": 3,
@@ -11173,7 +11173,7 @@
         "className": "",
         "typeIsComboBox": false,
         "msgTrigger": "onChange",
-        "x": 890,
+        "x": 900,
         "y": 1300,
         "wires": [
             [
