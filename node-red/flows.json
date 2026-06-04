@@ -1352,7 +1352,7 @@
         "type": "function",
         "z": "1bca7697946c1d3f",
         "name": "Quality",
-        "func": "\n\nif (msg.topic.toLowerCase().includes(\"quality\")) {\n    context.set(\"quality\", msg.payload);\n    return;\n}\n\n\nlet quality = context.get(\"quality\") || 0;\nlet qualityMsg = {}\n\nswitch (quality) {\n    case 1:\n        qualityMsg.payload = \"★\";\n        break;\n    case 2:\n        qualityMsg.payload = \"★★\";\n        break;\n    case 3:\n        qualityMsg.payload = \"★★★\";\n        break;\n    default:\n        qualityMsg.payload = \"--\";\n        msg.payload = \"--\";\n        break;\n}\n\nmsg.ui_update = {};\nmsg.ui_update.units = qualityMsg.payload + \" %\";\n\nreturn [msg, qualityMsg];\n",
+        "func": "\n\nif (msg.topic.toLowerCase().includes(\"quality\")) {\n    context.set(\"quality\", msg.payload);\n    return;\n}\n\n\nlet quality = context.get(\"quality\") || 0;\nlet qualityMsg = {topic: \"quality\"};\n\nswitch (quality) {\n    case 1:\n        qualityMsg.payload = \"★\";\n        break;\n    case 2:\n        qualityMsg.payload = \"★★\";\n        break;\n    case 3:\n        qualityMsg.payload = \"★★★\";\n        break;\n    default:\n        qualityMsg.payload = \"--\";\n        //msg.payload = \"--\";\n        break;\n}\n\nmsg.ui_update = {};\nmsg.ui_update.units = qualityMsg.payload + \" %\";\n\nreturn [msg, qualityMsg];\n",
         "outputs": 2,
         "timeout": 0,
         "noerr": 0,
@@ -3717,7 +3717,7 @@
         "name": "",
         "onlyChanges": false,
         "x": 180,
-        "y": 1280,
+        "y": 1300,
         "wires": [
             [
                 "9833133c96b19773"
@@ -3742,7 +3742,7 @@
         "name": "",
         "onlyChanges": false,
         "x": 180,
-        "y": 1500,
+        "y": 1520,
         "wires": [
             [
                 "ee1ddc99836d7c5f"
@@ -3797,8 +3797,7 @@
         "y": 620,
         "wires": [
             [
-                "a852c58b3b285f49",
-                "2800cb844c48d105"
+                "a852c58b3b285f49"
             ]
         ]
     },
@@ -3918,7 +3917,8 @@
         "y": 100,
         "wires": [
             [
-                "e50497657df013ef"
+                "e50497657df013ef",
+                "2800cb844c48d105"
             ]
         ]
     },
@@ -5682,7 +5682,7 @@
         "type": "function",
         "z": "2561d49b29c858c7",
         "name": "Derate",
-        "func": "\nconst DIVIDER = 25;\n\nif (msg.topic.toLowerCase().includes(\"outdoor\")) {\n    context.set(\"ref\", msg.payload);\n    return null;\n}\n\nif (msg.topic.toLowerCase().includes(\"fridge\")) {\n    let ref    = context.get(\"ref\");\n    let fridge = msg.payload;\n    let derate = global.get(\"fridgeTempDerate\") || 0;\n\n    if (ref !== undefined && fridge !== undefined && derate > 0) {\n        if (ref > fridge) {\n            msg.payload -= (ref - fridge) / derate;\n        }\n    }\n\n}\n\nreturn msg;",
+        "func": "\nconst DIVIDER = 25;\n\nif (msg.topic.toLowerCase().includes(\"room\")) {\n    context.set(\"ref\", msg.payload);\n    return null;\n}\n\nif (msg.topic.toLowerCase().includes(\"fridge\")) {\n    let ref    = context.get(\"ref\");\n    let fridge = msg.payload;\n    let derate = global.get(\"fridgeTempDerate\") || 0;\n\n    if (ref !== undefined && fridge !== undefined && derate > 0) {\n        if (ref > fridge) {\n            msg.payload -= (ref - fridge) / derate;\n        }\n    }\n\n}\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -11096,7 +11096,7 @@
         "z": "fc670f602d442a02",
         "group": "7a52027f8ab130e8",
         "name": "Fridge temp derating",
-        "label": "Relative to outdoor",
+        "label": "Rel to room temp",
         "tooltip": "",
         "order": 8,
         "width": 3,
