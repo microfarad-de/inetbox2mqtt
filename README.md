@@ -12,7 +12,7 @@ Since Venus OS manages its own network connectivity, all network configuration c
 
 The status LED functionality previously used for LIN bus debugging has also been disabled, as users can now access the log files directly.
 
-Additionally, a Node-RED dashboard for controlling the Truma Combi heater is included under `node-red/caravan-dashboard.json`.
+Additionally, a Node-RED dashboard for controlling the Truma Combi heater is included under `node-red/flows.json`.
 
 ## Prerequisites
 
