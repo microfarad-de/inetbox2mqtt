@@ -8709,6 +8709,16 @@
                 "label": "40%",
                 "value": 40,
                 "type": "num"
+            },
+            {
+                "label": "50%",
+                "value": 50,
+                "type": "num"
+            },
+            {
+                "label": "60%",
+                "value": 60,
+                "type": "num"
             }
         ],
         "payload": "",
@@ -11096,7 +11106,7 @@
         "z": "fc670f602d442a02",
         "group": "7a52027f8ab130e8",
         "name": "Fridge temp derating",
-        "label": "Rel to room temp",
+        "label": "Per indoor Δ°C",
         "tooltip": "",
         "order": 8,
         "width": 3,
