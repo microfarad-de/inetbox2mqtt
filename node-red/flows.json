@@ -5743,7 +5743,7 @@
         "type": "function",
         "z": "c74d4096e08fa272",
         "name": "HeatingTrigger",
-        "func": "\nif (msg.payload === undefined) {\n    return null;\n}\n\nlet temp = msg.payload;\n\nif (temp !== 0) {\n    \n    let fan      = flow.get('fan') || 'eco';\n    let lastTemp = flow.get('lastTemp') || 0;\n    \n\n    // Prepare two different messages\n    let msg1 = { payload: temp, topic: 'temp' };\n    let msg2 = { payload: fan,  topic: 'fan' };\n    \n    if (lastTemp === 0) {\n        return [msg1, msg2];\n    }\n    else {\n        return [msg1, null];\n    }\n\n}\nelse {\n    context.set('last_temp', 0);\n    \n    let msg1 = { payload: 0,     topic: 'temp' }\n    let msg2 = { payload: 'off', topic: 'fan' };\n    return [msg1, msg2];\n}\n    \n",
+        "func": "\nif (msg.payload === undefined) {\n    return null;\n}\n\nlet temp = msg.payload;\n\nif (temp !== 0) {\n    \n    let fan      = flow.get('fan');\n    let lastTemp = flow.get('lastTemp') || 0;\n    \n    if (fan === undefined || fan === 'off') {\n        fan = 'eco';\n        lastTemp = 0;\n    }\n    \n\n    // Prepare two different messages\n    let msg1 = { payload: temp, topic: 'temp' };\n    let msg2 = { payload: fan,  topic: 'fan' };\n    \n    if (lastTemp === 0) {\n        return [msg1, msg2];\n    }\n    else {\n        return [msg1, null];\n    }\n\n}\nelse {\n    flow.set('lastTemp', 0);\n    \n    let msg1 = { payload: 0,     topic: 'temp' }\n    let msg2 = { payload: 'off', topic: 'fan' };\n    return [msg1, msg2];\n}\n    \n",
         "outputs": 2,
         "timeout": 0,
         "noerr": 0,
