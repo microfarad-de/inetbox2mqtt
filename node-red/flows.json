@@ -111,7 +111,7 @@
                 "value": "°C"
             },
             {
-                "name": "repetitions",
+                "name": "averageCount",
                 "type": "num",
                 "value": "1"
             }
@@ -1249,11 +1249,11 @@
         "type": "function",
         "z": "26a48bdabf7607df",
         "name": "Alarm",
-        "func": "\nfunction resolveValue(input) {\n    // Check if the input is a number (int or float)\n    if (!isNaN(input) && String(input).trim() !== \"\") {\n        return Number(input);\n    } else {\n        // Otherwise, treat it as a global variable name\n        return global.get(input);\n    }\n}\n\nlet val = +msg.payload;  // Convert to an integer\n\nlet low     = resolveValue(env.get(\"low\"));\nlet high    = resolveValue(env.get(\"high\"));\nlet thr     = env.get(\"threshold\");\nlet message = env.get(\"message\");\nlet unit    = env.get(\"unit\");\nlet repeat  = env.get(\"repetitions\");\nlet style   = {ui_update: {class: \"\"}};\nlet alerts  = global.get(\"alerts\") || {};\nlet count   = context.get(\"count\") || 0;\n\nlet lastAlarm = context.get(\"lastAlarm\") || false;\nlet alarm = false;\n\nif (val < low) {\n    count--;\n    context.set(\"count\", count);\n}\nelse if (val > high) {\n    count++;\n    context.set(\"count\", count);\n}\nelse if (val >= (low + thr) && val <= (high - thr)) {\n    count = 0\n    context.set(\"count\", count);\n    alarm = false;\n    context.set(\"lastAlarm\", alarm);\n    delete alerts[message];\n    global.set(\"alerts\", alerts);\n    return [null, style];\n}\n\nif (count <= -repeat) {\n    alarm = \"low\";\n}\nelse if (count >= repeat) {\n    alarm = \"high\";\n}\n\nif (alarm && alarm !== lastAlarm) {\n    context.set(\"lastAlarm\", alarm);\n    style.ui_update.class = \"error\";\n    msg.payload = `⚠️ Caravan alert!\\n${message}: ${val}${unit}`;\n    let text    = `⚠️ ${message}: ${val}${unit}`\n    node.warn(text);\n    alerts[message] = text;\n    global.set(\"alerts\", alerts);\n    return [msg, style];\n}\nelse if (alarm && !alerts[message]) {\n    count = 0\n    context.set(\"count\", count);\n    alarm = false;\n    context.set(\"lastAlarm\", alarm);\n    return [null, style];\n}\nelse {\n    return null;\n}\n\n",
+        "func": "\nfunction resolveValue(input) {\n    // Check if the input is a number (int or float)\n    if (!isNaN(input) && String(input).trim() !== \"\") {\n        return Number(input);\n    } else {\n        // Otherwise, treat it as a global variable name\n        return global.get(input);\n    }\n}\n\nlet val = +msg.payload;  // Convert to an integer\n\nlet low     = resolveValue(env.get(\"low\"));\nlet high    = resolveValue(env.get(\"high\"));\nlet thr     = env.get(\"threshold\");\nlet message = env.get(\"message\");\nlet unit    = env.get(\"unit\");\nlet style   = {ui_update: {class: \"\"}};\nlet alerts  = global.get(\"alerts\") || {};\nlet avgCnt  = env.get(\"averageCount\") || 1;\nlet avg     = context.get(\"average\");\n\nif (avg === undefined) {\n    avg = val;\n}\n\navg = (val + avg * (avgCnt - 1)) / avgCnt;\nstyle.avg = avg;\ncontext.set(\"average\", avg);\n\nlet lastAlarm = context.get(\"lastAlarm\") || false;\nlet alarm = false;\n\nif (avg < low) {\n    alarm = \"low\";\n}\nelse if (avg > high) {\n    alarm = \"high\";\n}\nelse if (avg >= (low + thr) && avg <= (high - thr)) {\n    alarm = false;\n    context.set(\"lastAlarm\", alarm);\n    style.ui_update.class = \"\";\n    delete alerts[message];\n    global.set(\"alerts\", alerts);\n    return [null, style];\n}\n\n\nif (alarm && alarm !== lastAlarm) {\n    context.set(\"lastAlarm\", alarm);\n    style.ui_update.class = \"error\";\n    msg.payload = `⚠️ Caravan alert!\\n${message}: ${val}${unit}`;\n    let text    = `⚠️ ${message}: ${val}${unit}`\n    node.warn(text);\n    alerts[message] = text;\n    global.set(\"alerts\", alerts);\n    return [msg, style];\n}\nelse if (lastAlarm && alerts[message] === undefined) {\n    context.set(\"lastAlarm\", false);\n    style.ui_update.class = \"\";\n    return [null, style];\n}\nelse {\n    return [null, {avg: avg}];\n}\n\n",
         "outputs": 2,
         "timeout": 0,
         "noerr": 0,
-        "initialize": "// Code added here will be run once\n// whenever the node is started.\ncontext.set(\"count\", undefined);\ncontext.set(\"lastAlarm\", undefined);",
+        "initialize": "// Code added here will be run once\n// whenever the node is started.\ncontext.set(\"average\", undefined);\ncontext.set(\"lastAlarm\", undefined);",
         "finalize": "",
         "libs": [],
         "x": 350,
@@ -1428,7 +1428,7 @@
         "type": "function",
         "z": "1230e5122b3b7f25",
         "name": "Alarm",
-        "func": "\nlet val      = msg.payload;\nlet message  = env.get(\"message\");\nlet instance = env.get(\"instance\");\nlet index    = `${message} ${instance}`;\n\nlet alerts    = global.get(\"alerts\") || {};\nlet lastAlarm = context.get(\"lastAlarm\") || false;\nlet alarm = false;\n\nif (val === \"OK\") {\n    alarm = false;\n    delete alerts[index];\n    global.set(\"alerts\", alerts);\n    context.set(\"lastAlarm\", alarm);\n}\nelse {\n    alarm = val;\n}\n\n\nif (alarm && alarm !== lastAlarm) {\n    context.set(\"lastAlarm\", alarm);\n    msg.payload = `⚠️ Caravan alert!\\n${message}:\\n${val}`;\n    text = `⚠️ ${message}: ${val}`;\n    node.warn(text);\n    alerts[index] = text;\n    global.set(\"alerts\", alerts);\n    return msg;\n}\nelse if (!alerts[index]) {\n    alarm = false;\n    context.set(\"lastAlarm\", alarm);\n}\nelse {\n    return null;\n}\n\n",
+        "func": "\nlet val      = msg.payload;\nlet message  = env.get(\"message\");\nlet instance = env.get(\"instance\");\nlet index    = `${message} ${instance}`;\n\nlet alerts    = global.get(\"alerts\") || {};\nlet lastAlarm = context.get(\"lastAlarm\") || false;\nlet alarm = false;\n\nif (val === \"OK\") {\n    alarm = false;\n    delete alerts[index];\n    global.set(\"alerts\", alerts);\n    context.set(\"lastAlarm\", alarm);\n}\nelse {\n    alarm = val;\n}\n\n\nif (alarm && alarm !== lastAlarm) {\n    context.set(\"lastAlarm\", alarm);\n    msg.payload = `⚠️ Caravan alert!\\n${message}:\\n${val}`;\n    text = `⚠️ ${message}: ${val}`;\n    node.warn(text);\n    alerts[index] = text;\n    global.set(\"alerts\", alerts);\n    return msg;\n}\nelse if (lastAlarm && alerts[index] === undefined) {\n    context.set(\"lastAlarm\", false);\n}\nelse {\n    return null;\n}\n\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -2167,7 +2167,7 @@
             },
             {
                 "name": "threshold",
-                "value": "50",
+                "value": "80",
                 "type": "num"
             },
             {
@@ -2179,6 +2179,16 @@
                 "name": "unit",
                 "value": "%",
                 "type": "str"
+            },
+            {
+                "name": "averageCount",
+                "value": "10",
+                "type": "num"
+            },
+            {
+                "name": "repetitions",
+                "value": "10",
+                "type": "num"
             }
         ],
         "x": 770,
@@ -2207,7 +2217,7 @@
             },
             {
                 "name": "threshold",
-                "value": "50",
+                "value": "80",
                 "type": "num"
             },
             {
@@ -2219,6 +2229,16 @@
                 "name": "unit",
                 "value": "%",
                 "type": "str"
+            },
+            {
+                "name": "averageCount",
+                "value": "10",
+                "type": "num"
+            },
+            {
+                "name": "repetitions",
+                "value": "10",
+                "type": "num"
             }
         ],
         "x": 770,
@@ -5531,6 +5551,11 @@
                 "type": "str"
             },
             {
+                "name": "averageCount",
+                "value": "50",
+                "type": "num"
+            },
+            {
                 "name": "repetitions",
                 "value": "30",
                 "type": "num"
@@ -5569,6 +5594,11 @@
                 "name": "unit",
                 "value": "V",
                 "type": "str"
+            },
+            {
+                "name": "averageCount",
+                "value": "50",
+                "type": "num"
             },
             {
                 "name": "repetitions",
@@ -5611,6 +5641,11 @@
                 "type": "str"
             },
             {
+                "name": "averageCount",
+                "value": "50",
+                "type": "num"
+            },
+            {
                 "name": "repetitions",
                 "value": "30",
                 "type": "num"
@@ -5649,6 +5684,11 @@
                 "name": "unit",
                 "value": "V",
                 "type": "str"
+            },
+            {
+                "name": "averageCount",
+                "value": "50",
+                "type": "num"
             },
             {
                 "name": "repetitions",
@@ -6066,11 +6106,11 @@
         "type": "function",
         "z": "c74d4096e08fa272",
         "name": "DecodeError",
-        "func": "\nlet status = { payload: '', ui_update: {class: ''} };\n\nif (msg.topic.includes('alive')) {\n    if (msg.payload !== 'ON') {\n        status.payload = 'Connection lost!';\n        status.ui_update.class = 'error';\n    }\n    else {\n        lastStatus = context.get('lastStatus');\n        if (lastStatus === undefined) {\n            status.payload = 'OK';\n        }\n        else {\n            status = lastStatus;\n        }\n    }\n    \n    return status;\n}\n\nelse {\n    \n    switch (+msg.payload) {\n        \n        case 0:\n            status.payload = 'OK';\n            break;\n            \n        case 7:\n            status.payload = '230V disconnect!';\n            status.ui_update.class = 'error';\n            break;\n        \n        case 8:\n            status.payload = 'Gas interrupted!';  // In mix mode\n            status.ui_update.class = 'error';\n            break;\n        \n        case 17:\n            status.payload = 'Gas interrupted!';\n            status.ui_update.class = 'error';\n            break;\n            \n        default:\n            status.payload = 'Error code: ' + msg.payload;\n            status.ui_update.class = 'error';\n            break;\n    }\n\n    context.set('lastStatus', status);\n    \n    return status;\n}\n",
-        "outputs": 1,
+        "func": "\nlet status = { payload: 'OK', ui_update: {class: ''} };\nlet alarm  = { payload: 'OK'}; \n\nif (msg.topic.includes('alive')) {\n    if (msg.payload !== 'ON') {\n        status.payload = 'Connection lost!';\n        status.ui_update.class = 'error';\n        alarm.payload = \"connection lost!\";\n    }\n    else {\n        lastStatus = context.get('lastStatus');\n        lastAlarm  = context.get('lastAlarm');\n        if (lastStatus !== undefined) {\n            status = lastStatus;\n            alarm  = lastAlarm;\n        }\n    }\n    \n    return [status, alarm];\n}\n\nelse {\n    \n    switch (+msg.payload) {\n        \n        case 0:\n            status.payload = 'OK';\n            alarm.payload  = 'OK';\n            break;\n            \n        case 7:\n            status.payload = '230V disconnect!';\n            status.ui_update.class = 'error';\n            alarm.payload = '230V disconnect!';\n            break;\n        \n        case 8:\n            status.payload = 'Gas interrupted!';  // In mix mode\n            status.ui_update.class = 'error';\n            alarm.payload = 'gas interrupted!';\n            break;\n        \n        case 17:\n            status.payload = 'Gas interrupted!';\n            status.ui_update.class = 'error';\n            alarm.payload = 'gas interrupted!';\n            break;\n            \n        default:\n            status.payload = 'Error code: ' + msg.payload;\n            status.ui_update.class = 'error';\n            alarm.payload = 'error code: ' + msg.payload;\n            break;\n    }\n\n    context.set('lastStatus', status);\n    context.set('lastAlarm', alarm);\n    \n    return [status, alarm];\n}\n",
+        "outputs": 2,
         "timeout": 0,
         "noerr": 0,
-        "initialize": "// Code added here will be run once\n// whenever the node is started.\ncontext.set('lastStatus', undefined);\n",
+        "initialize": "// Code added here will be run once\n// whenever the node is started.\ncontext.set('lastStatus', undefined);\ncontext.set('lastAlarm', undefined);\n",
         "finalize": "",
         "libs": [],
         "x": 430,
@@ -6078,7 +6118,9 @@
         "wires": [
             [
                 "3764559c61d5efd8",
-                "975147e68669abdf",
+                "975147e68669abdf"
+            ],
+            [
                 "2cb60131ed577e2e"
             ]
         ]
@@ -7539,7 +7581,7 @@
         "type": "function",
         "z": "fcffa944a0680a42",
         "name": "DecodeError",
-        "func": "\nlet conn    = context.get(\"conn\")    || false;\nlet sensor  = context.get(\"sensor\")  || {fridge: false, outdoor: false};\nlet battery = context.get(\"battery\") || false;\nlet outdoor = context.get(\"outdoor\") || false;\nlet boost   = context.get(\"boost\")   || false;\nlet discCnt = context.get(\"discCnt\") || 0;\n\nlet status  = {payload: \"OK\", ui_update: {class: \"\"}};\nlet alarm1  = {payload: \"OK\"};\nlet alarm2  = {payload: \"OK\"};\nlet alarm3  = {payload: \"OK\"};\nlet alarm4  = {payload: \"OK\"};\n\nif (msg.topic === \"return\") {\n\n    if (msg.payload.code !== 0) {\n        discCnt++;\n    }\n    else {\n        discCnt = 0;\n    }\n    context.set(\"discCnt\", discCnt);\n    if (discCnt >= 15) {\n        conn = false;\n    }\n    else {\n        conn = true;\n    }\n    context.set(\"conn\", conn);\n}\nelse if (msg.topic === \"sensor\") {\n    context.set(\"sensor\", msg.payload);\n}\nelse if (msg.topic === \"battery\") {\n    context.set(\"battery\", msg.payload);\n}\nelse if (msg.topic === \"outdoor\") {\n    context.set(\"outdoor\", msg.payload);\n}\nelse if (msg.topic === \"boost\") {\n    context.set(\"boost\", msg.payload);\n}\n\n//node.warn(`conn=${conn}, sensor=${sensor}`);\n\nif (boost) {\n    status.payload = \"Boost\";\n}\n\nif (!battery) {\n    status.payload = \"Low batt\";\n}\n\nif (!outdoor) {\n    status.payload = \"Outdoor temp!\";\n    status.ui_update.class = \"error\";\n    alarm1.payload = \"Low outdoor temp!\";\n}\n\nif (!sensor.outdoor) {\n    status.payload = \"Outdoor sensor!\";\n    status.ui_update.class = \"error\";\n    alarm2.payload = \"Outdoor temp sensor error!\";\n}\n\nif (!conn) {\n    status.payload = \"Connection lost!\";\n    status.ui_update.class = \"error\";\n    alarm3.payload = status.payload;\n}\n\nif (!sensor.fridge) {\n    status.payload = \"Fridge sensor!\";\n    status.ui_update.class = \"error\";\n    alarm4.payload = \"Fridge temp sensor error!\";\n}\n\nreturn [status, alarm1, alarm2, alarm3, alarm4];\n",
+        "func": "\nlet conn    = context.get(\"conn\")    || false;\nlet sensor  = context.get(\"sensor\")  || {fridge: false, outdoor: false};\nlet battery = context.get(\"battery\") || false;\nlet outdoor = context.get(\"outdoor\") || false;\nlet boost   = context.get(\"boost\")   || false;\nlet discCnt = context.get(\"discCnt\") || 0;\n\nlet status  = {payload: \"OK\", ui_update: {class: \"\"}};\nlet alarm1  = {payload: \"OK\"};\nlet alarm2  = {payload: \"OK\"};\nlet alarm3  = {payload: \"OK\"};\nlet alarm4  = {payload: \"OK\"};\n\nif (msg.topic === \"return\") {\n\n    if (msg.payload.code !== 0) {\n        discCnt++;\n    }\n    else {\n        discCnt = 0;\n    }\n    context.set(\"discCnt\", discCnt);\n    if (discCnt >= 15) {\n        conn = false;\n    }\n    else {\n        conn = true;\n    }\n    context.set(\"conn\", conn);\n}\nelse if (msg.topic === \"sensor\") {\n    context.set(\"sensor\", msg.payload);\n}\nelse if (msg.topic === \"battery\") {\n    context.set(\"battery\", msg.payload);\n}\nelse if (msg.topic === \"outdoor\") {\n    context.set(\"outdoor\", msg.payload);\n}\nelse if (msg.topic === \"boost\") {\n    context.set(\"boost\", msg.payload);\n}\n\n//node.warn(`conn=${conn}, sensor=${sensor}`);\n\nif (boost) {\n    status.payload = \"Boost\";\n}\n\nif (!battery) {\n    status.payload = \"Low batt\";\n}\n\nif (!outdoor) {\n    status.payload = \"Outdoor temp!\";\n    status.ui_update.class = \"error\";\n    alarm1.payload = \"low outdoor temp!\";\n}\n\nif (!sensor.outdoor) {\n    status.payload = \"Outdoor sensor!\";\n    status.ui_update.class = \"error\";\n    alarm2.payload = \"outdoor temp sensor error!\";\n}\n\nif (!conn) {\n    status.payload = \"Connection lost!\";\n    status.ui_update.class = \"error\";\n    alarm3.payload = \"connection lost!\";\n}\n\nif (!sensor.fridge) {\n    status.payload = \"Fridge sensor!\";\n    status.ui_update.class = \"error\";\n    alarm4.payload = \"fridge temp sensor error!\";\n}\n\nreturn [status, alarm1, alarm2, alarm3, alarm4];\n",
         "outputs": 5,
         "timeout": 0,
         "noerr": 0,
