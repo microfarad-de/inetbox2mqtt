@@ -7539,8 +7539,8 @@
         "type": "function",
         "z": "fcffa944a0680a42",
         "name": "DecodeError",
-        "func": "\nlet conn    = context.get(\"conn\")    || false;\nlet sensor  = context.get(\"sensor\")  || {fridge: false, outdoor: false};\nlet battery = context.get(\"battery\") || false;\nlet outdoor = context.get(\"outdoor\") || false;\nlet boost   = context.get(\"boost\")   || false;\nlet discCnt = context.get(\"discCnt\") || 0;\n\nlet status  = {payload: \"OK\", ui_update: {class: \"\"}};\nlet alarm1  = {payload: \"OK\"};\nlet alarm2  = {payload: \"OK\"};\nlet alarm3  = {payload: \"OK\"};\nlet alarm4  = {payload: \"OK\"};\nlet alarm5  = {payload: \"OK\"};\n\nif (msg.topic === \"return\") {\n\n    if (msg.payload.code !== 0) {\n        discCnt++;\n    }\n    else {\n        discCnt = 0;\n    }\n    context.set(\"discCnt\", discCnt);\n    if (discCnt >= 15) {\n        conn = false;\n    }\n    else {\n        conn = true;\n    }\n    context.set(\"conn\", conn);\n}\nelse if (msg.topic === \"sensor\") {\n    context.set(\"sensor\", msg.payload);\n}\nelse if (msg.topic === \"battery\") {\n    context.set(\"battery\", msg.payload);\n}\nelse if (msg.topic === \"outdoor\") {\n    context.set(\"outdoor\", msg.payload);\n}\nelse if (msg.topic === \"boost\") {\n    context.set(\"boost\", msg.payload);\n}\n\n//node.warn(`conn=${conn}, sensor=${sensor}`);\n\nif (boost) {\n    status.payload = \"Boost\";\n}\n\nif (!outdoor) {\n    status.payload = \"Outdoor temp!\";\n    status.ui_update.class = \"error\";\n    alarm1.payload = \"Low outdoor temp!\";\n}\n\nif (!sensor.outdoor) {\n    status.payload = \"Outdoor sensor!\";\n    status.ui_update.class = \"error\";\n    alarm4.payload = \"Outdoor temp sensor error!\";\n}\n\nif (!battery) {\n    status.payload = \"Low battery!\";\n    status.ui_update.class = \"error\";\n    alarm2.payload = status.payload;\n}\n\nif (!conn) {\n    status.payload = \"Connection lost!\";\n    status.ui_update.class = \"error\";\n    alarm3.payload = status.payload;\n}\n\nif (!sensor.fridge) {\n    status.payload = \"Fridge sensor!\";\n    status.ui_update.class = \"error\";\n    alarm5.payload = \"Fridge temp sensor error!\";\n}\n\nreturn [status, alarm1, alarm2, alarm3, alarm4, alarm5];\n",
-        "outputs": 6,
+        "func": "\nlet conn    = context.get(\"conn\")    || false;\nlet sensor  = context.get(\"sensor\")  || {fridge: false, outdoor: false};\nlet battery = context.get(\"battery\") || false;\nlet outdoor = context.get(\"outdoor\") || false;\nlet boost   = context.get(\"boost\")   || false;\nlet discCnt = context.get(\"discCnt\") || 0;\n\nlet status  = {payload: \"OK\", ui_update: {class: \"\"}};\nlet alarm1  = {payload: \"OK\"};\nlet alarm2  = {payload: \"OK\"};\nlet alarm3  = {payload: \"OK\"};\nlet alarm4  = {payload: \"OK\"};\n\nif (msg.topic === \"return\") {\n\n    if (msg.payload.code !== 0) {\n        discCnt++;\n    }\n    else {\n        discCnt = 0;\n    }\n    context.set(\"discCnt\", discCnt);\n    if (discCnt >= 15) {\n        conn = false;\n    }\n    else {\n        conn = true;\n    }\n    context.set(\"conn\", conn);\n}\nelse if (msg.topic === \"sensor\") {\n    context.set(\"sensor\", msg.payload);\n}\nelse if (msg.topic === \"battery\") {\n    context.set(\"battery\", msg.payload);\n}\nelse if (msg.topic === \"outdoor\") {\n    context.set(\"outdoor\", msg.payload);\n}\nelse if (msg.topic === \"boost\") {\n    context.set(\"boost\", msg.payload);\n}\n\n//node.warn(`conn=${conn}, sensor=${sensor}`);\n\nif (boost) {\n    status.payload = \"Boost\";\n}\n\nif (!battery) {\n    status.payload = \"Low batt\";\n}\n\nif (!outdoor) {\n    status.payload = \"Outdoor temp!\";\n    status.ui_update.class = \"error\";\n    alarm1.payload = \"Low outdoor temp!\";\n}\n\nif (!sensor.outdoor) {\n    status.payload = \"Outdoor sensor!\";\n    status.ui_update.class = \"error\";\n    alarm2.payload = \"Outdoor temp sensor error!\";\n}\n\nif (!conn) {\n    status.payload = \"Connection lost!\";\n    status.ui_update.class = \"error\";\n    alarm3.payload = status.payload;\n}\n\nif (!sensor.fridge) {\n    status.payload = \"Fridge sensor!\";\n    status.ui_update.class = \"error\";\n    alarm4.payload = \"Fridge temp sensor error!\";\n}\n\nreturn [status, alarm1, alarm2, alarm3, alarm4];\n",
+        "outputs": 5,
         "timeout": 0,
         "noerr": 0,
         "initialize": "// Code added here will be run once\n// whenever the node is started.\ncontext.set(\"discCnt\", undefined);\ncontext.set(\"conn\", undefined);\ncontext.set(\"sensor\", undefined);\ncontext.set(\"battery\", undefined);\ncontext.set(\"outdoor\", undefined);\ncontext.set(\"boost\", undefined);\n",
@@ -7563,9 +7563,6 @@
             ],
             [
                 "03c36a2650c6cb34"
-            ],
-            [
-                "393a95d01dcea06d"
             ]
         ]
     },
@@ -8209,27 +8206,6 @@
         ],
         "x": 780,
         "y": 1060,
-        "wires": []
-    },
-    {
-        "id": "393a95d01dcea06d",
-        "type": "subflow:1230e5122b3b7f25",
-        "z": "fcffa944a0680a42",
-        "name": "",
-        "env": [
-            {
-                "name": "message",
-                "value": "Fridge",
-                "type": "str"
-            },
-            {
-                "name": "instance",
-                "value": "5",
-                "type": "num"
-            }
-        ],
-        "x": 780,
-        "y": 1100,
         "wires": []
     },
     {
