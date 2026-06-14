@@ -5722,7 +5722,7 @@
         "type": "function",
         "z": "2561d49b29c858c7",
         "name": "Derate",
-        "func": "\nconst DIVIDER = 25;\n\nif (msg.topic.toLowerCase().includes(\"room\")) {\n    context.set(\"ref\", msg.payload);\n    return null;\n}\n\nif (msg.topic.toLowerCase().includes(\"fridge\")) {\n    let ref    = context.get(\"ref\");\n    let fridge = msg.payload;\n    let derate = global.get(\"fridgeTempDerate\") || 0;\n\n    if (ref !== undefined && fridge !== undefined && derate > 0) {\n        if (ref > fridge) {\n            msg.payload -= (ref - fridge) / derate;\n        }\n    }\n\n}\n\nreturn msg;",
+        "func": "\n\nif (msg.topic.toLowerCase().includes(\"room\")) {\n    context.set(\"ref\", msg.payload);\n    return null;\n}\n\nif (msg.topic.toLowerCase().includes(\"fridge\")) {\n    let ref    = context.get(\"ref\");\n    let fridge = msg.payload;\n    let derate = global.get(\"fridgeTempDerate\") || 0;\n\n    if (ref !== undefined && fridge !== undefined && derate > 0) {\n        if (ref > fridge) {\n            msg.payload -= (ref - fridge) / derate;\n        }\n    }\n\n}\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
