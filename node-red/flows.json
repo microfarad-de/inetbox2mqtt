@@ -1150,7 +1150,7 @@
         "group": "28b10b40908e96b0",
         "name": "spacer",
         "tooltip": "",
-        "order": 18,
+        "order": 22,
         "width": "6",
         "height": "1",
         "className": ""
@@ -7434,11 +7434,11 @@
         "type": "function",
         "z": "fcffa944a0680a42",
         "name": "FridgeControlLoop",
-        "func": "\n// Settings\nconst lowBattSoC       = global.get(\"fridgeLowBattSoC\");       // Low battery detection state of charge in %\nconst boostDutyCycle   = global.get(\"fridgeBoostDC\");          // Compressor duty cycle threshold for activating the gas boost function\nconst boostHyst        = global.get(\"fridgeBoostHyst\");        // Compressor duty cycle reduction for deactivating the gas boost function\nconst defrostTempDec   = global.get(\"fridgeDefrostTempDec\");   // Decrease target temp by this amout when preparing for a defrost cycle\nconst openDoorTempRate = global.get(\"fridgeOpenDoorTempRate\"); // Fridge temp increase rate per trigger interval to raise an open door alarm\nconst openDoorTempInc  = global.get(\"fridgeOpenDoorTempInc\");  // Absolute fridge temp increase to raise an open door alarm\nconst freezerInstalled = global.get(\"fridgeFreezerInstalled\"); // Freezer compartment has been installed\nconst minOutdoorTemp   = global.get(\"fridgeMinOutdoorTemp\");   // Minimum allowed operation outdoor temperature\n\nlet now = Date.now();\nlet cmd = {};\nlet sensorStatus  = {topic: \"sensor\", payload: {fridge: true, outdoor: true}};\nlet battStatus    = {topic: \"battery\", payload: true};\nlet outdoorStatus = {topic: \"outdoor\", payload: context.get(\"outdoorStatus\")};\nif (outdoorStatus.payload === undefined) outdoorStatus.payload = true;\nlet boostStatus   = {topic: \"boost\"};\nlet mode          = {topic: \"mode\"};\n\n// Store received values\nif (msg.topic === \"fridgeTargetTemp\") {\n    context.set(\"target\", msg.payload);\n}\nelse if (msg.topic === \"fridgeAbsorberMode\") {\n    context.set(\"absorberMode\", msg.payload);\n    // Ensure that boost is not deactivated if settings are reloaded from file\n    if (context.get(\"boostActive\")) {\n        mode.payload = 0;\n        context.set(\"lastMode\", mode.payload);\n        node.send([null, null, mode]);   // Set absorber mode to 0\n    }\n    else {\n        mode.payload = msg.payload;\n        context.set(\"lastMode\", mode.payload);\n        node.send([null, null, mode]);  // Forward absorber mode\n    }\n}\nelse if (msg.topic === \"fridgeAbsorberModeUser\") {\n    context.set(\"absorberMode\", msg.payload);\n    if (context.get(\"boostActive\")) {\n        node.log(\"Boost disabled by user\");\n        boostStatus.payload = false;\n        node.send([null, boostStatus, null]);    \n    }\n    mode.payload = msg.payload;\n    context.set(\"lastMode\", mode.payload);\n    node.send([null, null, mode]);  // Forward absorber mode\n}\nelse if (msg.topic === \"fridge\") {\n    context.set(\"fridge\", msg.raw);\n    context.set(\"fridgeStamp\", now);\n}\nelse if (msg.topic === \"outdoor\") {\n    context.set(\"outdoor\", msg.raw);\n    context.set(\"outdoorStamp\", now);\n}\nelse if (msg.topic === \"room\") {\n    context.set(\"room\", msg.payload);\n}\nelse if (msg.topic === \"battery\") {\n    context.set(\"battery\", msg.payload);\n}\nelse if (msg.topic === \"jsonConfig\") {\n    context.set(\"ok\", msg.payload.ok);\n    if (msg.payload.ok === 30) {\n        context.set(\"sysStatus\", msg.payload);\n    }\n}\nelse if (msg.topic === \"return\") {\n    context.set(\"return\", msg.payload.code);\n}\n\n// Proceed only if trigger was received\nif (msg.topic !== \"trigger\") {\n    return null;\n}\n\n\n// Read state variables\nlet target    = context.get(\"target\");\nlet absMode   = context.get(\"absorberMode\") || 0;\nlet fridge    = context.get(\"fridge\");\nlet outdoor   = context.get(\"outdoor\");\nlet room      = context.get(\"room\");\nlet sysStatus = context.get(\"sysStatus\") || {};\nlet battery   = context.get(\"battery\");\nlet lastTemp  = context.get(\"lastTemp\");\nlet fridgeStamp  = context.get(\"fridgeStamp\") || 0;\nlet outdoorStamp = context.get(\"outdoorStamp\") || 0;\nlet nextCmd   = context.get(\"nextCmd\");\nlet count     = context.get(\"count\") || 0;\nlet lastCmd   = context.get(\"lastCmd\");\nlet avgDutyCycle = flow.get(\"avgDutyCycle\") || 0;\n\n\n// Temperature sensor failure detection\nif (now - fridgeStamp > 5*60000 || fridge === undefined) {\n    sensorStatus.payload.fridge = false;\n    fridge = undefined;\n}\nif (now - outdoorStamp > 5*60000 || outdoor === undefined) {\n    if (minOutdoorTemp > -100) {\n        sensorStatus.payload.outdoor = false;\n    }\n    outdoor = undefined;\n}\n\n// Confirm successful command transmission\nif (lastCmd) {\n    let code = context.get(\"return\");\n    let ok   = context.get(\"ok\");\n\n    context.set(\"return\", undefined);\n    context.set(\"ok\", undefined);\n    if (code === 0) {\n        if (lastCmd.payload === `\"c ${ok}\"`) {\n            //node.warn(`Success: ${lastCmd.payload}`);\n            context.set(\"lastCmd\", undefined);\n            context.set(\"lastWarn\", undefined);\n        }\n        else {\n            let warn = `Retransmit: ${lastCmd.payload} (ok=${ok})`\n            // Avoid similar traces\n            if (warn !== context.get(\"lastWarn\")) {\n                context.set(\"lastWarn\", warn);\n                node.warn(warn);\n            }\n            return [lastCmd, sensorStatus, null];\n        }\n    }\n    else if (code !== undefined) {\n        let warn = `Retransmit: ${lastCmd.payload} (code=${code})`\n        // Avoid similar traces\n        if (warn !== context.get(\"lastWarn\")) {\n            context.set(\"lastWarn\", warn);\n            node.warn(warn);\n        }\n        return [lastCmd, sensorStatus, null];\n    }\n    else {\n        context.set(\"lastWarn\", undefined);\n        return [null, sensorStatus, null];\n    }\n}\n\n\n// Log defrost status changes\nif (sysStatus.defrost !== context.get(\"lastDefrostLog\")) {\n    node.log(`Defrost status: defrost=${sysStatus.defrost}`);\n    context.set(\"lastDefrostLog\", sysStatus.defrost);\n}\n\n\n// Defrost management\nif (sysStatus.defrost === 0) {\n    context.set(\"lastDefrost\", 0);\n}\nelse if (sysStatus.defrost === 1) {\n    if (context.get(\"lastDefrost\") === 2) {\n        context.set(\"lastDefrost\", 1);\n    }\n    // Race condition - sequence must be 0 -> 2 -> 1\n    else if (context.get(\"lastDefrost\") === 0 && nextCmd === undefined) {\n        node.log(\"Restarting defrost for pre-cool\");\n        nextCmd = \"\\\"c 20\\\"\";               // Disable defrost\n        context.set(\"nextCmd\", \"\\\"c 21\\\"\"); // Reenable defrost\n        sysStatus.defrost = 0;\n        context.set(\"sysStatus\", sysStatus);\n    }\n} \nelse if (sysStatus.defrost === 2) {\n    context.set(\"lastDefrost\", 2);\n}\n// Disable defrost if defrost runtime counter has been reset (workaround for Arduino FW bug)\nif (sysStatus.runtime === 0 && sysStatus.defrost !== 0 && nextCmd === undefined) {\n    node.log(\"Disabled defrost due to 0 runtime\");\n    nextCmd = \"\\\"c 20\\\"\";  // Disable defrost\n    sysStatus.defrost = 0;\n    context.set(\"sysStatus\", sysStatus);\n}\n// Disable defrost during boost\nif (context.get(\"boost\") && sysStatus.defrost === 1 && nextCmd === undefined) {\n    node.log(\"Disabled defrost due to active boost\");\n    nextCmd = \"\\\"c 20\\\"\";  // Disable defrost\n    sysStatus.defrost = 0;\n    context.set(\"sysStatus\", sysStatus);\n}\n\n\n// Low battery detection and gas boost activation\nlet lowBatt = (battery < lowBattSoC);\nlet boost   = context.get(\"boost\") || false;\nif (avgDutyCycle >= boostDutyCycle && !boost && sysStatus.defrost !== 1) {\n    boost = true;\n    context.set(\"boost\", boost);\n}\nelse if (avgDutyCycle < boostDutyCycle - boostHyst && boost) {\n    boost = false;\n    context.set(\"boost\", boost);\n}\nif (lowBatt || boost) {\n    if (lowBatt) {\n        battStatus.payload = false;\n    }\n    if (!context.get(\"boostActive\")) {\n        node.log(`Boost enabled: battery=${battery}, dutyCycle=${avgDutyCycle}`);\n        context.set(\"boostActive\", true);\n        boostStatus.payload = true;\n        mode.payload = 0;  // Switch to gas mode\n        context.set(\"lastMode\", mode.payload);\n        node.send([null, boostStatus, mode]);\n    }\n}\nelse {\n    if (context.get(\"boostActive\")) {\n        node.log(`Boost disabled: battery=${battery}, dutyCycle=${avgDutyCycle}`);\n        context.set(\"boostActive\", false);\n        boostStatus.payload = false;\n        mode.payload = absMode;  // Restore previous mode\n        context.set(\"lastMode\", mode.payload);\n        node.send([null, boostStatus, mode]);\n    }\n}\n\n\n\n// Disable gas absorbtion refrigerator during defrost\nif (sysStatus.defrost === 1 && !context.get(\"absDisabled\")) {\n    context.set(\"absDisabled\", true);\n    mode.payload = 1;\n    node.send([null, null, mode]);\n}\nelse if (sysStatus.defrost === 0 && context.get(\"absDisabled\")) {\n    context.set(\"absDisabled\", false);\n    mode.payload = context.get(\"lastMode\");\n    node.send([null, null, mode]);\n}\n\n\n// Low outdoor temperature\nif (outdoorStatus.payload === true && outdoor < minOutdoorTemp && target < 100 && sensorStatus.payload.outdoor) {\n    outdoorStatus.payload = false;\n    context.set(\"outdoorStatus\", false);\n}\nelse if ((outdoorStatus.payload === false && outdoor >= minOutdoorTemp + 1) || target === 100 || sensorStatus.payload.outdoor === false) {\n    outdoorStatus.payload = true;\n    context.set(\"outdoorStatus\", true);\n}\n\n\n// Temperature increase rate calculation\nif (count % 3 === 0 || fridge < lastTemp || lastTemp === undefined) {\n  context.set(\"lastTemp\", fridge);\n}\nlet delta = fridge - lastTemp;\n//node.warn(`fridge=${fridge}, lastTemp=${lastTemp}, delta=${delta}, nextCmd=${nextCmd}`);\n\n\n// Open door / temperature surge detection\nif (((delta > openDoorTempRate && fridge > target) || (fridge > target + openDoorTempInc && target < 100)) && \n       !context.get(\"wasOpenDr\") && nextCmd === undefined && battStatus.payload && outdoorStatus.payload && sensorStatus.payload.fridge) {\n    node.log(`Temperature surge: delta=${delta.toFixed(3)}, fridge=${fridge.toFixed(3)}`);\n    if (sysStatus.defrost !== 0) {\n        nextCmd = \"\\\"c 20\\\"\";            // Disable defrost\n    }\n    context.set(\"nextCmd\", \"\\\"c 10\\\"\");  // Set max speed\n    context.set(\"wasOpenDr\", true);\n}\nelse if (fridge < target || target === 100) {\n    context.set(\"wasOpenDr\", false);\n}\n\n\n// Deactivate periodic defrost if freezer compartment has been installed\nif (freezerInstalled && sysStatus.defrost !== -1) {\n    nextCmd = \"\\\"c 22\\\"\";  // Deactivate defrost feature\n    sysStatus.defrost = -1;\n    context.set(\"sysStatus\", sysStatus);\n}\nelse if (!freezerInstalled && sysStatus.defrost === -1) {\n    nextCmd = \"\\\"c 23\\\"\";  // Activate defrost feature\n    sysStatus.defrost = 0;\n    context.set(\"sysStatus\", sysStatus);\n}\n\n\n// Pre-cool before starting a defrost cycle\nif (sysStatus.defrost === 2 && target > 1 && !context.get(\"boost\")) {\n    target = target - defrostTempDec;\n}\n\n\n\n// Manage event counter\nlet statusEvent = false;\nlet pingEvent   = false;\nif (count % 2 === 0) {\n    statusEvent = true;\n}\nelse if (count % 3 === 0) {\n    pingEvent = true;\n}\ncount++;\ncontext.set(\"count\", count);\n\n\n// Request system status by default\ncmd.payload = \"\\\"c 30\\\"\";\n\n\n// Request system status\nif (statusEvent && nextCmd === undefined) {\n    cmd.payload = \"\\\"c 30\\\"\";  // Request system status\n}\n// Execute scheduled command\nelse if (nextCmd !== undefined) {\n    if (nextCmd === context.get(\"nextCmd\")) {\n        context.set(\"nextCmd\", undefined);\n    }\n    cmd.payload = nextCmd;\n}\n// Fridge temperature sensor failure\nelse if (sensorStatus.payload.fridge === false) {\n    //node.log(\"Temperature sensor no signal\");\n    // Don't send command\n}\n// Low battery or low outdoor temperature\nelse if (battStatus.payload === false || outdoorStatus.payload === false) {\n    if (sysStatus.inputEnabled === 1 || pingEvent) {\n        cmd.payload = \"\\\"c 0\\\"\";   // Turn off the compressor\n    }\n}\n// Turn off\nelse if (target === 100) {\n    if (sysStatus.inputEnabled === 1 || pingEvent) {\n        cmd.payload = \"\\\"c 0\\\"\";   // Turn off the compressor\n    }\n}\n// Start\nelse if (fridge > target) {\n    if (sysStatus.inputEnabled === 0 || pingEvent) {\n        cmd.payload = \"\\\"c 11\\\"\";  // Turn on the compressor\n        if (sysStatus.inputEnabled === 0) {\n            node.log(`Compressor on: fridge=${fridge.toFixed(3)}, target=${target}`);\n        }\n    }\n}\n// Stop\nelse {\n    if (sysStatus.inputEnabled === 1 || pingEvent) {\n        cmd.payload = \"\\\"c 0\\\"\";   // Turn off the compressor\n        if (sysStatus.inputEnabled === 1) {\n            node.log(`Compressor off: fridge=${fridge.toFixed(3)}, target=${target}`);\n        }\n    }\n    \n}\n\nnode.send([null, battStatus, null]);\nnode.send([null, outdoorStatus, null]);\nnode.send([null, sensorStatus, null]);\n\n// Filter logs\nif (cmd.payload !== \"\\\"c 30\\\"\" && cmd.payload !== context.get(\"lastLogCmd\")) {\n    context.set(\"lastLogCmd\", cmd.payload);\n    node.log(`Sent: ${cmd.payload}`);\n}\n\ncontext.set(\"lastCmd\", cmd);\nreturn [cmd, null, null];\n\n\n\n",
+        "func": "\n// Settings\nconst lowBattSoC       = global.get(\"fridgeLowBattSoC\");       // Low battery detection state of charge in %\nconst boostDutyCycle   = global.get(\"fridgeBoostDC\");          // Compressor duty cycle threshold for activating the gas boost function\nconst boostHyst        = global.get(\"fridgeBoostHyst\");        // Compressor duty cycle reduction for deactivating the gas boost function\nconst defrostTempDec   = global.get(\"fridgeDefrostTempDec\");   // Decrease target temp by this amout when preparing for a defrost cycle\nconst openDoorTempRate = global.get(\"fridgeOpenDoorTempRate\"); // Fridge temp increase rate per trigger interval to raise an open door alarm\nconst openDoorTempInc  = global.get(\"fridgeOpenDoorTempInc\");  // Absolute fridge temp increase to raise an open door alarm\nconst freezerInstalled = global.get(\"fridgeFreezerInstalled\"); // Freezer compartment has been installed\nconst minOutdoorTemp   = global.get(\"fridgeMinOutdoorTemp\");   // Minimum allowed operation outdoor temperature\nconst defrostTimer1    = global.get(\"fridgeDefrostTimer1\");    // Defrost activation timer 1\nconst defrostTimer2    = global.get(\"fridgeDefrostTimer2\");    // Defrost activation timer 2\n\n\nlet now    = Date.now();\nlet hour   = new Date().getHours();\nlet cmd = {};\nlet sensorStatus  = {topic: \"sensor\", payload: {fridge: true, outdoor: true}};\nlet battStatus    = {topic: \"battery\", payload: true};\nlet outdoorStatus = {topic: \"outdoor\", payload: context.get(\"outdoorStatus\")};\nif (outdoorStatus.payload === undefined) outdoorStatus.payload = true;\nlet boostStatus   = {topic: \"boost\"};\nlet mode          = {topic: \"mode\"};\n\n// Store received values\nif (msg.topic === \"fridgeTargetTemp\") {\n    context.set(\"target\", msg.payload);\n}\nelse if (msg.topic === \"fridgeAbsorberMode\") {\n    context.set(\"absorberMode\", msg.payload);\n    // Ensure that boost is not deactivated if settings are reloaded from file\n    if (context.get(\"boostActive\")) {\n        mode.payload = 0;\n        context.set(\"lastMode\", mode.payload);\n        node.send([null, null, mode]);   // Set absorber mode to 0\n    }\n    else {\n        mode.payload = msg.payload;\n        context.set(\"lastMode\", mode.payload);\n        node.send([null, null, mode]);  // Forward absorber mode\n    }\n}\nelse if (msg.topic === \"fridgeAbsorberModeUser\") {\n    context.set(\"absorberMode\", msg.payload);\n    if (context.get(\"boostActive\")) {\n        node.log(\"Boost disabled by user\");\n        boostStatus.payload = false;\n        node.send([null, boostStatus, null]);    \n    }\n    mode.payload = msg.payload;\n    context.set(\"lastMode\", mode.payload);\n    node.send([null, null, mode]);  // Forward absorber mode\n}\nelse if (msg.topic === \"fridge\") {\n    context.set(\"fridge\", msg.raw);\n    context.set(\"fridgeStamp\", now);\n}\nelse if (msg.topic === \"outdoor\") {\n    context.set(\"outdoor\", msg.raw);\n    context.set(\"outdoorStamp\", now);\n}\nelse if (msg.topic === \"room\") {\n    context.set(\"room\", msg.payload);\n}\nelse if (msg.topic === \"battery\") {\n    context.set(\"battery\", msg.payload);\n}\nelse if (msg.topic === \"jsonConfig\") {\n    context.set(\"ok\", msg.payload.ok);\n    if (msg.payload.ok === 30) {\n        context.set(\"sysStatus\", msg.payload);\n    }\n}\nelse if (msg.topic === \"return\") {\n    context.set(\"return\", msg.payload.code);\n}\n\n// Proceed only if trigger was received\nif (msg.topic !== \"trigger\") {\n    return null;\n}\n\n\n// Read state variables\nlet target    = context.get(\"target\");\nlet absMode   = context.get(\"absorberMode\") || 0;\nlet fridge    = context.get(\"fridge\");\nlet outdoor   = context.get(\"outdoor\");\nlet room      = context.get(\"room\");\nlet sysStatus = context.get(\"sysStatus\") || {};\nlet battery   = context.get(\"battery\");\nlet lastTemp  = context.get(\"lastTemp\");\nlet fridgeStamp  = context.get(\"fridgeStamp\") || 0;\nlet outdoorStamp = context.get(\"outdoorStamp\") || 0;\nlet nextCmd   = context.get(\"nextCmd\");\nlet count     = context.get(\"count\") || 0;\nlet lastCmd   = context.get(\"lastCmd\");\nlet avgDutyCycle = flow.get(\"avgDutyCycle\") || 0;\n\n\n// Temperature sensor failure detection\nif (now - fridgeStamp > 5*60000 || fridge === undefined) {\n    sensorStatus.payload.fridge = false;\n    fridge = undefined;\n}\nif (now - outdoorStamp > 5*60000 || outdoor === undefined) {\n    if (minOutdoorTemp > -100) {\n        sensorStatus.payload.outdoor = false;\n    }\n    outdoor = undefined;\n}\n\n// Confirm successful command transmission\nif (lastCmd) {\n    let code = context.get(\"return\");\n    let ok   = context.get(\"ok\");\n\n    context.set(\"return\", undefined);\n    context.set(\"ok\", undefined);\n    if (code === 0) {\n        if (lastCmd.payload === `\"c ${ok}\"`) {\n            //node.warn(`Success: ${lastCmd.payload}`);\n            context.set(\"lastCmd\", undefined);\n            context.set(\"lastWarn\", undefined);\n        }\n        else {\n            let warn = `Retransmit: ${lastCmd.payload} (ok=${ok})`\n            // Avoid similar traces\n            if (warn !== context.get(\"lastWarn\")) {\n                context.set(\"lastWarn\", warn);\n                node.warn(warn);\n            }\n            return [lastCmd, sensorStatus, null];\n        }\n    }\n    else if (code !== undefined) {\n        let warn = `Retransmit: ${lastCmd.payload} (code=${code})`\n        // Avoid similar traces\n        if (warn !== context.get(\"lastWarn\")) {\n            context.set(\"lastWarn\", warn);\n            node.warn(warn);\n        }\n        return [lastCmd, sensorStatus, null];\n    }\n    else {\n        context.set(\"lastWarn\", undefined);\n        return [null, sensorStatus, null];\n    }\n}\n\n\n// Log defrost status changes\nif (sysStatus.defrost !== context.get(\"lastDefrostLog\")) {\n    node.log(`Defrost status: defrost=${sysStatus.defrost}`);\n    context.set(\"lastDefrostLog\", sysStatus.defrost);\n}\n\n\n// Defrost management\nif (sysStatus.defrost === 0) {\n    context.set(\"lastDefrost\", 0);\n}\nelse if (sysStatus.defrost === 1) {\n    if (context.get(\"lastDefrost\") === 2) {\n        context.set(\"lastDefrost\", 1);\n    }\n    // Race condition - sequence must be 0 -> 2 -> 1\n    else if (context.get(\"lastDefrost\") === 0 && nextCmd === undefined) {\n        node.log(\"Restarting defrost for pre-cool\");\n        nextCmd = \"\\\"c 20\\\"\";               // Disable defrost\n        context.set(\"nextCmd\", \"\\\"c 21\\\"\"); // Reenable defrost\n        sysStatus.defrost = 0;\n        context.set(\"sysStatus\", sysStatus);\n    }\n} \nelse if (sysStatus.defrost === 2) {\n    context.set(\"lastDefrost\", 2);\n}\n// Disable defrost if defrost runtime counter has been reset (workaround for Arduino FW bug)\nif (sysStatus.runtime === 0 && sysStatus.defrost !== 0 && nextCmd === undefined) {\n    node.log(\"Disabled defrost due to 0 runtime\");\n    nextCmd = \"\\\"c 20\\\"\";  // Disable defrost\n    sysStatus.defrost = 0;\n    context.set(\"sysStatus\", sysStatus);\n}\n// Defrost timer\nif ((hour === defrostTimer1 || hour === defrostTimer2) && !freezerInstalled && \n        !context.get(\"defrostTimerActive\") && nextCmd === undefined) {\n    node.log(`Timer triggered defrost: hour=${hour}`);\n    context.set(\"defrostTimerActive\", true);\n    nextCmd = \"\\\"c 21\\\"\";  // Start defrost \n}\nelse if (hour !== defrostTimer1 && hour !== defrostTimer1+1 && \n        hour !== defrostTimer2 && hour !== defrostTimer2+1 && context.get(\"defrostTimerActive\")) {\n    context.set(\"defrostTimerActive\", false);\n}\n\n\n// Low battery detection and gas boost activation\nlet lowBatt = (battery < lowBattSoC);\nlet boost   = context.get(\"boost\") || false;\nif (avgDutyCycle >= boostDutyCycle && !boost && sysStatus.defrost !== 1) {\n    boost = true;\n    context.set(\"boost\", boost);\n}\nelse if (avgDutyCycle < boostDutyCycle - boostHyst && boost) {\n    boost = false;\n    context.set(\"boost\", boost);\n}\nif (lowBatt || boost) {\n    if (lowBatt) {\n        battStatus.payload = false;\n    }\n    if (!context.get(\"boostActive\")) {\n        node.log(`Boost enabled: battery=${battery}, dutyCycle=${avgDutyCycle}`);\n        context.set(\"boostActive\", true);\n        boostStatus.payload = true;\n        mode.payload = 0;  // Switch to gas mode\n        context.set(\"lastMode\", mode.payload);\n        node.send([null, boostStatus, mode]);\n    }\n}\nelse {\n    if (context.get(\"boostActive\")) {\n        node.log(`Boost disabled: battery=${battery}, dutyCycle=${avgDutyCycle}`);\n        context.set(\"boostActive\", false);\n        boostStatus.payload = false;\n        mode.payload = absMode;  // Restore previous mode\n        context.set(\"lastMode\", mode.payload);\n        node.send([null, boostStatus, mode]);\n    }\n}\n\n\n\n// Disable gas absorbtion refrigerator during defrost\nif (sysStatus.defrost === 1 && !context.get(\"absDisabled\")) {\n    context.set(\"absDisabled\", true);\n    mode.payload = 1;\n    node.send([null, null, mode]);\n}\nelse if (sysStatus.defrost === 0 && context.get(\"absDisabled\")) {\n    context.set(\"absDisabled\", false);\n    mode.payload = context.get(\"lastMode\");\n    node.send([null, null, mode]);\n}\n\n\n// Low outdoor temperature\nif (outdoorStatus.payload === true && outdoor < minOutdoorTemp && target < 100 && sensorStatus.payload.outdoor) {\n    outdoorStatus.payload = false;\n    context.set(\"outdoorStatus\", false);\n}\nelse if ((outdoorStatus.payload === false && outdoor >= minOutdoorTemp + 1) || target === 100 || sensorStatus.payload.outdoor === false) {\n    outdoorStatus.payload = true;\n    context.set(\"outdoorStatus\", true);\n}\n\n\n// Temperature increase rate calculation\nif (count % 3 === 0 || fridge < lastTemp || lastTemp === undefined) {\n  context.set(\"lastTemp\", fridge);\n}\nlet delta = fridge - lastTemp;\n//node.warn(`fridge=${fridge}, lastTemp=${lastTemp}, delta=${delta}, nextCmd=${nextCmd}`);\n\n\n// Open door / temperature surge detection\nif (((delta > openDoorTempRate && fridge > target) || (fridge > target + openDoorTempInc && target < 100)) && \n       !context.get(\"wasOpenDr\") && nextCmd === undefined && battStatus.payload && outdoorStatus.payload && sensorStatus.payload.fridge) {\n    node.log(`Temperature surge: delta=${delta.toFixed(3)}, fridge=${fridge.toFixed(3)}`);\n    if (sysStatus.defrost !== 0) {\n        nextCmd = \"\\\"c 20\\\"\";            // Disable defrost\n    }\n    context.set(\"nextCmd\", \"\\\"c 10\\\"\");  // Set max speed\n    context.set(\"wasOpenDr\", true);\n}\nelse if (fridge < target || target === 100) {\n    context.set(\"wasOpenDr\", false);\n}\n\n\n// Deactivate periodic defrost if freezer compartment has been installed\nif (freezerInstalled && sysStatus.defrost !== -1) {\n    nextCmd = \"\\\"c 22\\\"\";  // Deactivate defrost feature\n    sysStatus.defrost = -1;\n    context.set(\"sysStatus\", sysStatus);\n}\nelse if (!freezerInstalled && sysStatus.defrost === -1) {\n    nextCmd = \"\\\"c 23\\\"\";  // Activate defrost feature\n    sysStatus.defrost = 0;\n    context.set(\"sysStatus\", sysStatus);\n}\n\n\n// Pre-cool before starting a defrost cycle\nif (sysStatus.defrost === 2 && target > 1) {\n    target = target - defrostTempDec;\n}\n\n\n\n// Manage event counter\nlet statusEvent = false;\nlet pingEvent   = false;\nif (count % 2 === 0) {\n    statusEvent = true;\n}\nelse if (count % 3 === 0) {\n    pingEvent = true;\n}\ncount++;\ncontext.set(\"count\", count);\n\n\n// Request system status by default\ncmd.payload = \"\\\"c 30\\\"\";\n\n\n// Request system status\nif (statusEvent && nextCmd === undefined) {\n    cmd.payload = \"\\\"c 30\\\"\";  // Request system status\n}\n// Execute scheduled command\nelse if (nextCmd !== undefined) {\n    if (nextCmd === context.get(\"nextCmd\")) {\n        context.set(\"nextCmd\", undefined);\n    }\n    cmd.payload = nextCmd;\n}\n// Fridge temperature sensor failure\nelse if (sensorStatus.payload.fridge === false) {\n    //node.log(\"Temperature sensor no signal\");\n    // Don't send command\n}\n// Low battery or low outdoor temperature\nelse if (battStatus.payload === false || outdoorStatus.payload === false) {\n    if (sysStatus.inputEnabled === 1 || pingEvent) {\n        cmd.payload = \"\\\"c 0\\\"\";   // Turn off the compressor\n    }\n}\n// Turn off\nelse if (target === 100) {\n    if (sysStatus.inputEnabled === 1 || pingEvent) {\n        cmd.payload = \"\\\"c 0\\\"\";   // Turn off the compressor\n    }\n}\n// Start\nelse if (fridge > target) {\n    if (sysStatus.inputEnabled === 0 || pingEvent) {\n        cmd.payload = \"\\\"c 11\\\"\";  // Turn on the compressor\n        if (sysStatus.inputEnabled === 0) {\n            node.log(`Compressor on: fridge=${fridge.toFixed(3)}, target=${target}`);\n        }\n    }\n}\n// Stop\nelse {\n    if (sysStatus.inputEnabled === 1 || pingEvent) {\n        cmd.payload = \"\\\"c 0\\\"\";   // Turn off the compressor\n        if (sysStatus.inputEnabled === 1) {\n            node.log(`Compressor off: fridge=${fridge.toFixed(3)}, target=${target}`);\n        }\n    }\n    \n}\n\nnode.send([null, battStatus, null]);\nnode.send([null, outdoorStatus, null]);\nnode.send([null, sensorStatus, null]);\n\n// Filter logs\nif (cmd.payload !== \"\\\"c 30\\\"\" && cmd.payload !== context.get(\"lastLogCmd\")) {\n    context.set(\"lastLogCmd\", cmd.payload);\n    node.log(`Sent: ${cmd.payload}`);\n}\n\ncontext.set(\"lastCmd\", cmd);\nreturn [cmd, null, null];\n\n\n\n",
         "outputs": 3,
         "timeout": 0,
         "noerr": 0,
-        "initialize": "// Code added here will be run once\n// whenever the node is started.\ncontext.set(\"count\", undefined);\ncontext.set(\"target\", undefined);\ncontext.set(\"absorberMode\", undefined);\ncontext.set(\"fridge\", undefined);\ncontext.set(\"fridgeStamp\", undefined);\ncontext.set(\"outdoor\", undefined);\ncontext.set(\"outdoorStamp\", undefined);\ncontext.set(\"room\", undefined);\ncontext.set(\"battery\", undefined);\ncontext.set(\"sysStatus\", undefined);\ncontext.set(\"lastTemp\", undefined);\ncontext.set(\"lastCmd\", undefined);\ncontext.set(\"nextCmd\", undefined);\ncontext.set(\"lastLogCmd\", undefined);\ncontext.set(\"return\", undefined);\ncontext.set(\"ok\", undefined);\ncontext.set(\"lastDefrost\", undefined);\ncontext.set(\"boost\", undefined);\ncontext.set(\"boostActive\", undefined);\ncontext.set(\"outdoorStatus\", undefined);\ncontext.set(\"wasOpenDr\", undefined);\ncontext.set(\"lastDefrostLog\", undefined);\ncontext.set(\"absDisabled\", undefined);\ncontext.set(\"lastMode\", undefined);\n\nflow.set(\"defrostDisable\", undefined);\n\n",
+        "initialize": "// Code added here will be run once\n// whenever the node is started.\ncontext.set(\"count\", undefined);\ncontext.set(\"target\", undefined);\ncontext.set(\"absorberMode\", undefined);\ncontext.set(\"fridge\", undefined);\ncontext.set(\"fridgeStamp\", undefined);\ncontext.set(\"outdoor\", undefined);\ncontext.set(\"outdoorStamp\", undefined);\ncontext.set(\"room\", undefined);\ncontext.set(\"battery\", undefined);\ncontext.set(\"sysStatus\", undefined);\ncontext.set(\"lastTemp\", undefined);\ncontext.set(\"lastCmd\", undefined);\ncontext.set(\"nextCmd\", undefined);\ncontext.set(\"lastLogCmd\", undefined);\ncontext.set(\"return\", undefined);\ncontext.set(\"ok\", undefined);\ncontext.set(\"lastDefrost\", undefined);\ncontext.set(\"boost\", undefined);\ncontext.set(\"boostActive\", undefined);\ncontext.set(\"outdoorStatus\", undefined);\ncontext.set(\"wasOpenDr\", undefined);\ncontext.set(\"lastDefrostLog\", undefined);\ncontext.set(\"absDisabled\", undefined);\ncontext.set(\"lastMode\", undefined);\ncontext.set(\"defrostTimerActive\", undefined);\n\nflow.set(\"defrostDisable\", undefined);\n\n",
         "finalize": "",
         "libs": [],
         "x": 590,
@@ -8456,15 +8456,15 @@
         "type": "function",
         "z": "fc670f602d442a02",
         "name": "DecodeJSON",
-        "func": "\nlet json = msg.payload;\nlet msgCount = 0\n\nfunction makeMessage(key, defaultValue) {\n    msgCount++;\n    flow.set(\"msgCount\", msgCount);\n    let value = (json[key] !== undefined) ? json[key] : defaultValue;\n    return {\n        topic: key,\n        payload: value\n    };\n}\n\n\nlet messages = [\n    makeMessage(\"fridgeFreezerInstalled\", false),\n    makeMessage(\"fridgeLowBattSoC\", 30),\n    makeMessage(\"fridgeBoostDC\", 90),\n    makeMessage(\"fridgeBoostHyst\", 20),\n    makeMessage(\"fridgeDefrostTempDec\", 0.5),\n    makeMessage(\"fridgeOpenDoorTempRate\", 0.15),\n    makeMessage(\"fridgeOpenDoorTempInc\", 1),\n    makeMessage(\"fridgeMinOutdoorTemp\", -100),\n    makeMessage(\"fridgePlaceholdeSetting\", 0), // Reserved for future use\n\n    makeMessage(\"alarmBattLow\", 20),\n    makeMessage(\"alarmPropaneLow\", 5),\n    makeMessage(\"alarmTempRoomLow\", 5),\n    makeMessage(\"alarmTempRoomHigh\", 35),\n    makeMessage(\"alarmTempFridgeLow\", 1),\n    makeMessage(\"alarmTempFridgeHigh\", 10),\n    makeMessage(\"alarmTempWaterLow\", 5),\n    makeMessage(\"alarmTempCpuHigh\", 70),\n    makeMessage(\"alarmTempBattLow\", 5),\n    makeMessage(\"alarmTempBattHigh\", 30),\n    makeMessage(\"alarmSensorBatt\", 2.7),\n\n    makeMessage(\"offsetTempRoom\", 0),\n    makeMessage(\"offsetTempOutdoor\", 0),\n    makeMessage(\"offsetTempFridge\", 0),\n\n    makeMessage(\"fridgeTargetTemp\", 4),\n    makeMessage(\"fridgeAbsorberMode\", 1),\n    \n    makeMessage(\"cmbPhone\", \"\"),\n    makeMessage(\"cmbApiKey\", \"\"),\n    \n    makeMessage(\"fridgeTempDerate\", 20),\n\n    {topic: \"apply\", payload: \"\"}\n];\n\nreturn messages;\n",
-        "outputs": 29,
+        "func": "\nlet json = msg.payload;\nlet msgCount = 0\n\nfunction makeMessage(key, defaultValue) {\n    msgCount++;\n    flow.set(\"msgCount\", msgCount);\n    let value = (json[key] !== undefined) ? json[key] : defaultValue;\n    return {\n        topic: key,\n        payload: value\n    };\n}\n\n\nlet messages = [\n    makeMessage(\"fridgeFreezerInstalled\", false),\n    makeMessage(\"fridgeLowBattSoC\", 30),\n    makeMessage(\"fridgeBoostDC\", 90),\n    makeMessage(\"fridgeBoostHyst\", 20),\n    makeMessage(\"fridgeDefrostTempDec\", 0.5),\n    makeMessage(\"fridgeDefrostTimer1\", 2),\n    makeMessage(\"fridgeDefrostTimer2\", 4),\n    makeMessage(\"fridgeOpenDoorTempRate\", 0.15),\n    makeMessage(\"fridgeOpenDoorTempInc\", 1),\n    makeMessage(\"fridgeMinOutdoorTemp\", -100),\n\n    makeMessage(\"alarmBattLow\", 20),\n    makeMessage(\"alarmPropaneLow\", 5),\n    makeMessage(\"alarmTempRoomLow\", 5),\n    makeMessage(\"alarmTempRoomHigh\", 35),\n    makeMessage(\"alarmTempFridgeLow\", 1),\n    makeMessage(\"alarmTempFridgeHigh\", 10),\n    makeMessage(\"alarmTempWaterLow\", 5),\n    makeMessage(\"alarmTempCpuHigh\", 70),\n    makeMessage(\"alarmTempBattLow\", 5),\n    makeMessage(\"alarmTempBattHigh\", 30),\n    makeMessage(\"alarmSensorBatt\", 2.7),\n\n    makeMessage(\"offsetTempRoom\", 0),\n    makeMessage(\"offsetTempOutdoor\", 0),\n    makeMessage(\"offsetTempFridge\", 0),\n\n    makeMessage(\"fridgeTargetTemp\", 4),\n    makeMessage(\"fridgeAbsorberMode\", 1),\n    \n    makeMessage(\"cmbPhone\", \"\"),\n    makeMessage(\"cmbApiKey\", \"\"),\n    \n    makeMessage(\"fridgeTempDerate\", 20),\n\n    {topic: \"apply\", payload: \"\"}\n];\n\nreturn messages;\n",
+        "outputs": 30,
         "timeout": 0,
         "noerr": 0,
         "initialize": "// Code added here will be run once\n// whenever the node is started.\nflow.set(\"msgCount\", undefined);\n",
         "finalize": "",
         "libs": [],
         "x": 580,
-        "y": 300,
+        "y": 380,
         "wires": [
             [
                 "5bca797a0c9db125"
@@ -8482,6 +8482,12 @@
                 "1f01216242ce5d9e"
             ],
             [
+                "b8d191fbc6ea8d0d"
+            ],
+            [
+                "d3a31d7ae7c0a0d2"
+            ],
+            [
                 "ec9b33a5a52234df"
             ],
             [
@@ -8490,7 +8496,6 @@
             [
                 "fdcc84cb71acc56f"
             ],
-            [],
             [
                 "a7111274ce363101"
             ],
@@ -8608,7 +8613,7 @@
         "z": "fc670f602d442a02",
         "name": "",
         "x": 370,
-        "y": 280,
+        "y": 360,
         "wires": [
             [
                 "506010c16d2924c9"
@@ -8661,7 +8666,7 @@
         "name": "Low battery cut-off",
         "label": "State of charge",
         "tooltip": "",
-        "order": 6,
+        "order": 10,
         "width": 3,
         "height": "",
         "passthru": true,
@@ -8739,7 +8744,7 @@
         "type": "ui-text",
         "z": "fc670f602d442a02",
         "group": "28b10b40908e96b0",
-        "order": 5,
+        "order": 9,
         "width": "3",
         "height": "1",
         "name": "",
@@ -8768,7 +8773,7 @@
         ],
         "uncaught": false,
         "x": 370,
-        "y": 320,
+        "y": 400,
         "wires": [
             [
                 "506010c16d2924c9"
@@ -8780,7 +8785,7 @@
         "type": "ui-text",
         "z": "fc670f602d442a02",
         "group": "28b10b40908e96b0",
-        "order": 9,
+        "order": 13,
         "width": "3",
         "height": "1",
         "name": "",
@@ -8805,7 +8810,7 @@
         "name": "Boost start duty cycle",
         "label": "Duty cycle",
         "tooltip": "",
-        "order": 10,
+        "order": 14,
         "width": 3,
         "height": "",
         "passthru": true,
@@ -8874,7 +8879,7 @@
         "type": "ui-text",
         "z": "fc670f602d442a02",
         "group": "28b10b40908e96b0",
-        "order": 3,
+        "order": 7,
         "width": "3",
         "height": "1",
         "name": "",
@@ -8899,7 +8904,7 @@
         "name": "Defrost pre-cool",
         "label": "Temp decrease",
         "tooltip": "",
-        "order": 4,
+        "order": 8,
         "width": 3,
         "height": "",
         "passthru": true,
@@ -8952,7 +8957,7 @@
         "type": "ui-text",
         "z": "fc670f602d442a02",
         "group": "28b10b40908e96b0",
-        "order": 13,
+        "order": 17,
         "width": "3",
         "height": "1",
         "name": "",
@@ -8966,7 +8971,7 @@
         "wrapText": false,
         "className": "",
         "x": 130,
-        "y": 280,
+        "y": 360,
         "wires": []
     },
     {
@@ -8977,7 +8982,7 @@
         "name": "ODD temp increase rate",
         "label": "°C / minute",
         "tooltip": "",
-        "order": 14,
+        "order": 18,
         "width": 3,
         "height": "",
         "passthru": true,
@@ -9013,7 +9018,7 @@
         "typeIsComboBox": false,
         "msgTrigger": "onChange",
         "x": 910,
-        "y": 280,
+        "y": 360,
         "wires": [
             [
                 "9417300a8154fe41"
@@ -9025,7 +9030,7 @@
         "type": "ui-text",
         "z": "fc670f602d442a02",
         "group": "28b10b40908e96b0",
-        "order": 15,
+        "order": 19,
         "width": "3",
         "height": "1",
         "name": "",
@@ -9039,7 +9044,7 @@
         "wrapText": false,
         "className": "",
         "x": 140,
-        "y": 320,
+        "y": 400,
         "wires": []
     },
     {
@@ -9050,7 +9055,7 @@
         "name": "ODD temp increase",
         "label": "Temp increase",
         "tooltip": "",
-        "order": 16,
+        "order": 20,
         "width": 3,
         "height": "",
         "passthru": true,
@@ -9096,7 +9101,7 @@
         "typeIsComboBox": false,
         "msgTrigger": "onChange",
         "x": 890,
-        "y": 320,
+        "y": 400,
         "wires": [
             [
                 "9417300a8154fe41"
@@ -9122,7 +9127,7 @@
         "wrapText": false,
         "className": "",
         "x": 90,
-        "y": 520,
+        "y": 600,
         "wires": []
     },
     {
@@ -9179,7 +9184,7 @@
         "typeIsComboBox": false,
         "msgTrigger": "onChange",
         "x": 870,
-        "y": 520,
+        "y": 600,
         "wires": [
             [
                 "c5cd6710bd410a34"
@@ -9205,7 +9210,7 @@
         "wrapText": false,
         "className": "",
         "x": 90,
-        "y": 560,
+        "y": 640,
         "wires": []
     },
     {
@@ -9257,7 +9262,7 @@
         "typeIsComboBox": false,
         "msgTrigger": "onChange",
         "x": 870,
-        "y": 560,
+        "y": 640,
         "wires": [
             [
                 "c5cd6710bd410a34"
@@ -9283,7 +9288,7 @@
         "wrapText": false,
         "className": "",
         "x": 100,
-        "y": 600,
+        "y": 680,
         "wires": []
     },
     {
@@ -9340,7 +9345,7 @@
         "typeIsComboBox": false,
         "msgTrigger": "onChange",
         "x": 880,
-        "y": 600,
+        "y": 680,
         "wires": [
             [
                 "c5cd6710bd410a34"
@@ -9366,7 +9371,7 @@
         "wrapText": false,
         "className": "",
         "x": 100,
-        "y": 640,
+        "y": 720,
         "wires": []
     },
     {
@@ -9413,7 +9418,7 @@
         "typeIsComboBox": false,
         "msgTrigger": "onChange",
         "x": 880,
-        "y": 640,
+        "y": 720,
         "wires": [
             [
                 "c5cd6710bd410a34"
@@ -9439,7 +9444,7 @@
         "wrapText": false,
         "className": "",
         "x": 100,
-        "y": 680,
+        "y": 760,
         "wires": []
     },
     {
@@ -9461,7 +9466,7 @@
         "wrapText": false,
         "className": "",
         "x": 110,
-        "y": 720,
+        "y": 800,
         "wires": []
     },
     {
@@ -9513,7 +9518,7 @@
         "typeIsComboBox": false,
         "msgTrigger": "onChange",
         "x": 880,
-        "y": 680,
+        "y": 760,
         "wires": [
             [
                 "c5cd6710bd410a34"
@@ -9564,7 +9569,7 @@
         "typeIsComboBox": false,
         "msgTrigger": "onChange",
         "x": 890,
-        "y": 720,
+        "y": 800,
         "wires": [
             [
                 "c5cd6710bd410a34"
@@ -9590,7 +9595,7 @@
         "wrapText": false,
         "className": "",
         "x": 100,
-        "y": 760,
+        "y": 840,
         "wires": []
     },
     {
@@ -9637,7 +9642,7 @@
         "typeIsComboBox": false,
         "msgTrigger": "onChange",
         "x": 880,
-        "y": 760,
+        "y": 840,
         "wires": [
             [
                 "c5cd6710bd410a34"
@@ -9663,7 +9668,7 @@
         "wrapText": false,
         "className": "",
         "x": 100,
-        "y": 800,
+        "y": 880,
         "wires": []
     },
     {
@@ -9710,7 +9715,7 @@
         "typeIsComboBox": false,
         "msgTrigger": "onChange",
         "x": 880,
-        "y": 800,
+        "y": 880,
         "wires": [
             [
                 "c5cd6710bd410a34"
@@ -9736,7 +9741,7 @@
         "wrapText": false,
         "className": "",
         "x": 110,
-        "y": 840,
+        "y": 920,
         "wires": []
     },
     {
@@ -9758,7 +9763,7 @@
         "wrapText": false,
         "className": "",
         "x": 110,
-        "y": 880,
+        "y": 960,
         "wires": []
     },
     {
@@ -9805,7 +9810,7 @@
         "typeIsComboBox": false,
         "msgTrigger": "onChange",
         "x": 890,
-        "y": 880,
+        "y": 960,
         "wires": [
             [
                 "c5cd6710bd410a34"
@@ -9856,7 +9861,7 @@
         "typeIsComboBox": false,
         "msgTrigger": "onChange",
         "x": 890,
-        "y": 840,
+        "y": 920,
         "wires": [
             [
                 "c5cd6710bd410a34"
@@ -9882,7 +9887,7 @@
         "wrapText": false,
         "className": "",
         "x": 90,
-        "y": 1180,
+        "y": 1260,
         "wires": []
     },
     {
@@ -10014,7 +10019,7 @@
         "typeIsComboBox": false,
         "msgTrigger": "onChange",
         "x": 870,
-        "y": 1180,
+        "y": 1260,
         "wires": [
             [
                 "08ebf0b647182af1"
@@ -10040,7 +10045,7 @@
         "wrapText": false,
         "className": "",
         "x": 100,
-        "y": 1220,
+        "y": 1300,
         "wires": []
     },
     {
@@ -10062,7 +10067,7 @@
         "wrapText": false,
         "className": "",
         "x": 90,
-        "y": 1260,
+        "y": 1340,
         "wires": []
     },
     {
@@ -10074,7 +10079,7 @@
             "236fdb56f87224ab"
         ],
         "x": 1025,
-        "y": 1440,
+        "y": 1520,
         "wires": [
             [
                 "c2daddd28170cbb5"
@@ -10091,7 +10096,7 @@
             "b8de84a1a12a151c"
         ],
         "x": 815,
-        "y": 1420,
+        "y": 1500,
         "wires": []
     },
     {
@@ -10104,7 +10109,7 @@
             "0ffbdf4fdf3d401d"
         ],
         "x": 815,
-        "y": 1460,
+        "y": 1540,
         "wires": []
     },
     {
@@ -10114,7 +10119,7 @@
         "group": "28b10b40908e96b0",
         "name": "Apply 1",
         "label": "Apply",
-        "order": 17,
+        "order": 21,
         "width": 6,
         "height": 1,
         "emulateClick": false,
@@ -10139,7 +10144,7 @@
         "pointerupPayload": "",
         "pointerupPayloadType": "str",
         "x": 880,
-        "y": 440,
+        "y": 520,
         "wires": [
             [
                 "9417300a8154fe41"
@@ -10164,7 +10169,7 @@
         "allowrate": false,
         "outputs": 1,
         "x": 590,
-        "y": 540,
+        "y": 660,
         "wires": [
             [
                 "9417300a8154fe41",
@@ -10205,7 +10210,7 @@
         "pointerupPayload": "",
         "pointerupPayloadType": "str",
         "x": 880,
-        "y": 1360,
+        "y": 1440,
         "wires": [
             [
                 "08ebf0b647182af1"
@@ -10244,7 +10249,7 @@
         "pointerupPayload": "",
         "pointerupPayloadType": "str",
         "x": 880,
-        "y": 1100,
+        "y": 1180,
         "wires": [
             [
                 "c5cd6710bd410a34"
@@ -10259,7 +10264,7 @@
         "name": "Boost stop hysteresis",
         "label": "Duty cycle offset",
         "tooltip": "",
-        "order": 12,
+        "order": 16,
         "width": 3,
         "height": "",
         "passthru": true,
@@ -10312,7 +10317,7 @@
         "type": "ui-text",
         "z": "fc670f602d442a02",
         "group": "28b10b40908e96b0",
-        "order": 11,
+        "order": 15,
         "width": "3",
         "height": "1",
         "name": "",
@@ -10399,7 +10404,7 @@
         "z": "fc670f602d442a02",
         "name": "",
         "x": 1170,
-        "y": 240,
+        "y": 280,
         "wires": [
             [
                 "c2daddd28170cbb5"
@@ -10419,7 +10424,7 @@
         "z": "fc670f602d442a02",
         "name": "",
         "x": 1170,
-        "y": 560,
+        "y": 800,
         "wires": [
             [
                 "c2daddd28170cbb5"
@@ -10438,8 +10443,8 @@
         "type": "subflow:521836fa35cf581b",
         "z": "fc670f602d442a02",
         "name": "",
-        "x": 1170,
-        "y": 1160,
+        "x": 1150,
+        "y": 1300,
         "wires": [
             [
                 "c2daddd28170cbb5"
@@ -10492,7 +10497,7 @@
         "typeIsComboBox": false,
         "msgTrigger": "onChange",
         "x": 880,
-        "y": 920,
+        "y": 1000,
         "wires": [
             [
                 "c5cd6710bd410a34"
@@ -10518,7 +10523,7 @@
         "wrapText": false,
         "className": "",
         "x": 100,
-        "y": 920,
+        "y": 1000,
         "wires": []
     },
     {
@@ -10540,7 +10545,7 @@
         "wrapText": false,
         "className": "",
         "x": 110,
-        "y": 960,
+        "y": 1040,
         "wires": []
     },
     {
@@ -10562,7 +10567,7 @@
         "wrapText": false,
         "className": "",
         "x": 100,
-        "y": 1000,
+        "y": 1080,
         "wires": []
     },
     {
@@ -10591,7 +10596,7 @@
         "iconPosition": "left",
         "iconInnerPosition": "inside",
         "x": 890,
-        "y": 960,
+        "y": 1040,
         "wires": [
             [
                 "c5cd6710bd410a34"
@@ -10624,7 +10629,7 @@
         "iconPosition": "left",
         "iconInnerPosition": "inside",
         "x": 890,
-        "y": 1000,
+        "y": 1080,
         "wires": [
             [
                 "c5cd6710bd410a34"
@@ -10760,7 +10765,7 @@
         "typeIsComboBox": false,
         "msgTrigger": "onChange",
         "x": 880,
-        "y": 1220,
+        "y": 1300,
         "wires": [
             [
                 "08ebf0b647182af1"
@@ -10896,7 +10901,7 @@
         "typeIsComboBox": false,
         "msgTrigger": "onChange",
         "x": 870,
-        "y": 1260,
+        "y": 1340,
         "wires": [
             [
                 "08ebf0b647182af1"
@@ -10939,7 +10944,9 @@
         "y": 80,
         "wires": [
             [
-                "1f01216242ce5d9e"
+                "1f01216242ce5d9e",
+                "b8d191fbc6ea8d0d",
+                "d3a31d7ae7c0a0d2"
             ]
         ]
     },
@@ -10964,7 +10971,7 @@
         "value": "payload",
         "valueType": "msg",
         "x": 100,
-        "y": 1040,
+        "y": 1120,
         "wires": []
     },
     {
@@ -10999,7 +11006,7 @@
         "pointerupPayload": "",
         "pointerupPayloadType": "str",
         "x": 900,
-        "y": 1040,
+        "y": 1120,
         "wires": [
             [
                 "c2a1fb732fab3de5"
@@ -11015,8 +11022,8 @@
         "links": [
             "67078aee4f30ebb8"
         ],
-        "x": 1055,
-        "y": 1040,
+        "x": 1025,
+        "y": 1120,
         "wires": []
     },
     {
@@ -11027,7 +11034,7 @@
         "name": "Low temp cut-off",
         "label": "Outdoor temp",
         "tooltip": "",
-        "order": 8,
+        "order": 12,
         "width": 3,
         "height": "",
         "passthru": true,
@@ -11068,7 +11075,7 @@
         "typeIsComboBox": false,
         "msgTrigger": "onChange",
         "x": 890,
-        "y": 360,
+        "y": 440,
         "wires": [
             [
                 "9417300a8154fe41"
@@ -11080,7 +11087,7 @@
         "type": "ui-text",
         "z": "fc670f602d442a02",
         "group": "28b10b40908e96b0",
-        "order": 7,
+        "order": 11,
         "width": "3",
         "height": "1",
         "name": "",
@@ -11096,7 +11103,7 @@
         "value": "payload",
         "valueType": "msg",
         "x": 110,
-        "y": 360,
+        "y": 440,
         "wires": []
     },
     {
@@ -11183,7 +11190,7 @@
         "typeIsComboBox": false,
         "msgTrigger": "onChange",
         "x": 900,
-        "y": 1300,
+        "y": 1380,
         "wires": [
             [
                 "08ebf0b647182af1"
@@ -11211,7 +11218,367 @@
         "value": "payload",
         "valueType": "msg",
         "x": 120,
-        "y": 1300,
+        "y": 1380,
         "wires": []
+    },
+    {
+        "id": "a5be740a234a6f4c",
+        "type": "ui-text",
+        "z": "fc670f602d442a02",
+        "group": "28b10b40908e96b0",
+        "order": 3,
+        "width": "3",
+        "height": "1",
+        "name": "",
+        "label": "Defrost timer 1",
+        "format": "{{msg.payload}}",
+        "layout": "row-spread",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#717171",
+        "wrapText": false,
+        "className": "",
+        "value": "payload",
+        "valueType": "msg",
+        "x": 100,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "e946e85e06dcb992",
+        "type": "ui-text",
+        "z": "fc670f602d442a02",
+        "group": "28b10b40908e96b0",
+        "order": 5,
+        "width": "3",
+        "height": "1",
+        "name": "",
+        "label": "Defrost timer 2",
+        "format": "{{msg.payload}}",
+        "layout": "row-spread",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#717171",
+        "wrapText": false,
+        "className": "",
+        "value": "payload",
+        "valueType": "msg",
+        "x": 100,
+        "y": 320,
+        "wires": []
+    },
+    {
+        "id": "b8d191fbc6ea8d0d",
+        "type": "ui-dropdown",
+        "z": "fc670f602d442a02",
+        "group": "28b10b40908e96b0",
+        "name": "Defrost timer 1",
+        "label": "Time",
+        "tooltip": "",
+        "order": 4,
+        "width": 3,
+        "height": "",
+        "passthru": true,
+        "multiple": false,
+        "chips": false,
+        "clearable": false,
+        "options": [
+            {
+                "label": "Off",
+                "value": -1,
+                "type": "num"
+            },
+            {
+                "label": "0:00",
+                "value": 0,
+                "type": "num"
+            },
+            {
+                "label": "1:00",
+                "value": 1,
+                "type": "num"
+            },
+            {
+                "label": "2:00",
+                "value": 2,
+                "type": "num"
+            },
+            {
+                "label": "3:00",
+                "value": 3,
+                "type": "num"
+            },
+            {
+                "label": "4:00",
+                "value": 4,
+                "type": "num"
+            },
+            {
+                "label": "5:00",
+                "value": 5,
+                "type": "num"
+            },
+            {
+                "label": "6:00",
+                "value": 6,
+                "type": "num"
+            },
+            {
+                "label": "7:00",
+                "value": 7,
+                "type": "num"
+            },
+            {
+                "label": "8:00",
+                "value": 8,
+                "type": "num"
+            },
+            {
+                "label": "9:00",
+                "value": 9,
+                "type": "num"
+            },
+            {
+                "label": "10:00",
+                "value": 10,
+                "type": "num"
+            },
+            {
+                "label": "11:00",
+                "value": 11,
+                "type": "num"
+            },
+            {
+                "label": "12:00",
+                "value": 12,
+                "type": "num"
+            },
+            {
+                "label": "13:00",
+                "value": 13,
+                "type": "num"
+            },
+            {
+                "label": "14:00",
+                "value": 14,
+                "type": "num"
+            },
+            {
+                "label": "15:00",
+                "value": 15,
+                "type": "num"
+            },
+            {
+                "label": "16:00",
+                "value": 16,
+                "type": "num"
+            },
+            {
+                "label": "17:00",
+                "value": 17,
+                "type": "num"
+            },
+            {
+                "label": "18:00",
+                "value": 18,
+                "type": "num"
+            },
+            {
+                "label": "19:00",
+                "value": 19,
+                "type": "num"
+            },
+            {
+                "label": "20:00",
+                "value": 20,
+                "type": "num"
+            },
+            {
+                "label": "21:00",
+                "value": 21,
+                "type": "num"
+            },
+            {
+                "label": "22:00",
+                "value": 22,
+                "type": "num"
+            },
+            {
+                "label": "23:00",
+                "value": 23,
+                "type": "num"
+            }
+        ],
+        "payload": "",
+        "topic": "fridgeDefrostTimer1",
+        "topicType": "str",
+        "className": "",
+        "typeIsComboBox": false,
+        "msgTrigger": "onChange",
+        "x": 880,
+        "y": 280,
+        "wires": [
+            [
+                "9417300a8154fe41"
+            ]
+        ]
+    },
+    {
+        "id": "d3a31d7ae7c0a0d2",
+        "type": "ui-dropdown",
+        "z": "fc670f602d442a02",
+        "group": "28b10b40908e96b0",
+        "name": "Defrost timer 2",
+        "label": "Time",
+        "tooltip": "",
+        "order": 6,
+        "width": 3,
+        "height": "",
+        "passthru": true,
+        "multiple": false,
+        "chips": false,
+        "clearable": false,
+        "options": [
+            {
+                "label": "Off",
+                "value": -1,
+                "type": "num"
+            },
+            {
+                "label": "0:00",
+                "value": 0,
+                "type": "num"
+            },
+            {
+                "label": "1:00",
+                "value": 1,
+                "type": "num"
+            },
+            {
+                "label": "2:00",
+                "value": 2,
+                "type": "num"
+            },
+            {
+                "label": "3:00",
+                "value": 3,
+                "type": "num"
+            },
+            {
+                "label": "4:00",
+                "value": 4,
+                "type": "num"
+            },
+            {
+                "label": "5:00",
+                "value": 5,
+                "type": "num"
+            },
+            {
+                "label": "6:00",
+                "value": 6,
+                "type": "num"
+            },
+            {
+                "label": "7:00",
+                "value": 7,
+                "type": "num"
+            },
+            {
+                "label": "8:00",
+                "value": 8,
+                "type": "num"
+            },
+            {
+                "label": "9:00",
+                "value": 9,
+                "type": "num"
+            },
+            {
+                "label": "10:00",
+                "value": 10,
+                "type": "num"
+            },
+            {
+                "label": "11:00",
+                "value": 11,
+                "type": "num"
+            },
+            {
+                "label": "12:00",
+                "value": 12,
+                "type": "num"
+            },
+            {
+                "label": "13:00",
+                "value": 13,
+                "type": "num"
+            },
+            {
+                "label": "14:00",
+                "value": 14,
+                "type": "num"
+            },
+            {
+                "label": "15:00",
+                "value": 15,
+                "type": "num"
+            },
+            {
+                "label": "16:00",
+                "value": 16,
+                "type": "num"
+            },
+            {
+                "label": "17:00",
+                "value": 17,
+                "type": "num"
+            },
+            {
+                "label": "18:00",
+                "value": 18,
+                "type": "num"
+            },
+            {
+                "label": "19:00",
+                "value": 19,
+                "type": "num"
+            },
+            {
+                "label": "20:00",
+                "value": 20,
+                "type": "num"
+            },
+            {
+                "label": "21:00",
+                "value": 21,
+                "type": "num"
+            },
+            {
+                "label": "22:00",
+                "value": 22,
+                "type": "num"
+            },
+            {
+                "label": "23:00",
+                "value": 23,
+                "type": "num"
+            }
+        ],
+        "payload": "",
+        "topic": "fridgeDefrostTimer2",
+        "topicType": "str",
+        "className": "",
+        "typeIsComboBox": false,
+        "msgTrigger": "onChange",
+        "x": 880,
+        "y": 320,
+        "wires": [
+            [
+                "9417300a8154fe41"
+            ]
+        ]
     }
 ]
