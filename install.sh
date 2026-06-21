@@ -7,6 +7,9 @@
 # Enable classic Bluetooth
 sed -i 's|^[[:space:]]*ControllerMode[[:space:]]*=[[:space:]]*le[[:space:]]*$|ControllerMode = dual|' /etc/bluetooth/ble.conf
 
+# Disable redundant time stamp in Node-RED log
+sed -i 's/\<multilog\> t /\0/;s/multilog t /multilog /' /opt/victronenergy/service/node-red-venus/log/run
+
 # Disable the vesmart-server service
 touch /opt/victronenergy/service-templates/vesmart-server/down
 
