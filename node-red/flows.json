@@ -158,6 +158,11 @@
                 "name": "rounding",
                 "type": "num",
                 "value": "1"
+            },
+            {
+                "name": "avgSamples",
+                "type": "num",
+                "value": "1"
             }
         ],
         "meta": {},
@@ -1279,11 +1284,11 @@
         "type": "function",
         "z": "43e263465d4c8532",
         "name": "Offset",
-        "func": "\nfunction resolveValue(input) {\n    // Check if the input is a number (int or float)\n    if (!isNaN(input) && String(input).trim() !== \"\") {\n        return Number(input);\n    } else {\n        // Otherwise, treat it as a global variable name\n        return global.get(input);\n    }\n}\n\n\nlet temp = msg.payload;\n\noffset   = resolveValue(env.get('offset'));\nrounding = env.get('rounding');\n\ntemp = temp + offset;\n\nmsg.payload = +(+temp).toFixed(rounding);\nmsg.raw     = temp;\n\nreturn msg;",
+        "func": "\nfunction resolveValue(input) {\n    // Check if the input is a number (int or float)\n    if (!isNaN(input) && String(input).trim() !== \"\") {\n        return Number(input);\n    } else {\n        // Otherwise, treat it as a global variable name\n        return global.get(input);\n    }\n}\n\n\nlet temp     = msg.payload;\nlet offset   = resolveValue(env.get('offset'));\nlet rounding = env.get('rounding');\nlet avgSamp  = env.get('avgSamples');\nlet avgTemp  = context.get('avgTemp');\n\ntemp = temp + offset;\n\nif (avgTemp === undefined || avgSamp < 1) {\n    avgTemp = temp;\n    context.set('avgTemp', avgTemp);\n}\nelse {\n    avgTemp = (temp + avgTemp * (avgSamp - 1)) / avgSamp;\n    context.set('avgTemp', avgTemp);\n}\n\nmsg.payload = +(+avgTemp).toFixed(rounding);\nmsg.raw     = avgTemp;\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
-        "initialize": "",
+        "initialize": "// Code added here will be run once\n// whenever the node is started.\n\n// Intentionally don't reset avgTemp",
         "finalize": "",
         "libs": [],
         "x": 310,
@@ -3937,8 +3942,7 @@
         "y": 100,
         "wires": [
             [
-                "e50497657df013ef",
-                "2800cb844c48d105"
+                "e50497657df013ef"
             ]
         ]
     },
@@ -4112,6 +4116,11 @@
                 "name": "offset",
                 "value": "offsetTempRoom",
                 "type": "str"
+            },
+            {
+                "name": "avgSamples",
+                "value": "4",
+                "type": "num"
             }
         ],
         "x": 510,
@@ -4121,7 +4130,8 @@
                 "f8c13de4be546aa7",
                 "6dbdd0e9fbc3fcaa",
                 "3e20c20608b3e828",
-                "ca728154b5b26204"
+                "ca728154b5b26204",
+                "2800cb844c48d105"
             ]
         ]
     },
@@ -5727,7 +5737,7 @@
         "type": "function",
         "z": "2561d49b29c858c7",
         "name": "Derate",
-        "func": "\n\nif (msg.topic.toLowerCase().includes(\"room\")) {\n    context.set(\"ref\", msg.payload);\n    return null;\n}\n\nif (msg.topic.toLowerCase().includes(\"fridge\")) {\n    let ref    = context.get(\"ref\");\n    let fridge = msg.payload;\n    let derate = global.get(\"fridgeTempDerate\") || 0;\n\n    if (ref !== undefined && fridge !== undefined && derate > 0) {\n        if (ref > fridge) {\n            msg.payload -= (ref - fridge) / derate;\n        }\n    }\n\n}\n\nreturn msg;",
+        "func": "\n\nif (msg.topic.toLowerCase().includes(\"room\")) {\n    context.set(\"ref\", msg.raw);\n    return null;\n}\n\nif (msg.topic.toLowerCase().includes(\"fridge\")) {\n    let ref    = context.get(\"ref\");\n    let fridge = msg.payload;\n    let derate = global.get(\"fridgeTempDerate\") || 0;\n\n    if (ref !== undefined && fridge !== undefined && derate > 0) {\n        if (ref > fridge) {\n            msg.payload -= (ref - fridge) / derate;\n        }\n    }\n\n}\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
