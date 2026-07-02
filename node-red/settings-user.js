@@ -12,12 +12,11 @@ module.exports = {
     //uiHost: "127.0.0.1",
     uiHost: "0.0.0.0",
 
-     /** Context Storage
-      * The following property can be used to enable context storage. The configuration
-      * provided here will enable file-based context that flushes to disk every 30 seconds.
-      * Refer to the documentation for further options: https://nodered.org/docs/api/context/
-      */
-
+    /** Context Storage
+     * The following property can be used to enable context storage. The configuration
+     * provided here will enable file-based context that flushes to disk every 30 seconds.
+     * Refer to the documentation for further options: https://nodered.org/docs/api/context/
+     */
     contextStorage: {
 
         default: "memory",
