@@ -2789,7 +2789,7 @@
         "id": "12b4e09b46e4f6dd",
         "type": "function",
         "z": "b22624498baaa896",
-        "name": "TextValue",
+        "name": "Units",
         "func": "\nmsg.payload = msg.textvalue;\n\nlet msg2 = {};\n\nmsg2.ui_update = {};\nmsg2.ui_update.units = \"[\" + msg.payload.slice(0, 4) + \"] W\";\n\nreturn [msg2, msg];",
         "outputs": 2,
         "timeout": 0,
@@ -2797,7 +2797,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 560,
+        "x": 550,
         "y": 920,
         "wires": [
             [
@@ -5763,6 +5763,42 @@
         ]
     },
     {
+        "id": "994a0fdb23f0482a",
+        "type": "link in",
+        "z": "2561d49b29c858c7",
+        "name": "Duty Cycle",
+        "links": [
+            "a0d3c9bd85c4d6d3"
+        ],
+        "x": 395,
+        "y": 1060,
+        "wires": [
+            [
+                "7e31c4a0b9fe488d"
+            ]
+        ]
+    },
+    {
+        "id": "7e31c4a0b9fe488d",
+        "type": "function",
+        "z": "2561d49b29c858c7",
+        "name": "Units",
+        "func": "\nlet msg2 = {};\n\nmsg2.ui_update = {};\nmsg2.ui_update.units = \"[\" + msg.payload + \"] °C\";\n\nreturn msg2;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 510,
+        "y": 1060,
+        "wires": [
+            [
+                "c02cc7af79521236"
+            ]
+        ]
+    },
+    {
         "id": "e797340e231f7c0d",
         "type": "function",
         "z": "c74d4096e08fa272",
@@ -8308,7 +8344,8 @@
         "wires": [
             [
                 "3492fefa9a608e51",
-                "649c370c245facc1"
+                "649c370c245facc1",
+                "a0d3c9bd85c4d6d3"
             ]
         ]
     },
@@ -8331,6 +8368,19 @@
         ],
         "x": 780,
         "y": 1060,
+        "wires": []
+    },
+    {
+        "id": "a0d3c9bd85c4d6d3",
+        "type": "link out",
+        "z": "fcffa944a0680a42",
+        "name": "Duty Cycle",
+        "mode": "link",
+        "links": [
+            "994a0fdb23f0482a"
+        ],
+        "x": 1095,
+        "y": 680,
         "wires": []
     },
     {
