@@ -835,10 +835,10 @@
     {
         "id": "e96f88435ad61c8c",
         "type": "ui-spacer",
-        "group": "576d8789f70030f1",
+        "group": "b4b782239fd512fd",
         "name": "spacer",
         "tooltip": "",
-        "order": 5,
+        "order": 3,
         "width": "6",
         "height": "1",
         "className": ""
@@ -921,7 +921,7 @@
         "order": 4,
         "showTitle": true,
         "className": "",
-        "visible": "true",
+        "visible": false,
         "disabled": "false",
         "groupType": "default"
     },
@@ -1036,7 +1036,7 @@
         "order": 5,
         "showTitle": true,
         "className": "",
-        "visible": "true",
+        "visible": false,
         "disabled": "false",
         "groupType": "default"
     },
@@ -1284,7 +1284,7 @@
         "type": "function",
         "z": "43e263465d4c8532",
         "name": "Offset",
-        "func": "\nfunction resolveValue(input) {\n    // Check if the input is a number (int or float)\n    if (!isNaN(input) && String(input).trim() !== \"\") {\n        return Number(input);\n    } else {\n        // Otherwise, treat it as a global variable name\n        return global.get(input);\n    }\n}\n\nlet temp     = msg.payload;\nlet offset   = resolveValue(env.get('offset'));\nlet rounding = env.get('rounding');\nlet avgSamp  = env.get('avgSamples');\nlet avgTemp  = context.get('avgTemp');\n\ntemp = temp + offset;\n\nif (avgTemp === undefined || avgSamp < 1) {\n    avgTemp = temp;\n    context.set('avgTemp', avgTemp);\n}\nelse {\n    avgTemp = (temp + avgTemp * (avgSamp - 1)) / avgSamp;\n    context.set('avgTemp', avgTemp);\n}\n\n\n\nmsg.payload = +(+avgTemp).toFixed(rounding);\nmsg.raw     = avgTemp;\n\nreturn msg;",
+        "func": "\nfunction resolveValue(input) {\n    // Check if the input is a number (int or float)\n    if (!isNaN(input) && String(input).trim() !== \"\") {\n        return Number(input);\n    } else {\n        // Otherwise, treat it as a global variable name\n        return global.get(input);\n    }\n}\n\nlet temp     = msg.payload;\nlet offset   = resolveValue(env.get('offset'));\nlet rounding = env.get('rounding');\nlet avgSamp  = env.get('avgSamples');\nlet avgTemp  = context.get('avgTemp');\n\ntemp = temp + offset;\n\nif (!Number.isFinite(avgTemp) || avgSamp < 1) {\n    avgTemp = temp;\n    context.set('avgTemp', avgTemp);\n}\nelse {\n    avgTemp = (temp + avgTemp * (avgSamp - 1)) / avgSamp;\n    context.set('avgTemp', avgTemp);\n}\n\n\n\nmsg.payload = +(+avgTemp).toFixed(rounding);\nmsg.raw     = avgTemp;\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -4765,7 +4765,8 @@
         "y": 720,
         "wires": [
             [
-                "291c20af2a14a174"
+                "291c20af2a14a174",
+                "bda34772ee7c7751"
             ]
         ]
     },
@@ -5768,7 +5769,8 @@
         "z": "2561d49b29c858c7",
         "name": "Duty Cycle",
         "links": [
-            "a0d3c9bd85c4d6d3"
+            "a0d3c9bd85c4d6d3",
+            "f98434f7c1fe1357"
         ],
         "x": 395,
         "y": 1060,
@@ -5783,7 +5785,7 @@
         "type": "function",
         "z": "2561d49b29c858c7",
         "name": "Units",
-        "func": "\nlet msg2 = {};\n\nmsg2.ui_update = {};\nmsg2.ui_update.units = \"[\" + msg.payload + \"] °C\";\n\nreturn msg2;",
+        "func": "\nlet msg2 = {};\n\nif (msg.topic === \"speed\") {\n    context.set(\"speed\", msg.payload);\n    return null;\n}\n\nlet speed = context.get(\"speed\") || 0;\nlet icon  = \"○\";\n\nif (speed > 0) {\n    icon = \"●\";\n}\n\nmsg2.ui_update = {};\nmsg2.ui_update.units = \"[\" + icon + msg.payload + \"] °C\";\n\nreturn msg2;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -5795,6 +5797,99 @@
         "wires": [
             [
                 "c02cc7af79521236"
+            ]
+        ]
+    },
+    {
+        "id": "f81c3da0437e5058",
+        "type": "function",
+        "z": "2561d49b29c858c7",
+        "name": "Units",
+        "func": "\nif (msg.raw === undefined) {\n    return null;\n}\n\nlet msg2 = {};\n\nmsg2.ui_update = {};\nmsg2.ui_update.units = \"[\" + msg.raw + \"] °C\";\n\nreturn msg2;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 510,
+        "y": 140,
+        "wires": [
+            [
+                "6dbdd0e9fbc3fcaa"
+            ]
+        ]
+    },
+    {
+        "id": "e5ac31f585b05b1a",
+        "type": "link in",
+        "z": "2561d49b29c858c7",
+        "name": "Temperature",
+        "links": [
+            "c84e94ce9e29af0f",
+            "dfcbac10d61f1db8"
+        ],
+        "x": 395,
+        "y": 140,
+        "wires": [
+            [
+                "f81c3da0437e5058"
+            ]
+        ]
+    },
+    {
+        "id": "9c68a38f43c7b1f0",
+        "type": "link in",
+        "z": "2561d49b29c858c7",
+        "name": "Water temp",
+        "links": [
+            "dfcbac10d61f1db8"
+        ],
+        "x": 395,
+        "y": 1380,
+        "wires": [
+            [
+                "501acf6d768b4476"
+            ]
+        ]
+    },
+    {
+        "id": "501acf6d768b4476",
+        "type": "function",
+        "z": "2561d49b29c858c7",
+        "name": "Units",
+        "func": "\nlet msg2 = {};\n\nmsg2.ui_update = {};\nmsg2.ui_update.units = \"[\" + msg.payload + \"] °C\";\n\nreturn msg2;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 510,
+        "y": 1380,
+        "wires": [
+            [
+                "090deb48f0431120"
+            ]
+        ]
+    },
+    {
+        "id": "bda34772ee7c7751",
+        "type": "function",
+        "z": "2561d49b29c858c7",
+        "name": "Units",
+        "func": "\nlet msg2 = {};\n\nmsg2.ui_update = {};\nmsg2.ui_update.units = \"[Rh:\" + msg.payload + \"] °C\";\n\nreturn msg2;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 510,
+        "y": 660,
+        "wires": [
+            [
+                "1ac7db4665ba096a"
             ]
         ]
     },
@@ -6964,7 +7059,7 @@
         "type": "function",
         "z": "c74d4096e08fa272",
         "name": "Decode",
-        "func": "if (msg.payload === undefined) {\n    return null;\n}\n\nswitch (msg.payload) {\n    case 0:\n        msg.payload = 'Off';\n        break;\n    \n    default:\n        msg.payload = msg.payload + '°C';\n        break;\n}\n\nreturn msg;\n",
+        "func": "if (msg.payload === undefined) {\n    return null;\n}\n\nswitch (msg.payload) {\n    case 0:\n        msg.payload = 'Off';\n        msg.raw     = msg.payload;\n        break;\n    \n    default:\n        msg.raw     = msg.payload;\n        msg.payload = msg.payload + '°C';\n        break;\n}\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -6975,7 +7070,8 @@
         "y": 220,
         "wires": [
             [
-                "122d78cd25de6ab7"
+                "122d78cd25de6ab7",
+                "c84e94ce9e29af0f"
             ]
         ]
     },
@@ -7015,7 +7111,8 @@
         "y": 540,
         "wires": [
             [
-                "f2d33c43bccfd098"
+                "f2d33c43bccfd098",
+                "dfcbac10d61f1db8"
             ]
         ]
     },
@@ -7082,6 +7179,33 @@
         "libs": [],
         "x": 890,
         "y": 260,
+        "wires": []
+    },
+    {
+        "id": "c84e94ce9e29af0f",
+        "type": "link out",
+        "z": "c74d4096e08fa272",
+        "name": "Temperature",
+        "mode": "link",
+        "links": [
+            "e5ac31f585b05b1a"
+        ],
+        "x": 1055,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "dfcbac10d61f1db8",
+        "type": "link out",
+        "z": "c74d4096e08fa272",
+        "name": "Water temp",
+        "mode": "link",
+        "links": [
+            "e5ac31f585b05b1a",
+            "9c68a38f43c7b1f0"
+        ],
+        "x": 1055,
+        "y": 500,
         "wires": []
     },
     {
@@ -7305,7 +7429,7 @@
         "type": "function",
         "z": "fcffa944a0680a42",
         "name": "DecodeJSON",
-        "func": "\nlet json = msg.payload;\n\nlet msg1 = {};\nlet msg2 = {};\nlet msg3 = {};\n\nlet minPwm = 190;\nlet maxPwm = 75;\nlet minRpm = 2000;\nlet maxRpm = 3000\n\nif (json.ok !== 30) return;\n\nfunction map (value, inMin, inMax, outMin, outMax) {\n    return (value - inMin) * (outMax - outMin) / (inMax - inMin) + outMin\n}\n\nmsg1.payload = json.dutyCycle;\n\nmsg2.payload = json.outputPwm;\n\npwm = json.outputPwm;\nif (pwm > 0) {\n    speed = map(pwm, minPwm, maxPwm, minRpm, maxRpm);\n    msg2.payload = +(+speed).toFixed(0);\n}\nelse {\n   msg2.payload = 0 ;\n}\n\n// Workaround to hide the \"WAIT\" state\nif (flow.get(\"defrostDisable\")) {\n    json.defrost = 0;\n}\n\nswitch (json.defrost) {\n    case 0:\n    case -1:\n        msg3.payload = \"Off\";\n        break;\n    case 1:\n        msg3.payload = \"On\";\n        break;\n    case 2:\n        msg3.payload = \"Wait\";\n        break;\n}\n\nreturn [msg1, msg2, msg3];\n",
+        "func": "\nlet json = msg.payload;\n\nlet msg1 = {topic: \"dutyCycle\"};\nlet msg2 = {topic: \"speed\"};\nlet msg3 = {topic: \"defrost\"};\n\nlet minPwm = 190;\nlet maxPwm = 75;\nlet minRpm = 2000;\nlet maxRpm = 3000\n\nif (json.ok !== 30) return;\n\nfunction map (value, inMin, inMax, outMin, outMax) {\n    return (value - inMin) * (outMax - outMin) / (inMax - inMin) + outMin\n}\n\nmsg1.payload = json.dutyCycle;\n\nmsg2.payload = json.outputPwm;\n\npwm = json.outputPwm;\nif (pwm > 0) {\n    speed = map(pwm, minPwm, maxPwm, minRpm, maxRpm);\n    msg2.payload = +(+speed).toFixed(0);\n}\nelse {\n   msg2.payload = 0 ;\n}\n\n// Workaround to hide the \"WAIT\" state\nif (flow.get(\"defrostDisable\")) {\n    json.defrost = 0;\n}\n\nswitch (json.defrost) {\n    case 0:\n    case -1:\n        msg3.payload = \"Off\";\n        break;\n    case 1:\n        msg3.payload = \"On\";\n        break;\n    case 2:\n        msg3.payload = \"Wait\";\n        break;\n}\n\nreturn [msg1, msg2, msg3];\n",
         "outputs": 3,
         "timeout": 0,
         "noerr": 0,
@@ -7319,7 +7443,8 @@
                 "931aacf73d0cec6d"
             ],
             [
-                "e0575167fd853f01"
+                "e0575167fd853f01",
+                "f98434f7c1fe1357"
             ],
             [
                 "7dd29f98636a2aa9"
@@ -7695,7 +7820,8 @@
         "z": "fcffa944a0680a42",
         "name": "State of charge",
         "links": [
-            "68255a9e7f62d58c"
+            "68255a9e7f62d58c",
+            "c44d46e9cf7c2a2b"
         ],
         "x": 155,
         "y": 440,
@@ -8381,6 +8507,19 @@
         ],
         "x": 1095,
         "y": 680,
+        "wires": []
+    },
+    {
+        "id": "f98434f7c1fe1357",
+        "type": "link out",
+        "z": "fcffa944a0680a42",
+        "name": "Compressor speed",
+        "mode": "link",
+        "links": [
+            "994a0fdb23f0482a"
+        ],
+        "x": 1095,
+        "y": 840,
         "wires": []
     },
     {
