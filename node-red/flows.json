@@ -4128,10 +4128,10 @@
         "wires": [
             [
                 "f8c13de4be546aa7",
-                "6dbdd0e9fbc3fcaa",
                 "3e20c20608b3e828",
                 "ca728154b5b26204",
-                "2800cb844c48d105"
+                "2800cb844c48d105",
+                "98e8f33ad874fafe"
             ]
         ]
     },
@@ -4186,7 +4186,7 @@
             [
                 "3e0b6cee6fa14daa",
                 "1f345342255566d2",
-                "090deb48f0431120"
+                "e75cbedf2ee94eae"
             ]
         ]
     },
@@ -5533,7 +5533,7 @@
             "bd479a673f65a239"
         ],
         "x": 675,
-        "y": 60,
+        "y": 40,
         "wires": []
     },
     {
@@ -5890,6 +5890,56 @@
         "wires": [
             [
                 "1ac7db4665ba096a"
+            ]
+        ]
+    },
+    {
+        "id": "98e8f33ad874fafe",
+        "type": "trigger",
+        "z": "2561d49b29c858c7",
+        "name": "",
+        "op1": "",
+        "op2": "0",
+        "op1type": "pay",
+        "op2type": "str",
+        "duration": "-2",
+        "extend": false,
+        "overrideDelay": false,
+        "units": "s",
+        "reset": "",
+        "bytopic": "all",
+        "topic": "topic",
+        "outputs": 1,
+        "x": 700,
+        "y": 80,
+        "wires": [
+            [
+                "6dbdd0e9fbc3fcaa"
+            ]
+        ]
+    },
+    {
+        "id": "e75cbedf2ee94eae",
+        "type": "trigger",
+        "z": "2561d49b29c858c7",
+        "name": "",
+        "op1": "",
+        "op2": "0",
+        "op1type": "pay",
+        "op2type": "str",
+        "duration": "-2",
+        "extend": false,
+        "overrideDelay": false,
+        "units": "s",
+        "reset": "",
+        "bytopic": "all",
+        "topic": "topic",
+        "outputs": 1,
+        "x": 700,
+        "y": 1320,
+        "wires": [
+            [
+                "090deb48f0431120"
             ]
         ]
     },
