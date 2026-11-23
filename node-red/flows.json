@@ -3803,7 +3803,7 @@
         "onlyChanges": false,
         "roundValues": "1",
         "x": 240,
-        "y": 1500,
+        "y": 1600,
         "wires": [
             [
                 "efcd52eb9123c4b6"
@@ -3829,7 +3829,7 @@
         "onlyChanges": false,
         "roundValues": "3",
         "x": 150,
-        "y": 620,
+        "y": 660,
         "wires": [
             [
                 "a852c58b3b285f49"
@@ -3855,7 +3855,7 @@
         "onlyChanges": false,
         "roundValues": "1",
         "x": 140,
-        "y": 720,
+        "y": 760,
         "wires": [
             [
                 "5a1c2139256a9b7c"
@@ -3881,7 +3881,7 @@
         "onlyChanges": false,
         "roundValues": "3",
         "x": 150,
-        "y": 1000,
+        "y": 1100,
         "wires": [
             [
                 "2800cb844c48d105"
@@ -3907,7 +3907,7 @@
         "onlyChanges": false,
         "roundValues": "1",
         "x": 170,
-        "y": 1660,
+        "y": 1760,
         "wires": [
             [
                 "ee9a4211b556cacf"
@@ -3928,7 +3928,7 @@
         "rh": 0,
         "inputs": 0,
         "x": 130,
-        "y": 1340,
+        "y": 1440,
         "wires": [
             [
                 "7d902834cd76bb07"
@@ -4009,7 +4009,7 @@
             }
         ],
         "x": 710,
-        "y": 1060,
+        "y": 1160,
         "wires": [
             [
                 "b39fbe0d42a248d4"
@@ -4039,7 +4039,7 @@
             }
         ],
         "x": 710,
-        "y": 1400,
+        "y": 1500,
         "wires": [
             [
                 "b58793209f5ee98a"
@@ -4074,7 +4074,7 @@
             }
         ],
         "x": 710,
-        "y": 1540,
+        "y": 1640,
         "wires": [
             [
                 "dd6fe58b20a74178"
@@ -4104,7 +4104,7 @@
             }
         ],
         "x": 710,
-        "y": 1700,
+        "y": 1800,
         "wires": [
             [
                 "8e2cd2587cdc9e98"
@@ -4162,14 +4162,14 @@
                 "type": "num"
             }
         ],
-        "x": 550,
-        "y": 1000,
+        "x": 530,
+        "y": 1100,
         "wires": [
             [
                 "925f92e5f41b2072",
                 "d8bb06d32cf5b8b5",
-                "c02cc7af79521236",
-                "8b91c74452c84a68"
+                "8b91c74452c84a68",
+                "00fa1d3b99ab8154"
             ]
         ]
     },
@@ -4186,7 +4186,7 @@
             }
         ],
         "x": 510,
-        "y": 1340,
+        "y": 1440,
         "wires": [
             [
                 "3e0b6cee6fa14daa",
@@ -4201,7 +4201,7 @@
         "z": "2561d49b29c858c7",
         "name": "",
         "x": 510,
-        "y": 1500,
+        "y": 1600,
         "wires": [
             [
                 "4bd74f30706ccf3c",
@@ -4222,7 +4222,7 @@
             }
         ],
         "x": 510,
-        "y": 1660,
+        "y": 1760,
         "wires": [
             [
                 "746dd63504103d04",
@@ -4335,12 +4335,12 @@
             }
         ],
         "x": 510,
-        "y": 620,
+        "y": 660,
         "wires": [
             [
                 "713b900f566507bd",
-                "1ac7db4665ba096a",
-                "24b6bb1ad19e7321"
+                "24b6bb1ad19e7321",
+                "5cf0c4a13fae7bb0"
             ]
         ]
     },
@@ -4357,7 +4357,7 @@
             }
         ],
         "x": 510,
-        "y": 720,
+        "y": 760,
         "wires": [
             [
                 "8b3cbd29fad5b5e5"
@@ -4383,7 +4383,7 @@
         "onlyChanges": false,
         "roundValues": "1",
         "x": 140,
-        "y": 1120,
+        "y": 1220,
         "wires": [
             [
                 "32b738159ce24492"
@@ -4403,7 +4403,7 @@
             }
         ],
         "x": 510,
-        "y": 1120,
+        "y": 1220,
         "wires": [
             [
                 "d8d12b2b6d3ac2e1"
@@ -4429,7 +4429,7 @@
         "onlyChanges": false,
         "roundValues": "1",
         "x": 150,
-        "y": 820,
+        "y": 860,
         "wires": [
             [
                 "042c33c4332e30d9"
@@ -4449,7 +4449,7 @@
             }
         ],
         "x": 510,
-        "y": 820,
+        "y": 860,
         "wires": [
             [
                 "ab551531580504ad"
@@ -4590,7 +4590,7 @@
         "value": "payload",
         "valueType": "msg",
         "x": 890,
-        "y": 1020,
+        "y": 1120,
         "wires": []
     },
     {
@@ -4612,7 +4612,7 @@
         "z": "2561d49b29c858c7",
         "name": "",
         "x": 710,
-        "y": 1020,
+        "y": 1120,
         "wires": [
             [
                 "b39fbe0d42a248d4"
@@ -4714,7 +4714,7 @@
         "value": "payload",
         "valueType": "msg",
         "x": 900,
-        "y": 620,
+        "y": 660,
         "wires": []
     },
     {
@@ -4723,7 +4723,7 @@
         "z": "2561d49b29c858c7",
         "name": "",
         "x": 710,
-        "y": 620,
+        "y": 660,
         "wires": [
             [
                 "24871667c32d50e2"
@@ -4751,7 +4751,7 @@
         "value": "payload",
         "valueType": "msg",
         "x": 890,
-        "y": 720,
+        "y": 760,
         "wires": []
     },
     {
@@ -4767,7 +4767,7 @@
             }
         ],
         "x": 710,
-        "y": 720,
+        "y": 760,
         "wires": [
             [
                 "291c20af2a14a174",
@@ -4796,7 +4796,7 @@
         "value": "payload",
         "valueType": "msg",
         "x": 900,
-        "y": 800,
+        "y": 840,
         "wires": []
     },
     {
@@ -4812,7 +4812,7 @@
             }
         ],
         "x": 710,
-        "y": 800,
+        "y": 840,
         "wires": [
             [
                 "802c34362f2c4162"
@@ -4840,7 +4840,7 @@
         "value": "payload",
         "valueType": "msg",
         "x": 880,
-        "y": 1120,
+        "y": 1220,
         "wires": []
     },
     {
@@ -4856,7 +4856,7 @@
             }
         ],
         "x": 710,
-        "y": 1120,
+        "y": 1220,
         "wires": [
             [
                 "1db71ef6c0dd3b89"
@@ -4869,7 +4869,7 @@
         "z": "2561d49b29c858c7",
         "name": "",
         "x": 710,
-        "y": 1360,
+        "y": 1460,
         "wires": [
             [
                 "b58793209f5ee98a"
@@ -4897,7 +4897,7 @@
         "value": "payload",
         "valueType": "msg",
         "x": 890,
-        "y": 1360,
+        "y": 1460,
         "wires": []
     },
     {
@@ -4906,7 +4906,7 @@
         "z": "2561d49b29c858c7",
         "name": "",
         "x": 710,
-        "y": 1500,
+        "y": 1600,
         "wires": [
             [
                 "dd6fe58b20a74178"
@@ -4934,7 +4934,7 @@
         "value": "payload",
         "valueType": "msg",
         "x": 890,
-        "y": 1500,
+        "y": 1600,
         "wires": []
     },
     {
@@ -4943,7 +4943,7 @@
         "z": "2561d49b29c858c7",
         "name": "",
         "x": 710,
-        "y": 1660,
+        "y": 1760,
         "wires": [
             [
                 "8e2cd2587cdc9e98"
@@ -4971,7 +4971,7 @@
         "value": "payload",
         "valueType": "msg",
         "x": 900,
-        "y": 1660,
+        "y": 1760,
         "wires": []
     },
     {
@@ -5058,7 +5058,7 @@
         "styleGlow": false,
         "className": "large-gauge-text",
         "x": 860,
-        "y": 580,
+        "y": 620,
         "wires": [
             []
         ]
@@ -5147,7 +5147,7 @@
         "styleGlow": false,
         "className": "large-gauge-text",
         "x": 850,
-        "y": 980,
+        "y": 1080,
         "wires": [
             []
         ]
@@ -5171,7 +5171,7 @@
         "onlyChanges": false,
         "roundValues": "2",
         "x": 180,
-        "y": 1220,
+        "y": 1320,
         "wires": [
             [
                 "21036f8750650e45",
@@ -5200,7 +5200,7 @@
         "value": "payload",
         "valueType": "msg",
         "x": 880,
-        "y": 1220,
+        "y": 1320,
         "wires": []
     },
     {
@@ -5216,7 +5216,7 @@
             }
         ],
         "x": 710,
-        "y": 1220,
+        "y": 1320,
         "wires": [
             [
                 "e40cf8f912e64c7c"
@@ -5242,7 +5242,7 @@
         "onlyChanges": false,
         "roundValues": "2",
         "x": 180,
-        "y": 880,
+        "y": 920,
         "wires": [
             [
                 "0f975df191703924",
@@ -5271,7 +5271,7 @@
         "value": "payload",
         "valueType": "msg",
         "x": 880,
-        "y": 880,
+        "y": 920,
         "wires": []
     },
     {
@@ -5287,7 +5287,7 @@
             }
         ],
         "x": 710,
-        "y": 880,
+        "y": 920,
         "wires": [
             [
                 "29a1859ee6666879"
@@ -5522,7 +5522,7 @@
         "styleGlow": false,
         "className": "large-gauge-text",
         "x": 850,
-        "y": 1320,
+        "y": 1420,
         "wires": [
             []
         ]
@@ -5552,7 +5552,7 @@
             "ba5bc53644e7417d"
         ],
         "x": 675,
-        "y": 960,
+        "y": 1020,
         "wires": []
     },
     {
@@ -5603,7 +5603,7 @@
             }
         ],
         "x": 710,
-        "y": 1260,
+        "y": 1360,
         "wires": [
             [
                 "e40cf8f912e64c7c"
@@ -5658,7 +5658,7 @@
             }
         ],
         "x": 710,
-        "y": 920,
+        "y": 960,
         "wires": [
             [
                 "29a1859ee6666879"
@@ -5785,7 +5785,7 @@
             "4a40c64894e9eb63"
         ],
         "x": 675,
-        "y": 660,
+        "y": 700,
         "wires": []
     },
     {
@@ -5800,8 +5800,8 @@
         "initialize": "// Code added here will be run once\n// whenever the node is started.\n\n// Don't reset \"ref\" context variable - keep it persistent\n",
         "finalize": "",
         "libs": [],
-        "x": 430,
-        "y": 1000,
+        "x": 410,
+        "y": 1100,
         "wires": [
             [
                 "3c84ac16a56e8271"
@@ -5818,7 +5818,7 @@
             "f98434f7c1fe1357"
         ],
         "x": 395,
-        "y": 1060,
+        "y": 1160,
         "wires": [
             [
                 "7e31c4a0b9fe488d"
@@ -5838,7 +5838,7 @@
         "finalize": "",
         "libs": [],
         "x": 510,
-        "y": 1060,
+        "y": 1160,
         "wires": [
             [
                 "c02cc7af79521236"
@@ -5891,7 +5891,7 @@
             "dfcbac10d61f1db8"
         ],
         "x": 395,
-        "y": 1380,
+        "y": 1480,
         "wires": [
             [
                 "501acf6d768b4476"
@@ -5911,7 +5911,7 @@
         "finalize": "",
         "libs": [],
         "x": 510,
-        "y": 1380,
+        "y": 1480,
         "wires": [
             [
                 "090deb48f0431120"
@@ -5931,7 +5931,7 @@
         "finalize": "",
         "libs": [],
         "x": 510,
-        "y": 660,
+        "y": 700,
         "wires": [
             [
                 "1ac7db4665ba096a"
@@ -5981,10 +5981,60 @@
         "topic": "topic",
         "outputs": 1,
         "x": 700,
-        "y": 1320,
+        "y": 1420,
         "wires": [
             [
                 "090deb48f0431120"
+            ]
+        ]
+    },
+    {
+        "id": "5cf0c4a13fae7bb0",
+        "type": "trigger",
+        "z": "2561d49b29c858c7",
+        "name": "",
+        "op1": "",
+        "op2": "0",
+        "op1type": "pay",
+        "op2type": "str",
+        "duration": "-2",
+        "extend": false,
+        "overrideDelay": false,
+        "units": "s",
+        "reset": "",
+        "bytopic": "all",
+        "topic": "topic",
+        "outputs": 1,
+        "x": 700,
+        "y": 620,
+        "wires": [
+            [
+                "1ac7db4665ba096a"
+            ]
+        ]
+    },
+    {
+        "id": "00fa1d3b99ab8154",
+        "type": "trigger",
+        "z": "2561d49b29c858c7",
+        "name": "",
+        "op1": "",
+        "op2": "0",
+        "op1type": "pay",
+        "op2type": "str",
+        "duration": "-2",
+        "extend": false,
+        "overrideDelay": false,
+        "units": "s",
+        "reset": "",
+        "bytopic": "all",
+        "topic": "topic",
+        "outputs": 1,
+        "x": 700,
+        "y": 1080,
+        "wires": [
+            [
+                "c02cc7af79521236"
             ]
         ]
     },
@@ -9514,6 +9564,21 @@
             {
                 "label": "5°C",
                 "value": 5,
+                "type": "num"
+            },
+            {
+                "label": "6°C",
+                "value": 6,
+                "type": "num"
+            },
+            {
+                "label": "7°C",
+                "value": 7,
+                "type": "num"
+            },
+            {
+                "label": "8°C",
+                "value": 8,
                 "type": "num"
             }
         ],
